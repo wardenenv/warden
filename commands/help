@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+[[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!" && exit 1
+
+WARDEN_USAGE='
+ _       __               __         
+| |     / /___ __________/ /__  ____ 
+| | /| / / __ `/ ___/ __  / _ \/ __ \
+| |/ |/ / /_/ / /  / /_/ /  __/ / / /
+|__/|__/\__,_/_/   \__,_/\___/_/ /_/ 
+'
+
+WARDEN_USAGE=$(cat <<EOF
+${WARDEN_USAGE:1}
+Warden version 0.1.0-dev
+
+\033[33mUsage:\033[0m
+  command [options] [arguments]
+
+\033[33mOptions:\033[0m
+  -h, --help        Display this help menu
+  -v, --verbose     Increases verbosity of output
+
+\033[33mCommands:\033[0m
+  install       Installs local docker environment in the current directory
+  update        Updates docker environment configuration in the current directory
+  upgrade       Pulls latest images and rebuilds the environment in the current directory
+EOF
+)
+
+echo -e "${WARDEN_USAGE}"
+exit 1

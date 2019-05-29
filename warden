@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -e
+trap '>&2 printf "\n\e[01;31mError: Command \`%s\` on line $LINENO failed with exit code $?\n" "$BASH_COMMAND"' ERR
+
+## find directory where this script is located following symlinks if neccessary
+SCRIPT_DIR="$( cd "$( dirname "$(readlink "${BASH_SOURCE[0]}")" )" >/dev/null && pwd )"
+
+## declare variables for flags and arguments
+declare WARDEN_PARAMS=
+declare WARDEN_COMMAND=help
+
+## parse first argument as command and determine validity
+if (( "$#" )) && [[ -f "${SCRIPT_DIR}/commands/${1}" ]]; then
+  WARDEN_COMMAND="$1"
+  shift
+else
+  WARDEN_COMMAND=help
+fi
+
+## parse arguments
+while (( "$#" )); do
+  case "$1" in
+    -h|--help)
+      echo -e "$(cat ${SCRIPT_DIR}/inc/_usage)"
+      exit
+      ;;
+    -*|--*=) # unsupported flags
+      >&2 echo "Error: Unsupported flag $1"
+      exit 1
+      ;;
+    *) # preserve positional arguments
+      WARDEN_PARAMS="${WARDEN_PARAMS} $1"
+      shift
+      ;;
+  esac
+done
+
+## execute sub-command in context of this script
+source ${SCRIPT_DIR}/commands/${WARDEN_COMMAND}
