@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 [[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!" && exit 1
 
-WARDEN_USAGE='
+WARDEN_HEADER='
  _       __               __         
 | |     / /___ __________/ /__  ____ 
 | | /| / / __ `/ ___/ __  / _ \/ __ \
@@ -10,7 +10,7 @@ WARDEN_USAGE='
 '
 
 WARDEN_USAGE=$(cat <<EOF
-${WARDEN_USAGE:1}
+${WARDEN_HEADER:1}
 Warden version 0.1.0-dev
 
 \033[33mUsage:\033[0m
@@ -26,6 +26,3 @@ Warden version 0.1.0-dev
   upgrade       Pulls latest images and rebuilds the environment in the current directory
 EOF
 )
-
-echo -e "${WARDEN_USAGE}"
-exit 1

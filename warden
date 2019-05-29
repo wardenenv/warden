@@ -3,25 +3,26 @@ set -e
 trap '>&2 printf "\n\e[01;31mError: Command \`%s\` on line $LINENO failed with exit code $?\n" "$BASH_COMMAND"' ERR
 
 ## find directory where this script is located following symlinks if neccessary
-SCRIPT_DIR="$( cd "$( dirname "$(readlink "${BASH_SOURCE[0]}")" )" >/dev/null && pwd )"
+WARDEN_DIR="$( cd "$( dirname "$(readlink "${BASH_SOURCE[0]}")" )" >/dev/null && pwd )"
 
 ## declare variables for flags and arguments
+declare WARDEN_HELP=
 declare WARDEN_PARAMS=
 declare WARDEN_COMMAND=
 
 ## parse first argument as command and determine validity
-if (( "$#" )) && [[ -f "${SCRIPT_DIR}/commands/${1}" ]]; then
+if (( "$#" )) && [[ -f "${WARDEN_DIR}/commands/${1}.cmd" ]]; then
   WARDEN_COMMAND="$1"
   shift
 else
-  WARDEN_COMMAND=help
+  WARDEN_COMMAND=usage
 fi
 
 ## parse arguments
 while (( "$#" )); do
   case "$1" in
     -h|--help)
-      WARDEN_COMMAND=help
+      WARDEN_HELP=1
       break
       ;;
     -*|--*=) # unsupported flags
@@ -35,5 +36,10 @@ while (( "$#" )); do
   esac
 done
 
+## display command specific usage info if help flag is set
+if [[ ${WARDEN_HELP} ]]; then
+  source "${WARDEN_DIR}/commands/usage.cmd"
+fi
+
 ## execute sub-command in context of this script
-source "${SCRIPT_DIR}/commands/${WARDEN_COMMAND}"
+source "${WARDEN_DIR}/commands/${WARDEN_COMMAND}.cmd"
