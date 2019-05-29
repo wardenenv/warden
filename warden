@@ -7,7 +7,7 @@ SCRIPT_DIR="$( cd "$( dirname "$(readlink "${BASH_SOURCE[0]}")" )" >/dev/null &&
 
 ## declare variables for flags and arguments
 declare WARDEN_PARAMS=
-declare WARDEN_COMMAND=help
+declare WARDEN_COMMAND=
 
 ## parse first argument as command and determine validity
 if (( "$#" )) && [[ -f "${SCRIPT_DIR}/commands/${1}" ]]; then
@@ -21,8 +21,8 @@ fi
 while (( "$#" )); do
   case "$1" in
     -h|--help)
-      echo -e "$(cat ${SCRIPT_DIR}/inc/_usage)"
-      exit
+      WARDEN_COMMAND=help
+      break
       ;;
     -*|--*=) # unsupported flags
       >&2 echo "Error: Unsupported flag $1"
@@ -36,4 +36,4 @@ while (( "$#" )); do
 done
 
 ## execute sub-command in context of this script
-source ${SCRIPT_DIR}/commands/${WARDEN_COMMAND}
+source "${SCRIPT_DIR}/commands/${WARDEN_COMMAND}"
