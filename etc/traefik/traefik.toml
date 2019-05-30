@@ -1,5 +1,8 @@
 defaultEntryPoints = ["http", "https"]
 
+# TODO: Get rid of this (m2c images are redirecting all 8000 requests via 301 currently, requiring use of 8443 to work)
+insecureSkipVerify = true
+
 [entryPoints]
   [entryPoints.http]
   address = ":80"
