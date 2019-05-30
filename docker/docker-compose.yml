@@ -11,8 +11,6 @@ services:
       - ~/.warden/etc/traefik/traefik.toml:/etc/traefik/traefik.toml
       - ~/.warden/ssl/certs:/etc/ssl/certs
       - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - proxy
     labels:
       - traefik.port=8080
     restart: always
@@ -23,8 +21,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer:/data
-    networks:
-      - proxy
     labels:
       - traefik.port=9000
     restart: always
@@ -34,6 +30,4 @@ volumes:
 
 networks:
   default:
-    name: warden_default
-  proxy:
-    name: warden_proxy
+    name: warden
