@@ -3,7 +3,7 @@ set -e
 trap '>&2 printf "\n\e[01;31mError: Command \`%s\` on line $LINENO failed with exit code $?\033[0m\n" "$BASH_COMMAND"' ERR
 
 ## find directory where this script is located following symlinks if neccessary
-readonly WARDEN_DIR="$( cd "$( dirname "$(readlink "${BASH_SOURCE[0]}")" )" >/dev/null && pwd )"
+readonly WARDEN_DIR="$( cd "$( dirname "$(readlink "${BASH_SOURCE[0]}" || echo "${BASH_SOURCE[0]}")" )" >/dev/null && pwd )"
 
 ## define global directory paths by commands
 readonly WARDEN_HOME_DIR=~/.warden
