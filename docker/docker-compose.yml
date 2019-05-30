@@ -1,6 +1,7 @@
 version: "3.5"
 services:
   traefik:
+    container_name: traefik
     image: traefik
     command: --api --docker --docker.domain=test
     ports:
@@ -17,6 +18,7 @@ services:
     restart: always
 
   portainer:
+    container_name: portainer
     image: portainer/portainer
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
