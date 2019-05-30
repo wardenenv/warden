@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 [[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!" && exit 1
 
-WARDEN_SSL_DIR=~/.warden/ssl
-WARDEN_CERTS_DIR="${WARDEN_SSL_DIR}/certs"
-mkdir -p "${WARDEN_CERTS_DIR}"
+mkdir -p "${WARDEN_SSL_DIR}/certs"
 
 if [[ ! -f "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem" ]]; then
   echo -e "\033[31mError: Missing the root CA file. Please run 'warden install' and try again."
@@ -24,20 +22,20 @@ done
 
 CERTIFICATE_NAME="${WARDEN_PARAMS[0]}"
 
-if [[ -f "${WARDEN_CERTS_DIR}/${CERTIFICATE_NAME}.key.pem" ]]; then
+if [[ -f "${WARDEN_SSL_DIR}/certs/${CERTIFICATE_NAME}.key.pem" ]]; then
     >&2 echo -e "\033[33mWarning: Certificate for ${CERTIFICATE_NAME} already exists! Overwriting...\033[0m\n"
 fi
 
 echo "==> Generating private key ${CERTIFICATE_NAME}.key.pem"
-openssl genrsa -out "${WARDEN_CERTS_DIR}/${CERTIFICATE_NAME}.key.pem" 2048
+openssl genrsa -out "${WARDEN_SSL_DIR}/certs/${CERTIFICATE_NAME}.key.pem" 2048
 
 echo "==> Generating signing req ${CERTIFICATE_NAME}.crt.pem"
 openssl req -new -sha256 -config <(cat                            \
     "${WARDEN_DIR}/etc/openssl/certificate.conf"                  \
     <(printf "subjectAltName = %s" "${CERTIFICATE_SAN_LIST}")     \
   )                                                               \
-  -key "${WARDEN_CERTS_DIR}/${CERTIFICATE_NAME}.key.pem"          \
-  -out "${WARDEN_CERTS_DIR}/${CERTIFICATE_NAME}.csr.pem"          \
+  -key "${WARDEN_SSL_DIR}/certs/${CERTIFICATE_NAME}.key.pem"      \
+  -out "${WARDEN_SSL_DIR}/certs/${CERTIFICATE_NAME}.csr.pem"      \
   -subj "/C=US/CN=${CERTIFICATE_NAME}"
 
 echo "==> Generating certificate ${CERTIFICATE_NAME}.crt.pem"
@@ -48,5 +46,6 @@ openssl x509 -req -days 365 -sha256 -extensions v3_req            \
   )                                                               \
   -CA "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem"                \
   -CAkey "${WARDEN_SSL_DIR}/rootca/private/ca.key.pem"            \
-  -in "${WARDEN_CERTS_DIR}/${CERTIFICATE_NAME}.csr.pem"           \
-  -out "${WARDEN_CERTS_DIR}/${CERTIFICATE_NAME}.crt.pem" 
+  -CAserial "${WARDEN_SSL_DIR}/rootca/serial"                     \
+  -in "${WARDEN_SSL_DIR}/certs/${CERTIFICATE_NAME}.csr.pem"       \
+  -out "${WARDEN_SSL_DIR}/certs/${CERTIFICATE_NAME}.crt.pem" 

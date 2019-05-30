@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 [[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!" && exit 1
 
-WARDEN_SSL_DIR=~/.warden/ssl
+if ! [[ -d "${WARDEN_SSL_DIR}/rootca" ]]; then
+    mkdir -p "${WARDEN_SSL_DIR}/rootca"/{certs,crl,newcerts,private}
 
-if ! [[ -d ${WARDEN_SSL_DIR}/rootca/ ]]; then
-    mkdir -p ${WARDEN_SSL_DIR}/rootca/{certs,crl,newcerts,private}
-
-    touch ${WARDEN_SSL_DIR}/rootca/index.txt
-    echo 1000 > ${WARDEN_SSL_DIR}/rootca/serial
+    touch "${WARDEN_SSL_DIR}/rootca/index.txt"
+    echo 1000 > "${WARDEN_SSL_DIR}/rootca/serial"
 fi
 
 # create CA root certificate if none present
@@ -29,4 +27,8 @@ if ! security dump-trust-settings -d | grep 'Warden Proxy Local CA' >/dev/null; 
   echo "==> Trusting root certificate (requires sudo privileges)"
   sudo security add-trusted-cert -d -r trustRoot \
       -k /Library/Keychains/System.keychain "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem"
+fi
+
+if [[ ! -f "${WARDEN_SSL_DIR}/certs/warden.test.crt.pem" ]]; then
+  "${WARDEN_DIR}/warden" sign-certificate warden.test
 fi
