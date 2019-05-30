@@ -1,0 +1,35 @@
+version: "3.5"
+services:
+  traefik:
+    image: traefik
+    command: --api --docker --docker.domain=test
+    ports:
+      - "80:80"     # The HTTP port
+      - "443:443"   # The HTTPS port
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - proxy
+    labels:
+      - traefik.port=8080
+    restart: always
+
+  portainer:
+    image: portainer/portainer
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer:/data
+    networks:
+      - proxy
+    labels:
+      - traefik.port=9000
+    restart: always
+
+volumes:
+  portainer:
+
+networks:
+  default:
+    name: warden_default
+  proxy:
+    name: warden_proxy
