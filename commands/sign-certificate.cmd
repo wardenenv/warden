@@ -49,3 +49,6 @@ openssl x509 -req -days 365 -sha256 -extensions v3_req            \
   -CAserial "${WARDEN_SSL_DIR}/rootca/serial"                     \
   -in "${WARDEN_SSL_DIR}/certs/${CERTIFICATE_NAME}.csr.pem"       \
   -out "${WARDEN_SSL_DIR}/certs/${CERTIFICATE_NAME}.crt.pem" 
+
+echo "==> Restarting traefik"
+"${WARDEN_DIR}/warden" restart traefik
