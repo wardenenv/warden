@@ -30,5 +30,5 @@ if ! security dump-trust-settings -d | grep 'Warden Proxy Local CA' >/dev/null; 
 fi
 
 if [[ ! -f "${WARDEN_SSL_DIR}/certs/warden.test.crt.pem" ]]; then
-  "${WARDEN_DIR}/warden" sign-certificate warden.test
+  "${WARDEN_DIR}/bin/warden" sign-certificate warden.test
 fi
