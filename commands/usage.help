@@ -24,8 +24,6 @@ Warden version 0.1.0-dev
   up                Starts global warden managed containers
   down              Stops global warden managed containers
   install           Installs local docker environment in the current directory
-  update            Updates docker environment configuration in the current directory
-  upgrade           Pulls latest images and rebuilds the environment in the current directory
   sign-certificate  Signs a wildcard certificate including all passed hostnames on the SAN list
 EOF
 )
