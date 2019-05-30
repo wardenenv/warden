@@ -18,4 +18,4 @@ for cert in $(find "${WARDEN_SSL_DIR}/certs" -type f -name "*.crt.pem" | sed -E 
 done
 
 pushd "${WARDEN_DIR}" >/dev/null
-docker-compose -p warden -f docker/docker-compose.yml up -d
+docker-compose -p warden -f docker/docker-compose.yml up -d ${WARDEN_PARAMS[@]}
