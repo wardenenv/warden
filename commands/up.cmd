@@ -4,8 +4,8 @@
 assert_installed
 
 mkdir -p "${WARDEN_HOME_DIR}/etc/traefik"
-cp "${WARDEN_DIR}/etc/traefik/traefik.toml" "${WARDEN_HOME_DIR}/etc/traefik/traefik.toml"
-cp "${WARDEN_DIR}/etc/dnsmasq.conf" "${WARDEN_HOME_DIR}/etc/dnsmasq.conf"
+cp "${WARDEN_DIR}/config/traefik/traefik.toml" "${WARDEN_HOME_DIR}/etc/traefik/traefik.toml"
+cp "${WARDEN_DIR}/config/dnsmasq.conf" "${WARDEN_HOME_DIR}/etc/dnsmasq.conf"
 
 # TODO: Determine if a template loop may work in the config file to do this automatically in traefik
 for cert in $(find "${WARDEN_SSL_DIR}/certs" -type f -name "*.crt.pem" | sed -E 's#^.*/ssl/certs/(.*)\.crt\.pem$#\1#'); do

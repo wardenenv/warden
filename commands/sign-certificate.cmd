@@ -31,7 +31,7 @@ openssl genrsa -out "${WARDEN_SSL_DIR}/certs/${CERTIFICATE_NAME}.key.pem" 2048
 
 echo "==> Generating signing req ${CERTIFICATE_NAME}.crt.pem"
 openssl req -new -sha256 -config <(cat                            \
-    "${WARDEN_DIR}/etc/openssl/certificate.conf"                  \
+    "${WARDEN_DIR}/config/openssl/certificate.conf"               \
     <(printf "subjectAltName = %s" "${CERTIFICATE_SAN_LIST}")     \
   )                                                               \
   -key "${WARDEN_SSL_DIR}/certs/${CERTIFICATE_NAME}.key.pem"      \
@@ -41,7 +41,7 @@ openssl req -new -sha256 -config <(cat                            \
 echo "==> Generating certificate ${CERTIFICATE_NAME}.crt.pem"
 openssl x509 -req -days 365 -sha256 -extensions v3_req            \
   -extfile <(cat                                                  \
-    "${WARDEN_DIR}/etc/openssl/certificate.conf"                  \
+    "${WARDEN_DIR}/config/openssl/certificate.conf"               \
     <(printf "subjectAltName = %s" "${CERTIFICATE_SAN_LIST}")     \
   )                                                               \
   -CA "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem"                \
