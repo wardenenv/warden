@@ -32,3 +32,10 @@ fi
 if [[ ! -f "${WARDEN_SSL_DIR}/certs/warden.test.crt.pem" ]]; then
   "${WARDEN_DIR}/bin/warden" sign-certificate warden.test
 fi
+
+## configure resolver for .test domains
+if [[ ! -d /etc/resolver ]] || [[ ! -f /etc/resolver/test ]]; then
+  echo "==> Configuring resolver for .test domains (requires sudo privileges)"
+  sudo mkdir /etc/resolver
+  echo "nameserver 127.0.0.1" | sudo tee /etc/resolver/test >/dev/null
+fi

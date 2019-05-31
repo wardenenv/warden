@@ -25,6 +25,17 @@ services:
       - traefik.port=9000
     restart: always
 
+  dnsmasq:
+    container_name: dnsmasq
+    image: jpillora/dnsmasq
+    ports:
+      - 53:53/udp
+    volumes:
+      - ~/.warden/etc/dnsmasq.conf:/etc/dnsmasq.conf
+    labels:
+      - traefik.port=8080
+    restart: always
+
 volumes:
   portainer:
 
