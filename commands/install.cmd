@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 [[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!" && exit 1
 
-if ! [[ -d "${WARDEN_SSL_DIR}/rootca" ]]; then
+if [[ ! -d "${WARDEN_SSL_DIR}/rootca" ]]; then
     mkdir -p "${WARDEN_SSL_DIR}/rootca"/{certs,crl,newcerts,private}
 
     touch "${WARDEN_SSL_DIR}/rootca/index.txt"
