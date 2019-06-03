@@ -45,7 +45,7 @@ services:
       - ~/.ssh/id_rsa.pub:/etc/authorized_keys/admin
       - sshd_keys:/etc/ssh/keys
     environment:
-      - |
+      - >-
         MOTD=Welcome to the Warden SSH tunnel!
       - SSH_USERS=admin:2000:2000
     restart: always
