@@ -37,6 +37,10 @@ while (( "$#" )); do
       WARDEN_HELP=1
       break
       ;;
+    --) # end argument parsing
+      shift
+      break
+      ;;
     -*|--*=) # unsupported flags
       >&2 echo "Error: Unsupported flag $1"
       exit 1
