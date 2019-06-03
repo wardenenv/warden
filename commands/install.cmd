@@ -23,10 +23,16 @@ if [[ ! -f "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem" ]]; then
     -subj "/C=US/O=Warden Proxy Local CA"
 fi
 
-if ! security dump-trust-settings -d | grep 'Warden Proxy Local CA' >/dev/null; then
+## trust root ca differently on linux-gnu than on macOS
+if [[ "$OSTYPE" == "linux-gnu" ]] && [[ ! -f /etc/pki/ca-trust/source/anchors/warden-proxy-local-ca.cert.pem ]]; then
+    echo "==> Trusting root certificate (requires sudo privileges)"
+    sudo cp "${WARDEN_SSL_DIR}/certs/ca.cert.pem" /etc/pki/ca-trust/source/anchors/warden-proxy-local-ca.cert.pem
+    sudo update-ca-trust
+    sudo update-ca-trust enable
+elif [[ "$OSTYPE" == "darwin"* ]] && ! security dump-trust-settings -d | grep 'Warden Proxy Local CA' >/dev/null; then
   echo "==> Trusting root certificate (requires sudo privileges)"
   sudo security add-trusted-cert -d -r trustRoot \
-      -k /Library/Keychains/System.keychain "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem"
+    -k /Library/Keychains/System.keychain "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem"
 fi
 
 if [[ ! -f "${WARDEN_SSL_DIR}/certs/warden.test.crt.pem" ]]; then
