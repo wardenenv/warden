@@ -42,7 +42,7 @@ services:
     ports:
       - "2222:22"
     volumes:
-      - ~/.warden/sshd/admin.pub:/etc/authorized_keys/admin
+      - ~/.warden/sshd/tunnel.pub:/etc/authorized_keys/tunnel
       - sshd_keys:/etc/ssh/keys
     environment:
       - >-

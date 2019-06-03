@@ -41,10 +41,10 @@ if [[ ! -d /etc/resolver ]] || [[ ! -f /etc/resolver/test ]]; then
 fi
 
 ## generate rsa keypair for authenticating to warden sshd service
-if [[ ! -f "${WARDEN_HOME_DIR}/sshd/admin" ]]; then
-  echo "==> Generating rsa key pair for admin user auth into sshd service"
+if [[ ! -f "${WARDEN_HOME_DIR}/sshd/tunnel" ]]; then
+  echo "==> Generating rsa key pair for tunnel into sshd service"
   mkdir -p "${WARDEN_HOME_DIR}/sshd"
-  ssh-keygen -b 2048 -t rsa -f "${WARDEN_HOME_DIR}/sshd/admin" -N "" -C "admin@sshd.warden.test"
+  ssh-keygen -b 2048 -t rsa -f "${WARDEN_HOME_DIR}/sshd/tunnel" -N "" -C "tunnel@sshd.warden.test"
 fi
 
 ## TODO: Add following to the global ssh config at /etc/ssh/ssh_config (will require sudo)
@@ -52,5 +52,5 @@ fi
 #   HostName 127.0.0.1
 #   User tunnel
 #   Port 2222
-#   IdentityFile ~/.warden/sshd/admin
+#   IdentityFile ~/.warden/sshd/tunnel
 #
