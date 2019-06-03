@@ -47,10 +47,16 @@ if [[ ! -f "${WARDEN_HOME_DIR}/sshd/tunnel" ]]; then
   ssh-keygen -b 2048 -t rsa -f "${WARDEN_HOME_DIR}/sshd/tunnel" -N "" -C "tunnel@sshd.warden.test"
 fi
 
-## TODO: Add following to the global ssh config at /etc/ssh/ssh_config (will require sudo)
-# Host sshd.warden.test
-#   HostName 127.0.0.1
-#   User tunnel
-#   Port 2222
-#   IdentityFile ~/.warden/sshd/tunnel
-#
+if ! grep '## WARDEN START ##' /etc/ssh/ssh_config >/dev/null; then
+  echo "==> Configuring sshd tunnel in host ssh_config (requires sudo privileges)"
+  cat <<-EOF | sudo tee -a /etc/ssh/ssh_config >/dev/null
+		
+		## WARDEN START ##
+		Host sshd.warden.test
+		  HostName 127.0.0.1
+		  User tunnel
+		  Port 2222
+		  IdentityFile ~/.warden/sshd/tunnel
+		## WARDEN END ##
+		EOF
+fi
