@@ -29,7 +29,7 @@ services:
     container_name: dnsmasq
     image: jpillora/dnsmasq
     ports:
-      - 53:53/udp
+      - "53:53/udp"
     volumes:
       - ~/.warden/etc/dnsmasq.conf:/etc/dnsmasq.conf
     labels:
