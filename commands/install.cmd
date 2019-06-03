@@ -39,3 +39,18 @@ if [[ ! -d /etc/resolver ]] || [[ ! -f /etc/resolver/test ]]; then
   sudo mkdir /etc/resolver
   echo "nameserver 127.0.0.1" | sudo tee /etc/resolver/test >/dev/null
 fi
+
+## generate rsa keypair for authenticating to warden sshd service
+if [[ ! -f "${WARDEN_HOME_DIR}/sshd/admin" ]]; then
+  echo "==> Generating rsa key pair for admin user auth into sshd service"
+  mkdir -p "${WARDEN_HOME_DIR}/sshd"
+  ssh-keygen -b 2048 -t rsa -f "${WARDEN_HOME_DIR}/sshd/admin" -N "" -C "admin@sshd.warden.test"
+fi
+
+## TODO: Add following to the global ssh config at /etc/ssh/ssh_config (will require sudo)
+# Host sshd.warden.test
+#   HostName 127.0.0.1
+#   User tunnel
+#   Port 2222
+#   IdentityFile ~/.warden/sshd/admin
+#
