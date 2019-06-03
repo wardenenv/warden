@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+set -e
+trap '>&2 printf "\n\e[01;31mError: Command \`%s\` on line $LINENO failed with exit code $?\033[0m\n" "$BASH_COMMAND"' ERR
+
+## find directory where this script is located following symlinks if neccessary
+readonly WARDEN_DIR="$(
+  cd "$(
+    dirname "$(
+      (readlink "${BASH_SOURCE[0]}" || echo "${BASH_SOURCE[0]}") \
+        | sed -e "s#^../#$(dirname "$(dirname "${BASH_SOURCE[0]}")")/#"
+    )"
+  )/.." >/dev/null \
+  && pwd
+)"
+
+## define global directory paths by commands
+readonly WARDEN_HOME_DIR=~/.warden
+readonly WARDEN_SSL_DIR="${WARDEN_HOME_DIR}/ssl"
+
+## declare variables for flags and arguments
+declare WARDEN_HELP=
+declare WARDEN_PARAMS=()
+declare WARDEN_COMMAND=
+
+## parse first argument as command and determine validity
+if (( "$#" )) && [[ -f "${WARDEN_DIR}/commands/${1}.cmd" ]]; then
+  WARDEN_COMMAND="$1"
+  shift
+else
+  WARDEN_COMMAND=usage
+fi
+
+## parse arguments
+while (( "$#" )); do
+  case "$1" in
+    -h|--help)
+      WARDEN_HELP=1
+      break
+      ;;
+    --) # end argument parsing
+      shift
+      break
+      ;;
+    -*|--*=) # unsupported flags
+      >&2 echo "Error: Unsupported flag $1"
+      exit 1
+      ;;
+    *) # preserve positional arguments
+      WARDEN_PARAMS+=($1)
+      shift
+      ;;
+  esac
+done
+
+function assert_installed {
+  if [[ ! -f "${WARDEN_HOME_DIR}/.installed" ]]; then
+    "${WARDEN_DIR}/bin/warden" install
+    date > "${WARDEN_HOME_DIR}/.installed"
+  fi
+}
+
+## display command specific usage info if help flag is set
+if [[ ${WARDEN_HELP} ]]; then
+  source "${WARDEN_DIR}/commands/usage.cmd"
+fi
+
+## execute sub-command in context of this script
+source "${WARDEN_DIR}/commands/${WARDEN_COMMAND}.cmd"

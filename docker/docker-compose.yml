@@ -1,0 +1,59 @@
+version: "3.5"
+services:
+  traefik:
+    container_name: traefik
+    image: traefik
+    command: --api --docker --docker.domain=test
+    ports:
+      - "80:80"     # The HTTP port
+      - "443:443"   # The HTTPS port
+    volumes:
+      - ~/.warden/etc/traefik/traefik.toml:/etc/traefik/traefik.toml
+      - ~/.warden/ssl/certs:/etc/ssl/certs
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - traefik.port=8080
+    restart: always
+
+  portainer:
+    container_name: portainer
+    image: portainer/portainer
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer:/data
+    labels:
+      - traefik.port=9000
+    restart: always
+
+  dnsmasq:
+    container_name: dnsmasq
+    image: jpillora/dnsmasq
+    ports:
+      - "53:53/udp"
+    volumes:
+      - ~/.warden/etc/dnsmasq.conf:/etc/dnsmasq.conf
+    labels:
+      - traefik.port=8080
+    restart: always
+
+  tunnel:
+    container_name: tunnel
+    image: panubo/sshd
+    ports:
+      - "2222:22"
+    volumes:
+      - ~/.warden/tunnel/ssh_key.pub:/etc/authorized_keys/user
+      - sshd_keys:/etc/ssh/keys
+    environment:
+      - >-
+        MOTD=Welcome to the Warden SSH tunnel!
+      - SSH_USERS=user:2000:2000
+    restart: always
+
+volumes:
+  portainer:
+  sshd_keys:
+
+networks:
+  default:
+    name: warden
