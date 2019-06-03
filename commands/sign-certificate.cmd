@@ -51,6 +51,7 @@ openssl x509 -req -days 365 -sha256 -extensions v3_req            \
   -out "${WARDEN_SSL_DIR}/certs/${CERTIFICATE_NAME}.crt.pem" 
 
 if [[ "$(cd "${WARDEN_DIR}" && docker-compose -p warden -f docker/docker-compose.yml ps -q traefik)" ]]; then
-  echo "==> Restarting traefik"
+  echo "==> Updating traefik"
+  "${WARDEN_DIR}/bin/warden" up traefik
   "${WARDEN_DIR}/bin/warden" restart traefik
 fi
