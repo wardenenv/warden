@@ -41,10 +41,10 @@ if [[ ! -d /etc/resolver ]] || [[ ! -f /etc/resolver/test ]]; then
 fi
 
 ## generate rsa keypair for authenticating to warden sshd service
-if [[ ! -f "${WARDEN_HOME_DIR}/sshd/tunnel" ]]; then
+if [[ ! -f "${WARDEN_HOME_DIR}/tunnel/ssh_key" ]]; then
   echo "==> Generating rsa key pair for tunnel into sshd service"
-  mkdir -p "${WARDEN_HOME_DIR}/sshd"
-  ssh-keygen -b 2048 -t rsa -f "${WARDEN_HOME_DIR}/sshd/tunnel" -N "" -C "tunnel@sshd.warden.test"
+  mkdir -p "${WARDEN_HOME_DIR}/tunnel"
+  ssh-keygen -b 2048 -t rsa -f "${WARDEN_HOME_DIR}/tunnel/ssh_key" -N "" -C "user@tunnel.warden.test"
 fi
 
 if ! grep '## WARDEN START ##' /etc/ssh/ssh_config >/dev/null; then
@@ -52,11 +52,11 @@ if ! grep '## WARDEN START ##' /etc/ssh/ssh_config >/dev/null; then
   cat <<-EOF | sudo tee -a /etc/ssh/ssh_config >/dev/null
 		
 		## WARDEN START ##
-		Host sshd.warden.test
+		Host tunnel.warden.test
 		  HostName 127.0.0.1
-		  User tunnel
+		  User user
 		  Port 2222
-		  IdentityFile ~/.warden/sshd/tunnel
+		  IdentityFile ~/.warden/tunnel/ssh_key
 		## WARDEN END ##
 		EOF
 fi

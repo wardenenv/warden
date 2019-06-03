@@ -36,18 +36,18 @@ services:
       - traefik.port=8080
     restart: always
 
-  sshd:
-    container_name: sshd
+  tunnel:
+    container_name: tunnel
     image: panubo/sshd
     ports:
       - "2222:22"
     volumes:
-      - ~/.warden/sshd/tunnel.pub:/etc/authorized_keys/tunnel
+      - ~/.warden/tunnel/ssh_key.pub:/etc/authorized_keys/user
       - sshd_keys:/etc/ssh/keys
     environment:
       - >-
         MOTD=Welcome to the Warden SSH tunnel!
-      - SSH_USERS=tunnel:2000:2000
+      - SSH_USERS=user:2000:2000
     restart: always
 
 volumes:
