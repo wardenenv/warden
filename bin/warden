@@ -56,6 +56,7 @@ function assert_installed {
   if [[ ! -f "${WARDEN_HOME_DIR}/.installed" ]]; then
     "${WARDEN_DIR}/bin/warden" install
     date > "${WARDEN_HOME_DIR}/.installed"
+    echo "==> Installed successfully. Starting..."
   fi
 }
 

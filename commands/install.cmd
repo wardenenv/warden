@@ -71,5 +71,3 @@ if ! grep '## WARDEN START ##' /etc/ssh/ssh_config >/dev/null; then
 		## WARDEN END ##
 		EOF
 fi
-
-echo "==> Installed successfully"
