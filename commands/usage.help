@@ -11,7 +11,7 @@ WARDEN_HEADER='
 
 WARDEN_USAGE=$(cat <<EOF
 ${WARDEN_HEADER:1}
-Warden version 0.1.0-dev
+Warden version 0.1.0-beta1
 
 \033[33mUsage:\033[0m
   command [options] [arguments]
