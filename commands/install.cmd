@@ -53,6 +53,11 @@ if [[ ! -f "${WARDEN_HOME_DIR}/tunnel/ssh_key" ]]; then
   ssh-keygen -b 2048 -t rsa -f "${WARDEN_HOME_DIR}/tunnel/ssh_key" -N "" -C "user@tunnel.warden.test"
 fi
 
+## since bind mounts are native on linux to use .pub file as authorized_keys file in tunnel it must have proper perms
+if [[ "$OSTYPE" == "linux-gnu" ]] && [[ "$(stat -c '%U' "${WARDEN_HOME_DIR}/tunnel/ssh_key.pub")" != "root" ]]; then
+  sudo chown root:root "${WARDEN_HOME_DIR}/tunnel/ssh_key.pub"
+fi
+
 if ! grep '## WARDEN START ##' /etc/ssh/ssh_config >/dev/null; then
   echo "==> Configuring sshd tunnel in host ssh_config (requires sudo privileges)"
   cat <<-EOF | sudo tee -a /etc/ssh/ssh_config >/dev/null
