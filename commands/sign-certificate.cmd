@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 [[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!" && exit 1
 
+## ensure warden install has been run
+assert_installed
+
 mkdir -p "${WARDEN_SSL_DIR}/certs"
 
 if [[ ! -f "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem" ]]; then

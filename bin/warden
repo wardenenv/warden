@@ -53,10 +53,15 @@ while (( "$#" )); do
 done
 
 function assert_installed {
-  if [[ ! -f "${WARDEN_HOME_DIR}/.installed" ]]; then
+  if [[ ! -f "${WARDEN_HOME_DIR}/.installed" ]] \
+    || [[ "${WARDEN_HOME_DIR}/.installed" -ot "${WARDEN_DIR}/bin/warden" ]]
+  then
+    [[ -f "${WARDEN_HOME_DIR}/.installed" ]] && echo "==> Updating warden" || echo "==> Starting initialization"
+
     "${WARDEN_DIR}/bin/warden" install
+
+    [[ -f "${WARDEN_HOME_DIR}/.installed" ]] && echo "==> Update complete" || echo "==> Initialization complete"
     date > "${WARDEN_HOME_DIR}/.installed"
-    echo "==> Installed successfully"
   fi
 }
 
