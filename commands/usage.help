@@ -11,7 +11,7 @@ WARDEN_HEADER='
 
 WARDEN_USAGE=$(cat <<EOF
 ${WARDEN_HEADER:1}
-Warden version 0.1.0-beta1
+Warden version 0.1.0-beta2
 
 \033[33mUsage:\033[0m
   command [options] [arguments]
@@ -22,7 +22,7 @@ Warden version 0.1.0-beta1
 
 \033[33mCommands:\033[0m
   down              Stop and remove containers, networks, and services
-  install           Installs local docker environment in the current directory
+  install           Initializes or updates warden configuration on host machine
   restart           Restarts warden managed containers
   sign-certificate  Signs a wildcard certificate including all passed hostnames on the SAN list
   start             Start services
