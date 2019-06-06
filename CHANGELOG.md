@@ -1,3 +1,8 @@
+0.1.0-beta3
+===============
+
+* Fixed infinite loop on initial setup routine
+
 0.1.0-beta2
 ===============
 
