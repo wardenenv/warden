@@ -1,0 +1,58 @@
+version: "3"
+
+services:
+
+  nginx:
+    image: davidalger/magento:nginx-${NGINX_VERSION:-1.16}-alpine
+    depends_on:
+      - db
+      - phpfpm
+    volumes:
+      - ./:/var/www/html:delegated
+    labels:
+      - traefik.docker.network=warden
+      - traefik.frontend.rule=Host:${TRAEFIK_SUBDOMAIN:-www}.${TRAEFIK_DOMAIN}
+    networks:
+      - warden
+      - default
+
+  phpfpm:
+    image: davidalger/magento:php-fpm-${PHP_VERSION:-7.2}-alpine
+    depends_on:
+      - db
+    volumes:
+      - ~/.composer:/var/www/.composer:delegated
+      - ./:/var/www/html:delegated
+
+  db:
+    image: mariadb:${MARIADB_VERSION:-10.3}
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-magento}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-magento}
+      - MYSQL_USER=${MYSQL_USER:-magento}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-magento}
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - warden
+      - default
+
+  redis:
+    image: redis:${REDIS_VERSION:-5.0}-alpine
+
+  mailhog:
+    image: mailhog/mailhog:${MAILHOG_VERSION:-v1.0.0}
+    labels:
+      - traefik.docker.network=warden
+      - traefik.port=8025
+      - traefik.frontend.rule=Host:mailhog.${TRAEFIK_DOMAIN}
+    networks:
+      - warden
+      - default
+
+volumes:
+  dbdata:
+
+networks:
+  warden:
+    external: true
