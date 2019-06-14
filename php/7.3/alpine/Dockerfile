@@ -40,9 +40,8 @@ RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
         opcache \
     && pecl channel-update pecl.php.net \
     && echo -e "yes\nyes" | pecl install -o -f \
-        xdebug \
         igbinary \
         redis \
         amqp \
-    && docker-php-ext-enable xdebug redis igbinary amqp \
+    && docker-php-ext-enable redis igbinary amqp \
     && apk del .build-deps

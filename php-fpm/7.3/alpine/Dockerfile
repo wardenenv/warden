@@ -44,7 +44,7 @@ RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
         igbinary \
         redis \
         amqp \
-    && docker-php-ext-enable xdebug redis igbinary amqp \
+    && docker-php-ext-enable redis igbinary amqp \
     && apk del .build-deps
 
 COPY etc/php.ini /usr/local/etc/php/php.ini
