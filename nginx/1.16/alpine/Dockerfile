@@ -1,5 +1,5 @@
 FROM nginx:1.16-alpine
-RUN apk add --no-cache bash
+RUN apk add --no-cache bash shadow
 
 ENV NGINX_UPSTREAM_HOST     phpfpm
 ENV NGINX_UPSTREAM_PORT     9000
@@ -10,6 +10,7 @@ COPY etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.template
 COPY etc/nginx/available.d/magento1.conf /etc/nginx/available.d/magento1.conf
 COPY etc/nginx/available.d/magento2.conf /etc/nginx/available.d/magento2.conf
 
+RUN groupmod -g 1000 www-data
 RUN echo "export PS1='\[\033[0;0m\]\u@\h\[\033[0m\]:\[\033[0;31m\]\w\[\033[0m\]# '" >> /root/.bashrc
 
 VOLUME  /var/www/html

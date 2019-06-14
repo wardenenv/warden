@@ -2,6 +2,7 @@ FROM php:7.1-fpm-alpine3.9
 
 # Install dependencies
 RUN apk add --no-cache \
+        shadow \
         bzip2-dev \
         freetype-dev \
         gettext-dev \
@@ -57,6 +58,7 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 RUN echo "export PS1='\[\033[0;0m\]\u@\h\[\033[0m\]:\[\033[0;31m\]\w\[\033[0m\]# '" >> /root/.bashrc \
     && echo "export PS1='\[\033[0;36m\]\u@\h\[\033[0m\]:\[\033[0;37m\]\w\[\033[0m\]$ '" >> /home/www-data/.bashrc
 
+RUN usermod -u 1000 www-data && groupmod -g 1000 www-data && chown www-data:www-data /var/www/html
 USER www-data
 
 VOLUME  /var/www/html
