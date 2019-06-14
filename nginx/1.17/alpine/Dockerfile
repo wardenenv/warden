@@ -10,6 +10,8 @@ COPY etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.template
 COPY etc/nginx/available.d/magento1.conf /etc/nginx/available.d/magento1.conf
 COPY etc/nginx/available.d/magento2.conf /etc/nginx/available.d/magento2.conf
 
+RUN echo "export PS1='\[\033[0;0m\]\u@\h\[\033[0m\]:\[\033[0;31m\]\w\[\033[0m\]# '" >> /root/.bashrc
+
 VOLUME  /var/www/html
 WORKDIR /var/www/html
 

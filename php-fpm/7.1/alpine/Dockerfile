@@ -53,6 +53,10 @@ COPY etc/php.ini /usr/local/etc/php/php.ini
 COPY etc/opcache.ini /usr/local/etc/php/conf.d/05-opcache.ini
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
+# Configure pretty PS1 with differing colors for root and www-data
+RUN echo "export PS1='\[\033[0;0m\]\u@\h\[\033[0m\]:\[\033[0;31m\]\w\[\033[0m\]# '" >> /root/.bashrc \
+    && echo "export PS1='\[\033[0;36m\]\u@\h\[\033[0m\]:\[\033[0;37m\]\w\[\033[0m\]$ '" >> /home/www-data/.bashrc
+
 USER www-data
 
 VOLUME  /var/www/html
