@@ -1,9 +1,19 @@
 FROM nginx:1.17-alpine
+RUN apk add --no-cache bash
 
-COPY etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
-COPY etc/nginx/default.d/magento2.conf /etc/nginx/default.d/magento2.conf
+ENV NGINX_UPSTREAM_HOST     phpfpm
+ENV NGINX_UPSTREAM_PORT     9000
+ENV NGINX_ROOT              /var/www/html
+ENV NGINX_TEMPLATE          magento2.conf
 
-RUN mkdir -p /var/www/html/pub && chown -R 82:www-data /var/www/html
+COPY etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.template
+COPY etc/nginx/available.d/magento1.conf /etc/nginx/available.d/magento1.conf
+COPY etc/nginx/available.d/magento2.conf /etc/nginx/available.d/magento2.conf
 
 VOLUME  /var/www/html
 WORKDIR /var/www/html
+
+CMD [ "${NGINX_TEMPLATE}" = "magento2.conf" ] && export NGINX_PUBLIC=/pub; \
+    envsubst '${NGINX_UPSTREAM_HOST} ${NGINX_UPSTREAM_PORT} ${NGINX_ROOT} ${NGINX_PUBLIC} ${NGINX_TEMPLATE}' \
+        < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf \
+    && nginx -g "daemon off;"

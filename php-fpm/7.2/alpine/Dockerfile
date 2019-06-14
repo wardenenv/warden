@@ -12,7 +12,8 @@ RUN apk add --no-cache \
         libxml2-dev \
         libxslt-dev \
         libzip-dev \
-        rabbitmq-c-dev
+        rabbitmq-c-dev \
+        bash
 
 # Install required PHP extensions
 RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
@@ -49,8 +50,6 @@ RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
 COPY etc/php.ini /usr/local/etc/php/php.ini
 COPY etc/opcache.ini /usr/local/etc/php/conf.d/05-opcache.ini
 COPY --from=composer /usr/bin/composer /usr/bin/composer
-
-RUN mkdir -p /var/www/html/pub && chown -R www-data:www-data /var/www/html
 
 USER www-data
 

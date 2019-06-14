@@ -13,10 +13,15 @@ readonly BASE_DIR="$(
   && pwd
 )/.."
 
+## support passing a single argument to the command to be more specific on what is built
+SEARCH_PATH="${1:-*}"
+
+## change into base directory and login to docker hub if neccessary
 pushd ${BASE_DIR} >/dev/null
 docker login
 
-for file in $(find * -type f -name Dockerfile); do
+## iterate over and build each Dockerfile
+for file in $(find ${SEARCH_PATH} -type f -name Dockerfile); do
     BUILD_DIR="$(dirname "${file}")"
     IMAGE_TAG="davidalger/magento:$(dirname "${file}" | tr / -)"
     docker build -t "${IMAGE_TAG}" ${BUILD_DIR}
