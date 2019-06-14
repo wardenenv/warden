@@ -4,6 +4,8 @@ services:
 
   nginx:
     image: davidalger/magento:nginx-${NGINX_VERSION:-1.16}-alpine
+    environment:
+      - NGINX_TEMPLATE=magento1.conf
     depends_on:
       - db
       - phpfpm
