@@ -3,6 +3,7 @@ version: "3"
 services:
 
   nginx:
+    hostname: nginx
     image: davidalger/magento:nginx-${NGINX_VERSION:-1.16}-alpine
     depends_on:
       - db
@@ -12,6 +13,7 @@ services:
       - appdata:/var/www/html
 
   varnish:
+    hostname: varnish
     image: davidalger/magento:varnish-${VARNISH_VERSION:-4.1}-alpine
     depends_on:
       - nginx
@@ -23,6 +25,7 @@ services:
       - default
 
   phpfpm:
+    hostname: phpfpm
     image: davidalger/magento:php-fpm-${PHP_VERSION:-7.2}-alpine
     depends_on:
       - db
@@ -32,6 +35,7 @@ services:
       - appdata:/var/www/html
 
   db:
+    hostname: mariadb
     image: mariadb:${MARIADB_VERSION:-10.3}
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-magento}
@@ -45,9 +49,11 @@ services:
       - default
 
   redis:
+    hostname: redis
     image: redis:${REDIS_VERSION:-5.0}-alpine
 
   mailhog:
+    hostname: mailhog
     image: mailhog/mailhog:${MAILHOG_VERSION:-v1.0.0}
     labels:
       - traefik.docker.network=warden
