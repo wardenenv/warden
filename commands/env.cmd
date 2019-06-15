@@ -3,7 +3,10 @@
 
 WARDEN_ENV_PATH="$(pwd)"
 while [[ "${WARDEN_ENV_PATH}" != "/" ]]; do
-    if [[ -f "${WARDEN_ENV_PATH}/.env" ]] && grep "^WARDEN_ENV_TYPE" "${WARDEN_ENV_PATH}/.env" >/dev/null; then
+    if [[ -f "${WARDEN_ENV_PATH}/.env" ]] \
+        && grep "^WARDEN_ENV_NAME" "${WARDEN_ENV_PATH}/.env" >/dev/null \
+        && grep "^WARDEN_ENV_TYPE" "${WARDEN_ENV_PATH}/.env" >/dev/null
+    then
         break
     fi
     WARDEN_ENV_PATH="$(dirname "${WARDEN_ENV_PATH}")"
@@ -14,7 +17,7 @@ done
 
 eval "$(grep "^WARDEN_" "${WARDEN_ENV_PATH}/.env")"
 
-WARDEN_ENV_NAME="${WARDEN_ENV_NAME:-$(basename "${WARDEN_ENV_PATH}")}"
+WARDEN_ENV_NAME="${WARDEN_ENV_NAME:-}"
 WARDEN_ENV_TYPE="${WARDEN_ENV_TYPE:-}"
 
 [[ ! -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.yml" ]] \
