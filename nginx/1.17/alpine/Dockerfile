@@ -1,7 +1,7 @@
 FROM nginx:1.17-alpine
 RUN apk add --no-cache bash shadow
 
-ENV NGINX_UPSTREAM_HOST     phpfpm
+ENV NGINX_UPSTREAM_HOST     php-fpm
 ENV NGINX_UPSTREAM_PORT     9000
 ENV NGINX_ROOT              /var/www/html
 ENV NGINX_TEMPLATE          magento2.conf
