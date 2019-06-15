@@ -13,6 +13,14 @@ readonly WARDEN_DIR="$(
   && pwd
 )"
 
+## function for determining if a value is present in an array
+containsElement () {
+  local e match="$1"
+  shift
+  for e; do [[ "$e" == "$match" ]] && return 0; done
+  return 1
+}
+
 ## define global directory paths by commands
 readonly WARDEN_HOME_DIR=~/.warden
 readonly WARDEN_SSL_DIR="${WARDEN_HOME_DIR}/ssl"
@@ -21,6 +29,7 @@ readonly WARDEN_SSL_DIR="${WARDEN_HOME_DIR}/ssl"
 declare WARDEN_HELP=
 declare WARDEN_PARAMS=()
 declare WARDEN_COMMAND=
+declare WARDEN_ANYARGS=(env)
 
 ## parse first argument as command and determine validity
 if (( "$#" )) && [[ -f "${WARDEN_DIR}/commands/${1}.cmd" ]]; then
@@ -37,11 +46,12 @@ while (( "$#" )); do
       WARDEN_HELP=1
       break
       ;;
-    --) # end argument parsing
+    --) # end argument parsing (unless command is on 'anyargs' list and consumes anything as params)
       shift
-      break
+      containsElement "${WARDEN_COMMAND}" "${WARDEN_ANYARGS[@]}" || break
       ;;
-    -*|--*=) # unsupported flags
+    -*|--*=) # unsupported flags (unless command is on 'anyargs' list and consumes anything as params)
+      containsElement "${WARDEN_COMMAND}" "${WARDEN_ANYARGS[@]}" && break
       >&2 echo "Error: Unsupported flag $1"
       exit 1
       ;;
