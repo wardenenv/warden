@@ -9,7 +9,7 @@ services:
       - NGINX_TEMPLATE=magento1.conf
     depends_on:
       - db
-      - phpfpm
+      - php-fpm
     volumes:
       - ./:/var/www/html:delegated
     labels:
@@ -19,8 +19,8 @@ services:
       - warden
       - default
 
-  phpfpm:
-    hostname: phpfpm
+  php-fpm:
+    hostname: php-fpm
     image: davidalger/magento:php-fpm-${PHP_VERSION:-7.2}-alpine
     depends_on:
       - db

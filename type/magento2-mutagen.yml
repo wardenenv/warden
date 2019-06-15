@@ -7,7 +7,7 @@ services:
     image: davidalger/magento:nginx-${NGINX_VERSION:-1.16}-alpine
     depends_on:
       - db
-      - phpfpm
+      - php-fpm
     volumes:
       - ./pub/media:/var/www/html/pub/media:delegated
       - appdata:/var/www/html
@@ -24,8 +24,8 @@ services:
       - warden
       - default
 
-  phpfpm:
-    hostname: phpfpm
+  php-fpm:
+    hostname: php-fpm
     image: davidalger/magento:php-fpm-${PHP_VERSION:-7.2}-alpine
     depends_on:
       - db
