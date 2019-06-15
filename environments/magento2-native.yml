@@ -29,7 +29,7 @@ services:
     depends_on:
       - db
     volumes:
-      - ~/.composer:/var/www/.composer:delegated
+      - ~/.composer:/home/www-data/.composer:delegated
       - ./:/var/www/html:delegated
 
   db:
