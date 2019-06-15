@@ -50,7 +50,7 @@ services:
  
   elasticsearch:
     hostname: elasticsearch
-    image: mage2click/magento-elasticsearch:${ELASTICSEARCH_VERSION:-5.6}
+    image: davidalger/magento:elasticsearch-${ELASTICSEARCH_VERSION:-5.6}-alpine
     labels:
       - traefik.docker.network=warden
       - traefik.port=9200

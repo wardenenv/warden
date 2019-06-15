@@ -17,11 +17,11 @@ eval "$(grep "^WARDEN_" "${WARDEN_ENV_PATH}/.env")"
 WARDEN_ENV_NAME="${WARDEN_ENV_NAME:-$(basename "${WARDEN_ENV_PATH}")}"
 WARDEN_ENV_TYPE="${WARDEN_ENV_TYPE:-}"
 
-[[ ! -f "${WARDEN_DIR}/type/${WARDEN_ENV_TYPE}.yml" ]] \
+[[ ! -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.yml" ]] \
     && >&2 echo -e "\033[31mInvalid environment type \"${WARDEN_ENV_TYPE}\" specified." && exit 1
 
 docker-compose \
     --project-directory "${WARDEN_ENV_PATH}" \
     -p "${WARDEN_ENV_NAME}" \
-    -f "${WARDEN_DIR}/type/${WARDEN_ENV_TYPE}.yml" \
+    -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.yml" \
     "${WARDEN_PARAMS[@]}" "$@"
