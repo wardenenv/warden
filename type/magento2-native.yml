@@ -45,10 +45,34 @@ services:
     networks:
       - warden
       - default
+ 
+  elasticsearch:
+    hostname: elasticsearch
+    image: mage2click/magento-elasticsearch:${ELASTICSEARCH_VERSION:-5.6}
+    labels:
+      - traefik.docker.network=warden
+      - traefik.port=9200
+      - traefik.frontend.rule=Host:elasticsearch.${TRAEFIK_DOMAIN}
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    networks:
+      - warden
+      - default
 
   redis:
     hostname: redis
     image: redis:${REDIS_VERSION:-5.0}-alpine
+
+  rabbitmq:
+    hostname: rabbitmq
+    image: rabbitmq:${RABBITMQ_VERSION:-3.7.14}-management-alpine
+    labels:
+      - traefik.docker.network=warden
+      - traefik.port=15672
+      - traefik.frontend.rule=Host:rabbitmq.${TRAEFIK_DOMAIN}
+    networks:
+      - warden
+      - default
 
   mailhog:
     hostname: mailhog
@@ -63,6 +87,7 @@ services:
 
 volumes:
   dbdata:
+  esdata:
 
 networks:
   warden:
