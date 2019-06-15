@@ -11,7 +11,7 @@ backend default {
 }
 
 acl purge {
-    "phpfpm";
+    "${ACL_PURGE_HOST}";
 }
 
 sub vcl_recv {
