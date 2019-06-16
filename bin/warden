@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -e
-trap '>&2 printf "\n\e[01;31mError: Command \`%s\` on line $LINENO failed with exit code $?\033[0m\n" "$BASH_COMMAND"' ERR
+trap '>&2 printf "\n\e[01;31mERROR\033[0m: Command \`%s\` on line $LINENO failed with exit code $?\n" "$BASH_COMMAND"' ERR
 
 ## find directory where this script is located following symlinks if neccessary
 readonly WARDEN_DIR="$(
@@ -52,7 +52,7 @@ while (( "$#" )); do
       ;;
     -*|--*=) # unsupported flags (unless command is on 'anyargs' list and consumes anything as params)
       containsElement "${WARDEN_COMMAND}" "${WARDEN_ANYARGS[@]}" && break
-      >&2 echo "Error: Unsupported flag $1"
+      >&2 printf "\e[01;31mERROR\033[0m: Unsupported flag $1\n"
       exit 1
       ;;
     *) # preserve positional arguments
