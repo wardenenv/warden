@@ -1,0 +1,34 @@
+
+[watch]
+pollingInterval = 20
+
+[sync]
+mode = "two-way-resolved"
+
+[ignore]
+vcs = true
+default = [
+    # System files
+    ".DS_Store",
+    "._*",
+
+    # Vim files
+    "*~",
+    "*.sw[a-p]",
+
+    # IDE files
+    ".idea",
+
+    # Magento files
+    "/generated",
+    "/pub/media",
+    "/pub/static",
+    "/var",
+    "node_modules",
+]
+
+[permissions]
+fileModeBeta = "0644"
+directoryModeBeta = "0755"
+defaultOwnerBeta = "www-data"
+defaultGroupBeta = "www-data"
