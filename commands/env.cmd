@@ -45,6 +45,11 @@ case "${WARDEN_PARAMS[0]}" in
         mutagen create -c "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.toml" \
             --label "warden-sync=${WARDEN_ENV_NAME}" \
             "${WARDEN_ENV_PATH}" "docker://$(warden env ps -q php-fpm)/var/www/html"
+        
+        ## wait for sync session to complete initial sync before exiting
+        echo "Waiting for initial synchronization to complete"
+        while !  mutagen list --label-selector "warden-sync=${WARDEN_ENV_NAME}" \
+            | grep -i 'watching for changes'>/dev/null; do printf .; sleep 1; done; echo
         ;;
     stop-sync)
         ## terminate only sessions labeled with this env name
