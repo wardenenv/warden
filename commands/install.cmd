@@ -40,10 +40,14 @@ if [[ ! -f "${WARDEN_SSL_DIR}/certs/warden.test.crt.pem" ]]; then
 fi
 
 ## configure resolver for .test domains
-if [[ ! -d /etc/resolver ]] || [[ ! -f /etc/resolver/test ]]; then
+if [[ "$OSTYPE" == "linux-gnu" ]] && systemctl status NetworkManager | grep 'active (running)' >/dev/null; then
+  echo "==> NetworkManager DNS configuration not yet implemented on linux"
+elif [[ "$OSTYPE" == "darwin"* ]] && [[ ! -d /etc/resolver ]] || [[ ! -f /etc/resolver/test ]]; then
   echo "==> Configuring resolver for .test domains (requires sudo privileges)"
   sudo mkdir /etc/resolver
   echo "nameserver 127.0.0.1" | sudo tee /etc/resolver/test >/dev/null
+else
+  echo "==> WARNING: Use of dnsmasq is not supported on this system; entries in /etc/hosts will be required :("
 fi
 
 ## generate rsa keypair for authenticating to warden sshd service
