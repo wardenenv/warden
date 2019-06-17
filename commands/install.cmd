@@ -40,21 +40,24 @@ if [[ ! -f "${WARDEN_SSL_DIR}/certs/warden.test.crt.pem" ]]; then
 fi
 
 ## configure resolver for .test domains
-if [[ "$OSTYPE" == "linux-gnu" ]] \
-  && systemctl status NetworkManager | grep 'active (running)' >/dev/null \
-  && ! grep '^prepend domain-name-servers 127.0.0.1;$' /etc/dhcp/dhclient.conf >/dev/null 2>&1
-then
-  echo "==> Configuring resolver for .test domains (requires sudo privileges)"
-  DHCLIENT_CONF=$'\n'"$(sudo cat /etc/dhcp/dhclient.conf 2>/dev/null)" || DHCLIENT_CONF=
-  DHCLIENT_CONF="prepend domain-name-servers 127.0.0.1;${DHCLIENT_CONF}"
-  echo "${DHCLIENT_CONF}" | sudo tee /etc/dhcp/dhclient.conf
-  sudo systemctl restart NetworkManager
-elif [[ "$OSTYPE" == "darwin"* ]] && [[ ! -d /etc/resolver ]] || [[ ! -f /etc/resolver/test ]]; then
-  echo "==> Configuring resolver for .test domains (requires sudo privileges)"
-  sudo mkdir /etc/resolver
-  echo "nameserver 127.0.0.1" | sudo tee /etc/resolver/test >/dev/null
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+  if systemctl status NetworkManager | grep 'active (running)' >/dev/null \
+    && ! grep '^prepend domain-name-servers 127.0.0.1;$' /etc/dhcp/dhclient.conf >/dev/null 2>&1
+  then
+    echo "==> Configuring resolver for .test domains (requires sudo privileges)"
+    DHCLIENT_CONF=$'\n'"$(sudo cat /etc/dhcp/dhclient.conf 2>/dev/null)" || DHCLIENT_CONF=
+    DHCLIENT_CONF="prepend domain-name-servers 127.0.0.1;${DHCLIENT_CONF}"
+    echo "${DHCLIENT_CONF}" | sudo tee /etc/dhcp/dhclient.conf
+    sudo systemctl restart NetworkManager
+  fi
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+  if [[ ! -f /etc/resolver/test ]]; then
+    echo "==> Configuring resolver for .test domains (requires sudo privileges)"
+    sudo mkdir /etc/resolver
+    echo "nameserver 127.0.0.1" | sudo tee /etc/resolver/test >/dev/null
+  fi
 else
-  echo "==> WARNING: Use of dnsmasq is not supported on this system; entries in /etc/hosts will be required :("
+  echo -e "\033[33m==> WARNING: Use of dnsmasq is not supported on this system; entries in /etc/hosts will be required\033[0m"
 fi
 
 ## generate rsa keypair for authenticating to warden sshd service
