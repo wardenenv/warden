@@ -14,6 +14,7 @@ fi
 eval "$(grep "^MYSQL_" "${WARDEN_ENV_PATH}/.env")"
 eval "$(grep -E '^\W+- MYSQL_.*=\$\{.*\}' "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.yml" | sed -E 's/.*- //g')"
 
+## sub-command execution
 case "${WARDEN_PARAMS[0]}" in
     connect)
         "${WARDEN_DIR}/bin/warden" env exec db \
