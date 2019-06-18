@@ -4,7 +4,7 @@ services:
 
   nginx:
     hostname: nginx
-    image: davidalger/magento:nginx-${NGINX_VERSION:-1.16}-alpine
+    image: davidalger/warden:nginx-${NGINX_VERSION:-1.16}-alpine
     depends_on:
       - db
       - php-fpm
@@ -13,7 +13,7 @@ services:
 
   varnish:
     hostname: varnish
-    image: davidalger/magento:varnish-${VARNISH_VERSION:-4.1}-alpine
+    image: davidalger/warden:varnish-${VARNISH_VERSION:-4.1}-alpine
     depends_on:
       - nginx
     labels:
@@ -25,7 +25,7 @@ services:
 
   php-fpm:
     hostname: php-fpm
-    image: davidalger/magento:php-fpm-${PHP_VERSION:-7.2}-alpine
+    image: davidalger/php:${PHP_VERSION:-7.2}-fpm-alpine
     depends_on:
       - db
     volumes:
