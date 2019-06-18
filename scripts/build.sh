@@ -23,7 +23,7 @@ docker login
 ## iterate over and build each Dockerfile
 for file in $(find ${SEARCH_PATH} -type f -name Dockerfile); do
     BUILD_DIR="$(dirname "${file}")"
-    IMAGE_TAG="davidalger/magento:$(dirname "${file}" | tr / -)"
+    IMAGE_TAG="davidalger/warden:$(dirname "${file}" | tr / -)"
     docker build -t "${IMAGE_TAG}" ${BUILD_DIR}
     docker push "${IMAGE_TAG}"
 done
