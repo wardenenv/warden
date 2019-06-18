@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+[[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!" && exit 1
+
+WARDEN_USAGE=$(cat <<EOF
+\033[33mUsage:\033[0m
+  db <sub-command>
+
+\033[33mOptions:\033[0m
+  -h, --help        Display this help menu
+  -v, --verbose     Increases verbosity of output
+
+\033[33mCommands:\033[0m
+  connect           Launches an interactive mysql session within the current project environment
+  import            Reads data from stdin and loads it into the current project\047s mysql database
+EOF
+)

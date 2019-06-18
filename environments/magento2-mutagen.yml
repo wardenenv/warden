@@ -1,0 +1,97 @@
+version: "3"
+
+services:
+
+  nginx:
+    hostname: nginx
+    image: davidalger/warden:nginx-${NGINX_VERSION:-1.16}-alpine
+    depends_on:
+      - db
+      - php-fpm
+    volumes:
+      - ./pub/media:/var/www/html/pub/media:delegated
+      - appdata:/var/www/html
+
+  varnish:
+    hostname: varnish
+    image: davidalger/warden:varnish-${VARNISH_VERSION:-4.1}-alpine
+    depends_on:
+      - nginx
+    labels:
+      - traefik.docker.network=warden
+      - traefik.frontend.rule=Host:${TRAEFIK_SUBDOMAIN:-www}.${TRAEFIK_DOMAIN}
+    networks:
+      - warden
+      - default
+
+  php-fpm:
+    hostname: php-fpm
+    image: davidalger/php:${PHP_VERSION:-7.2}-fpm-alpine
+    depends_on:
+      - db
+    volumes:
+      - ~/.composer:/home/www-data/.composer:delegated
+      - ./pub/media:/var/www/html/pub/media:delegated
+      - appdata:/var/www/html
+
+  db:
+    hostname: mariadb
+    image: mariadb:${MARIADB_VERSION:-10.3}
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-magento}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-magento}
+      - MYSQL_USER=${MYSQL_USER:-magento}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-magento}
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - warden
+      - default
+ 
+  elasticsearch:
+    hostname: elasticsearch
+    image: davidalger/warden:elasticsearch-${ELASTICSEARCH_VERSION:-5.6}-alpine
+    labels:
+      - traefik.docker.network=warden
+      - traefik.port=9200
+      - traefik.frontend.rule=Host:elasticsearch.${TRAEFIK_DOMAIN}
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    networks:
+      - warden
+      - default
+
+  redis:
+    hostname: redis
+    image: redis:${REDIS_VERSION:-5.0}-alpine
+
+  rabbitmq:
+    hostname: rabbitmq
+    image: rabbitmq:${RABBITMQ_VERSION:-3.7.14}-management-alpine
+    labels:
+      - traefik.docker.network=warden
+      - traefik.port=15672
+      - traefik.frontend.rule=Host:rabbitmq.${TRAEFIK_DOMAIN}
+    networks:
+      - warden
+      - default
+
+  mailhog:
+    hostname: mailhog
+    image: mailhog/mailhog:${MAILHOG_VERSION:-v1.0.0}
+    labels:
+      - traefik.docker.network=warden
+      - traefik.port=8025
+      - traefik.frontend.rule=Host:mailhog.${TRAEFIK_DOMAIN}
+    networks:
+      - warden
+      - default
+
+volumes:
+  appdata:
+  dbdata:
+  esdata:
+
+networks:
+  warden:
+    external: true

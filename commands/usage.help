@@ -11,7 +11,7 @@ WARDEN_HEADER='
 
 WARDEN_USAGE=$(cat <<EOF
 ${WARDEN_HEADER:1}
-Warden version 0.1.0-beta3
+Warden version 0.1.0-beta4
 
 \033[33mUsage:\033[0m
   command [options] [arguments]
@@ -22,6 +22,8 @@ Warden version 0.1.0-beta3
 
 \033[33mCommands:\033[0m
   down              Stop and remove containers, networks, and services
+  env-init          Configure environment by adding '.env' file to the current working directory
+  env               Controls an environment from any point within the root project directory
   install           Initializes or updates warden configuration on host machine
   restart           Restarts warden managed containers
   sign-certificate  Signs a wildcard certificate including all passed hostnames on the SAN list

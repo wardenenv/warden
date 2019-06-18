@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -e
-trap '>&2 printf "\n\e[01;31mError: Command \`%s\` on line $LINENO failed with exit code $?\033[0m\n" "$BASH_COMMAND"' ERR
+trap '>&2 printf "\n\e[01;31mERROR\033[0m: Command \`%s\` on line $LINENO failed with exit code $?\n" "$BASH_COMMAND"' ERR
 
 ## find directory where this script is located following symlinks if neccessary
 readonly WARDEN_DIR="$(
@@ -13,6 +13,14 @@ readonly WARDEN_DIR="$(
   && pwd
 )"
 
+## function for determining if a value is present in an array
+containsElement () {
+  local e match="$1"
+  shift
+  for e; do [[ "$e" == "$match" ]] && return 0; done
+  return 1
+}
+
 ## define global directory paths by commands
 readonly WARDEN_HOME_DIR=~/.warden
 readonly WARDEN_SSL_DIR="${WARDEN_HOME_DIR}/ssl"
@@ -21,6 +29,8 @@ readonly WARDEN_SSL_DIR="${WARDEN_HOME_DIR}/ssl"
 declare WARDEN_HELP=
 declare WARDEN_PARAMS=()
 declare WARDEN_COMMAND=
+declare WARDEN_ANYARGS=(env db)
+declare WARDEN_VERBOSE=
 
 ## parse first argument as command and determine validity
 if (( "$#" )) && [[ -f "${WARDEN_DIR}/commands/${1}.cmd" ]]; then
@@ -37,12 +47,17 @@ while (( "$#" )); do
       WARDEN_HELP=1
       break
       ;;
-    --) # end argument parsing
-      shift
+    -v|--verbose)
+      WARDEN_VERBOSE=1
       break
       ;;
-    -*|--*=) # unsupported flags
-      >&2 echo "Error: Unsupported flag $1"
+    --) # end argument parsing (unless command is on 'anyargs' list and consumes anything as params)
+      shift
+      containsElement "${WARDEN_COMMAND}" "${WARDEN_ANYARGS[@]}" || break
+      ;;
+    -*|--*=) # unsupported flags (unless command is on 'anyargs' list and consumes anything as params)
+      containsElement "${WARDEN_COMMAND}" "${WARDEN_ANYARGS[@]}" && break
+      >&2 printf "\e[01;31mERROR\033[0m: Unsupported flag $1\n"
       exit 1
       ;;
     *) # preserve positional arguments
