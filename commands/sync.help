@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+[[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!" && exit 1
+
+WARDEN_USAGE=$(cat <<EOF
+\033[33mUsage:\033[0m
+  sync <sub-command>
+
+\033[33mOptions:\033[0m
+  -h, --help        Display this help menu
+  -v, --verbose     Increases verbosity of output
+
+\033[33mCommands:\033[0m
+  start           Start the mutagen sync for the current project environment
+  stop            Stops the mutagen sync for the current project environment
+  list            Lists mutagen session status for current project environment
+                  and optionally (with -v) the full configuration
+EOF
+)
