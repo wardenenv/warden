@@ -8,5 +8,15 @@ WARDEN_USAGE=$(cat <<EOF
 \033[33mOptions:\033[0m
   -h, --help        Display this help menu
   -v, --verbose     Increases verbosity of output
+
+\033[33mEnvironment Types:\033[0m
+  magento2 (default)  Nginx, varnish, php-fpm, db (mariadb), elasticsearch, redis,
+                      rabbitmq, and mailhog services pre configured for Magento 2;
+                      on macOS systems code files are synced into container using
+                      mutagen session with pub/media, pub/static, generated and
+                      var dirs excluded. On Linux code is mounted natively.
+
+  magento1            Nginx, php-fpm, db (mariadb), redis, and mailhog services
+                      pre-configured for running Magento 1
 EOF
 )
