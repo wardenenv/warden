@@ -1,3 +1,11 @@
+0.1.0-beta5
+===============
+
+* Fixed issue with docker-compose exit codes would result in error messages from global trap
+* Added auto-install of mutagen where not already present when any sync command is run
+* Added support for WARDEN_WEB_ROOT env setting to publish a sub-dir into /var/www/html
+* Changed images for php-fpm to use environment type specfic images from davidalger/warden repository
+
 0.1.0-beta4
 ===============
 
