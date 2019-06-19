@@ -10,6 +10,12 @@ if (( ${#WARDEN_PARAMS[@]} == 0 )); then
     exit 1
 fi
 
+## attempt to install mutagen if not already present
+if ! which mutagen >/dev/null; then
+    echo -e "\033[33mMutagen could not be found; attempting install via brew.\033[0m"
+    brew install havoc-io/mutagen/mutagen
+fi
+
 ## sub-command execution
 case "${WARDEN_PARAMS[0]}" in
     start)
