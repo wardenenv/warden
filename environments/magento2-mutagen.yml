@@ -9,7 +9,7 @@ services:
       - db
       - php-fpm
     volumes:
-      - ./pub/media:/var/www/html/pub/media:delegated
+      - .${WARDEN_WEB_ROOT:-}/pub/media:/var/www/html/pub/media:delegated
       - appdata:/var/www/html
 
   varnish:
@@ -26,12 +26,12 @@ services:
 
   php-fpm:
     hostname: php-fpm
-    image: davidalger/php:${PHP_VERSION:-7.2}-fpm-alpine
+    image: davidalger/warden:mage2-fpm-${PHP_VERSION:-7.2}-alpine
     depends_on:
       - db
     volumes:
       - ~/.composer:/home/www-data/.composer:delegated
-      - ./pub/media:/var/www/html/pub/media:delegated
+      - .${WARDEN_WEB_ROOT:-}/pub/media:/var/www/html/pub/media:delegated
       - appdata:/var/www/html
 
   db:

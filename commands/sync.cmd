@@ -10,6 +10,12 @@ if (( ${#WARDEN_PARAMS[@]} == 0 )); then
     exit 1
 fi
 
+## attempt to install mutagen if not already present
+if ! which mutagen >/dev/null; then
+    echo -e "\033[33mMutagen could not be found; attempting install via brew.\033[0m"
+    brew install havoc-io/mutagen/mutagen
+fi
+
 ## sub-command execution
 case "${WARDEN_PARAMS[0]}" in
     start)
@@ -26,7 +32,7 @@ case "${WARDEN_PARAMS[0]}" in
         ## create sync session based on environment type configuration
         mutagen create -c "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.toml" \
             --label "warden-sync=${WARDEN_ENV_NAME}" \
-            "${WARDEN_ENV_PATH}" "docker://$(warden env ps -q php-fpm)/var/www/html"
+            "${WARDEN_ENV_PATH}${WARDEN_WEB_ROOT:-}" "docker://$(warden env ps -q php-fpm)/var/www/html"
         
         ## wait for sync session to complete initial sync before exiting
         echo "Waiting for initial synchronization to complete"

@@ -10,6 +10,9 @@ if (( ${#WARDEN_PARAMS[@]} == 0 )); then
     exit 1
 fi
 
+## simply allow the return code from docker-compose to bubble up per normal
+trap '' ERR
+
 ## anything not caught above is simply passed through to docker-compose to orchestrate
 docker-compose \
     --project-directory "${WARDEN_ENV_PATH}" \

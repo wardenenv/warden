@@ -9,7 +9,7 @@ services:
       - db
       - php-fpm
     volumes:
-      - ./:/var/www/html:delegated
+      - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
 
   varnish:
     hostname: varnish
@@ -25,12 +25,12 @@ services:
 
   php-fpm:
     hostname: php-fpm
-    image: davidalger/php:${PHP_VERSION:-7.2}-fpm-alpine
+    image: davidalger/warden:mage2-fpm-${PHP_VERSION:-7.2}-alpine
     depends_on:
       - db
     volumes:
       - ~/.composer:/home/www-data/.composer:delegated
-      - ./:/var/www/html:delegated
+      - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
 
   db:
     hostname: mariadb
