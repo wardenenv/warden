@@ -21,7 +21,7 @@ services:
 
   php-fpm:
     hostname: php-fpm
-    image: davidalger/php:${PHP_VERSION:-7.2}-fpm-alpine
+    image: davidalger/warden:mage1-fpm-${PHP_VERSION:-7.2}-alpine
     depends_on:
       - db
     volumes:
