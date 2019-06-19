@@ -11,7 +11,7 @@ services:
       - db
       - php-fpm
     volumes:
-      - ./:/var/www/html:delegated
+      - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
     labels:
       - traefik.docker.network=warden
       - traefik.frontend.rule=Host:${TRAEFIK_SUBDOMAIN:-www}.${TRAEFIK_DOMAIN}
@@ -26,7 +26,7 @@ services:
       - db
     volumes:
       - ~/.composer:/home/www-data/.composer:delegated
-      - ./:/var/www/html:delegated
+      - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
 
   db:
     hostname: mariadb

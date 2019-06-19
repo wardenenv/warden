@@ -9,7 +9,7 @@ services:
       - db
       - php-fpm
     volumes:
-      - ./pub/media:/var/www/html/pub/media:delegated
+      - .${WARDEN_WEB_ROOT:-}/pub/media:/var/www/html/pub/media:delegated
       - appdata:/var/www/html
 
   varnish:
@@ -31,7 +31,7 @@ services:
       - db
     volumes:
       - ~/.composer:/home/www-data/.composer:delegated
-      - ./pub/media:/var/www/html/pub/media:delegated
+      - .${WARDEN_WEB_ROOT:-}/pub/media:/var/www/html/pub/media:delegated
       - appdata:/var/www/html
 
   db:

@@ -9,7 +9,7 @@ services:
       - db
       - php-fpm
     volumes:
-      - ./:/var/www/html:delegated
+      - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
 
   varnish:
     hostname: varnish
@@ -30,7 +30,7 @@ services:
       - db
     volumes:
       - ~/.composer:/home/www-data/.composer:delegated
-      - ./:/var/www/html:delegated
+      - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
 
   db:
     hostname: mariadb
