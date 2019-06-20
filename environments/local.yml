@@ -1,0 +1,4 @@
+version: "3"
+networks:
+  warden:
+    external: true
