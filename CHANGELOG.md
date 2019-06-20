@@ -1,3 +1,9 @@
+0.1.0-beta6
+===============
+
+* Added support for extending environment configuration on a per-project basis via `.warden/warden-env.yml` and `.warden/warden-env.<WARDEN_ENV_TYPE>.yml` files
+* Added `local` env type to support projects which do not conform to any of the templated environments suppoprted out-of-the-box
+
 0.1.0-beta5
 ===============
 
