@@ -13,9 +13,18 @@ fi
 ## simply allow the return code from docker-compose to bubble up per normal
 trap '' ERR
 
+## configure docker-compose files
+DOCKER_COMPOSE_ARGS=-f\ "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.yml"
+
+if [[ -f "${WARDEN_ENV_PATH}/.warden/warden-env.yml" ]]; then
+    DOCKER_COMPOSE_ARGS+=\ -f\ "${WARDEN_ENV_PATH}/.warden/warden-env.yml"
+fi
+
+if [[ -f "${WARDEN_ENV_PATH}/.warden/warden-env.${WARDEN_ENV_TYPE}.yml" ]]; then
+    DOCKER_COMPOSE_ARGS+=\ -f\ "${WARDEN_ENV_PATH}/.warden/warden-env.${WARDEN_ENV_TYPE}.yml"
+fi
+
 ## anything not caught above is simply passed through to docker-compose to orchestrate
 docker-compose \
-    --project-directory "${WARDEN_ENV_PATH}" \
-    -p "${WARDEN_ENV_NAME}" \
-    -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.yml" \
-    "${WARDEN_PARAMS[@]}" "$@"
+    --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
+    ${DOCKER_COMPOSE_ARGS} "${WARDEN_PARAMS[@]}" "$@"
