@@ -24,6 +24,8 @@ COPY docker-php-entrypoint /usr/local/bin/
 COPY etc/additions.ini /usr/local/etc/php/conf.d/10-additions.ini.template
 
 RUN touch /usr/local/etc/php/conf.d/10-additions.ini \
-    && chown www-data /usr/local/etc/php/conf.d/10-additions.ini
+    && chown www-data /usr/local/etc/php/conf.d/10-additions.ini \
+    && mkdir /var/www/html/pub \
+    && chown www-data:www-data /var/www/html/pub
 
 USER www-data
