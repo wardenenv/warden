@@ -13,7 +13,8 @@ services:
     volumes:
       - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
     labels:
-      - traefik.docker.network=warden
+      - traefik.enable=true
+      - traefik.port=80
       - traefik.frontend.rule=Host:${TRAEFIK_SUBDOMAIN:-www}.${TRAEFIK_DOMAIN}
     networks:
       - warden
@@ -50,7 +51,7 @@ services:
     hostname: mailhog
     image: mailhog/mailhog:${MAILHOG_VERSION:-v1.0.0}
     labels:
-      - traefik.docker.network=warden
+      - traefik.enable=true
       - traefik.port=8025
       - traefik.frontend.rule=Host:mailhog.${TRAEFIK_DOMAIN}
     networks:

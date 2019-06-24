@@ -1,3 +1,13 @@
+0.1.0-beta6
+===============
+
+* Added support for extending environment configuration on a per-project basis via `.warden/warden-env.yml` and `.warden/warden-env.<WARDEN_ENV_TYPE>.yml` files
+* Added `local` env type to support projects which do not conform to any of the templated environments suppoprted out-of-the-box
+* Changed Traefik configuration to automatically use the warden docker network (eliminates need for `traefik.docker.network=warden` label on all proxied containers
+* Changed Traefik configuration to require containers be explicitly enabled for Traefik via the label `traefik.enable=true`
+* Changed docker-compose environment type templates to version 3.5 for better extendability in project override files
+* Fixed bug where resolver setup on macOS would fail if `/etc/resolver` dir was already present during install (PR #1 by @fooman)
+
 0.1.0-beta5
 ===============
 

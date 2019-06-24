@@ -14,6 +14,14 @@ fi
 eval "$(grep "^MYSQL_" "${WARDEN_ENV_PATH}/.env")"
 eval "$(grep -E '^\W+- MYSQL_.*=\$\{.*\}' "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.yml" | sed -E 's/.*- //g')"
 
+if [[ -f "${WARDEN_ENV_PATH}/.warden/warden-env.yml" ]]; then
+    eval "$(grep -E '^\W+- MYSQL_.*=\$\{.*\}' "${WARDEN_ENV_PATH}/.warden/warden-env.yml" | sed -E 's/.*- //g')"
+fi
+
+if [[ -f "${WARDEN_ENV_PATH}/.warden/warden-env.${WARDEN_ENV_TYPE}.yml" ]]; then
+    eval "$(grep -E '^\W+- MYSQL_.*=\$\{.*\}' "${WARDEN_ENV_PATH}/.warden/warden-env.${WARDEN_ENV_TYPE}.yml" | sed -E 's/.*- //g')"
+fi
+
 ## sub-command execution
 case "${WARDEN_PARAMS[0]}" in
     connect)

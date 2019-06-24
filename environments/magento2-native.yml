@@ -1,4 +1,4 @@
-version: "3"
+version: "3.5"
 
 services:
 
@@ -17,7 +17,7 @@ services:
     depends_on:
       - nginx
     labels:
-      - traefik.docker.network=warden
+      - traefik.enable=true
       - traefik.frontend.rule=Host:${TRAEFIK_SUBDOMAIN:-www}.${TRAEFIK_DOMAIN}
     networks:
       - warden
@@ -50,7 +50,7 @@ services:
     hostname: elasticsearch
     image: mage2click/magento-elasticsearch:${ELASTICSEARCH_VERSION:-5.6}
     labels:
-      - traefik.docker.network=warden
+      - traefik.enable=true
       - traefik.port=9200
       - traefik.frontend.rule=Host:elasticsearch.${TRAEFIK_DOMAIN}
     volumes:
@@ -67,7 +67,7 @@ services:
     hostname: rabbitmq
     image: rabbitmq:${RABBITMQ_VERSION:-3.7.14}-management-alpine
     labels:
-      - traefik.docker.network=warden
+      - traefik.enable=true
       - traefik.port=15672
       - traefik.frontend.rule=Host:rabbitmq.${TRAEFIK_DOMAIN}
     networks:
@@ -78,7 +78,7 @@ services:
     hostname: mailhog
     image: mailhog/mailhog:${MAILHOG_VERSION:-v1.0.0}
     labels:
-      - traefik.docker.network=warden
+      - traefik.enable=true
       - traefik.port=8025
       - traefik.frontend.rule=Host:mailhog.${TRAEFIK_DOMAIN}
     networks:
