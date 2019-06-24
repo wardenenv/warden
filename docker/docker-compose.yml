@@ -3,7 +3,12 @@ services:
   traefik:
     container_name: traefik
     image: traefik
-    command: --api --docker --docker.domain=test
+    command: |
+      --api
+      --docker
+      --docker.domain=test
+      --docker.network=warden
+      --docker.exposedByDefault=false
     ports:
       - "80:80"     # The HTTP port
       - "443:443"   # The HTTPS port
@@ -12,6 +17,7 @@ services:
       - ~/.warden/ssl/certs:/etc/ssl/certs
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
+      - traefik.enable=true
       - traefik.port=8080
     restart: always
 
@@ -22,6 +28,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer:/data
     labels:
+      - traefik.enable=true
       - traefik.port=9000
     restart: always
 
@@ -33,6 +40,7 @@ services:
     volumes:
       - ~/.warden/etc/dnsmasq.conf:/etc/dnsmasq.conf
     labels:
+      - traefik.enable=true
       - traefik.port=8080
     restart: always
 
