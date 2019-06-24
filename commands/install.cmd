@@ -55,7 +55,9 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
 elif [[ "$OSTYPE" == "darwin"* ]]; then
   if [[ ! -f /etc/resolver/test ]]; then
     echo "==> Configuring resolver for .test domains (requires sudo privileges)"
-    sudo mkdir /etc/resolver
+    if [[ ! -d /etc/resolver ]]; then
+        sudo mkdir /etc/resolver
+    fi
     echo "nameserver 127.0.0.1" | sudo tee /etc/resolver/test >/dev/null
   fi
 else
