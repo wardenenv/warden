@@ -50,11 +50,14 @@ services:
  
   elasticsearch:
     hostname: elasticsearch
-    image: davidalger/warden:elasticsearch-${ELASTICSEARCH_VERSION:-5.6}-alpine
+    image: davidalger/warden:elasticsearch-${ELASTICSEARCH_VERSION:-5.6}
     labels:
       - traefik.enable=true
       - traefik.port=9200
       - traefik.frontend.rule=Host:elasticsearch.${TRAEFIK_DOMAIN}
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms64m -Xmx512m"
     volumes:
       - esdata:/usr/share/elasticsearch/data
     networks:
