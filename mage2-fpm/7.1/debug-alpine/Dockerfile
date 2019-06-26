@@ -1,4 +1,4 @@
-FROM davidalger/php:7.2-fpm-alpine
+FROM davidalger/php:7.1-fpm-alpine
 USER root
 
 ENV MAILHOG_HOST    mailhog
@@ -17,5 +17,7 @@ RUN touch /usr/local/etc/php/conf.d/10-additions.ini \
     && chown www-data /usr/local/etc/php/conf.d/10-additions.ini \
     && mkdir /var/www/html/pub \
     && chown www-data:www-data /var/www/html/pub
+
+RUN docker-php-ext-enable xdebug
 
 USER www-data

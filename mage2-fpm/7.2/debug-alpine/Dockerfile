@@ -18,4 +18,6 @@ RUN touch /usr/local/etc/php/conf.d/10-additions.ini \
     && mkdir /var/www/html/pub \
     && chown www-data:www-data /var/www/html/pub
 
+RUN docker-php-ext-enable xdebug
+
 USER www-data
