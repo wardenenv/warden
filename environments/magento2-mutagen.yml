@@ -34,6 +34,16 @@ services:
       - .${WARDEN_WEB_ROOT:-}/pub/media:/var/www/html/pub/media:delegated
       - appdata:/var/www/html
 
+  php-debug:
+    hostname: php-debug
+    image: davidalger/warden:mage2-fpm-${PHP_VERSION:-7.2}-debug-alpine
+    depends_on:
+      - db
+    volumes:
+      - ~/.composer:/home/www-data/.composer:delegated
+      - .${WARDEN_WEB_ROOT:-}/pub/media:/var/www/html/pub/media:delegated
+      - appdata:/var/www/html
+
   db:
     hostname: mariadb
     image: mariadb:${MARIADB_VERSION:-10.3}
