@@ -5,6 +5,8 @@ services:
   nginx:
     hostname: nginx
     image: davidalger/warden:nginx-${NGINX_VERSION:-1.16}-alpine
+    environment:
+      - XDEBUG_CONNECT_BACK_HOST=${XDEBUG_CONNECT_BACK_HOST:-host.docker.internal}
     depends_on:
       - db
       - php-fpm
@@ -37,6 +39,8 @@ services:
   php-debug:
     hostname: php-debug
     image: davidalger/warden:mage2-fpm-${PHP_VERSION:-7.2}-debug-alpine
+    environment:
+      - PHP_IDE_CONFIG=serverName=${WARDEN_ENV_NAME}-docker
     depends_on:
       - db
     volumes:

@@ -35,6 +35,8 @@ services:
   php-debug:
     hostname: php-debug
     image: davidalger/warden:mage2-fpm-${PHP_VERSION:-7.2}-debug-alpine
+    environment:
+      - PHP_IDE_CONFIG=serverName=${WARDEN_ENV_NAME}-docker
     depends_on:
       - db
     volumes:
