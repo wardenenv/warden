@@ -7,6 +7,7 @@ services:
     image: davidalger/warden:nginx-${NGINX_VERSION:-1.16}-alpine
     environment:
       - NGINX_TEMPLATE=magento1.conf
+      - XDEBUG_CONNECT_BACK_HOST=${XDEBUG_CONNECT_BACK_HOST:-host.docker.internal}
     depends_on:
       - db
       - php-fpm
@@ -23,6 +24,17 @@ services:
   php-fpm:
     hostname: php-fpm
     image: davidalger/warden:mage1-fpm-${PHP_VERSION:-7.2}-alpine
+    depends_on:
+      - db
+    volumes:
+      - ~/.composer:/home/www-data/.composer:delegated
+      - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
+
+  php-debug:
+    hostname: php-debug
+    image: davidalger/warden:mage1-fpm-${PHP_VERSION:-7.2}-debug-alpine
+    environment:
+      - PHP_IDE_CONFIG=serverName=${WARDEN_ENV_NAME}-docker
     depends_on:
       - db
     volumes:

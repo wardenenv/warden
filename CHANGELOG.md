@@ -1,3 +1,9 @@
+0.1.0-beta7
+===============
+
+* Added Xdebug support via additional `php-debug` container which Nginx routes to based on presence of `XDEBUG_SESSION` cookie.
+* Fixed Elasticsearch images used in Magento 2 environment templates and configured for lower overall memory utilization upon container start for a smaller env footprint.
+
 0.1.0-beta6
 ===============
 
