@@ -71,6 +71,7 @@ services:
       - traefik.frontend.rule=Host:elasticsearch.${TRAEFIK_DOMAIN}
     environment:
       - discovery.type=single-node
+      - xpack.security.enabled=false
       - "ES_JAVA_OPTS=-Xms64m -Xmx512m"
     volumes:
       - esdata:/usr/share/elasticsearch/data
