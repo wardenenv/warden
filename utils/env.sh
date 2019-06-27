@@ -28,7 +28,12 @@ function loadEnvConfig () {
     WARDEN_ENV_NAME="${WARDEN_ENV_NAME:-}"
     WARDEN_ENV_TYPE="${WARDEN_ENV_TYPE:-}"
 
-    if [[ ! -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.yml" ]]; then
+    WARDEN_ENV_SUBT="${OSTYPE:-undefined}"
+    if [[ ${WARDEN_ENV_SUBT} =~ ^darwin ]]; then
+        WARDEN_ENV_SUBT=darwin
+    fi
+
+    if [[ ! -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.base.yml" ]]; then
         >&2 echo -e "\033[31mInvalid environment type \"${WARDEN_ENV_TYPE}\" specified."
         return 1
     fi

@@ -20,7 +20,7 @@ fi
 case "${WARDEN_PARAMS[0]}" in
     start)
         ## if no mutagen configuration file exists for the environment type, exit with error
-        [[ ! -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.toml" ]] \
+        [[ ! -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.mutagen.toml" ]] \
             && >&2 echo -e "\033[31mMutagen configuration does not exist for environment type \"${WARDEN_ENV_TYPE}\"" && exit 1
 
         ## start mutagen daemon if not already running
