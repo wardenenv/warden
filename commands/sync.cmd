@@ -10,6 +10,12 @@ if (( ${#WARDEN_PARAMS[@]} == 0 )); then
     exit 1
 fi
 
+## disable sync command on non-darwin environments where it should not be used
+if [[ ${WARDEN_ENV_SUBT} != "darwin" ]]; then
+    >&2 echo -e "\033[31mMutagen sync sessions are not used on \"${WARDEN_ENV_SUBT}\" host environments\033[0m"
+    exit 1
+fi
+
 ## attempt to install mutagen if not already present
 if ! which mutagen >/dev/null; then
     echo -e "\033[33mMutagen could not be found; attempting install via brew.\033[0m"
@@ -17,8 +23,10 @@ if ! which mutagen >/dev/null; then
 fi
 
 ## if no mutagen configuration file exists for the environment type, exit with error
-[[ ! -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.mutagen.toml" ]] \
-    && >&2 echo -e "\033[31mMutagen configuration does not exist for environment type \"${WARDEN_ENV_TYPE}\"" && exit 1
+if [[ ! -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.mutagen.toml" ]]; then
+    >&2 echo -e "\033[31mMutagen configuration does not exist for environment type \"${WARDEN_ENV_TYPE}\"\033[0m"
+    exit 1
+fi
 
 ## sub-command execution
 case "${WARDEN_PARAMS[0]}" in
