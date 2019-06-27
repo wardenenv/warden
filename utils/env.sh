@@ -14,7 +14,7 @@ function locateEnvPath () {
     done
 
     if [[ "${WARDEN_ENV_PATH}" = "/" ]]; then
-        >&2 echo -e "\033[31mEnvironment config could not be found. Please run \"warden env-init\" and try again!"
+        >&2 echo -e "\033[31mEnvironment config could not be found. Please run \"warden env-init\" and try again!\033[0m"
         return 1
     fi
 
@@ -28,8 +28,13 @@ function loadEnvConfig () {
     WARDEN_ENV_NAME="${WARDEN_ENV_NAME:-}"
     WARDEN_ENV_TYPE="${WARDEN_ENV_TYPE:-}"
 
-    if [[ ! -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.yml" ]]; then
-        >&2 echo -e "\033[31mInvalid environment type \"${WARDEN_ENV_TYPE}\" specified."
+    WARDEN_ENV_SUBT="${OSTYPE:-undefined}"
+    if [[ ${WARDEN_ENV_SUBT} =~ ^darwin ]]; then
+        WARDEN_ENV_SUBT=darwin
+    fi
+
+    if [[ ! -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.base.yml" ]]; then
+        >&2 echo -e "\033[31mInvalid environment type \"${WARDEN_ENV_TYPE}\" specified.\033[0m"
         return 1
     fi
 }

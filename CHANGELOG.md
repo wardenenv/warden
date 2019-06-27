@@ -1,3 +1,11 @@
+0.1.0
+===============
+
+* Changed the env type setup to automatically include additional configuration based on $OSTYPE.
+* Changed the environment template structure to utilize per-OSTYPE docker-compose config additions where environments differ from one host OS to another (such as `magento2` env type, which uses plain mounts on `linux-gnu` but sync sessions on `darwin`)
+* Fixed a few error messages so they won't change shell text color permanently when they output.
+* Fixed sync command to output error message when any sub-command is run on an env lacking a mutagen configuration.
+
 0.1.0-beta7
 ===============
 
