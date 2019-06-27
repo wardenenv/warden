@@ -30,7 +30,7 @@ case "${WARDEN_PARAMS[0]}" in
         mutagen terminate --label-selector "warden-sync=${WARDEN_ENV_NAME}"
 
         ## create sync session based on environment type configuration
-        mutagen create -c "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.toml" \
+        mutagen create -c "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.mutagen.toml" \
             --label "warden-sync=${WARDEN_ENV_NAME}" \
             "${WARDEN_ENV_PATH}${WARDEN_WEB_ROOT:-}" "docker://$(warden env ps -q php-fpm)/var/www/html"
         
