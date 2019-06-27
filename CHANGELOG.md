@@ -1,3 +1,8 @@
+0.1.1
+===============
+
+* Fixed bug where 'db' commands broke due to template overhaul in 0.1.0 release.
+
 0.1.0
 ===============
 
