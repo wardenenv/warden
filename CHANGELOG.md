@@ -1,6 +1,7 @@
-HEAD
+0.1.2
 ===============
 
+* Added max_allowed_packet=1024M to db containers for M1 and M2 to avoid imports or upgrade routines from failing on large packets.
 * Changed `php-fpm` and `php-debug` to use custom images based on `centos:7` as opposed to the `alpine3.9` based official php-fpm images to avoid seg-faults when Source Guardian loader is installed alongside Xdebug.
 * Fixed issue with DEFINER stripping in `db import` allowing it to correctly strip from both TRIGGERS and ALGORITHM clauses.
 
