@@ -31,6 +31,13 @@ for file in $(find ${SEARCH_PATH} -type f -name Dockerfile); do
     BUILD_DIR="$(dirname "${file}")"
     IMAGE_TAG="davidalger/warden:$(dirname "${file}" | tr / - | sed 's/--/-/')"
 
-    docker build -t "${IMAGE_TAG}" ${BUILD_DIR}
+    if [[ -d "$(echo ${BUILD_DIR} | cut -d/ -f1)/context" ]]; then
+      BUILD_CONTEXT="$(echo ${BUILD_DIR} | cut -d/ -f1)/context"
+    else
+      BUILD_CONTEXT="${BUILD_DIR}"
+    fi
+
+    printf "\e[01;31m==> building ${IMAGE_TAG} from ${BUILD_DIR}/Dockerfile with context ${BUILD_CONTEXT}\033[0m\n"
+    docker build -t "${IMAGE_TAG}" -f ${BUILD_DIR}/Dockerfile ${BUILD_CONTEXT}
     [[ $PUSH_FLAG ]] && docker push "${IMAGE_TAG}"
 done
