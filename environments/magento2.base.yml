@@ -21,13 +21,13 @@ services:
 
   php-fpm:
     hostname: php-fpm
-    image: davidalger/warden:mage2-fpm-${PHP_VERSION:-7.2}-alpine
+    image: davidalger/warden:mage2-fpm-${PHP_VERSION:-7.2}
     depends_on:
       - db
 
   php-debug:
     hostname: php-debug
-    image: davidalger/warden:mage2-fpm-${PHP_VERSION:-7.2}-debug-alpine
+    image: davidalger/warden:mage2-fpm-${PHP_VERSION:-7.2}-debug
     environment:
       - PHP_IDE_CONFIG=serverName=${WARDEN_ENV_NAME}-docker
     depends_on:
@@ -41,6 +41,9 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE:-magento}
       - MYSQL_USER=${MYSQL_USER:-magento}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD:-magento}
+    command:
+      - mysqld
+      - --max_allowed_packet=1024M
     volumes:
       - dbdata:/var/lib/mysql
     networks:

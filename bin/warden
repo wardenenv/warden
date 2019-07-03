@@ -29,7 +29,7 @@ readonly WARDEN_SSL_DIR="${WARDEN_HOME_DIR}/ssl"
 declare WARDEN_HELP=
 declare WARDEN_PARAMS=()
 declare WARDEN_COMMAND=
-declare WARDEN_ANYARGS=(env db)
+declare WARDEN_ANYARGS=(env db shell)
 declare WARDEN_VERBOSE=
 
 ## parse first argument as command and determine validity
