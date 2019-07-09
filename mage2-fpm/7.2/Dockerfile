@@ -4,6 +4,10 @@ USER root
 ENV MAILHOG_HOST    mailhog
 ENV MAILHOG_PORT    1025
 
+RUN yum install -y which pv python36-pip mariadb102 \
+    && yum clean all \
+    && rm -rf /var/cache/yum
+
 RUN npm install -g grunt-cli
 
 RUN mkdir -p /usr/local/bin \
