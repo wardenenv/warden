@@ -102,6 +102,12 @@ if [[ ! -f "${WARDEN_HOME_DIR}/tunnel/ssh_key" ]]; then
   ssh-keygen -b 2048 -t rsa -f "${WARDEN_HOME_DIR}/tunnel/ssh_key" -N "" -C "user@tunnel.warden.test"
 fi
 
+## if host machine does not have composer installed, this directory will otherwise be created by docker with root:root
+## causing problems so it's created as current user to avoid composer issues inside environments given it is mounted
+if [[ ! -d ~/.composer ]]; then
+  mkdir ~/.composer
+fi
+
 ## since bind mounts are native on linux to use .pub file as authorized_keys file in tunnel it must have proper perms
 if [[ "$OSTYPE" == "linux-gnu" ]] && [[ "$(stat -c '%U' "${WARDEN_HOME_DIR}/tunnel/ssh_key.pub")" != "root" ]]; then
   sudo chown root:root "${WARDEN_HOME_DIR}/tunnel/ssh_key.pub"

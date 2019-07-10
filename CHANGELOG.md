@@ -5,6 +5,7 @@ HEAD
 * Updated install routine to properly trust CA root on Ubuntu (previously warden install would simply fail)
 * Updated DNS auto-configuration on linux systems to handle systemd-resolved usage.
 * Fixed issue on Ubuntu where dnsmasq container would fail to bind to port 53.
+* Fixed issue where lack of `~/.composer` dir (resulting in creation by docker) can cause permissions error inside containers.
 
 0.1.2
 ===============
