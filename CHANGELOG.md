@@ -1,4 +1,4 @@
-HEAD
+0.1.3
 ===============
 
 * Added ability on linux to prevent warden from touching dns configuration when `~/.warden/nodnsconfig` is present.
