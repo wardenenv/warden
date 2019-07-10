@@ -7,6 +7,7 @@
 * Fixed issue on Ubuntu where dnsmasq container would fail to bind to port 53.
 * Fixed issue where lack of `~/.composer` dir (resulting in creation by docker) can cause permissions error inside containers.
 * Fixed issue with `bin/magento setup:install` allowing it to pass permissions checks (PR #2 by @fooman)
+* Fixed issue where `env` and `env-init` commands failed to reset shell colors when printing error messages (issue #4 reported by @navarr)
 
 0.1.2
 ===============
