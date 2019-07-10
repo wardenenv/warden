@@ -22,8 +22,10 @@ default = [
     # Magento files
     "/generated",
     "/pub/media",
-    "/pub/static",
-    "/var",
+    "/pub/static/**",
+    "!/pub/static/.htaccess",
+    "/var/**",
+    "!/var/.htaccess",
     "node_modules",
 ]
 

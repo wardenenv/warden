@@ -10,11 +10,11 @@ WARDEN_ENV_NAME="${WARDEN_PARAMS[0]:-}"
 WARDEN_ENV_TYPE="${WARDEN_PARAMS[1]:-magento2}"
 
 # Require the user inputs the required environment name parameter
-[[ ! ${WARDEN_ENV_NAME} ]] && >&2 echo -e "\033[31mMissing required argument. Please use --help to to print usage." && exit 1
+[[ ! ${WARDEN_ENV_NAME} ]] && >&2 echo -e "\033[31mMissing required argument. Please use --help to to print usage.\033[0m" && exit 1
 
 # Verify the auto-select and/or type path resolves correctly before setting it
 [[ ! -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.base.yml" ]] \
-    && >&2 echo -e "\033[31mInvalid environment type \"${WARDEN_ENV_TYPE}\" specified." && exit 1
+    && >&2 echo -e "\033[31mInvalid environment type \"${WARDEN_ENV_TYPE}\" specified.\033[0m" && exit 1
 
 # Write the .env file to current working directory
 cat > "${WARDEN_ENV_PATH}/.env" <<EOF

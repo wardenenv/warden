@@ -35,11 +35,11 @@ then
   sudo update-ca-trust enable
 elif [[ "$OSTYPE" == "linux-gnu" ]] \
   && [[ -d /usr/local/share/ca-certificates ]] \
-  && [[ ! -f /usr/local/share/ca-certificates/warden-proxy-local-ca.cert.pem ]] \
+  && [[ ! -f /usr/local/share/ca-certificates/warden-proxy-local-ca.crt ]] \
   ## Ubuntu/Debian
 then
   echo "==> Trusting root certificate (requires sudo privileges)"  
-  sudo cp "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem" /usr/local/share/ca-certificates/warden-proxy-local-ca.cert.pem
+  sudo cp "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem" /usr/local/share/ca-certificates/warden-proxy-local-ca.crt
   sudo update-ca-certificates
 elif [[ "$OSTYPE" == "darwin"* ]] \
   && ! security dump-trust-settings -d | grep 'Warden Proxy Local CA' >/dev/null \

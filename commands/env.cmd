@@ -6,7 +6,7 @@ WARDEN_ENV_PATH="$(locateEnvPath)" || exit $?
 loadEnvConfig "${WARDEN_ENV_PATH}" || exit $?
 
 if (( ${#WARDEN_PARAMS[@]} == 0 )); then
-    echo -e "\033[33mThis command has required params which are passed through to docker-compose, please use --help for details."
+    echo -e "\033[33mThis command has required params which are passed through to docker-compose, please use --help for details.\033[0m"
     exit 1
 fi
 
