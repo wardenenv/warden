@@ -55,8 +55,10 @@ if [[ ! -f "${WARDEN_SSL_DIR}/certs/warden.test.crt.pem" ]]; then
   "${WARDEN_DIR}/bin/warden" sign-certificate warden.test
 fi
 
-## configure resolver for .test domains
-if [[ "$OSTYPE" == "linux-gnu" ]]; then
+## configure resolver for .test domains; allow linux machines to prevent warden
+## from touching dns configuration if need be since unlike macOS there is not
+## support for resolving only *.test domains via /etc/resolver/test settings
+if [[ "$OSTYPE" == "linux-gnu" ]] && [[ ! -f "${WARDEN_HOME_DIR}/nodnsconfig" ]]; then
   if systemctl status NetworkManager | grep 'active (running)' >/dev/null \
     && ! grep '^nameserver 127.0.0.1$' /etc/resolv.conf >/dev/null
   then
@@ -76,6 +78,8 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     fi
     echo "nameserver 127.0.0.1" | sudo tee /etc/resolver/test >/dev/null
   fi
+elif [[ -f "${WARDEN_HOME_DIR}/nodnsconfig" ]]; then
+  echo -e "\033[33m==> WARNING: The flag '${WARDEN_HOME_DIR}/nodnsconfig' is present; skipping DNS configuration\033[0m"
 else
   echo -e "\033[33m==> WARNING: Use of dnsmasq is not supported on this system; entries in /etc/hosts will be required\033[0m"
 fi

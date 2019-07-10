@@ -1,3 +1,9 @@
+HEAD
+===============
+
+* Added ability on linux to prevent warden from touching dns configuration when `~/.warden/nodnsconfig` is present.
+* Updated install routine to properly trust CA root on Ubuntu (previously warden install would simply fail)
+
 0.1.2
 ===============
 
