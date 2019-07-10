@@ -64,10 +64,21 @@ if [[ "$OSTYPE" == "linux-gnu" ]] && [[ ! -f "${WARDEN_HOME_DIR}/nodnsconfig" ]]
   then
     echo "==> Configuring resolver for .test domains (requires sudo privileges)"
     if ! sudo grep '^prepend domain-name-servers 127.0.0.1;$' /etc/dhcp/dhclient.conf >/dev/null 2>&1; then
+      echo "  + Configuring dhclient to prepend dns with 127.0.0.1 resolver (requires sudo privileges)"
       DHCLIENT_CONF=$'\n'"$(sudo cat /etc/dhcp/dhclient.conf 2>/dev/null)" || DHCLIENT_CONF=
       DHCLIENT_CONF="prepend domain-name-servers 127.0.0.1;${DHCLIENT_CONF}"
       echo "${DHCLIENT_CONF}" | sudo tee /etc/dhcp/dhclient.conf
       sudo systemctl restart NetworkManager
+    fi
+
+    ## When systemd-resolvd is used (as it is on Ubuntu by default) check the resolv config mode
+    if systemctl status systemd-resolved | grep 'active (running)' >/dev/null \
+      && [[ -L /etc/resolv.conf ]] \
+      && [[ "$(readlink /etc/resolv.conf)" != "../run/systemd/resolve/resolv.conf" ]]
+    then
+      echo "  + Configuring systemd-resolved to use dhcp settings (requires sudo privileges)"
+      echo "    by pointing /etc/resolv.conf at resolv.conf vs stub-resolv.conf"
+      sudo ln -fsn ../run/systemd/resolve/resolv.conf /etc/resolv.conf
     fi
   fi
 elif [[ "$OSTYPE" == "darwin"* ]]; then
