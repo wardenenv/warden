@@ -23,33 +23,62 @@ if [[ ! -f "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem" ]]; then
     -subj "/C=US/O=Warden Proxy Local CA"
 fi
 
-## trust root ca differently on linux-gnu than on macOS
-if [[ "$OSTYPE" == "linux-gnu" ]] && [[ ! -f /etc/pki/ca-trust/source/anchors/warden-proxy-local-ca.cert.pem ]]; then
-  echo "==> Trusting root certificate (requires sudo privileges)"
+## trust root ca differently on Fedora, Ubuntu and macOS
+if [[ "$OSTYPE" == "linux-gnu" ]] \
+  && [[ -d /etc/pki/ca-trust/source/anchors ]] \
+  && [[ ! -f /etc/pki/ca-trust/source/anchors/warden-proxy-local-ca.cert.pem ]] \
+  ## Fedora/CentOS
+then
+  echo "==> Trusting root certificate (requires sudo privileges)"  
   sudo cp "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem" /etc/pki/ca-trust/source/anchors/warden-proxy-local-ca.cert.pem
   sudo update-ca-trust
   sudo update-ca-trust enable
-elif [[ "$OSTYPE" == "darwin"* ]] && ! security dump-trust-settings -d | grep 'Warden Proxy Local CA' >/dev/null; then
+elif [[ "$OSTYPE" == "linux-gnu" ]] \
+  && [[ -d /usr/local/share/ca-certificates ]] \
+  && [[ ! -f /usr/local/share/ca-certificates/warden-proxy-local-ca.cert.pem ]] \
+  ## Ubuntu/Debian
+then
+  echo "==> Trusting root certificate (requires sudo privileges)"  
+  sudo cp "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem" /usr/local/share/ca-certificates/warden-proxy-local-ca.cert.pem
+  sudo update-ca-certificates
+elif [[ "$OSTYPE" == "darwin"* ]] \
+  && ! security dump-trust-settings -d | grep 'Warden Proxy Local CA' >/dev/null \
+  ## Apple macOS
+then
   echo "==> Trusting root certificate (requires sudo privileges)"
   sudo security add-trusted-cert -d -r trustRoot \
     -k /Library/Keychains/System.keychain "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem"
 fi
 
+## sign certificate used by services run on warden.test sub-domains
 if [[ ! -f "${WARDEN_SSL_DIR}/certs/warden.test.crt.pem" ]]; then
   "${WARDEN_DIR}/bin/warden" sign-certificate warden.test
 fi
 
-## configure resolver for .test domains
-if [[ "$OSTYPE" == "linux-gnu" ]]; then
+## configure resolver for .test domains; allow linux machines to prevent warden
+## from touching dns configuration if need be since unlike macOS there is not
+## support for resolving only *.test domains via /etc/resolver/test settings
+if [[ "$OSTYPE" == "linux-gnu" ]] && [[ ! -f "${WARDEN_HOME_DIR}/nodnsconfig" ]]; then
   if systemctl status NetworkManager | grep 'active (running)' >/dev/null \
     && ! grep '^nameserver 127.0.0.1$' /etc/resolv.conf >/dev/null
   then
     echo "==> Configuring resolver for .test domains (requires sudo privileges)"
     if ! sudo grep '^prepend domain-name-servers 127.0.0.1;$' /etc/dhcp/dhclient.conf >/dev/null 2>&1; then
+      echo "  + Configuring dhclient to prepend dns with 127.0.0.1 resolver (requires sudo privileges)"
       DHCLIENT_CONF=$'\n'"$(sudo cat /etc/dhcp/dhclient.conf 2>/dev/null)" || DHCLIENT_CONF=
       DHCLIENT_CONF="prepend domain-name-servers 127.0.0.1;${DHCLIENT_CONF}"
       echo "${DHCLIENT_CONF}" | sudo tee /etc/dhcp/dhclient.conf
       sudo systemctl restart NetworkManager
+    fi
+
+    ## When systemd-resolvd is used (as it is on Ubuntu by default) check the resolv config mode
+    if systemctl status systemd-resolved | grep 'active (running)' >/dev/null \
+      && [[ -L /etc/resolv.conf ]] \
+      && [[ "$(readlink /etc/resolv.conf)" != "../run/systemd/resolve/resolv.conf" ]]
+    then
+      echo "  + Configuring systemd-resolved to use dhcp settings (requires sudo privileges)"
+      echo "    by pointing /etc/resolv.conf at resolv.conf vs stub-resolv.conf"
+      sudo ln -fsn ../run/systemd/resolve/resolv.conf /etc/resolv.conf
     fi
   fi
 elif [[ "$OSTYPE" == "darwin"* ]]; then
@@ -60,6 +89,8 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     fi
     echo "nameserver 127.0.0.1" | sudo tee /etc/resolver/test >/dev/null
   fi
+elif [[ -f "${WARDEN_HOME_DIR}/nodnsconfig" ]]; then
+  echo -e "\033[33m==> WARNING: The flag '${WARDEN_HOME_DIR}/nodnsconfig' is present; skipping DNS configuration\033[0m"
 else
   echo -e "\033[33m==> WARNING: Use of dnsmasq is not supported on this system; entries in /etc/hosts will be required\033[0m"
 fi
@@ -69,6 +100,12 @@ if [[ ! -f "${WARDEN_HOME_DIR}/tunnel/ssh_key" ]]; then
   echo "==> Generating rsa key pair for tunnel into sshd service"
   mkdir -p "${WARDEN_HOME_DIR}/tunnel"
   ssh-keygen -b 2048 -t rsa -f "${WARDEN_HOME_DIR}/tunnel/ssh_key" -N "" -C "user@tunnel.warden.test"
+fi
+
+## if host machine does not have composer installed, this directory will otherwise be created by docker with root:root
+## causing problems so it's created as current user to avoid composer issues inside environments given it is mounted
+if [[ ! -d ~/.composer ]]; then
+  mkdir ~/.composer
 fi
 
 ## since bind mounts are native on linux to use .pub file as authorized_keys file in tunnel it must have proper perms
