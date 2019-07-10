@@ -6,6 +6,7 @@
 * Updated DNS auto-configuration on linux systems to handle systemd-resolved usage.
 * Fixed issue on Ubuntu where dnsmasq container would fail to bind to port 53.
 * Fixed issue where lack of `~/.composer` dir (resulting in creation by docker) can cause permissions error inside containers.
+* Fixed issue with `bin/magento setup:install` allowing it to pass permissions checks (PR #2 by @fooman)
 
 0.1.2
 ===============
