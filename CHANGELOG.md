@@ -1,3 +1,8 @@
+0.1.4
+===============
+
+* Removed exclusion of 'node_modules' from Mutagen sync for Magento 2 to avoid breaking Dotdigitalgroup_Email module in vendor directory (this module includes a node_modules dir pre-installed).
+
 0.1.3
 ===============
 
