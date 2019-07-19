@@ -1,4 +1,4 @@
-UNRLEASED
+0.1.5
 ===============
 
 * Changed Mutagen polling interval from 20 to 10 seconds
