@@ -14,21 +14,26 @@ fi
 trap '' ERR
 
 ## configure docker-compose files
-DOCKER_COMPOSE_ARGS=-f\ "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.base.yml"
+DOCKER_COMPOSE_ARGS=()
+DOCKER_COMPOSE_ARGS+=("-f")
+DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.base.yml")
 
 if [[ -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.${WARDEN_ENV_SUBT}.yml" ]]; then
-    DOCKER_COMPOSE_ARGS+=\ -f\ "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.${WARDEN_ENV_SUBT}.yml"
+    DOCKER_COMPOSE_ARGS+=("-f")
+    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.${WARDEN_ENV_SUBT}.yml")
 fi
 
 if [[ -f "${WARDEN_ENV_PATH}/.warden/warden-env.yml" ]]; then
-    DOCKER_COMPOSE_ARGS+=\ -f\ "${WARDEN_ENV_PATH}/.warden/warden-env.yml"
+    DOCKER_COMPOSE_ARGS+=("-f")
+    DOCKER_COMPOSE_ARGS+=("${WARDEN_ENV_PATH}/.warden/warden-env.yml")
 fi
 
 if [[ -f "${WARDEN_ENV_PATH}/.warden/warden-env.${WARDEN_ENV_SUBT}.yml" ]]; then
-    DOCKER_COMPOSE_ARGS+=\ -f\ "${WARDEN_ENV_PATH}/.warden/warden-env.${WARDEN_ENV_SUBT}.yml"
+    DOCKER_COMPOSE_ARGS+=("-f")
+    DOCKER_COMPOSE_ARGS+=("${WARDEN_ENV_PATH}/.warden/warden-env.${WARDEN_ENV_SUBT}.yml")
 fi
 
 ## anything not caught above is simply passed through to docker-compose to orchestrate
 docker-compose \
     --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
-    ${DOCKER_COMPOSE_ARGS} "${WARDEN_PARAMS[@]}" "$@"
+    "${DOCKER_COMPOSE_ARGS[@]}" "${WARDEN_PARAMS[@]}" "$@"
