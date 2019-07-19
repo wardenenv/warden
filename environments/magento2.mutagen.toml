@@ -28,7 +28,5 @@ default = [
 ]
 
 [permissions]
-fileModeBeta = "0644"
-directoryModeBeta = "0755"
-defaultOwnerBeta = "www-data"
-defaultGroupBeta = "www-data"
+defaultFileMode = "0644"
+defaultDirectoryMode = "0755"
