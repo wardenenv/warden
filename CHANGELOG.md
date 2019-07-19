@@ -1,6 +1,7 @@
 UNRLEASED
 ===============
 
+* Changed Mutagen polling interval from 20 to 10 seconds
 * Removed `generated` directory from exclusions in Mutagen sync configuration (having this ignored breaks ability to step into generated class files during Xdebug sessions)
 * Fixed issue with Mutagen sync cofiguration causing `pub/static` (and other files) to have incorrect permissions resulting in 404'ing static resources
 

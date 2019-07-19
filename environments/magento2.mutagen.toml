@@ -1,6 +1,6 @@
 
 [watch]
-pollingInterval = 20
+pollingInterval = 10
 
 [sync]
 mode = "two-way-resolved"
