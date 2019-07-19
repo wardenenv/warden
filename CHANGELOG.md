@@ -1,3 +1,8 @@
+UNRLEASED
+===============
+
+* Removed `generated` directory from exclusions in Mutagen sync configuration (having this ignored breaks ability to step into generated class files during Xdebug sessions)
+
 0.1.4
 ===============
 
