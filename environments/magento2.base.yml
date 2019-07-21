@@ -14,7 +14,7 @@ services:
       - nginx
     labels:
       - traefik.enable=true
-      - traefik.frontend.rule=Host:${TRAEFIK_SUBDOMAIN:-www}.${TRAEFIK_DOMAIN}
+      - traefik.frontend.rule=Host:${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}
     networks:
       - warden
       - default

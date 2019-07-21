@@ -1,3 +1,8 @@
+UNRELEASED
+===============
+
+* Changed the default value `env-init` uses for `TRAEFIK_SUBDOMAIN` to `app` (previously it would match the environment type)
+
 0.1.5
 ===============
 

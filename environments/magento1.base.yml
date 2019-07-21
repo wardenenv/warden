@@ -13,7 +13,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.port=80
-      - traefik.frontend.rule=Host:${TRAEFIK_SUBDOMAIN:-www}.${TRAEFIK_DOMAIN}
+      - traefik.frontend.rule=Host:${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}
     networks:
       - warden
       - default
