@@ -29,6 +29,13 @@ RUN PHP_VERSION=$(php -v | head -n1 | cut -d' ' -f2 | cut -d. -f1-2) \
     && echo "extension=sourceguardian.so" > /etc/php.d/15-sourceguardian.ini \
     && rm -rf /tmp/sourceguardian
 
+# Install mhsendmail to support routing email through mailhog
+RUN mkdir -p /tmp/mhsendmail \
+    && cd /tmp/mhsendmail \
+    && curl -vLOs https://github.com/mailhog/mhsendmail/releases/download/v0.2.0/mhsendmail_linux_amd64 \
+    && chmod +x mhsendmail_linux_amd64 \
+    && mv mhsendmail_linux_amd64 /usr/local/bin/mhsendmail
+
 RUN touch /etc/php.d/05-additions.ini \
     && chown www-data /etc/php.d/05-additions.ini
 
