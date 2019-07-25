@@ -3,17 +3,14 @@ services:
   nginx:
     depends_on:
       - checkoutdb
-      - salesdb
 
   php-fpm:
     depends_on:
       - checkoutdb
-      - salesdb
 
   php-debug:
     depends_on:
       - checkoutdb
-      - salesdb
 
   checkoutdb:
     hostname: checkoutdb
@@ -32,23 +29,5 @@ services:
       - warden
       - default
 
-  salesdb:
-    hostname: salesdb
-    image: mariadb:${MARIADB_VERSION:-10.3}
-    environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-magento}
-      - MYSQL_DATABASE=${MYSQL_DATABASE:-magento}
-      - MYSQL_USER=${MYSQL_USER:-magento}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-magento}
-    command:
-      - mysqld
-      - --max_allowed_packet=1024M
-    volumes:
-      - salesdbdata:/var/lib/mysql
-    networks:
-      - warden
-      - default
-
 volumes:
   checkoutdbdata:
-  salesdbdata:
