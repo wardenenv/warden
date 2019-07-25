@@ -4,7 +4,7 @@ USER root
 ENV MAILHOG_HOST    mailhog
 ENV MAILHOG_PORT    1025
 
-RUN yum install -y which pv sendmail python36-pip mariadb102 \
+RUN yum install -y which pv python36-pip mariadb102 \
     && yum clean all \
     && rm -rf /var/cache/yum
 
