@@ -23,6 +23,11 @@ if [[ -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.${WARDEN_ENV_SUBT}.yml" 
     DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.${WARDEN_ENV_SUBT}.yml")
 fi
 
+if [[ ${WARDEN_SPLITDB} -eq 1 && -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.splitdb.yml" ]]; then
+    DOCKER_COMPOSE_ARGS+=("-f")
+    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.splitdb.yml")
+fi
+
 if [[ -f "${WARDEN_ENV_PATH}/.warden/warden-env.yml" ]]; then
     DOCKER_COMPOSE_ARGS+=("-f")
     DOCKER_COMPOSE_ARGS+=("${WARDEN_ENV_PATH}/.warden/warden-env.yml")
