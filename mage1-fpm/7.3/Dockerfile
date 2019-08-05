@@ -4,7 +4,7 @@ USER root
 ENV MAILHOG_HOST    mailhog
 ENV MAILHOG_PORT    1025
 
-RUN yum install -y which pv python36-pip mariadb102 \
+RUN yum install -y which pv sudo bind-utils python36-pip mariadb102 \
     && yum clean all \
     && rm -rf /var/cache/yum
 
@@ -36,7 +36,5 @@ RUN mkdir -p /tmp/mhsendmail \
     && chmod +x mhsendmail_linux_amd64 \
     && mv mhsendmail_linux_amd64 /usr/local/bin/mhsendmail
 
-RUN touch /etc/php.d/05-additions.ini \
-    && chown www-data /etc/php.d/05-additions.ini
-
+RUN echo "www-data ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd
 USER www-data
