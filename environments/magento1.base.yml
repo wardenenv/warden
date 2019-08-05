@@ -24,6 +24,7 @@ services:
     depends_on:
       - db
     volumes:
+      - ~/.warden/ssl/rootca/certs:/etc/ssl/warden-rootca-cert:ro
       - ~/.composer:/home/www-data/.composer:delegated
       - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
 
@@ -35,6 +36,7 @@ services:
     depends_on:
       - db
     volumes:
+      - ~/.warden/ssl/rootca/certs:/etc/ssl/warden-rootca-cert:ro
       - ~/.composer:/home/www-data/.composer:delegated
       - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
 

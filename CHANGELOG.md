@@ -3,6 +3,7 @@ UNRELEASED
 
 * Implement workaround for docker/for-mac#3775; publish DNS on port 6053 for macOS hosts. This allows Warden's dnsmasq service to function on Docker Desktop for Mac version 2.1.0.0 (which broke UDP port publishing required for DNS to work)
 * Changed the default value `env-init` uses for `TRAEFIK_SUBDOMAIN` to `app` (previously it would match the environment type)
+* Added mount of `~/.warden/ssl/rootca/certs:/etc/ssl/warden-rootca-cert:ro` to each env type's `php-fpm` and `php-debug` containers to support FPM images appending this CA root to the trusted ca-bundle on container start
 
 0.1.5
 ===============

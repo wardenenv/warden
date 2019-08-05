@@ -6,10 +6,12 @@ services:
 
   php-fpm:
     volumes:
+      - ~/.warden/ssl/rootca/certs:/etc/ssl/warden-rootca-cert:ro
       - ~/.composer:/home/www-data/.composer
       - .${WARDEN_WEB_ROOT:-}/:/var/www/html
 
   php-debug:
     volumes:
+      - ~/.warden/ssl/rootca/certs:/etc/ssl/warden-rootca-cert:ro
       - ~/.composer:/home/www-data/.composer
       - .${WARDEN_WEB_ROOT:-}/:/var/www/html
