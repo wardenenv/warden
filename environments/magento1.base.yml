@@ -29,6 +29,9 @@ services:
       - ~/.warden/ssl/rootca/certs:/etc/ssl/warden-rootca-cert:ro
       - ~/.composer:/home/www-data/.composer:delegated
       - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
+    networks:
+      - default
+      - warden
 
   php-debug:
     hostname: php-debug
@@ -43,6 +46,9 @@ services:
       - ~/.warden/ssl/rootca/certs:/etc/ssl/warden-rootca-cert:ro
       - ~/.composer:/home/www-data/.composer:delegated
       - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
+    networks:
+      - default
+      - warden
 
   db:
     hostname: mariadb

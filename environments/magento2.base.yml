@@ -26,6 +26,9 @@ services:
       - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
     depends_on:
       - db
+    networks:
+      - default
+      - warden
 
   php-debug:
     hostname: php-debug
@@ -36,6 +39,9 @@ services:
       - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
     depends_on:
       - db
+    networks:
+      - default
+      - warden
 
   db:
     hostname: mariadb
