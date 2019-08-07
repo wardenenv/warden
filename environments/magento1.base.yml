@@ -21,6 +21,8 @@ services:
   php-fpm:
     hostname: php-fpm
     image: davidalger/warden:mage1-fpm-${PHP_VERSION:-7.2}
+    extra_hosts:
+      - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
     depends_on:
       - db
     volumes:
@@ -33,6 +35,8 @@ services:
     image: davidalger/warden:mage1-fpm-${PHP_VERSION:-7.2}-debug
     environment:
       - PHP_IDE_CONFIG=serverName=${WARDEN_ENV_NAME}-docker
+    extra_hosts:
+      - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
     depends_on:
       - db
     volumes:
