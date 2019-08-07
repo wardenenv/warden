@@ -82,16 +82,12 @@ if [[ "$OSTYPE" == "linux-gnu" ]] && [[ ! -f "${WARDEN_HOME_DIR}/nodnsconfig" ]]
     fi
   fi
 elif [[ "$OSTYPE" == "darwin"* ]]; then
-  if [[ ! -f /etc/resolver/test ]] \
-    || ( ! grep "^nameserver 127.0.0.1" /etc/resolver/test >/dev/null ) \
-    || ( ! grep "^port 6053" /etc/resolver/test >/dev/null );
-  then
+  if [[ ! -f /etc/resolver/test ]]; then
     echo "==> Configuring resolver for .test domains (requires sudo privileges)"
     if [[ ! -d /etc/resolver ]]; then
         sudo mkdir /etc/resolver
     fi
     echo "nameserver 127.0.0.1" | sudo tee /etc/resolver/test >/dev/null
-    echo "port 6053" | sudo tee -a /etc/resolver/test >/dev/null
   fi
 elif [[ -f "${WARDEN_HOME_DIR}/nodnsconfig" ]]; then
   echo -e "\033[33m==> WARNING: The flag '${WARDEN_HOME_DIR}/nodnsconfig' is present; skipping DNS configuration\033[0m"
