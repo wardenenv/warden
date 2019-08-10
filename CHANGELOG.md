@@ -1,3 +1,11 @@
+0.1.6
+===============
+
+* Changed the default value `env-init` uses for `TRAEFIK_SUBDOMAIN` to `app` (previously it would match the environment type)
+* Added mount of `~/.warden/ssl/rootca/certs:/etc/ssl/warden-rootca-cert:ro` to each env type's `php-fpm` and `php-debug` containers to support FPM images appending this CA root to the trusted ca-bundle on container start
+* Added `extra_hosts` entry to set an entry in `/etc/hosts` within `php-fpm` and `php-debug` containers pointing the project's primary domain to the Traefik service IP address so `curl` and `SoapClient` (for example) may work inside a project's FPM services
+* Added FPM containers to the "warden" network so they'll be able to route http requests to Traefik
+
 0.1.5
 ===============
 

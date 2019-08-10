@@ -33,6 +33,10 @@ if [[ -f "${WARDEN_ENV_PATH}/.warden/warden-env.${WARDEN_ENV_SUBT}.yml" ]]; then
     DOCKER_COMPOSE_ARGS+=("${WARDEN_ENV_PATH}/.warden/warden-env.${WARDEN_ENV_SUBT}.yml")
 fi
 
+## lookup internal (warden docker network) IP address of traefik container (do not fail if traefik is stopped)
+export TRAEFIK_ADDRESS="$(docker container inspect traefik \
+    --format '{{.NetworkSettings.Networks.warden.IPAddress}}' 2>/dev/null || true)"
+
 ## anything not caught above is simply passed through to docker-compose to orchestrate
 docker-compose \
     --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
