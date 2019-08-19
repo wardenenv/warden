@@ -8,8 +8,6 @@ Warden is a CLI utility for orchestrating Docker developer environments, and ena
 * `docker-compose` available in your `$PATH` (included with Docker for Mac, can be installed via `brew`, `apt` or `dnf` on Linux)
 * [Mutagen](https://mutagen.io/) v0.9.0 or later installed via Homebrew (required on macOS only; Warden will attempt to install this via `brew` if not present when running `warden sync start`).
 
-Important Note: There is currently a major bug in the Docker Desktop for Mac edge release line preventing the `dnsmasq` container from exposing port 53 for automatic DNS. If you are running an edge release of Docker, please either revert to a stable release before setting up Warden or understand that automatic DNS resolution will not work.
-
 ### Recomended Additions
 
 * `pv` installed and available in your `$PATH` (you can install this via `brew install pv`) for use sending database files to `warden db import` and providing determinate progress indicators for the import. Alternatively `cat` may be used where `pv` is referenced in documentation but will not provide progress indicators.
