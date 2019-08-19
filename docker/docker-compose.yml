@@ -10,6 +10,7 @@ services:
       --docker.network=warden
       --docker.exposedByDefault=false
     ports:
+      - "8080:8080" # Traefik dashboard ui
       - "80:80"     # The HTTP port
       - "443:443"   # The HTTPS port
     volumes:
