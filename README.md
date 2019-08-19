@@ -39,6 +39,12 @@ Alternatively Warden may also be installed by cloning the repository to the dire
 * Full support for both Magento 1, Magento 2, and custom per-project environment configurations on macOS and Linux.
 * Ability to override, extend, or setup completely custom environment definitions on a per-project basis.
 
+After running `warden up` for the first time following installation, the following URLs can be used to interact with the UIs for services Warden runs globall:
+
+* https://traefik.warden.test/
+* https://portainer.warden.test/
+* https://dnsmasq.warden.test/
+
 ### Environment Types
 
 Warden currently supports three environment types. These types are passed to `env-init` when configuring a project for local development for the first time. This list of environment types can also be seen by running `warden env-init --help` on your command line.
