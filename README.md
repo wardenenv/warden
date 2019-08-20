@@ -128,10 +128,13 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
 
        composer global config http-basic.repo.magento.com <username> <password>
 
-7. Initialize project source files using composer create-project:
+7. Initialize project source files using composer create-project and then move them into place:
 
        composer create-project --repository-url=https://repo.magento.com/ \
            magento/project-community-edition /tmp/exampleproject 2.3.x
+
+       rsync -a /tmp/exampleproject/ /var/www/html/
+       rm -rf /tmp/exampleproject/
 
 8. Install the application and you should be all set:
 
