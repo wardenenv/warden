@@ -91,84 +91,88 @@ Run `warden help` and `warden env -h` for more details and useful command inform
 
 ### Initializing An Environment
 
-The below example demonstrates the setup of a Magento 2 application for local development (and assumes you have composer credentials on the host with valid marketplace credentials already configured). A similar process would be used to configure an environment of any other environment type. This also assumes that Warden has been started via `warden up` per the Warden installation procedure.
+The below example demonstrates the from-scratch setup of the Magento 2 application for local development. A similar process can easily be used to configure an environment of any other type. This assumes that Warden has been previously started via `warden up` as part of the installation procedure.
 
-1. Install project source files using `composer create-project` (or clone an existing project from your VCS of choice), then `cd` into the root project directory:
+1. Create a new directory on your host machine at the location of your choice and then jump into the new directory to get started:
 
-        composer create-project --ignore-platform-reqs \
-            --repository-url=https://repo.magento.com/ \
-            magento/project-community-edition ./exampleproject 2.3.x
-        
-        cd ./exampleproject
+       mkdir -p ~/Sites/exampleproject
+       cd ~/Sites/exampleproject
 
-2. From the root directory of your project, run `env-init` to create the `.env` file with configuration needed for Warden and Docker to work with the project. 
+2. From the root of your new project directory, run `env-init` to create the `.env` file with configuration needed for Warden and Docker to work with the project. 
 
-        warden env-init exampleproject magento2
+       warden env-init exampleproject magento2
 
     The result of this command is a `.env` file in the project root (tip: commit this to your VCS to share the configuration with other team members) having the following contents:
 
-    ```
-    WARDEN_ENV_NAME=exampleproject
-    WARDEN_ENV_TYPE=magento2
-    TRAEFIK_DOMAIN=exampleproject.test
-    TRAEFIK_SUBDOMAIN=app
-    ```
+       WARDEN_ENV_NAME=exampleproject
+       WARDEN_ENV_TYPE=magento2
+       TRAEFIK_DOMAIN=exampleproject.test
+       TRAEFIK_SUBDOMAIN=app
 
 3. Sign an SSL certificate for use with the project (the input here should match the value of `TRAEFIK_DOMAIN` in the above `.env` example file):
 
-        warden sign-certificate exampleproject.test
+       warden sign-certificate exampleproject.test
 
-4. Next you'll want to start your project environment:
+4. Next you'll want to start the project environment:
 
-        warden env up -d
-        warden sync start   ## Omit this if running on a Linux host (or if not used by env type)
+       warden env up -d
+       warden sync start   ## Omit this if running on a Linux host (or if not used by env type)
 
-5. Connect into your project environment using `warden shell`, install any composer packages, initialize the application and you should be all set. For Magento 2 this should look something like this:
+5. Drop into a shell within the project environment. Commands following this step in the setup procedure will be run from within the `php-fpm` docker container this launches you into:
 
-        ## This will launch you into a shell within the `php-fpm` container
-        warden shell
+       warden shell
 
-        ## Ensure all composer packages are present
-        composer install
+6. If you already have Magento Marketplace credentials configured, you may skip this step (`~/.composer/` on the host is mounted into the container to share composer cache between projects, and has the effect of persisting the `auth.json` on the host machine as well):
 
-        ## Run application install process
-        bin/magento setup:install \
-            --backend-frontname=backend \
-            --amqp-host=rabbitmq \
-            --amqp-port=5672 \
-            --amqp-user=guest \
-            --amqp-password=guest \
-            --db-host=db \
-            --db-name=magento \
-            --db-user=magento \
-            --db-password=magento \
-            --http-cache-hosts=varnish:80 \
-            --session-save=redis \
-            --session-save-redis-host=redis \
-            --session-save-redis-port=6379 \
-            --session-save-redis-db=2 \
-            --session-save-redis-max-concurrency=20 \
-            --cache-backend=redis \
-            --cache-backend-redis-server=redis \
-            --cache-backend-redis-db=0 \
-            --cache-backend-redis-port=6379 \
-            --page-cache=redis \
-            --page-cache-redis-server=redis \
-            --page-cache-redis-db=1 \
-            --page-cache-redis-port=6379
+    Note: To locate your authentication keys for Magento 2 repository, reference [this page on DevDocs](https://devdocs.magento.com/guides/v2.3/install-gde/prereq/connect-auth.html).
 
-        ## Generate an admin user
-        ADMIN_PASS="$(cat /dev/urandom | base64 | head -n1 | sed 's/[^a-zA-Z0-9]//g' | colrm 17)"
-        ADMIN_USER=localadmin
-        bin/magento admin:user:create \
-            --admin-password="${ADMIN_PASS}" \
-            --admin-user="${ADMIN_USER}" \
-            --admin-firstname="Local" \
-            --admin-lastname="Admin" \
-            --admin-email="${ADMIN_USER}@example.com"
-        printf "u: %s\np: %s\n" "${ADMIN_USER}" "${ADMIN_PASS}"
+       composer global config http-basic.repo.magento.com <username> <password>
 
-6. Launch the project in your browser:
+7. Initialize project source files using composer create-project:
+
+       composer create-project --repository-url=https://repo.magento.com/ \
+           magento/project-community-edition /tmp/exampleproject 2.3.x
+
+8. Install the application and you should be all set:
+
+       ## Run application install process
+       bin/magento setup:install \
+           --backend-frontname=backend \
+           --amqp-host=rabbitmq \
+           --amqp-port=5672 \
+           --amqp-user=guest \
+           --amqp-password=guest \
+           --db-host=db \
+           --db-name=magento \
+           --db-user=magento \
+           --db-password=magento \
+           --http-cache-hosts=varnish:80 \
+           --session-save=redis \
+           --session-save-redis-host=redis \
+           --session-save-redis-port=6379 \
+           --session-save-redis-db=2 \
+           --session-save-redis-max-concurrency=20 \
+           --cache-backend=redis \
+           --cache-backend-redis-server=redis \
+           --cache-backend-redis-db=0 \
+           --cache-backend-redis-port=6379 \
+           --page-cache=redis \
+           --page-cache-redis-server=redis \
+           --page-cache-redis-db=1 \
+           --page-cache-redis-port=6379
+
+       ## Generate an admin user
+       ADMIN_PASS="$(cat /dev/urandom | base64 | head -n1 | sed 's/[^a-zA-Z0-9]//g' | colrm 17)"
+       ADMIN_USER=localadmin
+       bin/magento admin:user:create \
+           --admin-password="${ADMIN_PASS}" \
+           --admin-user="${ADMIN_USER}" \
+           --admin-firstname="Local" \
+           --admin-lastname="Admin" \
+           --admin-email="${ADMIN_USER}@example.com"
+       printf "u: %s\np: %s\n" "${ADMIN_USER}" "${ADMIN_PASS}"
+
+9. Launch the application in your browser:
 
     * https://app.exampleproject.test/
     * https://app.exampleproject.test/backend/
