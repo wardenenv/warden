@@ -1,4 +1,4 @@
-UNRELEASED
+0.1.7
 ===============
 
 * All published ports now listen on `127.0.0.1` by default as opposed to `0.0.0.0` for a local environment that is fully inaccessible to the outside world apart from using a proxy (such as [Charles](https://www.charlesproxy.com/)).
