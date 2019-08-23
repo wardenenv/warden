@@ -10,8 +10,8 @@ services:
       --docker.network=warden
       --docker.exposedByDefault=false
     ports:
-      - "80:80"     # The HTTP port
-      - "443:443"   # The HTTPS port
+      - "127.0.0.1:80:80"     # The HTTP port
+      - "127.0.0.1:443:443"   # The HTTPS port
     volumes:
       - ~/.warden/etc/traefik/traefik.toml:/etc/traefik/traefik.toml
       - ~/.warden/ssl/certs:/etc/ssl/certs
@@ -48,7 +48,7 @@ services:
     container_name: tunnel
     image: panubo/sshd
     ports:
-      - "2222:22"
+      - "127.0.0.1:2222:22"
     volumes:
       - ~/.warden/tunnel/ssh_key.pub:/etc/authorized_keys/user
       - sshd_keys:/etc/ssh/keys
