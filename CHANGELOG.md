@@ -1,3 +1,8 @@
+UNRELEASED
+===============
+
+* Fixed issue where if sub-directory included a relative symlink pointing `.env` at parent project's `.env` file, `--project-dir` passed to `docker-compose` could be specified incorrectly when running warden from within the given sub-directory.
+
 0.1.7
 ===============
 
