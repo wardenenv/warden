@@ -8,6 +8,11 @@ RUN yum install -y which pv sudo bind-utils python36-pip mariadb102 \
     && yum clean all \
     && rm -rf /var/cache/yum
 
+ENV NODE_VERSION    10
+RUN npm install -g n \
+    && n install ${NODE_VERSION} \
+    && rm -rf /usr/local/n/versions/node
+
 RUN npm install -g grunt-cli
 
 RUN mkdir -p /usr/local/bin \
