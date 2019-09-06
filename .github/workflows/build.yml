@@ -1,5 +1,10 @@
 name: Docker Image CI
-on: [push]
+on:
+  schedule:
+  - cron: "0 6 * * 1"   # 6 AM UTC on Monday
+  push:
+    branches:
+    - master
 jobs:
   elasticsearch:
     name: Elasticsearch
