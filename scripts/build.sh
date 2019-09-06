@@ -12,6 +12,7 @@ readonly BASE_DIR="$(
   )" >/dev/null \
   && pwd
 )/.."
+pushd ${BASE_DIR} >/dev/null
 
 ## if --push is passed as first argument to script, this will login to docker hub and push images
 PUSH_FLAG=
@@ -22,9 +23,11 @@ else
   SEARCH_PATH="${1:-*}"
 fi
 
-## change into base directory and login to docker hub if neccessary
-pushd ${BASE_DIR} >/dev/null
-[[ $PUSH_FLAG ]] && docker login
+## login to docker hub as needed
+if [[ $PUSH_FLAG ]]; then
+  [ -t 1 ] && docker login \
+    || echo "${DOCKER_PASSWORD:-}" | docker login -u "${DOCKER_USERNAME:-}" --password-stdin
+fi
 
 ## iterate over and build each Dockerfile
 for file in $(find ${SEARCH_PATH} -type f -name Dockerfile); do

@@ -1,0 +1,46 @@
+name: Docker Image CI
+on: [push]
+jobs:
+  elasticsearch:
+    name: Elasticsearch
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - run: ./scripts/build.sh --push "${BUILD_GROUP}"
+      env:
+        BUILD_GROUP: elasticsearch
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+  mage1-fpm:
+    name: PHP-FPM (M1)
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - run: ./scripts/build.sh --push "${BUILD_GROUP}"
+      env:
+        BUILD_GROUP: mage1-fpm
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+  mage2-fpm:
+    name: PHP-FPM (M2)
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - run: ./scripts/build.sh --push "${BUILD_GROUP}"
+      env:
+        BUILD_GROUP: mage2-fpm
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+  nginx:
+    name: Nginx
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - run: ./scripts/build.sh --push "${BUILD_GROUP}"
+      env:
+        BUILD_GROUP: nginx
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
