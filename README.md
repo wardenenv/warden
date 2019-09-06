@@ -37,11 +37,19 @@ Alternatively Warden may also be installed by cloning the repository to the dire
 * Full support for both Magento 1, Magento 2, and custom per-project environment configurations on macOS and Linux.
 * Ability to override, extend, or setup completely custom environment definitions on a per-project basis.
 
+### Global Services
+
 After running `warden up` for the first time following installation, the following URLs can be used to interact with the UIs for services Warden runs globally:
 
 * https://traefik.warden.test/
 * https://portainer.warden.test/
 * https://dnsmasq.warden.test/
+
+### Docker Images
+
+The custom base images used by Warden environments can be found on [Docker Hub](https://hub.docker.com/r/davidalger/warden) or on Github: https://github.com/davidalger/docker-images-warden
+
+In addition to these custom base images, Warden also utilizes official images such as `redis`, `rabbitmq` and `mailhog` for example.
 
 ### Environment Types
 
@@ -54,38 +62,6 @@ Warden currently supports three environment types. These types are passed to `en
 All environment types (other than `local`) come pre-configured with a `mailhog` container, with `fpm` services configured to use `mhsendmail` to ensure outbound email does not inadvertently send out, and allows for simpler testing of email functionality on projects. There are also two `fpm` containers, `php-fpm` and `php-debug` (more on this later) to provide Xdebug support enabled via nothing more than setting the `XDEBUG_SESSION` cookie in your browser to direct the request to the `php-debug` container.
 
 For full details and a complete list of variables which may be used to adjusting things such as PHP or MySQL versions (by setting them in the project's `.env` file), and to see the `docker-compose` definitions used to assemble each environment type, look at the contents of the [environments directory](https://github.com/davidalger/warden/tree/master/environments) in this repository. Each environment has a `base` configuration YAML file, and optionally a `darwin` and `linux-gnu` file which add to the `base` definitions anything specific to a given host architecture (this is, for example, how the `magento2` environment type works seamlessly on macOS with Mutagen sync sessions while using native filesystem mounts on Linux hosts). This directory also houses the configuration used for starting Mutagen sync sessions on a project via the `warden sync start` command.
-
-## Warden Usage
-
-### Common Warden Commands
-
-Drop into a shell within the project environment (this command opens a bash shell in the `php-fpm` container)
-
-    warden shell
-
-Stopping a running environment (on linux, drop the `sync` command, it's not used on Linux)
-
-    warden env stop && warden sync stop
-
-Starting a stopped environment (on linux, drop the `sync` command, it's not used on Linux)
-
-    warden env start && warden sync start
-
-Watch the database processlist:
-
-    watch -n 3 "warden db connect -A -e 'show processlist'"
-
-Tail environment access logs:
-
-    warden env logs --tail 0 -f nginx php-fpm php-debug
-
-Tail the varnish activity log:
-
-    warden env exec -T varnish varnishlog
-
-### Warden Usage Information
-
-Run `warden help` and `warden env -h` for more details and useful command information.
 
 ## Environment Configuration
 
@@ -201,6 +177,60 @@ The versions of MariaDB, Elasticsearch, Varnish, Redis, and NodeJS may also be s
   * `VARNISH_VERSION`
   * `RABBITMQ_VERSION`
   * `NODE_VERSION`
+
+## Warden Usage
+
+### Common Warden Commands
+
+Drop into a shell within the project environment (this command opens a bash shell in the `php-fpm` container)
+
+    warden shell
+
+Stopping a running environment (on linux, drop the `sync` command, it's not used on Linux)
+
+    warden env stop && warden sync stop
+
+Starting a stopped environment (on linux, drop the `sync` command, it's not used on Linux)
+
+    warden env start && warden sync start
+
+Watch the database processlist:
+
+    watch -n 3 "warden db connect -A -e 'show processlist'"
+
+Tail environment access logs:
+
+    warden env logs --tail 0 -f nginx php-fpm php-debug
+
+Tail the varnish activity log:
+
+    warden env exec -T varnish varnishlog
+
+### Warden Usage Information
+
+Run `warden help` and `warden env -h` for more details and useful command information.
+
+### Using Xdebug with PHPStorm
+
+There are two docker containers running FPM, `php-fpm` and `php-debug`. The `php-debug` container has the Xdebug extension pre-installed. Nginx will automatically route requests to the `php-debug` container when the `XDEBUG_SESSION` cookie has been set to `PHPSTORM` via the Xdebug Helper browser extension.
+
+Xdebug will automatically connect back to the host machine on port 9000 for each request routed to the `php-debug` container (i.e. when the `XDEBUG_SESSION` cookie is set). When configuring Xdebug Helper in your browser, make sure it is setting this cookie with the value `PHPSTORM`. When it receives the first request, PHP Storm should prompt you if the "Server" configuration is missing. The below image demonstrates how this is setup; the import settings are these:
+
+* Name: `clnt-docker` (this is the value of the `WARDEN_ENV_NAME` variable in the `.env` file appended with a `-docker` suffix)
+* Host: `127.0.0.1`
+* Port: `80`
+* Debugger: Xdebug
+* Use path mappings must be enabled, with a mapping to link the project root on the host with `/var/www/html` within the container.
+
+![clnt-docker-xdebug-config](https://dropshare-ot3kdw.s3.amazonaws.com/uLum9y/Screen-Shot-2019-07-19-15-03-00.32-mgREBTld5RMl/Screen-Shot-2019-07-19-15-03-00.32.png)
+
+### Connecting to Database via SSH Tunnel
+
+#### Connection settings in TablePlus
+![TablePlus Connection Info](https://dropshare-ot3kdw.s3.amazonaws.com/uLum9y/Screen-Shot-2019-07-11-10-17-01-PE0kLIGI4WN3.png)
+
+#### Connection settings in Sequel Pro
+![Sequel Pro Connection Info](https://dropshare-ot3kdw.s3.amazonaws.com/uLum9y/Screen-Shot-2019-07-11-10-27-03-gklNxaZuNQ7L.png)
 
 ## License
 
