@@ -16,26 +16,32 @@ jobs:
         BUILD_GROUP: elasticsearch
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-
+  
   mage1-fpm:
-    name: PHP-FPM (M1)
+    name: Mage1-FPM ${{ matrix.php_version }}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php_version: ["5.5", "5.6", "7.0", "7.1", "7.2", "7.3"]
     steps:
     - uses: actions/checkout@v1
     - run: ./scripts/build.sh --push "${BUILD_GROUP}"
       env:
-        BUILD_GROUP: mage1-fpm
+        BUILD_GROUP: mage1-fpm/${{ matrix.php_version }}
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
   mage2-fpm:
-    name: PHP-FPM (M2)
+    name: Mage2-FPM ${{ matrix.php_version }}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php_version: ["7.0", "7.1", "7.2", "7.3"]
     steps:
     - uses: actions/checkout@v1
     - run: ./scripts/build.sh --push "${BUILD_GROUP}"
       env:
-        BUILD_GROUP: mage2-fpm
+        BUILD_GROUP: mage2-fpm/${{ matrix.php_version }}
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
