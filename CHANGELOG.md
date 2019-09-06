@@ -1,3 +1,9 @@
+0.1.8
+===============
+
+* Introduced `NODE_VERSION` environment variable to specify which version of NodeJS to install in FPM images during container startup (by default v10 is now pre-installed in `mage1-fpm` and `mage2-fpm` images at the time of this release; latest images must be pulled from Docker Hub for this to work).
+* Fixed issue where if sub-directory included a relative symlink pointing `.env` at parent project's `.env` file, `--project-dir` passed to `docker-compose` could be specified incorrectly when running warden from within the given sub-directory.
+
 0.1.7
 ===============
 

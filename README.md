@@ -169,13 +169,14 @@ To configure your project with a non-default PHP version, add the following to t
 
     PHP_VERSION=7.2
 
-The versions of MariaDB, Elasticsearch, Varnish and Redis may also be similarly configured using variables in the `.env` file:
+The versions of MariaDB, Elasticsearch, Varnish, Redis, and NodeJS may also be similarly configured using variables in the `.env` file:
 
   * `MARIADB_VERSION`
   * `ELASTICSEARCH_VERSION`
   * `REDIS_VERSION`
   * `VARNISH_VERSION`
   * `RABBITMQ_VERSION`
+  * `NODE_VERSION`
 
 ## Warden Usage
 

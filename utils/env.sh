@@ -18,6 +18,16 @@ function locateEnvPath () {
         return 1
     fi
 
+    ## Resolve .env symlink should it exist in project sub-directory allowing sub-stacks to use relative link to parent
+    WARDEN_ENV_PATH="$(
+        cd "$(
+            dirname "$(
+                (readlink "${WARDEN_ENV_PATH}/.env" || echo "${WARDEN_ENV_PATH}/.env")
+            )"
+        )" >/dev/null \
+        && pwd
+    )"
+
     echo "${WARDEN_ENV_PATH}"
 }
 
