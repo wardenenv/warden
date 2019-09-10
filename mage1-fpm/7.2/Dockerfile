@@ -41,5 +41,8 @@ RUN mkdir -p /tmp/mhsendmail \
     && chmod +x mhsendmail_linux_amd64 \
     && mv mhsendmail_linux_amd64 /usr/local/bin/mhsendmail
 
+# Install awscli to support data backfill workflows using S3 storage
+RUN pip3 install awscli --no-cache-dir
+
 RUN echo "www-data ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd
 USER www-data

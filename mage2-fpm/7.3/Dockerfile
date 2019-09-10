@@ -41,6 +41,9 @@ RUN mkdir -p /tmp/mhsendmail \
     && chmod +x mhsendmail_linux_amd64 \
     && mv mhsendmail_linux_amd64 /usr/local/bin/mhsendmail
 
+# Install awscli to support data backfill workflows using S3 storage
+RUN pip3 install awscli --no-cache-dir
+
 # Prevent pub dir from being auto-created by docker with wrong permissions when mounting pub/media
 RUN mkdir /var/www/html/pub && chown www-data:www-data /var/www/html/pub
 
