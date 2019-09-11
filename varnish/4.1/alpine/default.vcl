@@ -15,6 +15,9 @@ acl purge {
 }
 
 sub vcl_recv {
+    if (req.esi_level > 0) {
+        unset req.http.X-Blackfire-Query;
+    }
     if (req.method == "PURGE") {
         if (client.ip !~ purge) {
             return (synth(405, "Method not allowed"));
@@ -43,6 +46,10 @@ sub vcl_recv {
         req.method != "DELETE") {
           /* Non-RFC2616 or CONNECT which is weird. */
           return (pipe);
+    }
+
+    if (req.http.X-Blackfire-Query) {
+        return (pass);
     }
 
     # We only deal with GET and HEAD by default
