@@ -23,9 +23,10 @@ Alternatively Warden may also be installed by cloning the repository to the dire
 
     sudo mkdir /opt/warden
     sudo chown $(whoami) /opt/warden
-    git clone -b master git@github.com:davidalger/warden.git /opt/warden
+    git clone -b master https://github.com/davidalger/warden.git /opt/warden
     echo 'export PATH="/opt/warden/bin:$PATH"' >> ~/.bash_profile
     PATH="/opt/warden/bin:$PATH"
+    warden up
 
 ## Features
 
