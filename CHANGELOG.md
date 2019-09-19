@@ -1,3 +1,8 @@
+0.1.9
+===============
+
+* Pinned image for Traefik to use `traefik:v1.7` imgae vs `traefik:latest` to resolve issues caused by Traefik 2.0 having breaking changes in the configuration API
+
 0.1.8
 ===============
 

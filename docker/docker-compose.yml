@@ -2,7 +2,7 @@ version: "3.5"
 services:
   traefik:
     container_name: traefik
-    image: traefik
+    image: traefik:v1.7
     command: |
       --api
       --docker
