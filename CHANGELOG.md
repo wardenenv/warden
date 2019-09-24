@@ -1,3 +1,9 @@
+0.1.10
+===============
+
+* Added native support to Warden for using the [split-database system](https://devdocs.magento.com/guides/v2.3/config-guide/multi-master/multi-master.html) in Magento Commerce during local development (PR #5 from @navarr)
+* Added support for optional Blackfire profiling which can be enabled via settings in the project's `.env` file (PR #12 from @navarr)
+
 0.1.9
 ===============
 
