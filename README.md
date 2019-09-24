@@ -179,6 +179,13 @@ The versions of MariaDB, Elasticsearch, Varnish, Redis, and NodeJS may also be s
   * `RABBITMQ_VERSION`
   * `NODE_VERSION`
 
+### Magento 2 Specific Customizations
+
+The following variables can be added to the project's `.env` file to enable additional database containers for use with the Magento 2 (Commerce Only) [split-database solution](https://devdocs.magento.com/guides/v2.3/config-guide/multi-master/multi-master.html).
+
+  * `WARDEN_SPLIT_SALES=1`
+  * `WARDEN_SPLIT_CHECKOUT=1`
+
 ## Warden Usage
 
 ### Common Warden Commands
