@@ -1,0 +1,22 @@
+version: "3.5"
+services:
+  php-blackfire:
+    hostname: php-blackfire
+    image: davidalger/warden:mage2-fpm-${PHP_VERSION:-7.2}-blackfire
+    depends_on:
+      - db
+    networks:
+      - warden
+      - default
+
+  blackfire-agent:
+    hostname: blackfire-agent
+    image: blackfire/blackfire:latest
+    environment:
+      - BLACKFIRE_CLIENT_ID=${BLACKFIRE_CLIENT_ID}
+      - BLACKFIRE_CLIENT_TOKEN=${BLACKFIRE_CLIENT_TOKEN}
+      - BLACKFIRE_SERVER_ID=${BLACKFIRE_SERVER_ID}
+      - BLACKFIRE_SERVER_TOKEN=${BLACKFIRE_SERVER_TOKEN}
+    networks:
+      - warden
+      - default

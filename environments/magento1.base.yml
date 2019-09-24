@@ -6,7 +6,6 @@ services:
     environment:
       - NGINX_TEMPLATE=magento1.conf
     depends_on:
-      - db
       - php-fpm
     volumes:
       - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
