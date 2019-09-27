@@ -30,7 +30,7 @@ if [[ $PUSH_FLAG ]]; then
 fi
 
 ## iterate over and build each Dockerfile
-for file in $(find ${SEARCH_PATH} -type f -name Dockerfile); do
+for file in $(find ${SEARCH_PATH} -type f -name Dockerfile | sort -n); do
     BUILD_DIR="$(dirname "${file}")"
     IMAGE_TAG="davidalger/warden:$(dirname "${file}" | tr / - | sed 's/--/-/')"
 
