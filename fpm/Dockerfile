@@ -31,7 +31,10 @@ RUN PHP_VERSION=$(php -v | head -n1 | cut -d' ' -f2 | cut -d. -f1-2) \
 
 # Install and enable IonCube loader
 RUN PHP_VERSION=$(php -v | head -n1 | cut -d' ' -f2 | cut -d. -f1-2 | cut -d. -f1-2 | sed 's/\.//') \
-    && yum install -y php${PHP_VERSION}u-ioncube-loader \
+    && if (( ${PHP_VERSION} >= 73 )); \
+        then echo "php${PHP_VERSION}-ioncube does not exist yet in ius upstream; skipping" \
+        else yum install -y php${PHP_VERSION}u-ioncube-loader; \
+    fi \
     && yum clean all \
     && rm -rf /var/cache/yum
 
