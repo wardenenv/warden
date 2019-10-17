@@ -11,6 +11,7 @@ Warden is a CLI utility for orchestrating Docker developer environments, and ena
 ### Recomended Additions
 
 * `pv` installed and available in your `$PATH` (you can install this via `brew install pv`) for use sending database files to `warden db import` and providing determinate progress indicators for the import. Alternatively `cat` may be used where `pv` is referenced in documentation but will not provide progress indicators.
+* By default Docker Desktop assigns 2GB memory. This leads to extensive swapping, killed processed and extremely high CPU usage during some Magento actions, like for example running `sampledata:deploy`. It is recommended to assign at least 6GB RAM (unless your on a 8GB MBP, then go 4GB).
 
 ## Installing Warden
 
