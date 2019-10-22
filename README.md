@@ -95,6 +95,8 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
 
        warden env up -d
        warden sync start   ## Omit this if running on a Linux host (or if not used by env type)
+   
+   If you encounter an error about `Mounts denied…`, follow the instructions in the error message and run `warden env up -d` again.
 
 5. Drop into a shell within the project environment. Commands following this step in the setup procedure will be run from within the `php-fpm` docker container this launches you into:
 
