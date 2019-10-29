@@ -1,7 +1,7 @@
 version: "3.5"
 services:
   php-blackfire:
-    hostname: php-blackfire
+    hostname: "${WARDEN_ENV_NAME}-php-blackfire"
     image: davidalger/warden:mage2-fpm-${PHP_VERSION:-7.2}-blackfire
     depends_on:
       - db
@@ -10,7 +10,7 @@ services:
       - default
 
   blackfire-agent:
-    hostname: blackfire-agent
+    hostname: "${WARDEN_ENV_NAME}-blackfire-agent"
     image: blackfire/blackfire:latest
     environment:
       - BLACKFIRE_CLIENT_ID=${BLACKFIRE_CLIENT_ID}
