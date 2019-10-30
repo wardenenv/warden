@@ -2,7 +2,8 @@ UNRELEASED
 ===============
 
 * Updated Mutagen usage to rely on new commands and configuration in Mutagen 0.10.0 (Warden will now throw an error if you attempt to start a sync and have a version of Mutagen older than 0.10.0 installed)
-
+* Added WARDEN_ENV_NAME as prefix to each container hostname in compose configs (issue #29)
+ 
 0.1.10
 ===============
 
