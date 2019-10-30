@@ -5,7 +5,7 @@ USER root
 ENV MAILHOG_HOST    mailhog
 ENV MAILHOG_PORT    1025
 
-RUN yum install -y which pv sudo bind-utils python36-pip mariadb102 \
+RUN yum install -y which pv sudo bind-utils python36-pip mariadb102 bash-completion \
     && yum clean all \
     && rm -rf /var/cache/yum
 
