@@ -6,7 +6,7 @@ Warden is a CLI utility for orchestrating Docker developer environments, and ena
 * [Homebrew](https://brew.sh/) package manager (for installing Warden and other dependencies)
 * [Docker for Mac](https://hub.docker.com/editions/community/docker-ce-desktop-mac) or [Docker for Linux](https://docs.docker.com/install/) (tested on Fedora 29 and Ubuntu 18.10)
 * `docker-compose` available in your `$PATH` (included with Docker for Mac, can be installed via `brew`, `apt` or `dnf` on Linux)
-* [Mutagen](https://mutagen.io/) v0.9.0 or later installed via Homebrew (required on macOS only; Warden will attempt to install this via `brew` if not present when running `warden sync start`).
+* [Mutagen](https://mutagen.io/) v0.10.0 or later installed via Homebrew (required on macOS only; Warden will attempt to install this via `brew` if not present when running `warden sync start`).
 
 ### Recomended Additions
 

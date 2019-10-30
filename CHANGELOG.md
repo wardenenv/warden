@@ -1,3 +1,8 @@
+UNRELEASED
+===============
+
+* Updated Mutagen usage to rely on new commands and configuration in Mutagen 0.10.0 (Warden will now throw an error if you attempt to start a sync and have a version of Mutagen older than 0.10.0 installed)
+
 0.1.10
 ===============
 
