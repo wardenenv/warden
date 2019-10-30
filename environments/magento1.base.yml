@@ -1,7 +1,7 @@
 version: "3.5"
 services:
   nginx:
-    hostname: nginx
+    hostname: "${WARDEN_ENV_NAME}-nginx"
     image: davidalger/warden:nginx-${NGINX_VERSION:-1.16}-alpine
     environment:
       - NGINX_TEMPLATE=magento1.conf
@@ -18,7 +18,7 @@ services:
       - default
 
   php-fpm:
-    hostname: php-fpm
+    hostname: "${WARDEN_ENV_NAME}-php-fpm"
     image: davidalger/warden:mage1-fpm-${PHP_VERSION:-7.2}
     environment:
       - NODE_VERSION=${NODE_VERSION:-10}
@@ -35,7 +35,7 @@ services:
       - warden
 
   php-debug:
-    hostname: php-debug
+    hostname: "${WARDEN_ENV_NAME}-php-debug"
     image: davidalger/warden:mage1-fpm-${PHP_VERSION:-7.2}-debug
     environment:
       - NODE_VERSION=${NODE_VERSION:-10}
@@ -53,7 +53,7 @@ services:
       - warden
 
   db:
-    hostname: mariadb
+    hostname: "${WARDEN_ENV_NAME}-mariadb"
     image: mariadb:${MARIADB_VERSION:-10.3}
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-magento}
@@ -70,11 +70,11 @@ services:
       - default
 
   redis:
-    hostname: redis
+    hostname: "${WARDEN_ENV_NAME}-redis"
     image: redis:${REDIS_VERSION:-5.0}-alpine
 
   mailhog:
-    hostname: mailhog
+    hostname: "${WARDEN_ENV_NAME}-mailhog"
     image: mailhog/mailhog:${MAILHOG_VERSION:-v1.0.0}
     labels:
       - traefik.enable=true
