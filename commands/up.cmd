@@ -5,17 +5,20 @@
 assert_installed
 
 mkdir -p "${WARDEN_HOME_DIR}/etc/traefik"
-cp "${WARDEN_DIR}/config/traefik/traefik.toml" "${WARDEN_HOME_DIR}/etc/traefik/traefik.toml"
+cp "${WARDEN_DIR}/config/traefik/traefik.yml" "${WARDEN_HOME_DIR}/etc/traefik/traefik.yml"
+cp "${WARDEN_DIR}/config/traefik/dynamic.yml" "${WARDEN_HOME_DIR}/etc/traefik/dynamic.yml"
 cp "${WARDEN_DIR}/config/dnsmasq.conf" "${WARDEN_HOME_DIR}/etc/dnsmasq.conf"
+
+cat >> "${WARDEN_HOME_DIR}/etc/traefik/dynamic.yml" <<-EOF
+tls:
+  certificates:
+EOF
 
 # TODO: Determine if a template loop may work in the config file to do this automatically in traefik
 for cert in $(find "${WARDEN_SSL_DIR}/certs" -type f -name "*.crt.pem" | sed -E 's#^.*/ssl/certs/(.*)\.crt\.pem$#\1#'); do
-  [[ "${cert}" = "warden.test" ]] && continue
-
-  cat >> "${WARDEN_HOME_DIR}/etc/traefik/traefik.toml" <<-EOF
-	      [[entryPoints.https.tls.certificates]]
-	      certFile = "/etc/ssl/certs/${cert}.crt.pem"
-	      keyFile = "/etc/ssl/certs/${cert}.key.pem"
+  cat >> "${WARDEN_HOME_DIR}/etc/traefik/dynamic.yml" <<-EOF
+	    - certFile: /etc/ssl/certs/${cert}.crt.pem
+	      keyFile: /etc/ssl/certs/${cert}.key.pem
 	EOF
 done
 

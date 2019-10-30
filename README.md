@@ -221,6 +221,22 @@ Tail the varnish activity log:
 
 Run `warden help` and `warden env -h` for more details and useful command information.
 
+### Configuring LiveReload on Magento 2
+
+TODO Add documentation on adding the following into the `env.php` file including usage information:
+
+```
+'design' => [
+    'footer' => [
+        'absolute_footer' => '
+            <script id="__lr_script__">//<![CDATA[
+                document.write("<script src=\'/livereload.js?port=443\'/>");
+            //]]></script>
+        '
+    ]
+]
+```
+
 ### Using Xdebug with PHPStorm
 
 There are two docker containers running FPM, `php-fpm` and `php-debug`. The `php-debug` container has the Xdebug extension pre-installed. Nginx will automatically route requests to the `php-debug` container when the `XDEBUG_SESSION` cookie has been set to `PHPSTORM` via the Xdebug Helper browser extension.

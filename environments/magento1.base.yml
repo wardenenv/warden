@@ -11,8 +11,10 @@ services:
       - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
     labels:
       - traefik.enable=true
-      - traefik.port=80
-      - traefik.frontend.rule=Host:${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}
+      - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.tls=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.priority=1
+      - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.rule=HostRegexp(`{subdomain:.+}.${TRAEFIK_DOMAIN}`)
+      - traefik.http.services.${WARDEN_ENV_NAME}-nginx.loadbalancer.server.port=80
     networks:
       - warden
       - default
@@ -78,8 +80,9 @@ services:
     image: mailhog/mailhog:${MAILHOG_VERSION:-v1.0.0}
     labels:
       - traefik.enable=true
-      - traefik.port=8025
-      - traefik.frontend.rule=Host:mailhog.${TRAEFIK_DOMAIN}
+      - traefik.http.routers.${WARDEN_ENV_NAME}-mailhog.tls=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-mailhog.rule=Host(`mailhog.${TRAEFIK_DOMAIN}`)
+      - traefik.http.services.${WARDEN_ENV_NAME}-mailhog.loadbalancer.server.port=8025
     networks:
       - warden
       - default
