@@ -31,5 +31,6 @@ Warden version 0.2.0
   start             Start services
   stop              Stop services
   up                Create and start containers, networks, and services
+  clixdebug         CLI based xDebug execution within container
 EOF
 )
