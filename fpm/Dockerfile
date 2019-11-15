@@ -1,6 +1,5 @@
 ARG PHP_VERSION=
 FROM davidalger/php:${PHP_VERSION}-fpm
-USER root
 
 ENV MAILHOG_HOST    mailhog
 ENV MAILHOG_PORT    1025
@@ -48,5 +47,15 @@ RUN mkdir -p /tmp/mhsendmail \
 # Install awscli to support data backfill workflows using S3 storage
 RUN pip3 install awscli --no-cache-dir
 
-RUN echo "www-data ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd
+# Configure www-data user as primary php-fpm user for better local dev experience
+RUN useradd www-data \
+    && chmod 0755 ~www-data \
+    && mkdir -p /var/www/html \
+    && chown www-data:www-data /var/www/html \
+    && echo "www-data ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd \
+    && find /var/log /var/lib/php -uid $(id -u php-fpm) | xargs chown www-data \
+    && find /var/log /var/lib/php -gid $(id -g php-fpm) | xargs chgrp www-data \
+    && perl -pi -e 's/^(user|group) = php-fpm$/$1 = www-data/g' /etc/php-fpm.d/www.conf
+
+WORKDIR /var/www/html
 USER www-data
