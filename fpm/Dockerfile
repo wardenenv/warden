@@ -53,8 +53,10 @@ RUN useradd www-data \
     && mkdir -p /var/www/html \
     && chown www-data:www-data /var/www/html \
     && echo "www-data ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd \
-    && find /var/log /var/lib/php -uid $(id -u php-fpm) | xargs chown www-data \
-    && find /var/log /var/lib/php -gid $(id -g php-fpm) | xargs chgrp www-data \
+    && PHP_FPM_USER=$(grep -i '^user = ' /etc/php-fpm.d/www.conf | awk '{print $3}') \
+    && PHP_FPM_GROUP=$(grep -i '^group = ' /etc/php-fpm.d/www.conf | awk '{print $3}') \
+    && find /var/log /var/lib/php -uid $(id -u ${PHP_FPM_USER}) | xargs chown www-data \
+    && find /var/log /var/lib/php -gid $(id -g ${PHP_FPM_GROUP}) | xargs chgrp www-data \
     && perl -pi -e 's/^(user|group) = php-fpm$/$1 = www-data/g' /etc/php-fpm.d/www.conf
 
 WORKDIR /var/www/html
