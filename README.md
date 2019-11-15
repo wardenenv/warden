@@ -198,7 +198,7 @@ If you need multiple domains pointing to the same server, you can follow the ins
        warden sign-certificate exampleproject2.test
        warden sign-certificate exampleproject3.test
     
-2. Create a `.warden/warden-env.yml` file with the contents below (this will be additive to the docker-compose config Warden uses for the env, anything added here will be merged in, and you can see the complete config using warden env config):
+2. Create a `.warden/warden-env.yml` file with the contents below (this will be additive to the docker-compose config Warden uses for the env, anything added here will be merged in, and you can see the complete config using `warden env config`):
    
        version: "3.5"
        services:
