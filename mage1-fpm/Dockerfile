@@ -11,4 +11,7 @@ RUN mkdir -p /usr/local/bin \
 RUN curl -o /etc/bash_completion.d/n98-magerun.phar.bash \
         https://raw.githubusercontent.com/netz98/n98-magerun/master/res/autocompletion/bash/n98-magerun.phar.bash
 
+# Create mr alias for n98-magerun
+RUN ln -s /usr/local/bin/n98-magerun /usr/local/bin/mr
+
 USER www-data

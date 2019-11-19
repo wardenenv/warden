@@ -15,4 +15,7 @@ RUN curl -o /etc/bash_completion.d/n98-magerun2.phar.bash \
 # Prevent pub dir from being auto-created by docker with wrong permissions when mounting pub/media
 RUN mkdir /var/www/html/pub && chown www-data:www-data /var/www/html/pub
 
+# Create mr alias for n98-magerun
+RUN ln -s /usr/local/bin/n98-magerun /usr/local/bin/mr
+
 USER www-data
