@@ -5,7 +5,7 @@ if ! ( hash docker-compose 2>/dev/null); then
     echo -e "\033[31mdocker-compose is not installed" && exit 1
 fi
 
-DOCKER_COMPOSE_VERSION="$(docker-compose -v | grep -o '[0-9.]*' | head -n1)"
+DOCKER_COMPOSE_VERSION="$(docker-compose -v | grep -oE '[0-9\.]+' | head -n1)"
 if ! ( test "$(printf "$DOCKER_COMPOSE_VERSION\n$WARDEN_REQUIRED_DOCKER_COMPOSE" | sort -rV | head -n 1)" == "$DOCKER_COMPOSE_VERSION" ); then
     echo -e "\033[31mdocker-compose version should be $WARDEN_REQUIRED_DOCKER_COMPOSE or higher ($DOCKER_COMPOSE_VERSION installed)" && exit 1
 fi
@@ -135,4 +135,3 @@ if ! grep '## WARDEN START ##' /etc/ssh/ssh_config >/dev/null; then
 		## WARDEN END ##
 		EOF
 fi
-
