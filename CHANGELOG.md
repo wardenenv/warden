@@ -1,3 +1,9 @@
+0.1.11
+===============
+
+* Added option to enable and setup Selenium for use with MFTF via flag in project's `.env` file (PR #40 from @lbajsarowicz)
+* Added error message when `docker-compose` version in `$PATH` is incompatible (PR #41 from @lbajsarowicz)
+
 0.1.10
 ===============
 
