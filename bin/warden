@@ -21,6 +21,9 @@ containsElement () {
   return 1
 }
 
+## define environment requirements
+readonly WARDEN_REQUIRED_DOCKER_COMPOSE="1.18.0"
+
 ## define global directory paths by commands
 readonly WARDEN_HOME_DIR=~/.warden
 readonly WARDEN_SSL_DIR="${WARDEN_HOME_DIR}/ssl"
