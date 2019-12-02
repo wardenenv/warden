@@ -15,9 +15,6 @@ acl purge {
 }
 
 sub vcl_recv {
-    if (req.esi_level > 0) {
-        unset req.http.X-Blackfire-Query;
-    }
     if (req.method == "PURGE") {
         if (client.ip !~ purge) {
             return (synth(405, "Method not allowed"));
@@ -48,8 +45,14 @@ sub vcl_recv {
           return (pipe);
     }
 
+    # Handle profile requests from Blackfire browser plugin
     if (req.http.X-Blackfire-Query) {
-        return (pass);
+        # ESI request should not be included in the profile (doc page: http://bit.ly/2GdiE1S)
+        if (req.esi_level > 0) {
+            unset req.http.X-Blackfire-Query;
+        } else {
+            return (pass);
+        }
     }
 
     # We only deal with GET and HEAD by default
@@ -83,15 +86,16 @@ sub vcl_recv {
         } elsif (req.http.Accept-Encoding ~ "deflate" && req.http.user-agent !~ "MSIE") {
             set req.http.Accept-Encoding = "deflate";
         } else {
-            # unkown algorithm
+            # unknown algorithm
             unset req.http.Accept-Encoding;
         }
     }
 
-    # Remove Google gclid parameters to minimize the cache objects
-    set req.url = regsuball(req.url,"\?gclid=[^&]+$",""); # strips when QS = "?gclid=AAA"
-    set req.url = regsuball(req.url,"\?gclid=[^&]+&","?"); # strips when QS = "?gclid=AAA&foo=bar"
-    set req.url = regsuball(req.url,"&gclid=[^&]+",""); # strips when QS = "?foo=bar&gclid=AAA" or QS = "?foo=bar&gclid=AAA&bar=baz"
+    # Remove all marketing get parameters to minimize the cache objects
+    if (req.url ~ "(\?|&)(gclid|cx|ie|cof|siteurl|zanpid|origin|fbclid|mc_[a-z]+|utm_[a-z]+|_bta_[a-z]+)=") {
+        set req.url = regsuball(req.url, "(gclid|cx|ie|cof|siteurl|zanpid|origin|fbclid|mc_[a-z]+|utm_[a-z]+|_bta_[a-z]+)=[-_A-z0-9+()%.]+&?", "");
+        set req.url = regsub(req.url, "[?|&]+$", "");
+    }
 
     # Static files caching
     if (req.url ~ "^/(pub/)?(media|static)/") {
@@ -115,6 +119,19 @@ sub vcl_hash {
     # To make sure http users don't see ssl warning
     if (req.http.X-Forwarded-Proto) {
         hash_data(req.http.X-Forwarded-Proto);
+    }
+
+    if (req.url ~ "/graphql") {
+        call process_graphql_headers;
+    }
+}
+
+sub process_graphql_headers {
+    if (req.http.Store) {
+        hash_data(req.http.Store);
+    }
+    if (req.http.Content-Currency) {
+        hash_data(req.http.Content-Currency);
     }
 }
 
@@ -143,19 +160,21 @@ sub vcl_backend_response {
     }
 
     # validate if we need to cache it and prevent from setting cookie
-    # images, css and js are cacheable by default so we have to remove cookie also
     if (beresp.ttl > 0s && (bereq.method == "GET" || bereq.method == "HEAD")) {
         unset beresp.http.set-cookie;
     }
 
    # If page is not cacheable then bypass varnish for 2 minutes as Hit-For-Pass
    if (beresp.ttl <= 0s ||
-        beresp.http.Surrogate-control ~ "no-store" ||
-        (!beresp.http.Surrogate-Control && beresp.http.Vary == "*")) {
+       beresp.http.Surrogate-control ~ "no-store" ||
+       (!beresp.http.Surrogate-Control &&
+       beresp.http.Cache-Control ~ "no-cache|no-store") ||
+       beresp.http.Vary == "*") {
         # Mark as Hit-For-Pass for the next 2 minutes
         set beresp.ttl = 120s;
         set beresp.uncacheable = true;
     }
+
     return (deliver);
 }
 
@@ -171,7 +190,7 @@ sub vcl_deliver {
     }
 
     # Not letting browser to cache non-static files.
-    if (req.url !~ "^/(pub/)?(media|static)/") {
+    if (resp.http.Cache-Control !~ "private" && req.url !~ "^/(pub/)?(media|static)/") {
         set resp.http.Pragma = "no-cache";
         set resp.http.Expires = "-1";
         set resp.http.Cache-Control = "no-store, no-cache, must-revalidate, max-age=0";
