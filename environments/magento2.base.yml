@@ -7,6 +7,15 @@ services:
       - NGINX_TEMPLATE=magento2.conf
     depends_on:
       - php-fpm
+    labels:
+      - traefik.enable=${BYPASS_VARNISH:-false}
+      - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.tls=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.priority=2
+      - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.rule=HostRegexp(`{subdomain:.+}.${TRAEFIK_DOMAIN}`)
+      - traefik.http.services.${WARDEN_ENV_NAME}-nginx.loadbalancer.server.port=80
+    networks:
+      - warden
+      - default
 
   varnish:
     hostname: "${WARDEN_ENV_NAME}-varnish"
@@ -35,7 +44,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.${WARDEN_ENV_NAME}-livereload.tls=true
-      - traefik.http.routers.${WARDEN_ENV_NAME}-livereload.priority=1
+      - traefik.http.routers.${WARDEN_ENV_NAME}-livereload.priority=2
       - traefik.http.routers.${WARDEN_ENV_NAME}-livereload.rule=
           HostRegexp(`{subdomain:.+}.${TRAEFIK_DOMAIN}`) && Path(`/livereload.js,/livereload`)
       - traefik.http.routers.${WARDEN_ENV_NAME}-livereload.service=${WARDEN_ENV_NAME}-livereload
