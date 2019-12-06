@@ -211,7 +211,9 @@ If you need multiple domains pointing to the same server, you can follow the ins
    
        TRAEFIK_HOST_LIST=app.exampleproject.test,subdomain.exampleproject.test,exampleproject2.test,exampleproject3.test
 
-4. Run `warden env up -d` to update the containers then each of the URLs should work as expected. It will be up to you to ensure your application properly handles traffic coming from each of those domains (by editing the nginx configuration or your application).
+4.  It will be up to you to ensure your application properly handles traffic coming from each of those domains (by editing the nginx configuration or your application). An example approach can be found [here](https://github.com/davidalger/warden/pull/37#issuecomment-554651099).
+
+5. Run `warden env up -d` to update the containers then each of the URLs should work as expected.
 
 ## Warden Usage
 
