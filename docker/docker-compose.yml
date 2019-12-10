@@ -61,6 +61,7 @@ services:
       - >-
         MOTD=Welcome to the Warden SSH tunnel!
       - SSH_USERS=user:2000:2000
+      - TCP_FORWARDING=true
     restart: always
 
 volumes:

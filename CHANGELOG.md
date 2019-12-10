@@ -1,6 +1,7 @@
 UNRELEASED
 ===============
 
+* Resolve issue breaking SSH tunnel as used for port-forwards.
 * Updated Traefik container and configuration to deploy Traefik 2.0. This is one which overhauls the docker labels used to connect containers, and these labels have been updated on all built-in container configurations. Use of labels to configure Traefik in per-project configuration files in the project's `.warden` directory may be required for continued interoperability.
 * Added native support for multi-domain projects without requiring per-project configuration (thanks to use of wildcard rules in the new Traefik configuration)
 * Added labels to the `php-fpm` container in `magento2` environment to support use of Live Reload via JS injection in the site header (see README for details!)
