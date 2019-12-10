@@ -1,7 +1,7 @@
-UNRELEASED
+0.1.12
 ===============
 
-* Resolve issue breaking SSH tunnel as used for port-forwards.
+* Fixed issue breaking SSH tunnel as used for port-forwards.
 
 0.1.11
 ===============
