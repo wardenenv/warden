@@ -1,3 +1,8 @@
+0.1.12
+===============
+
+* Fixed issue breaking SSH tunnel as used for port-forwards.
+
 0.1.11
 ===============
 
