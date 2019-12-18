@@ -24,7 +24,10 @@ RUN PHP_VERSION=$(php -v | head -n1 | cut -d' ' -f2 | cut -d. -f1-2 | cut -d. -f
         then PHP_PKG_PREFIX=php${PHP_VERSION}; \
         else PHP_PKG_PREFIX=php${PHP_VERSION}u; \
     fi \
-    && yum install -y ${PHP_PKG_PREFIX}-pecl-amqp \
+    && if (( ${PHP_VERSION} >= 71 )); \
+        then yum install -y ${PHP_PKG_PREFIX}-pecl-amqp; \
+        else echo "${PHP_PKG_PREFIX}-pecl-amqp is not available for PHP 7.0 and lower; skippnig"; \
+    fi \
     && yum clean all \
     && rm -rf /var/cache/yum
 
