@@ -8,10 +8,11 @@ Warden is a CLI utility for orchestrating Docker developer environments, and ena
 * `docker-compose` available in your `$PATH` (included with Docker for Mac, can be installed via `brew`, `apt` or `dnf` on Linux)
 * [Mutagen](https://mutagen.io/) v0.9.0 or later installed via Homebrew (required on macOS only; Warden will attempt to install this via `brew` if not present when running `warden sync start`).
 
+**Warning: By default Docker Desktop allocates 2GB memory.** This leads to extensive swapping, killed processed and extremely high CPU usage during some Magento actions, like for example running sampledata:deploy and/or installing the application. It is recommended to assign at least 6GB RAM to Docker Desktop prior to deploying any Magento environments on Docker Desktop. This can be corrected via Preferences -> Advanced -> Memory. While you are there, it wouldn't hurt to let Docker have the use of a few more vCPUs (keep it at least 4 less than the maximum CPU allocation however to avoid having macOS contend with Docker for use of cores)
+
 ### Recomended Additions
 
 * `pv` installed and available in your `$PATH` (you can install this via `brew install pv`) for use sending database files to `warden db import` and providing determinate progress indicators for the import. Alternatively `cat` may be used where `pv` is referenced in documentation but will not provide progress indicators.
-* **By default Docker Desktop assigns 2GB memory. This leads to extensive swapping, killed processed and extremely high CPU usage during some Magento actions, like for example running `sampledata:deploy`. It is recommended to assign at least 6GB RAM (unless your on a 8GB MBP, then go 4GB).**
 
 ## Installing Warden
 
@@ -61,7 +62,7 @@ Warden currently supports three environment types. These types are passed to `en
 * `magento2` Provides the necessary containerized services for running Magento 2 in a local development context including Nginx, Varnish, php-fpm (PHP 7.0+), MariaDB, Elasticsearch, RabbitMQ and Redis. In order to achieve a well performing experience on macOS, source files are synced into the container using a Mutagen sync session (`pub/media` remains mounted using a delegated mount).
 * `magento1` Supports development of Magento 1 projects, launching containers for Nginx, php-fpm (PHP 5.5, 5.6 or 7.0+), MariaDB and Redis. Files mounted using delegated mount on macOS and natively on Linux.
 
-All environment types (other than `local`) come pre-configured with a `mailhog` container, with `fpm` services configured to use `mhsendmail` to ensure outbound email does not inadvertently send out, and allows for simpler testing of email functionality on projects. There are also two `fpm` containers, `php-fpm` and `php-debug` (more on this later) to provide Xdebug support enabled via nothing more than setting the `XDEBUG_SESSION` cookie in your browser to direct the request to the `php-debug` container.
+All environment types (other than `local`) come pre-configured with a `mailhog` container, with `fpm` services configured to use `mhsendmail` to ensure outbound email does not inadvertently send out, and allows for simpler testing of email functionality on projects (you can use [Traefik](https://traefik.warden.test/) to find the `mailhog` url for each project). There are also two `fpm` containers, `php-fpm` and `php-debug` (more on this later) to provide Xdebug support enabled via nothing more than setting the `XDEBUG_SESSION` cookie in your browser to direct the request to the `php-debug` container.
 
 For full details and a complete list of variables which may be used to adjusting things such as PHP or MySQL versions (by setting them in the project's `.env` file), and to see the `docker-compose` definitions used to assemble each environment type, look at the contents of the [environments directory](https://github.com/davidalger/warden/tree/master/environments) in this repository. Each environment has a `base` configuration YAML file, and optionally a `darwin` and `linux-gnu` file which add to the `base` definitions anything specific to a given host architecture (this is, for example, how the `magento2` environment type works seamlessly on macOS with Mutagen sync sessions while using native filesystem mounts on Linux hosts). This directory also houses the configuration used for starting Mutagen sync sessions on a project via the `warden sync start` command.
 
@@ -210,7 +211,9 @@ If you need multiple domains pointing to the same server, you can follow the ins
    
        TRAEFIK_HOST_LIST=app.exampleproject.test,subdomain.exampleproject.test,exampleproject2.test,exampleproject3.test
 
-4. Run `warden env up -d` to update the containers then each of the URLs should work as expected. It will be up to you to ensure your application properly handles traffic coming from each of those domains (by editing the nginx configuration or your application).
+4.  It will be up to you to ensure your application properly handles traffic coming from each of those domains (by editing the nginx configuration or your application). An example approach can be found [here](https://github.com/davidalger/warden/pull/37#issuecomment-554651099).
+
+5. Run `warden env up -d` to update the containers then each of the URLs should work as expected.
 
 ## Warden Usage
 
@@ -300,7 +303,7 @@ WARDEN_SELENIUM=1
 After generating MFTF configuration files (`dev/tests/acceptance/.env` generated by `vendor/bin/mftf setup:env` command), you need to provide selenium hostname:
 
 ```dotenv
-SELENIUM_HOST=selenium-chrome
+SELENIUM_HOST=selenium
 BROWSER=chrome
 ```
 
