@@ -1,0 +1,29 @@
+
+[watch]
+pollingInterval = 10
+
+[sync]
+mode = "two-way-resolved"
+
+[ignore]
+vcs = true
+default = [
+    # System files
+    ".DS_Store",
+    "._*",
+
+    # Vim files
+    "*~",
+    "*.sw[a-p]",
+
+    # IDE files
+    ".idea",
+
+    # Magento files
+    "/var/**",
+    "!/var/.htaccess",
+]
+
+[permissions]
+defaultFileMode = "0644"
+defaultDirectoryMode = "0755"
