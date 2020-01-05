@@ -19,7 +19,7 @@ services:
       - traefik.http.middlewares.http-redirect.redirectscheme.scheme=https
       - traefik.http.routers.traefik.tls=true
       - traefik.http.routers.traefik.rule=Host(`traefik.warden.test`)
-      - traefik.http.services.traefik.loadbalancer.server.port=8080
+      - traefik.http.routers.traefik.service=api@internal
     restart: always
 
   portainer:

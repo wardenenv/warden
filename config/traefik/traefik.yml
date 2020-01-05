@@ -1,6 +1,5 @@
 ---
 api:
-  insecure: true
   dashboard: true
 providers:
   file:
