@@ -1,12 +1,13 @@
 UNRELEASED
 ===============
 
-* Updated Traefik container and configuration to deploy Traefik 2.0. This is one which overhauls the docker labels used to connect containers, and these labels have been updated on all built-in container configurations. Use of labels to configure Traefik in per-project configuration files in the project's `.warden` directory may be required for continued interoperability.
-* Added native support for multi-domain projects without requiring per-project configuration (thanks to use of wildcard rules in the new Traefik configuration)
-* Added labels to the `php-fpm` container in `magento2` environment to support use of Live Reload via JS injection in the site header (see README for details!)
+* Updated Traefik container and configuration to deploy Traefik 2.1
+  * WARNING: This is a **breaking change** as Traefik v2 overhauled the labeling used to auto-configure routing on containers. All labeling on built-in environment configurations has been updated, but where labels are used to configure Traefik in per-project configuration files such as in `.warden/warden-env.yml` the project may require a co-ordinated update to labeling for continued interoperability of the customizations with Warden 0.2.0+
+* Added native support for multi-domain projects without requiring per-project routing configuration. This is accomplished using wildcard rules in the new Traefik labeling configuration allowing Warden to automatically route any sub-domain of the `TRAEFIK_DOMAIN` value in `.env` to the nginx and/or varnish container for handling by the application.
+* Added labels to `fpm` containers in `magento2` environment to support use of Live Reload via nothing more than an injected JS snippet in the site header or footer (see README for details!)
 * Updated Mutagen usage to rely on new commands and configuration in Mutagen 0.10.0 (Warden will now throw an error if you attempt to start a sync and have a version of Mutagen older than 0.10.0 installed)
 * Added `WARDEN_ENV_NAME` as prefix to each container hostname in compose configs (issue #29)
-* Added simple `BYPASS_VARNISH` flag which when set in project `.env` file will cause Traefik to route requests directly to `nginx` container rather than `varnish`
+* Added simple `BYPASS_VARNISH` flag which when set in project `.env` file will cause Traefik to route requests directly to `nginx` container rather than `varnish` (bypassing varnish container no longer requires setting up custom Traefik labelling on the nginx container in the project config files)
 
 0.1.12
 ===============
