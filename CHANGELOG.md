@@ -1,33 +1,37 @@
-UNRELEASED
-===============
+## UNRELEASED-0.2.0 (yyyy-mm-dd)
+[All Commits](https://github.com/davidalger/warden/compare/0.1.12..develop)
 
-* Updated Traefik container and configuration to deploy Traefik 2.1
-  * WARNING: This is a **breaking change** as Traefik v2 overhauled the labeling used to auto-configure routing on containers. All labeling on built-in environment configurations has been updated, but where labels are used to configure Traefik in per-project configuration files such as in `.warden/warden-env.yml` the project may require a co-ordinated update to labeling for continued interoperability of the customizations with Warden 0.2.0+
+**Enhancements:**
+* Updated Traefik container and configuration to deploy Traefik 2.1; this is a **breaking change** as Traefik v2 overhauled the labeling used to auto-configure routing on containers. All labeling on built-in environment configurations has been updated, but where labels are used to configure Traefik in per-project configuration files such as in `.warden/warden-env.yml` the project may require a coordinated update to labeling for continued interoperability of the customizations with Warden 0.2.0+
 * Added native support for multi-domain projects without requiring per-project routing configuration. This is accomplished using wildcard rules in the new Traefik labeling configuration allowing Warden to automatically route any sub-domain of the `TRAEFIK_DOMAIN` value in `.env` to the nginx and/or varnish container for handling by the application.
-* Added labels to `fpm` containers in `magento2` environment to support use of Live Reload via nothing more than an injected JS snippet in the site header or footer (see README for details!)
+* Added labels to `fpm` containers in `magento2` environment to support use of Live Reload via an injected JS snippet in the site header or footer (issue [#62](https://github.com/davidalger/warden/issues/62))
 * Updated Mutagen usage to rely on new commands and configuration in Mutagen 0.10.0 (Warden will now throw an error if you attempt to start a sync and have a version of Mutagen older than 0.10.0 installed)
-* Added `WARDEN_ENV_NAME` as prefix to each container hostname in compose configs (issue #29)
-* Added simple `BYPASS_VARNISH` flag which when set in project `.env` file will cause Traefik to route requests directly to `nginx` container rather than `varnish` (bypassing varnish container no longer requires setting up custom Traefik labelling on the nginx container in the project config files)
-* Updated configuration setup for SSH tunnel container so it will automatically re-instate the needed configuration (if missing) when running `up`, `start`, or `restart` to mitigate issue caused by macOS Catalina updates wiping out customizations to `/etc/ssh/ssh_config`
-* Added `laravel` environment type to support local development of Laravel based applications
-* Fixed broken incorrect blackfire environment template name for magento1 env type (issue #48)
+* Added `WARDEN_ENV_NAME` as prefix to each container hostname in compose configs (issue [#29](https://github.com/davidalger/warden/issues/29))
+* Added `BYPASS_VARNISH` flag which when set in project `.env` file will cause Traefik to route requests directly to `nginx` container rather than `varnish` (issue [#63](https://github.com/davidalger/warden/issues/63))
+* Updated configuration setup for SSH tunnel container so it will automatically re-instate the needed configuration (if missing) when running `up`, `start`, or `restart` to mitigate issue caused by macOS Catalina updates wiping out customizations to `/etc/ssh/ssh_config` (issue [#59](https://github.com/davidalger/warden/issues/59))
+* Added `laravel` environment type to support local development of Laravel based applications (issue [#60](https://github.com/davidalger/warden/issues/60))
 
-0.1.12
-===============
+**Bug fixes:**
+* Fixed broken incorrect Blackfire environment template name for magento1 env type (issue [#48](https://github.com/davidalger/warden/issues/48))
 
+## [0.1.12](https://github.com/davidalger/warden/tree/0.1.12) (2019-12-10)
+[All Commits](https://github.com/davidalger/warden/compare/0.1.11..0.1.12)
+
+**Bug fixes:**
 * Fixed issue breaking SSH tunnel as used for port-forwards.
 
-0.1.11
-===============
+## [0.1.11](https://github.com/davidalger/warden/tree/0.1.11) (2019-11-26)
+[All Commits](https://github.com/davidalger/warden/compare/0.1.10..0.1.11)
 
-* Added option to enable and setup Selenium for use with MFTF via flag in project's `.env` file (PR #40 from @lbajsarowicz)
-* Added error message to `warden install` when `docker-compose` version in `$PATH` is incompatible (PR #41 from @lbajsarowicz)
+**Enhancements:**
+* Added option to enable and setup Selenium for use with MFTF via flag in project's `.env` file ([#40](https://github.com/davidalger/warden/pull/40) by [lbajsarowicz](https://github.com/lbajsarowicz))
+* Added error message to `warden install` when `docker-compose` version in `$PATH` is incompatible ([#41](https://github.com/davidalger/warden/pull/41) by [lbajsarowicz](https://github.com/lbajsarowicz))
 
 0.1.10
 ===============
 
-* Added native support to Warden for using the [split-database system](https://devdocs.magento.com/guides/v2.3/config-guide/multi-master/multi-master.html) in Magento Commerce during local development (PR #5 from @navarr)
-* Added support for optional Blackfire profiling which can be enabled via settings in the project's `.env` file (PR #12 from @navarr)
+* Added native support to Warden for using the [split-database system](https://devdocs.magento.com/guides/v2.3/config-guide/multi-master/multi-master.html) in Magento Commerce during local development ([#5](https://github.com/davidalger/warden/pull/5) by [navarr](https://github.com/navarr))
+* Added support for optional Blackfire profiling which can be enabled via settings in the project's `.env` file ([#12](https://github.com/davidalger/warden/pull/12) by [navarr](https://github.com/navarr))
 
 0.1.9
 ===============
@@ -59,7 +63,7 @@ UNRELEASED
 * Changed Mutagen polling interval from 20 to 10 seconds
 * Removed `generated` directory from exclusions in Mutagen sync configuration (having this ignored breaks ability to step into generated class files during Xdebug sessions)
 * Fixed issue with Mutagen sync cofiguration causing `pub/static` (and other files) to have incorrect permissions resulting in 404'ing static resources
-* Fixed issue causing `warden env` to break when run from a path which contained a space (issue #3 reported by @fooman)
+* Fixed issue causing `warden env` to break when run from a path which contained a space (issue [#3](https://github.com/davidalger/warden/issues/3))
 
 0.1.4
 ===============
@@ -74,8 +78,8 @@ UNRELEASED
 * Updated DNS auto-configuration on linux systems to handle systemd-resolved usage.
 * Fixed issue on Ubuntu where dnsmasq container would fail to bind to port 53.
 * Fixed issue where lack of `~/.composer` dir (resulting in creation by docker) can cause permissions error inside containers.
-* Fixed issue with `bin/magento setup:install` allowing it to pass permissions checks (PR #2 by @fooman)
-* Fixed issue where `env` and `env-init` commands failed to reset shell colors when printing error messages (issue #4 reported by @navarr)
+* Fixed issue with `bin/magento setup:install` allowing it to pass permissions checks ([#2](https://github.com/davidalger/warden/pull/2) by [fooman](https://github.com/fooman))
+* Fixed issue where `env` and `env-init` commands failed to reset shell colors when printing error messages (issue [#4](https://github.com/davidalger/warden/issues/4))
 
 0.1.2
 ===============
@@ -112,7 +116,7 @@ UNRELEASED
 * Changed Traefik configuration to automatically use the warden docker network (eliminates need for `traefik.docker.network=warden` label on all proxied containers
 * Changed Traefik configuration to require containers be explicitly enabled for Traefik via the label `traefik.enable=true`
 * Changed docker-compose environment type templates to version 3.5 for better extendability in project override files
-* Fixed bug where resolver setup on macOS would fail if `/etc/resolver` dir was already present during install (PR #1 by @fooman)
+* Fixed bug where resolver setup on macOS would fail if `/etc/resolver` dir was already present during install ([#1](https://github.com/davidalger/warden/pull/1) by [fooman](https://github.com/fooman))
 
 0.1.0-beta5
 ===============
