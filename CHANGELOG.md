@@ -9,6 +9,7 @@ UNRELEASED
 * Added `WARDEN_ENV_NAME` as prefix to each container hostname in compose configs (issue #29)
 * Added simple `BYPASS_VARNISH` flag which when set in project `.env` file will cause Traefik to route requests directly to `nginx` container rather than `varnish` (bypassing varnish container no longer requires setting up custom Traefik labelling on the nginx container in the project config files)
 * Updated configuration setup for SSH tunnel container so it will automatically re-instate the needed configuration (if missing) when running `up`, `start`, or `restart` to mitigate issue caused by macOS Catalina updates wiping out customizations to `/etc/ssh/ssh_config`
+* Added `laravel` environment type to support local development of Laravel based applications
 
 0.1.12
 ===============
