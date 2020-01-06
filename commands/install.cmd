@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 [[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!" && exit 1
 
+source "${WARDEN_DIR}/utils/install.sh"
+
 if ! ( hash docker-compose 2>/dev/null); then
     echo -e "\033[31mdocker-compose is not installed" && exit 1
 fi
@@ -122,16 +124,5 @@ if [[ "$OSTYPE" == "linux-gnu" ]] && [[ "$(stat -c '%U' "${WARDEN_HOME_DIR}/tunn
   sudo chown root:root "${WARDEN_HOME_DIR}/tunnel/ssh_key.pub"
 fi
 
-if ! grep '## WARDEN START ##' /etc/ssh/ssh_config >/dev/null; then
-  echo "==> Configuring sshd tunnel in host ssh_config (requires sudo privileges)"
-  cat <<-EOF | sudo tee -a /etc/ssh/ssh_config >/dev/null
-		
-		## WARDEN START ##
-		Host tunnel.warden.test
-		  HostName 127.0.0.1
-		  User user
-		  Port 2222
-		  IdentityFile ~/.warden/tunnel/ssh_key
-		## WARDEN END ##
-		EOF
-fi
+## append settings for tunnel.warden.test in /etc/ssh/ssh_config
+installSshConfig

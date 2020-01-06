@@ -2,23 +2,24 @@ version: "3.5"
 services:
   traefik:
     container_name: traefik
-    image: traefik:v1.7
-    command: |
-      --api
-      --docker
-      --docker.domain=test
-      --docker.network=warden
-      --docker.exposedByDefault=false
+    image: traefik:2.1
     ports:
       - "127.0.0.1:80:80"     # The HTTP port
       - "127.0.0.1:443:443"   # The HTTPS port
     volumes:
-      - ~/.warden/etc/traefik/traefik.toml:/etc/traefik/traefik.toml
+      - ~/.warden/etc/traefik/traefik.yml:/etc/traefik/traefik.yml
+      - ~/.warden/etc/traefik/dynamic.yml:/etc/traefik/dynamic.yml
       - ~/.warden/ssl/certs:/etc/ssl/certs
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
       - traefik.enable=true
-      - traefik.port=8080
+      - traefik.http.routers.http-redirect.middlewares=http-redirect
+      - traefik.http.routers.http-redirect.rule=HostRegexp(`{domain:.+}`)
+      - traefik.http.routers.http-redirect.priority=1
+      - traefik.http.middlewares.http-redirect.redirectscheme.scheme=https
+      - traefik.http.routers.traefik.tls=true
+      - traefik.http.routers.traefik.rule=Host(`traefik.warden.test`)
+      - traefik.http.routers.traefik.service=api@internal
     restart: always
 
   portainer:
@@ -29,7 +30,9 @@ services:
       - portainer:/data
     labels:
       - traefik.enable=true
-      - traefik.port=9000
+      - traefik.http.routers.portainer.tls=true
+      - traefik.http.routers.portainer.rule=Host(`portainer.warden.test`)
+      - traefik.http.services.portainer.loadbalancer.server.port=9000
     restart: always
 
   dnsmasq:
@@ -41,20 +44,27 @@ services:
       - ~/.warden/etc/dnsmasq.conf:/etc/dnsmasq.conf
     labels:
       - traefik.enable=true
-      - traefik.port=8080
+      - traefik.http.routers.dnsmasq.tls=true
+      - traefik.http.routers.dnsmasq.rule=Host(`dnsmasq.warden.test`)
+      - traefik.http.services.dnsmasq.loadbalancer.server.port=8080
     restart: always
 
   tunnel:
     container_name: tunnel
-    image: panubo/sshd
+    image: panubo/sshd:1.1.0
     ports:
       - "127.0.0.1:2222:22"
     volumes:
       - ~/.warden/tunnel/ssh_key.pub:/etc/authorized_keys/user
       - sshd_keys:/etc/ssh/keys
     environment:
-      - >-
-        MOTD=Welcome to the Warden SSH tunnel!
+      - |
+        MOTD=Welcome to the Warden SSH tunnel container!
+
+        This tunnel container is used only for forwarding TCP
+        connections, generally to port 3306 of db containers
+        and is not typically used with an interactive shell.
+
       - SSH_USERS=user:2000:2000
       - TCP_FORWARDING=true
     restart: always

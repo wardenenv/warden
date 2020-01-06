@@ -70,19 +70,6 @@ while (( "$#" )); do
   esac
 done
 
-function assert_installed {
-  if [[ ! -f "${WARDEN_HOME_DIR}/.installed" ]] \
-    || [[ "${WARDEN_HOME_DIR}/.installed" -ot "${WARDEN_DIR}/bin/warden" ]]
-  then
-    [[ -f "${WARDEN_HOME_DIR}/.installed" ]] && echo "==> Updating warden" || echo "==> Starting initialization"
-
-    "${WARDEN_DIR}/bin/warden" install
-
-    [[ -f "${WARDEN_HOME_DIR}/.installed" ]] && echo "==> Update complete" || echo "==> Initialization complete"
-    date > "${WARDEN_HOME_DIR}/.installed"
-  fi
-}
-
 ## display command specific usage info if help flag is set
 if [[ ${WARDEN_HELP} ]]; then
   source "${WARDEN_DIR}/commands/usage.cmd"

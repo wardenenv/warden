@@ -4,7 +4,8 @@ services:
     hostname: "${WARDEN_ENV_NAME}-nginx"
     image: davidalger/warden:nginx-${NGINX_VERSION:-1.16}-alpine
     environment:
-      - NGINX_TEMPLATE=magento1.conf
+      - NGINX_TEMPLATE=laravel.conf
+      - NGINX_PUBLIC=/public
     depends_on:
       - php-fpm
     volumes:
@@ -21,7 +22,7 @@ services:
 
   php-fpm:
     hostname: "${WARDEN_ENV_NAME}-php-fpm"
-    image: davidalger/warden:mage1-fpm-${PHP_VERSION:-7.2}
+    image: davidalger/warden:fpm-${PHP_VERSION:-7.2}
     environment:
       - NODE_VERSION=${NODE_VERSION:-10}
     extra_hosts:
@@ -38,7 +39,7 @@ services:
 
   php-debug:
     hostname: "${WARDEN_ENV_NAME}-php-debug"
-    image: davidalger/warden:mage1-fpm-${PHP_VERSION:-7.2}-debug
+    image: davidalger/warden:fpm-${PHP_VERSION:-7.2}-debug
     environment:
       - NODE_VERSION=${NODE_VERSION:-10}
       - PHP_IDE_CONFIG=serverName=${WARDEN_ENV_NAME}-docker
@@ -58,13 +59,10 @@ services:
     hostname: "${WARDEN_ENV_NAME}-mariadb"
     image: mariadb:${MARIADB_VERSION:-10.3}
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-magento}
-      - MYSQL_DATABASE=${MYSQL_DATABASE:-magento}
-      - MYSQL_USER=${MYSQL_USER:-magento}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-magento}
-    command:
-      - mysqld
-      - --max_allowed_packet=1024M
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-laravel}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-laravel}
+      - MYSQL_USER=${MYSQL_USER:-laravel}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-laravel}
     volumes:
       - dbdata:/var/lib/mysql
     networks:
