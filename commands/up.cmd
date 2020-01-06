@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 [[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!" && exit 1
 
-## ensure warden install has been run
-assert_installed
+source "${WARDEN_DIR}/utils/install.sh"
+assertWardenInstall
 
 mkdir -p "${WARDEN_HOME_DIR}/etc/traefik"
 cp "${WARDEN_DIR}/config/traefik/traefik.yml" "${WARDEN_HOME_DIR}/etc/traefik/traefik.yml"
@@ -14,7 +14,6 @@ tls:
   certificates:
 EOF
 
-# TODO: Determine if a template loop may work in the config file to do this automatically in traefik
 for cert in $(find "${WARDEN_SSL_DIR}/certs" -type f -name "*.crt.pem" | sed -E 's#^.*/ssl/certs/(.*)\.crt\.pem$#\1#'); do
   cat >> "${WARDEN_HOME_DIR}/etc/traefik/dynamic.yml" <<-EOF
 	    - certFile: /etc/ssl/certs/${cert}.crt.pem

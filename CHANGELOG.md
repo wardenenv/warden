@@ -8,6 +8,7 @@ UNRELEASED
 * Updated Mutagen usage to rely on new commands and configuration in Mutagen 0.10.0 (Warden will now throw an error if you attempt to start a sync and have a version of Mutagen older than 0.10.0 installed)
 * Added `WARDEN_ENV_NAME` as prefix to each container hostname in compose configs (issue #29)
 * Added simple `BYPASS_VARNISH` flag which when set in project `.env` file will cause Traefik to route requests directly to `nginx` container rather than `varnish` (bypassing varnish container no longer requires setting up custom Traefik labelling on the nginx container in the project config files)
+* Updated configuration setup for SSH tunnel container so it will automatically re-instate the needed configuration (if missing) when running `up`, `start`, or `restart` to mitigate issue caused by macOS Catalina updates wiping out customizations to `/etc/ssh/ssh_config`
 
 0.1.12
 ===============
