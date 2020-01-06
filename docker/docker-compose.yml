@@ -58,8 +58,13 @@ services:
       - ~/.warden/tunnel/ssh_key.pub:/etc/authorized_keys/user
       - sshd_keys:/etc/ssh/keys
     environment:
-      - >-
-        MOTD=Welcome to the Warden SSH tunnel!
+      - |
+        MOTD=Welcome to the Warden SSH tunnel container!
+
+        This tunnel container is used only for forwarding TCP
+        connections, generally to port 3306 of db containers
+        and is not typically used with an interactive shell.
+
       - SSH_USERS=user:2000:2000
       - TCP_FORWARDING=true
     restart: always
