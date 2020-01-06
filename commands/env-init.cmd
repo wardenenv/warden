@@ -7,7 +7,7 @@ WARDEN_ENV_PATH="$(pwd)"
 # TODO: Prompt user for inputs when arguments remain unspecified
 
 WARDEN_ENV_NAME="${WARDEN_PARAMS[0]:-}"
-WARDEN_ENV_TYPE="${WARDEN_PARAMS[1]:-magento2}"
+WARDEN_ENV_TYPE="${WARDEN_PARAMS[1]:-}"
 
 # Require the user inputs the required environment name parameter
 [[ ! ${WARDEN_ENV_NAME} ]] && >&2 echo -e "\033[31mMissing required argument. Please use --help to to print usage.\033[0m" && exit 1
