@@ -11,6 +11,7 @@
 * Updated configuration setup for SSH tunnel container so it will automatically re-instate the needed configuration (if missing) when running `up`, `start`, or `restart` to mitigate issue caused by macOS Catalina updates wiping out customizations to `/etc/ssh/ssh_config` (issue [#59](https://github.com/davidalger/warden/issues/59))
 * Added `laravel` environment type to support local development of Laravel based applications (issue [#60](https://github.com/davidalger/warden/issues/60))
 * Updated `env-init` command to include default values for available variables in the project's `.env` making customization a bit easier (issue [#32](https://github.com/davidalger/warden/issues/32))
+* Updated default Elasticsearch version for `magento2` environments from 5.4 to 6.8 (issue [#66](https://github.com/davidalger/warden/issues/66))
 
 **Bug fixes:**
 * Fixed broken incorrect Blackfire environment template name for magento1 env type (issue [#48](https://github.com/davidalger/warden/issues/48))
