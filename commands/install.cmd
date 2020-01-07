@@ -76,8 +76,12 @@ if [[ "$OSTYPE" == "linux-gnu" ]] && [[ ! -f "${WARDEN_HOME_DIR}/nodnsconfig" ]]
     echo "==> Configuring resolver for .test domains (requires sudo privileges)"
     if ! sudo grep '^prepend domain-name-servers 127.0.0.1;$' /etc/dhcp/dhclient.conf >/dev/null 2>&1; then
       echo "  + Configuring dhclient to prepend dns with 127.0.0.1 resolver (requires sudo privileges)"
-      ## Ensure that dhclient.conf exists before using it
-      mkdir -p "/etc/dhcp" && touch "/etc/dhcp/dhclient.conf"
+
+      ## Ensure /etc/dhcp exists before writing dhclient.conf (on ArchLinux this may not pre-exist)
+      if [[ ! -d /etc/dhcp ]]; then
+        sudo mkdir /etc/dhcp
+      fi
+
       DHCLIENT_CONF=$'\n'"$(sudo cat /etc/dhcp/dhclient.conf 2>/dev/null)" || DHCLIENT_CONF=
       DHCLIENT_CONF="prepend domain-name-servers 127.0.0.1;${DHCLIENT_CONF}"
       echo "${DHCLIENT_CONF}" | sudo tee /etc/dhcp/dhclient.conf
