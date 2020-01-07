@@ -86,10 +86,10 @@ if [[ "${WARDEN_ENV_TYPE}" == "laravel" ]]; then
 
 		CACHE_DRIVER=redis
 		SESSION_DRIVER=redis
-
+		
 		REDIS_HOST=redis
 		REDIS_PORT=6379
-
+		
 		MAIL_DRIVER=sendmail
 	EOT
 fi
