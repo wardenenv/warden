@@ -5,13 +5,15 @@ Warden is a CLI utility for orchestrating Docker developer environments, and ena
 
 * [Homebrew](https://brew.sh/) package manager (for installing Warden and other dependencies)
 * [Docker for Mac](https://hub.docker.com/editions/community/docker-ce-desktop-mac) or [Docker for Linux](https://docs.docker.com/install/) (tested on Fedora 29 and Ubuntu 18.10)
-* `docker-compose` available in your `$PATH` (included with Docker for Mac, can be installed via `brew`, `apt` or `dnf` on Linux)
+* `docker-compose` available in your `$PATH` (can be installed via `brew`, `apt`, `dnf`, `pip3`)
 * [Mutagen](https://mutagen.io/) v0.9.0 or later installed via Homebrew (required on macOS only; Warden will attempt to install this via `brew` if not present when running `warden sync start`).
 
-### Recomended Additions
+**Warning: By default Docker Desktop allocates 2GB memory.** This leads to extensive swapping, killed processed and extremely high CPU usage during some Magento actions, like for example running sampledata:deploy and/or installing the application. It is recommended to assign at least 6GB RAM to Docker Desktop prior to deploying any Magento environments on Docker Desktop. This can be corrected via Preferences -> Advanced -> Memory. While you are there, it wouldn't hurt to let Docker have the use of a few more vCPUs (keep it at least 4 less than the maximum CPU allocation however to avoid having macOS contend with Docker for use of cores)
+
+### Recommended Additions
 
 * `pv` installed and available in your `$PATH` (you can install this via `brew install pv`) for use sending database files to `warden db import` and providing determinate progress indicators for the import. Alternatively `cat` may be used where `pv` is referenced in documentation but will not provide progress indicators.
-* By default Docker Desktop assigns 2GB memory. This leads to extensive swapping, killed processed and extremely high CPU usage during some Magento actions, like for example running `sampledata:deploy`. It is recommended to assign at least 6GB RAM (unless your on a 8GB MBP, then go 4GB).
+* On macOS it is **highly recommended** to install `docker-compose` via `pip3 install --user docker-compose` adding `~/Library/Python/3.7/bin/` to your `$PATH` vs relying on the `docker-compose` binary installed by Docker for Mac (or installing via brew, which Docker for Mac overwrites each time it starts); the binary installed by Docker for Mac out of the box takes roughly 8 to 20 times as long to initialize due to entropy related code (for example a `docker-compose version` command will take 2 to 5 seconds vs what should be a fraction of a second). Installing `docker-compose` via a third-party package manager such as `pip3` to a location other than `/usr/local/bin` (which Docker for Mac overwrites on startup) will resolve the slowness caused by Warden using `docker-compose` under the hood.
 
 ## Installing Warden
 
@@ -22,7 +24,7 @@ Warden may be installed via [Homebrew](https://brew.sh/) on both macOS and Linux
 
 Alternatively Warden may also be installed by cloning the repository to the directory of your choice and adding it to your `$PATH`:
 
-    sudo mkdir /opt/warden
+    sudo mkdir -p /opt/warden
     sudo chown $(whoami) /opt/warden
     git clone -b master https://github.com/davidalger/warden.git /opt/warden
     echo 'export PATH="/opt/warden/bin:$PATH"' >> ~/.bashrc
@@ -60,8 +62,9 @@ Warden currently supports three environment types. These types are passed to `en
 * [`local`](https://github.com/davidalger/warden/blob/master/environments/local.base.yml) This environment type does nothing more than declare the `docker-compose` version and declare the external `warden` network which Traefik uses to proxy requests into the project's containers. When this is used, a `.warden/warden-env.yml` may be placed in the root directory of the project workspace to define the desired containers, volumes, etc needed for the project. An example of a `local` environment type being used can be found in the [m2demo project](https://github.com/davidalger/m2demo).
 * `magento2` Provides the necessary containerized services for running Magento 2 in a local development context including Nginx, Varnish, php-fpm (PHP 7.0+), MariaDB, Elasticsearch, RabbitMQ and Redis. In order to achieve a well performing experience on macOS, source files are synced into the container using a Mutagen sync session (`pub/media` remains mounted using a delegated mount).
 * `magento1` Supports development of Magento 1 projects, launching containers for Nginx, php-fpm (PHP 5.5, 5.6 or 7.0+), MariaDB and Redis. Files mounted using delegated mount on macOS and natively on Linux.
+* `laravel` Supports development of Laravel projects, launching containers for Nginx, php-fpm, MariaDB and Redis. Files mounted using delegated mount on macOS and natively on Linux.
 
-All environment types (other than `local`) come pre-configured with a `mailhog` container, with `fpm` services configured to use `mhsendmail` to ensure outbound email does not inadvertently send out, and allows for simpler testing of email functionality on projects. There are also two `fpm` containers, `php-fpm` and `php-debug` (more on this later) to provide Xdebug support enabled via nothing more than setting the `XDEBUG_SESSION` cookie in your browser to direct the request to the `php-debug` container.
+All environment types (other than `local`) come pre-configured with a `mailhog` container, with `fpm` services configured to use `mhsendmail` to ensure outbound email does not inadvertently send out, and allows for simpler testing of email functionality on projects (you can use [Traefik](https://traefik.warden.test/) to find the `mailhog` url for each project). There are also two `fpm` containers, `php-fpm` and `php-debug` (more on this later) to provide Xdebug support enabled via nothing more than setting the `XDEBUG_SESSION` cookie in your browser to direct the request to the `php-debug` container.
 
 For full details and a complete list of variables which may be used to adjusting things such as PHP or MySQL versions (by setting them in the project's `.env` file), and to see the `docker-compose` definitions used to assemble each environment type, look at the contents of the [environments directory](https://github.com/davidalger/warden/tree/master/environments) in this repository. Each environment has a `base` configuration YAML file, and optionally a `darwin` and `linux-gnu` file which add to the `base` definitions anything specific to a given host architecture (this is, for example, how the `magento2` environment type works seamlessly on macOS with Mutagen sync sessions while using native filesystem mounts on Linux hosts). This directory also houses the configuration used for starting Mutagen sync sessions on a project via the `warden sync start` command.
 
@@ -189,6 +192,31 @@ The following variables can be added to the project's `.env` file to enable addi
   * `WARDEN_SPLIT_SALES=1`
   * `WARDEN_SPLIT_CHECKOUT=1`
 
+### Additional Domains
+
+If you need multiple domains pointing to the same server, you can follow the instructions below. In this example, we're going to add both an additional subdomain for an existing domain as well as add a couple of additional domains.
+
+1. Sign certificates for your new domains:
+   
+       warden sign-certificate exampleproject2.test
+       warden sign-certificate exampleproject3.test
+    
+2. Create a `.warden/warden-env.yml` file with the contents below (this will be additive to the docker-compose config Warden uses for the env, anything added here will be merged in, and you can see the complete config using `warden env config`):
+   
+       version: "3.5"
+       services:
+         varnish:
+           labels:
+             traefik.frontend.rule: Host:${TRAEFIK_HOST_LIST}
+   
+3. Add a comma-separated list of domains to the `.env` file (we're going to assume you want to continue to use the `app.exampleproject.test` domain for your primary application, so we're including that in the list):
+   
+       TRAEFIK_HOST_LIST=app.exampleproject.test,subdomain.exampleproject.test,exampleproject2.test,exampleproject3.test
+
+4.  It will be up to you to ensure your application properly handles traffic coming from each of those domains (by editing the nginx configuration or your application). An example approach can be found [here](https://github.com/davidalger/warden/pull/37#issuecomment-554651099).
+
+5. Run `warden env up -d` to update the containers then each of the URLs should work as expected.
+
 ## Warden Usage
 
 ### Common Warden Commands
@@ -220,6 +248,22 @@ Tail the varnish activity log:
 ### Warden Usage Information
 
 Run `warden help` and `warden env -h` for more details and useful command information.
+
+### Configuring LiveReload on Magento 2
+
+TODO Add documentation on adding the following into the `env.php` file including usage information:
+
+```
+'design' => [
+    'footer' => [
+        'absolute_footer' => '
+            <script id="__lr_script__">//<![CDATA[
+                document.write("<script src=\'/livereload.js?port=443\'/>");
+            //]]></script>
+        '
+    ]
+]
+```
 
 ### Using Xdebug with PHPStorm
 
@@ -263,6 +307,41 @@ Note: You can obtain the IDs and Tokens used in the above from within your Black
 #### Connection settings in PHPStorm
 ![PHPStorm Connection Config](https://user-images.githubusercontent.com/72463/66998481-a0062100-f0d4-11e9-8cc0-a5691fee59c5.png)
 ![PHPStorm Tunnel Config](https://user-images.githubusercontent.com/72463/66998483-a09eb780-f0d4-11e9-9643-8fe63dd62aad.png)
+
+### Testing with Magento Functional Testing Framework
+
+For information what **Magento Functional Testing Framework** is - please follow to [MFTF DevDocs](https://devdocs.magento.com/mftf/docs/introduction.html).
+
+MFTF is part of Magento 2. To run tests you need [Selenium](https://selenium.dev/) instance with [Chrome Webdriver](https://sites.google.com/a/chromium.org/chromedriver/). Warden provides Docker setup that contains Selenium Standalone with Chrome. You can enable it by adding the following to the project's `.env` file (or exporting them to environment variables prior to starting the environment):
+
+```dotenv
+WARDEN_SELENIUM=1
+```
+
+After generating MFTF configuration files (`dev/tests/acceptance/.env` generated by `vendor/bin/mftf setup:env` command), you need to provide selenium hostname:
+
+```dotenv
+SELENIUM_HOST=selenium
+BROWSER=chrome
+```
+
+To preview the process of testing, you need any **VLC** client that provides **SSH Tunnel** support (eg. [Remmina](https://remmina.org/how-to-install-remmina/)). To preview the process of testing, you need to use `tunnel.warden.test:2222` (login: `user`):
+
+* Remote Desktop Viewer
+
+  ![Remote Desktop Viewer](.screenshots/selenium-remote-desktop-viewer.png) 
+
+* Remmina
+
+  ![Remmina Configuration](.screenshots/remmina-ssh-tunnel.png)
+  
+### Custom environments
+
+To add custom environments you can add the .yml files inside the `custom_environments` folder. With this way you will be able to use containers that are not included to the base images that Warden provides. After adding the environment you can call it from the .env file.
+
+### Custom Commands
+
+To add custom commands you will need to add them to the `custom_commands` folder. With this way you can use your own custom workflow to interact with your docker containers. A good example will be if you want to use a sync command to get images from a remote server. You could build the command and make it available by adding it on the folder.
 
 ## License
 

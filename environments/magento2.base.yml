@@ -1,27 +1,39 @@
 version: "3.5"
 services:
   nginx:
-    hostname: nginx
+    hostname: "${WARDEN_ENV_NAME}-nginx"
     image: davidalger/warden:nginx-${NGINX_VERSION:-1.16}-alpine
     environment:
       - NGINX_TEMPLATE=magento2.conf
     depends_on:
       - php-fpm
+    labels:
+      - traefik.enable=${BYPASS_VARNISH:-false}
+      - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.tls=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.priority=2
+      - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.rule=HostRegexp(`{subdomain:.+}.${TRAEFIK_DOMAIN}`)
+      - traefik.http.services.${WARDEN_ENV_NAME}-nginx.loadbalancer.server.port=80
+    networks:
+      - warden
+      - default
 
   varnish:
-    hostname: varnish
+    hostname: "${WARDEN_ENV_NAME}-varnish"
     image: davidalger/warden:varnish-${VARNISH_VERSION:-4.1}-alpine
     depends_on:
       - nginx
     labels:
       - traefik.enable=true
-      - traefik.frontend.rule=Host:${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}
+      - traefik.http.routers.${WARDEN_ENV_NAME}-varnish.tls=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-varnish.priority=1
+      - traefik.http.routers.${WARDEN_ENV_NAME}-varnish.rule=HostRegexp(`{subdomain:.+}.${TRAEFIK_DOMAIN}`)
+      - traefik.http.services.${WARDEN_ENV_NAME}-varnish.loadbalancer.server.port=80
     networks:
       - warden
       - default
 
   php-fpm:
-    hostname: php-fpm
+    hostname: "${WARDEN_ENV_NAME}-php-fpm"
     image: davidalger/warden:mage2-fpm-${PHP_VERSION:-7.2}
     environment:
       - NODE_VERSION=${NODE_VERSION:-10}
@@ -29,12 +41,21 @@ services:
       - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
     depends_on:
       - db
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-livereload.tls=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-livereload.priority=2
+      - traefik.http.routers.${WARDEN_ENV_NAME}-livereload.rule=
+          HostRegexp(`{subdomain:.+}.${TRAEFIK_DOMAIN}`)
+            && (Path(`/livereload.js`) || Path(`/livereload`))
+      - traefik.http.routers.${WARDEN_ENV_NAME}-livereload.service=${WARDEN_ENV_NAME}-livereload
+      - traefik.http.services.${WARDEN_ENV_NAME}-livereload.loadbalancer.server.port=35729
     networks:
       - default
       - warden
 
   php-debug:
-    hostname: php-debug
+    hostname: "${WARDEN_ENV_NAME}-php-debug"
     image: davidalger/warden:mage2-fpm-${PHP_VERSION:-7.2}-debug
     environment:
       - NODE_VERSION=${NODE_VERSION:-10}
@@ -48,7 +69,7 @@ services:
       - warden
 
   db:
-    hostname: mariadb
+    hostname: "${WARDEN_ENV_NAME}-mariadb"
     image: mariadb:${MARIADB_VERSION:-10.3}
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-magento}
@@ -63,14 +84,15 @@ services:
     networks:
       - warden
       - default
- 
+
   elasticsearch:
-    hostname: elasticsearch
+    hostname: "${WARDEN_ENV_NAME}-elasticsearch"
     image: davidalger/warden:elasticsearch-${ELASTICSEARCH_VERSION:-5.6}
     labels:
       - traefik.enable=true
-      - traefik.port=9200
-      - traefik.frontend.rule=Host:elasticsearch.${TRAEFIK_DOMAIN}
+      - traefik.http.routers.${WARDEN_ENV_NAME}-elasticsearch.tls=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-elasticsearch.rule=Host(`elasticsearch.${TRAEFIK_DOMAIN}`)
+      - traefik.http.services.${WARDEN_ENV_NAME}-elasticsearch.loadbalancer.server.port=9200
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
@@ -82,27 +104,29 @@ services:
       - default
 
   redis:
-    hostname: redis
+    hostname: "${WARDEN_ENV_NAME}-redis"
     image: redis:${REDIS_VERSION:-5.0}-alpine
 
   rabbitmq:
-    hostname: rabbitmq
+    hostname: "${WARDEN_ENV_NAME}-rabbitmq"
     image: rabbitmq:${RABBITMQ_VERSION:-3.7.14}-management-alpine
     labels:
       - traefik.enable=true
-      - traefik.port=15672
-      - traefik.frontend.rule=Host:rabbitmq.${TRAEFIK_DOMAIN}
+      - traefik.http.routers.${WARDEN_ENV_NAME}-rabbitmq.tls=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-rabbitmq.rule=Host(`rabbitmq.${TRAEFIK_DOMAIN}`)
+      - traefik.http.services.${WARDEN_ENV_NAME}-rabbitmq.loadbalancer.server.port=15672
     networks:
       - warden
       - default
 
   mailhog:
-    hostname: mailhog
+    hostname: "${WARDEN_ENV_NAME}-mailhog"
     image: mailhog/mailhog:${MAILHOG_VERSION:-v1.0.0}
     labels:
       - traefik.enable=true
-      - traefik.port=8025
-      - traefik.frontend.rule=Host:mailhog.${TRAEFIK_DOMAIN}
+      - traefik.http.routers.${WARDEN_ENV_NAME}-mailhog.tls=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-mailhog.rule=Host(`mailhog.${TRAEFIK_DOMAIN}`)
+      - traefik.http.services.${WARDEN_ENV_NAME}-mailhog.loadbalancer.server.port=8025
     networks:
       - warden
       - default

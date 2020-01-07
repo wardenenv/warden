@@ -12,7 +12,11 @@ fi
 
 ## load connection information for the mysql service
 eval "$(grep "^MYSQL_" "${WARDEN_ENV_PATH}/.env")"
-eval "$(grep -E '^\W+- MYSQL_.*=\$\{.*\}' "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.base.yml" | sed -E 's/.*- //g')"
+if [[ -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.base.yml" ]]; then
+  eval "$(grep -E '^\W+- MYSQL_.*=\$\{.*\}' "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.base.yml" | sed -E 's/.*- //g')"
+else
+  eval "$(grep -E '^\W+- MYSQL_.*=\$\{.*\}' "${WARDEN_DIR}/custom_environments/${WARDEN_ENV_TYPE}.yml" | sed -E 's/.*- //g')"
+fi
 
 if [[ -f "${WARDEN_ENV_PATH}/.warden/warden-env.yml" ]]; then
     eval "$(grep -E '^\W+- MYSQL_.*=\$\{.*\}' "${WARDEN_ENV_PATH}/.warden/warden-env.yml" | sed -E 's/.*- //g')"

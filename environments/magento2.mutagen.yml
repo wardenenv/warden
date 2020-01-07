@@ -1,0 +1,30 @@
+---
+sync:
+  defaults:
+    mode: two-way-resolved
+    watch:
+      pollingInterval: 10
+    ignore:
+      vcs: true
+      paths:
+        # System files
+        - ".DS_Store"
+        - "._*"
+
+        # Vim files
+        - "*~"
+        - "*.sw[a-p]"
+
+        # IDE files
+        - ".idea"
+
+        # Magento files
+        - "/pub/media"
+        - "/pub/static/**"
+        - "!/pub/static/.htaccess"
+        - "/var/**"
+        - "!/var/.htaccess"
+
+    permissions:
+      defaultFileMode: "0644"
+      defaultDirectoryMode: "0755"
