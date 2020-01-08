@@ -45,9 +45,15 @@ case "${WARDEN_PARAMS[0]}" in
         mutagen sync terminate --label-selector "warden-sync=${WARDEN_ENV_NAME}"
 
         ## create sync session based on environment type configuration
-        mutagen sync create -c "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.mutagen.yml" \
+        if [[ -f "${WARDEN_DIR}/custom_environments/${WARDEN_ENV_TYPE}.mutagen.yml" ]]; then
+          mutagen sync create -c "${WARDEN_DIR}/custom_environments/${WARDEN_ENV_TYPE}.mutagen.yml" \
+              --label "warden-sync=${WARDEN_ENV_NAME}" \
+              "${WARDEN_ENV_PATH}${WARDEN_WEB_ROOT:-}" "docker://$(warden env ps -q php-fpm)/var/www/html"
+        else
+          mutagen sync create -c "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.mutagen.yml" \
             --label "warden-sync=${WARDEN_ENV_NAME}" \
             "${WARDEN_ENV_PATH}${WARDEN_WEB_ROOT:-}" "docker://$(warden env ps -q php-fpm)/var/www/html"
+        fi
         
         ## wait for sync session to complete initial sync before exiting
         echo "Waiting for initial synchronization to complete"
