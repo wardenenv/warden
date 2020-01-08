@@ -21,3 +21,20 @@ services:
     networks:
       - warden
       - default
+
+  allure:
+    hostname: "${WARDEN_ENV_NAME}-allure"
+    image: frankescobar/allure-docker-service
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-allure.tls=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-allure.rule=Host(`allure.${TRAEFIK_DOMAIN}`)
+      - traefik.http.services.${WARDEN_ENV_NAME}-allure.loadbalancer.server.port=4040
+    volumes:
+      - .${WARDEN_WEB_ROOT:-}/dev/tests/acceptance/tests/_output/allure-results:/app/allure-results
+    environment:
+      CHECK_RESULTS_EVERY_SECONDS: 60
+      KEEP_HISTORY: "TRUE"
+    networks:
+      - warden
+      - default

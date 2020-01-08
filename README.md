@@ -24,6 +24,12 @@ All contributions to the Warden project are welcome: use-cases, documentation, c
 
 Please note that by submitting a pull request or otherwise contributing to the Warden project, you warrant that each of your contributions is an original work and that you have full authority to grant rights to said contribution and by so doing you grant the owners of the Warden project, and those who receive the contribution directly or indirectly, a perpetual, worldwide, non-exclusive, royalty-free, irrevocable license to make, have made, use, offer to sell, sell and import or otherwise dispose of the contributions alone or with the Warden project in it's entirety.
 
+### Allure reports
+
+To access Allure reports generated (automatically updated each 60 seconds), you need to open in your browser:
+
+* https://allure.exampleproject.test/
+
 ## License
 
 This work is licensed under the MIT license. See [LICENSE](https://github.com/davidalger/warden/blob/develop/LICENSE) file for details.
