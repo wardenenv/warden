@@ -1,0 +1,4 @@
+version: "3.5"
+services:
+  selenium-chrome:
+    image: selenium/node-chrome-debug:3.8.1
