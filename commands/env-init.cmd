@@ -35,10 +35,10 @@ if [[ "${WARDEN_ENV_TYPE}" == "magento1" ]]; then
 		WARDEN_SELENIUM=0
 		WARDEN_BLACKFIRE=0
 
-		BLACKFIRE_CLIENT_ID=<client_id>
-		BLACKFIRE_CLIENT_TOKEN=<client_token>
-		BLACKFIRE_SERVER_ID=<server_id>
-		BLACKFIRE_SERVER_TOKEN=<server_token>
+		BLACKFIRE_CLIENT_ID="<client_id>"
+		BLACKFIRE_CLIENT_TOKEN="<client_token>"
+		BLACKFIRE_SERVER_ID="<server_id>"
+		BLACKFIRE_SERVER_TOKEN="<server_token>"
 	EOT
 fi
 
@@ -60,10 +60,10 @@ if [[ "${WARDEN_ENV_TYPE}" == "magento2" ]]; then
 		WARDEN_SPLIT_SALES=0
 		WARDEN_SPLIT_CHECKOUT=0
 
-		BLACKFIRE_CLIENT_ID=<client_id>
-		BLACKFIRE_CLIENT_TOKEN=<client_token>
-		BLACKFIRE_SERVER_ID=<server_id>
-		BLACKFIRE_SERVER_TOKEN=<server_token>
+		BLACKFIRE_CLIENT_ID="<client_id>"
+		BLACKFIRE_CLIENT_TOKEN="<client_token>"
+		BLACKFIRE_SERVER_ID="<server_id>"
+		BLACKFIRE_SERVER_TOKEN="<server_token>"
 	EOT
 fi
 
