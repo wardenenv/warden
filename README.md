@@ -192,6 +192,10 @@ The following variables can be added to the project's `.env` file to enable addi
   * `WARDEN_SPLIT_SALES=1`
   * `WARDEN_SPLIT_CHECKOUT=1`
 
+You can also run Admin Panel on separate subdomain by adding to the project's `.env` file:
+
+  * `WARDEN_ADMIN_SUBDOMAIN=backend`
+
 ### Additional Domains
 
 If you need multiple domains pointing to the same server, you can follow the instructions below. In this example, we're going to add both an additional subdomain for an existing domain as well as add a couple of additional domains.
@@ -208,12 +212,12 @@ If you need multiple domains pointing to the same server, you can follow the ins
          varnish:
            labels:
              traefik.frontend.rule: Host:${TRAEFIK_HOST_LIST}
-   
+
 3. Add a comma-separated list of domains to the `.env` file (we're going to assume you want to continue to use the `app.exampleproject.test` domain for your primary application, so we're including that in the list):
    
        TRAEFIK_HOST_LIST=app.exampleproject.test,subdomain.exampleproject.test,exampleproject2.test,exampleproject3.test
 
-4.  It will be up to you to ensure your application properly handles traffic coming from each of those domains (by editing the nginx configuration or your application). An example approach can be found [here](https://github.com/davidalger/warden/pull/37#issuecomment-554651099).
+4. It will be up to you to ensure your application properly handles traffic coming from each of those domains (by editing the nginx configuration or your application). An example approach can be found [here](https://github.com/davidalger/warden/pull/37#issuecomment-554651099).
 
 5. Run `warden env up -d` to update the containers then each of the URLs should work as expected.
 

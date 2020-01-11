@@ -33,6 +33,16 @@ if [[ ${WARDEN_SPLIT_CHECKOUT} -eq 1 && -f "${WARDEN_DIR}/environments/${WARDEN_
     DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.splitdb.checkout.yml")
 fi
 
+if [[ -z ${TRAEFIK_ADMIN_SUBDOMAIN} && -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.admin-domain.base.yml" ]]; then
+    DOCKER_COMPOSE_ARGS+=("-f")
+    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.admin-domain.yml")
+
+    if [[ ${WARDEN_SELENIUM} -eq 1 && -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.selenium.base.yml" ]]; then
+        DOCKER_COMPOSE_ARGS+=("-f")
+        DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.admin-domain.selenium.yml")
+    fi
+fi
+
 if [[ ${WARDEN_BLACKFIRE} -eq 1 && -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.blackfire.base.yml" ]]; then
     DOCKER_COMPOSE_ARGS+=("-f")
     DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.blackfire.base.yml")
