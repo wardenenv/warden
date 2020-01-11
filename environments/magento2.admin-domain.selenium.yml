@@ -3,3 +3,7 @@ services:
   selenium-hub:
     extra_hosts:
       - ${TRAEFIK_ADMIN_SUBDOMAIN}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
+
+  selenium-chrome:
+    extra_hosts:
+      - ${TRAEFIK_ADMIN_SUBDOMAIN}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
