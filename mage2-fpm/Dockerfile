@@ -2,7 +2,7 @@ ARG PHP_VERSION
 FROM davidalger/warden:fpm-${PHP_VERSION}
 USER root
 
-RUN npm install -g grunt-cli gulp
+RUN npm install -g grunt-cli gulp yarn
 
 RUN PHP_VERSION=$(php -v | head -n1 | cut -d' ' -f2 | cut -d. -f1-2 | cut -d. -f1-2 | sed 's/\.//') \
     && if (( ${PHP_VERSION} >= 72 )); \
