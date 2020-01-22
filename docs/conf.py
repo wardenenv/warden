@@ -1,6 +1,9 @@
 import sys, os
 import sphinx_rtd_theme
 
+import recommonmark
+from recommonmark.transform import AutoStructify
+
 from sphinx.highlighting import lexers
 from pygments.lexers.web import PhpLexer
 from pygments.lexers.web import HtmlLexer
@@ -13,23 +16,21 @@ lexers['php-annotations'] = PhpLexer(startinline=True)
 lexers['html'] = HtmlLexer(startinline=True)
 lexers['json'] = JsonLexer(startinline=True)
 
-extensions = ['sphinx.ext.autodoc',
-    'sphinx.ext.doctest',
-    'sphinx.ext.todo',
-    'sphinx.ext.coverage',
-    'sphinx.ext.imgmath',
-    'sphinx.ext.ifconfig',
-    'sensio.sphinx.configurationblock']
+extensions = [
+  'recommonmark',
+  'sphinx_rtd_theme',
+]
 
-source_suffix = '.md'
+source_suffix = ['.rst', '.md']
 master_doc = 'index'
 
 project = 'Warden'
 copyright = '2019 by David Alger.'
 author = 'David Alger'
-
 version = ''
 release = ''
+
+github_doc_root = 'https://github.com/davidalger/warden/tree/develop/doc/'
 
 exclude_patterns = ['_build']
 
@@ -40,3 +41,13 @@ html_show_sourcelink = False
 html_static_path = ['_static']
 templates_path = ['_templates']
 html_extra_path = ['_redirects']
+
+def setup(app):
+    app.add_config_value('recommonmark_config', {
+        #'url_resolver': lambda url: github_doc_root + url,
+        'auto_toc_tree_section': 'Table of Contents',
+        'enable_math': False,
+        'enable_inline_math': False,
+        'enable_eval_rst': True,
+    }, True)
+    app.add_transform(AutoStructify)
