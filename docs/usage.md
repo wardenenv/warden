@@ -1,6 +1,6 @@
 ## Warden Usage
 
-### Common Warden Commands
+### Common Commands
 
 Drop into a shell within the project environment (this command opens a bash shell in the `php-fpm` container)
 
@@ -26,6 +26,6 @@ Tail the varnish activity log:
 
     warden env exec -T varnish varnishlog
 
-### Warden Usage Information
+### Further Information
 
 Run `warden help` and `warden env -h` for more details and useful command information.
