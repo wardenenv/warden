@@ -17,10 +17,10 @@ BROWSER=chrome
 
 To preview the process of testing, you need any **VLC** client that provides **SSH Tunnel** support (eg. [Remmina](https://remmina.org/how-to-install-remmina/)). To preview the process of testing, you need to use `tunnel.warden.test:2222` (login: `user`):
 
-* Remote Desktop Viewer
+### Remote Desktop Viewer
 
-  ![Remote Desktop Viewer](../_static/selenium-remote-desktop-viewer.png) 
+  ![Remote Desktop Viewer](screenshots/selenium-remote-desktop-viewer.png) 
 
-* Remmina
+### Remmina
 
-  ![Remmina Configuration](../_static/remmina-ssh-tunnel.png)
+  ![Remmina Configuration](screenshots/remmina-ssh-tunnel.png)

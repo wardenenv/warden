@@ -10,4 +10,4 @@ Xdebug will automatically connect back to the host machine on port 9000 for each
 * Debugger: Xdebug
 * Use path mappings must be enabled, with a mapping to link the project root on the host with `/var/www/html` within the container.
 
-![clnt-docker-xdebug-config](https://dropshare-ot3kdw.s3.amazonaws.com/uLum9y/Screen-Shot-2019-07-19-15-03-00.32-mgREBTld5RMl/Screen-Shot-2019-07-19-15-03-00.32.png)
+![clnt-docker-xdebug-config](screenshots/xdebug-phpstorm.png)
