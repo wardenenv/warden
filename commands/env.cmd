@@ -58,6 +58,12 @@ if [[ ${WARDEN_SELENIUM} -eq 1 && -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TY
     DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.selenium.base.yml")
 fi
 
+if [[ ${WARDEN_SELENIUM_DEBUG} -eq 1 ]]; then
+    export WARDEN_SELENIUM_DEBUG="-debug"
+else
+    export WARDEN_SELENIUM_DEBUG=
+fi
+
 ## lookup internal (warden docker network) IP address of traefik container (do not fail if traefik is stopped)
 export TRAEFIK_ADDRESS="$(docker container inspect traefik \
     --format '{{.NetworkSettings.Networks.warden.IPAddress}}' 2>/dev/null || true)"
