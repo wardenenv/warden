@@ -124,6 +124,9 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
        bin/magento deploy:mode:set -s developer
        bin/magento cache:disable block_html full_page
 
+       bin/magento indexer:reindex
+       bin/magento cache:flush
+
        ## Generate an admin user
        ADMIN_PASS="$(pwgen -n1 16)"
        ADMIN_USER=localadmin
