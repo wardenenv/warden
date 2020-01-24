@@ -117,7 +117,7 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
        bin/magento config:set --lock-env catalog/search/elasticsearch6_server_port 9200
        bin/magento config:set --lock-env catalog/search/elasticsearch6_index_prefix magento2
        bin/magento config:set --lock-env catalog/search/elasticsearch6_enable_auth 0
-       bin/magento config:set --lock-env catalog/search/elasticsearch6_server_timeout 1
+       bin/magento config:set --lock-env catalog/search/elasticsearch6_server_timeout 15
 
        bin/magento config:set --lock-env dev/static/sign 0
 
