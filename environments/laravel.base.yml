@@ -24,6 +24,8 @@ services:
     hostname: "${WARDEN_ENV_NAME}-php-fpm"
     image: davidalger/warden:fpm-${PHP_VERSION:-7.2}
     environment:
+      - TRAEFIK_DOMAIN
+      - TRAEFIK_SUBDOMAIN
       - NODE_VERSION=${NODE_VERSION:-10}
     extra_hosts:
       - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
@@ -41,6 +43,8 @@ services:
     hostname: "${WARDEN_ENV_NAME}-php-debug"
     image: davidalger/warden:fpm-${PHP_VERSION:-7.2}-debug
     environment:
+      - TRAEFIK_DOMAIN
+      - TRAEFIK_SUBDOMAIN
       - NODE_VERSION=${NODE_VERSION:-10}
       - PHP_IDE_CONFIG=serverName=${WARDEN_ENV_NAME}-docker
     extra_hosts:

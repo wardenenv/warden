@@ -72,6 +72,8 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
        ## Run application install process
        bin/magento setup:install \
            --backend-frontname=backend \
+           --base-url="https://${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}/" \
+           --base-url-secure="https://${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}/" \
            --amqp-host=rabbitmq \
            --amqp-port=5672 \
            --amqp-user=guest \
