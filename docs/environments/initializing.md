@@ -18,6 +18,26 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
        TRAEFIK_DOMAIN=exampleproject.test
        TRAEFIK_SUBDOMAIN=app
 
+       BYPASS_VARNISH=false
+
+       ELASTICSEARCH_VERSION=6.8
+       MARIADB_VERSION=10.3
+       NODE_VERSION=10
+       PHP_VERSION=7.2
+       RABBITMQ_VERSION=3.7.14
+       REDIS_VERSION=5.0
+       VARNISH_VERSION=4.1
+
+       WARDEN_SELENIUM=0
+       WARDEN_BLACKFIRE=0
+       WARDEN_SPLIT_SALES=0
+       WARDEN_SPLIT_CHECKOUT=0
+
+       BLACKFIRE_CLIENT_ID="<client_id>"
+       BLACKFIRE_CLIENT_TOKEN="<client_token>"
+       BLACKFIRE_SERVER_ID="<server_id>"
+       BLACKFIRE_SERVER_TOKEN="<server_token>"
+
 3. Sign an SSL certificate for use with the project (the input here should match the value of `TRAEFIK_DOMAIN` in the above `.env` example file):
 
        warden sign-certificate exampleproject.test
