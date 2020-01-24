@@ -23,7 +23,7 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
        ELASTICSEARCH_VERSION=6.8
        MARIADB_VERSION=10.3
        NODE_VERSION=10
-       PHP_VERSION=7.2
+       PHP_VERSION=7.3
        RABBITMQ_VERSION=3.7.14
        REDIS_VERSION=5.0
        VARNISH_VERSION=4.1
