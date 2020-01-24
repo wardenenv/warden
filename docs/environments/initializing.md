@@ -46,7 +46,7 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
 
        warden env up -d
        warden sync start   ## Omit this if running on a Linux host (or if not used by env type)
-   
+
    If you encounter an error about `Mounts denied…`, follow the instructions in the error message and run `warden env up -d` again.
 
 5. Drop into a shell within the project environment. Commands following this step in the setup procedure will be run from within the `php-fpm` docker container this launches you into:
@@ -69,11 +69,9 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
 
 8. Install the application and you should be all set:
 
-       ## Run application install process
+       ## Install Application
        bin/magento setup:install \
            --backend-frontname=backend \
-           --base-url="https://${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}/" \
-           --base-url-secure="https://${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}/" \
            --amqp-host=rabbitmq \
            --amqp-port=5672 \
            --amqp-user=guest \
@@ -97,9 +95,24 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
            --page-cache-redis-db=1 \
            --page-cache-redis-port=6379
 
+       ## Configure Application
+       bin/magento config:set --lock-env web/unsecure/base_url \
+           "https://${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}/"
+
+       bin/magento config:set --lock-env web/secure/base_url \
+           "https://${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}/"
+
+       bin/magento config:set --lock-env web/secure/use_in_frontend 1
+       bin/magento config:set --lock-env web/secure/use_in_adminhtml 1
+       bin/magento config:set --lock-env web/seo/use_rewrites 1
+       bin/magento config:set --lock-env system/full_page_cache/caching_application 2
+
+       bin/magento cache:disable block_html full_page
+
        ## Generate an admin user
-       ADMIN_PASS="$(cat /dev/urandom | base64 | head -n1 | sed 's/[^a-zA-Z0-9]//g' | colrm 17)"
+       ADMIN_PASS="$(pwgen -n1 16)"
        ADMIN_USER=localadmin
+
        bin/magento admin:user:create \
            --admin-password="${ADMIN_PASS}" \
            --admin-user="${ADMIN_USER}" \
