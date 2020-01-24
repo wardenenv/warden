@@ -102,11 +102,26 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
        bin/magento config:set --lock-env web/secure/base_url \
            "https://${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}/"
 
+       bin/magento config:set --lock-env web/secure/offloader_header X-Forwarded-Proto
+
        bin/magento config:set --lock-env web/secure/use_in_frontend 1
        bin/magento config:set --lock-env web/secure/use_in_adminhtml 1
        bin/magento config:set --lock-env web/seo/use_rewrites 1
-       bin/magento config:set --lock-env system/full_page_cache/caching_application 2
 
+       bin/magento config:set --lock-env system/full_page_cache/caching_application 2
+       bin/magento config:set --lock-env system/full_page_cache/ttl 604800
+
+       bin/magento config:set --lock-env catalog/search/engine elasticsearch6
+       bin/magento config:set --lock-env catalog/search/enable_eav_indexer 1
+       bin/magento config:set --lock-env catalog/search/elasticsearch6_server_hostname elasticsearch
+       bin/magento config:set --lock-env catalog/search/elasticsearch6_server_port 9200
+       bin/magento config:set --lock-env catalog/search/elasticsearch6_index_prefix magento2
+       bin/magento config:set --lock-env catalog/search/elasticsearch6_enable_auth 0
+       bin/magento config:set --lock-env catalog/search/elasticsearch6_server_timeout 1
+
+       bin/magento config:set --lock-env dev/static/sign 0
+
+       bin/magento deploy:mode:set -s developer
        bin/magento cache:disable block_html full_page
 
        ## Generate an admin user
