@@ -7,6 +7,5 @@
 
     environments/types
     environments/initializing
-    environments/configuration
     environments/*
 ```

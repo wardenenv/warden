@@ -2,6 +2,8 @@
 
 Warden is a CLI utility for orchestrating Docker based developer environments, and enables multiple local environments to run simultaneously without port conflicts via the use of a few centrally run services for proxying requests into the correct environment's containers.
 
+<!-- include_open_stop -->
+
 * [Warden Website](https://warden.dev/)
 * [Warden Documentation](https://docs.warden.dev/)
 * [Installing Warden](https://docs.warden.dev/installing.html)
