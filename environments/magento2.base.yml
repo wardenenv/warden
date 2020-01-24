@@ -34,7 +34,7 @@ services:
 
   php-fpm:
     hostname: "${WARDEN_ENV_NAME}-php-fpm"
-    image: davidalger/warden:mage2-fpm-${PHP_VERSION:-7.2}
+    image: davidalger/warden:mage2-fpm-${PHP_VERSION:-7.3}
     environment:
       - TRAEFIK_DOMAIN
       - TRAEFIK_SUBDOMAIN
@@ -58,7 +58,7 @@ services:
 
   php-debug:
     hostname: "${WARDEN_ENV_NAME}-php-debug"
-    image: davidalger/warden:mage2-fpm-${PHP_VERSION:-7.2}-debug
+    image: davidalger/warden:mage2-fpm-${PHP_VERSION:-7.3}-debug
     environment:
       - TRAEFIK_DOMAIN
       - TRAEFIK_SUBDOMAIN
