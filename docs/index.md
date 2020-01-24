@@ -34,6 +34,5 @@ Under the hood `docker-compose` is used to to control everything which Warden ru
 
     changelog
     images
-    MIT License <https://github.com/davidalger/warden/blob/master/LICENSE>
     Github Project <https://github.com/davidalger/warden>
 ```
