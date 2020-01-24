@@ -17,7 +17,7 @@ BROWSER=chrome
 
 ### Debugging MFTF Tests
 
-By default Warden uses headless Chrome browser. If you want to preview the tests - you need to extend `.env` file and recreate environment (`warden env down && warden env up`)
+By default Warden uses headless Chrome browser. If you want to preview the tests - you need to extend `.env` file and update environment containers (`warden env up -d`)
 
 ```
 WARDEN_SELENIUM_DEBUG=1
