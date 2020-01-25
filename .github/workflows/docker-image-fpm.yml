@@ -1,0 +1,59 @@
+name: Docker Image FPM
+on:
+  schedule:
+  - cron: "0 6 * * 1"   # 6 AM UTC on Monday
+  push:
+    paths:
+    - version
+    - images/fpm/**
+    - images/mage1-fpm/**
+    - images/mage2-fpm/**
+    branches:
+    - develop
+jobs:
+  fpm:
+    name: FPM ${{ matrix.php_version }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php_version: ["5.5", "5.6", "7.0", "7.1", "7.2", "7.3"]
+    steps:
+    - uses: actions/checkout@v1
+    - run: ./images/scripts/build.sh --push "${BUILD_GROUP}"
+      env:
+        BUILD_GROUP: fpm
+        PHP_VERSION: ${{ matrix.php_version }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+  mage1-fpm:
+    name: Mage1-FPM ${{ matrix.php_version }}
+    runs-on: ubuntu-latest
+    needs: fpm
+    strategy:
+      matrix:
+        php_version: ["5.5", "5.6", "7.0", "7.1", "7.2", "7.3"]
+    steps:
+    - uses: actions/checkout@v1
+    - run: ./images/scripts/build.sh --push "${BUILD_GROUP}"
+      env:
+        BUILD_GROUP: mage1-fpm
+        PHP_VERSION: ${{ matrix.php_version }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+  mage2-fpm:
+    name: Mage2-FPM ${{ matrix.php_version }}
+    runs-on: ubuntu-latest
+    needs: fpm
+    strategy:
+      matrix:
+        php_version: ["7.0", "7.1", "7.2", "7.3"]
+    steps:
+    - uses: actions/checkout@v1
+    - run: ./images/scripts/build.sh --push "${BUILD_GROUP}"
+      env:
+        BUILD_GROUP: mage2-fpm
+        PHP_VERSION: ${{ matrix.php_version }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}

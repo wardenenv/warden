@@ -1,0 +1,1 @@
+sendmail_path = "/usr/local/bin/mhsendmail --smtp-addr='${MAILHOG_HOST}:${MAILHOG_PORT}'"

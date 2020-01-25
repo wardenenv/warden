@@ -1,0 +1,31 @@
+ARG PHP_VERSION
+FROM davidalger/warden:fpm-${PHP_VERSION}
+USER root
+
+RUN npm install -g grunt-cli gulp yarn
+
+RUN PHP_VERSION=$(php -v | head -n1 | cut -d' ' -f2 | cut -d. -f1-2 | cut -d. -f1-2 | sed 's/\.//') \
+    && if (( ${PHP_VERSION} >= 72 )); \
+        then MAGERUN_PHAR_URL=https://files.magerun.net/n98-magerun2.phar; \
+        else MAGERUN_PHAR_URL=https://files.magerun.net/n98-magerun2-3.2.0.phar; \
+    fi \
+    && mkdir -p /usr/local/bin \
+    && curl -s ${MAGERUN_PHAR_URL} > /usr/local/bin/n98-magerun \
+    && chmod +x /usr/local/bin/n98-magerun
+
+RUN PHP_VERSION=$(php -v | head -n1 | cut -d' ' -f2 | cut -d. -f1-2 | cut -d. -f1-2 | sed 's/\.//') \
+    && if (( ${PHP_VERSION} >= 72 )); \
+        then MAGERUN_BASH_REF=master; \
+        else MAGERUN_BASH_REF=3.2.0; \
+    fi \
+    && curl -o /etc/bash_completion.d/n98-magerun2.phar.bash \
+        https://raw.githubusercontent.com/netz98/n98-magerun2/${MAGERUN_BASH_REF}/res/autocompletion/bash/n98-magerun2.phar.bash \
+    && perl -pi -e 's/^(complete -o default .*)$/$1 n98-magerun/' /etc/bash_completion.d/n98-magerun2.phar.bash
+
+# Prevent pub dir from being auto-created by docker with wrong permissions when mounting pub/media
+RUN mkdir /var/www/html/pub && chown www-data:www-data /var/www/html/pub
+
+# Create mr alias for n98-magerun
+RUN ln -s /usr/local/bin/n98-magerun /usr/local/bin/mr
+
+USER www-data
