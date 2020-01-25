@@ -23,8 +23,13 @@ if ! which mutagen >/dev/null; then
 fi
 
 ## verify mutagen version constraint
-if which mutagen 2>/dev/null >/dev/null && (( $(mutagen version | sed 's/\./0/g' | sed -E 's/^0+//g') < 1000 )); then
-  >&2 printf "\e[01;31mMutagen version 0.10.0 or greater is required (version $(mutagen version) is installed).\033[0m"
+MUTAGEN_VERSION=$(mutagen version 2>/dev/null) || true
+if ! { \
+     (( $(echo ${MUTAGEN_VERSION:-0} | cut -d. -f1) >= 0 )) \
+  && (( $(echo ${MUTAGEN_VERSION:-0} | cut -d. -f2) >= 10 )) \
+  && (( $(echo ${MUTAGEN_VERSION:-0} | cut -d. -f3) >= 3 )); }
+then
+  >&2 printf "\e[01;31mMutagen version 0.10.3 or greater is required (version ${MUTAGEN_VERSION} is installed).\033[0m"
   >&2 printf "\n\nPlease update Mutagen:\n\n  brew upgrade havoc-io/mutagen/mutagen\n\n"
   exit 1
 fi
