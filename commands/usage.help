@@ -11,7 +11,7 @@ WARDEN_HEADER='
 
 WARDEN_USAGE=$(cat <<EOF
 ${WARDEN_HEADER:1}
-Warden version 0.2.0
+Warden version $(cat ${WARDEN_DIR}/version)
 
 \033[33mUsage:\033[0m
   command [options] [arguments]
@@ -32,5 +32,6 @@ Warden version 0.2.0
   start             Start services
   stop              Stop services
   up                Create and start containers, networks, and services
+  version           Show version information
 EOF
 )
