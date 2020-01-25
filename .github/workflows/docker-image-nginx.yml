@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Docker Image Nginx
 on:
   schedule:
   - cron: "0 6 * * 1"   # 6 AM UTC on Monday
