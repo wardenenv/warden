@@ -4,6 +4,12 @@ There are two docker containers running FPM, `php-fpm` and `php-debug`. The `php
 
 Xdebug will automatically connect back to the host machine on port 9000 for each request routed to the `php-debug` container (i.e. when the `XDEBUG_SESSION` cookie is set). When configuring Xdebug Helper in your browser, make sure it is setting this cookie with the value `PHPSTORM`.
 
+In similar fashion to the `warden shell` command there is also a debug command to launch into an xdebug enabled container shell for debugging CLI workflows:
+
+```
+warden debug
+```
+
 ### VSCode
 
 To configure a project in VSCode for debugging, add the following to `.vscode/launch.json` in the project directory:
