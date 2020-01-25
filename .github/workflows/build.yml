@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - run: ./scripts/build.sh --push "${BUILD_GROUP}"
+    - run: ./images/scripts/build.sh --push "${BUILD_GROUP}"
       env:
         BUILD_GROUP: elasticsearch
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -25,7 +25,7 @@ jobs:
         php_version: ["5.5", "5.6", "7.0", "7.1", "7.2", "7.3"]
     steps:
     - uses: actions/checkout@v1
-    - run: ./scripts/build.sh --push "${BUILD_GROUP}"
+    - run: ./images/scripts/build.sh --push "${BUILD_GROUP}"
       env:
         BUILD_GROUP: fpm
         PHP_VERSION: ${{ matrix.php_version }}
@@ -41,7 +41,7 @@ jobs:
         php_version: ["5.5", "5.6", "7.0", "7.1", "7.2", "7.3"]
     steps:
     - uses: actions/checkout@v1
-    - run: ./scripts/build.sh --push "${BUILD_GROUP}"
+    - run: ./images/scripts/build.sh --push "${BUILD_GROUP}"
       env:
         BUILD_GROUP: mage1-fpm
         PHP_VERSION: ${{ matrix.php_version }}
@@ -57,7 +57,7 @@ jobs:
         php_version: ["7.0", "7.1", "7.2", "7.3"]
     steps:
     - uses: actions/checkout@v1
-    - run: ./scripts/build.sh --push "${BUILD_GROUP}"
+    - run: ./images/scripts/build.sh --push "${BUILD_GROUP}"
       env:
         BUILD_GROUP: mage2-fpm
         PHP_VERSION: ${{ matrix.php_version }}
@@ -69,7 +69,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - run: ./scripts/build.sh --push "${BUILD_GROUP}"
+    - run: ./images/scripts/build.sh --push "${BUILD_GROUP}"
       env:
         BUILD_GROUP: nginx
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -80,7 +80,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - run: ./scripts/build.sh --push "${BUILD_GROUP}"
+    - run: ./images/scripts/build.sh --push "${BUILD_GROUP}"
       env:
         BUILD_GROUP: varnish
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
