@@ -3,22 +3,31 @@
 ## UNRELEASED-0.2.0 (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.1.12..develop)
 
+**Upgrade Notes:**
+
+As mentioned below this release of Warden brings with it an update to Traefik 2.1. The v2 line of Traefik completely overhauled the labelling system used to define routes. It also opens the door to new possibilities. All labeling on built-in environment configurations has been updated for compatibility with new versions of Traefik. However, this is a **breaking change** in the two following scenarios:
+
+* The `local` environment type is being used. When `local` env type is used, all config is contained in the project's `.warden/` directory and routes setup via labels on the custom containers will naturally need to be updated.
+* Projects using custom labels applied via override files such as `.warden/warden-env.yml` may need to be updated.
+
+Please reference the updated [base environment definitions](https://github.com/davidalger/warden/tree/develop/environments) for examples of how to update the labels on custom definitions.
+
 **Enhancements:**
-* Updated Traefik container and configuration to deploy Traefik 2.1; this is a **breaking change** as Traefik v2 overhauled the labeling used to auto-configure routing on containers. All labeling on built-in environment configurations has been updated, but where labels are used to configure Traefik in per-project configuration files such as in `.warden/warden-env.yml` the project may require a coordinated update to labeling for continued interoperability of the customizations with Warden 0.2.0+
 * Added native support for multi-domain projects without requiring per-project routing configuration. This is accomplished using wildcard rules in the new Traefik labeling configuration allowing Warden to automatically route any sub-domain of the `TRAEFIK_DOMAIN` value in `.env` to the nginx and/or varnish container for handling by the application.
+* Added `warden debug` command which launches user into Xdebug enabled `php-debug` container for debugging CLI based workflows (issue [#33](https://github.com/davidalger/warden/issues/33); [#35](https://github.com/davidalger/warden/pull/35) by [molotovbliss](https://github.com/molotovbliss))
 * Added labels to `fpm` containers in `magento2` environment to support use of Live Reload via an injected JS snippet in the site header or footer (issue [#62](https://github.com/davidalger/warden/issues/62))
-* Updated Mutagen usage to rely on new commands and configuration in Mutagen 0.10.0 (Warden will now throw an error if you attempt to start a sync and have a version of Mutagen older than 0.10.0 installed)
 * Added `WARDEN_ENV_NAME` as prefix to each container hostname in compose configs (issue [#29](https://github.com/davidalger/warden/issues/29))
 * Added `BYPASS_VARNISH` flag which when set in project `.env` file will cause Traefik to route requests directly to `nginx` container rather than `varnish` (issue [#63](https://github.com/davidalger/warden/issues/63))
-* Updated configuration setup for SSH tunnel container so it will automatically re-instate the needed configuration (if missing) when running `up`, `start`, or `restart` to mitigate issue caused by macOS Catalina updates wiping out customizations to `/etc/ssh/ssh_config` (issue [#59](https://github.com/davidalger/warden/issues/59))
 * Added `laravel` environment type to support local development of Laravel based applications (issue [#60](https://github.com/davidalger/warden/issues/60))
+* Added Allure reporting support to Selenium setup for MFTF ([#69](https://github.com/davidalger/warden/pull/69) by [lbajsarowicz](https://github.com/lbajsarowicz))
+* Updated Traefik container and configuration to deploy Traefik 2.1; this is a **potentially breaking change** as Traefik v2 overhauled the labeling used to auto-configure routing on containers. All labeling on built-in environment configurations has been updated, but where labels are used to configure Traefik in per-project configuration files such as in `.warden/warden-env.yml` the project may require a coordinated update to labeling for continued interoperability of the customizations with Warden 0.2.0+
+* Updated Mutagen usage to rely on new commands and configuration in Mutagen 0.10.0 (Warden will now throw an error if you attempt to start a sync and have a version of Mutagen older than 0.10.0 installed)
+* Updated configuration setup for SSH tunnel container so it will automatically re-instate the needed configuration (if missing) when running `up`, `start`, or `restart` to mitigate issue caused by macOS Catalina updates wiping out customizations to `/etc/ssh/ssh_config` (issue [#59](https://github.com/davidalger/warden/issues/59))
 * Updated `env-init` command to include default values for available variables in the project's `.env` making customization a bit easier (issue [#32](https://github.com/davidalger/warden/issues/32))
 * Updated default Elasticsearch version for `magento2` environments from 5.4 to 6.8 (issue [#66](https://github.com/davidalger/warden/issues/66))
 * Updated Selenium setup for MFTF to use hub and headless nodes by default (issue [#67](https://github.com/davidalger/warden/issues/67); [#68](https://github.com/davidalger/warden/pull/68) by [lbajsarowicz](https://github.com/lbajsarowicz))
-* Added Allure reporting support to Selenium setup for MFTF ([#69](https://github.com/davidalger/warden/pull/69) by [lbajsarowicz](https://github.com/lbajsarowicz))
 * Updated environment templates to pass `TRAEFIK_DOMAIN` and `TRAEFIK_SUBDOMAIN` into `php-fpm` and `php-debug` for use in documented install routine (issue [#42](https://github.com/davidalger/warden/issues/42))
-* Updated default PHP version for `magento2` environments from 7.2 to 7.3
-* Added `warden debug` command which launches user into Xdebug enabled `php-debug` container for debugging CLI based workflows (issue [#33](https://github.com/davidalger/warden/issues/33); [#35](https://github.com/davidalger/warden/pull/35) by [molotovbliss](https://github.com/molotovbliss))
+* Updated default PHP version for `magento2` environments from 7.2 to 7.3 (issue [#75](https://github.com/davidalger/warden/issues/75))
 
 **Bug fixes:**
 * Fixed broken incorrect Blackfire environment template name for magento1 env type (issue [#48](https://github.com/davidalger/warden/issues/48))
