@@ -3,8 +3,11 @@ on:
   schedule:
   - cron: "0 6 * * 1"   # 6 AM UTC on Monday
   push:
+    paths:
+    - version
+    - images/**
     branches:
-    - master
+    - develop
 jobs:
   elasticsearch:
     name: Elasticsearch
