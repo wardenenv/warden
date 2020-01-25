@@ -3,7 +3,7 @@
 
 WARDEN_USAGE=$(cat <<EOF
 \033[33mUsage:\033[0m
-  clixdebug [path/to/script.php]
+  debug [args]
 
 \033[33mOptions:\033[0m
   -h, --help        Display this help menu
