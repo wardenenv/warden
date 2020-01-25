@@ -5,21 +5,12 @@ on:
   push:
     paths:
     - version
-    - images/**
+    - images/fpm/**
+    - images/mage1-fpm/**
+    - images/mage2-fpm/**
     branches:
     - develop
 jobs:
-  elasticsearch:
-    name: Elasticsearch
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-    - run: ./images/scripts/build.sh --push "${BUILD_GROUP}"
-      env:
-        BUILD_GROUP: elasticsearch
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-  
   fpm:
     name: FPM ${{ matrix.php_version }}
     runs-on: ubuntu-latest
@@ -64,27 +55,5 @@ jobs:
       env:
         BUILD_GROUP: mage2-fpm
         PHP_VERSION: ${{ matrix.php_version }}
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-
-  nginx:
-    name: Nginx
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-    - run: ./images/scripts/build.sh --push "${BUILD_GROUP}"
-      env:
-        BUILD_GROUP: nginx
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-
-  varnish:
-    name: Varnish
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-    - run: ./images/scripts/build.sh --push "${BUILD_GROUP}"
-      env:
-        BUILD_GROUP: varnish
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}

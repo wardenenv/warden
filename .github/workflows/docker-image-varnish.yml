@@ -1,0 +1,21 @@
+name: Docker Image CI
+on:
+  schedule:
+  - cron: "0 6 * * 1"   # 6 AM UTC on Monday
+  push:
+    paths:
+    - version
+    - images/varnish/**
+    branches:
+    - develop
+jobs:
+  varnish:
+    name: Varnish
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - run: ./images/scripts/build.sh --push "${BUILD_GROUP}"
+      env:
+        BUILD_GROUP: varnish
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
