@@ -1,5 +1,5 @@
 ARG PHP_VERSION=
-FROM davidalger/warden:fpm-${PHP_VERSION}
+FROM quay.io/warden/php-fpm:${PHP_VERSION}
 USER root
 
 RUN PHP_VERSION=$(php -v | head -n1 | cut -d' ' -f2 | sed -E 's/([0-9])\.([0-9])\.([0-9]+)/\1\2/') && \

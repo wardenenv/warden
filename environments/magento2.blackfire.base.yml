@@ -2,7 +2,7 @@ version: "3.5"
 services:
   php-blackfire:
     hostname: "${WARDEN_ENV_NAME}-php-blackfire"
-    image: davidalger/warden:mage2-fpm-${PHP_VERSION:-7.3}-blackfire
+    image: quay.io/warden/php-fpm:${PHP_VERSION:-7.3}-magento2-blackfire
     depends_on:
       - db
     networks:
