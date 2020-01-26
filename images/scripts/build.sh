@@ -30,15 +30,26 @@ if [[ -z ${SEARCH_PATH} ]]; then
 fi
 
 ## login to docker hub as needed
-if [[ $PUSH_FLAG ]]; then
-  [ -t 1 ] && docker login \
-    || echo "${DOCKER_PASSWORD:-}" | docker login -u "${DOCKER_USERNAME:-}" --password-stdin
+if [[ ${PUSH_FLAG} ]]; then
+  if [[ ${DOCKER_USERNAME:-} ]]; then
+    echo "Attempting non-interactive docker login (via provided credentials)"
+    echo "${DOCKER_PASSWORD:-}" | docker login -u "${DOCKER_USERNAME:-}" --password-stdin ${DOCKER_REGISTRY:-quay.io}
+  elif [[ -t 1 ]]; then
+    echo "Attempting interactive docker login (tty)"
+    docker login ${DOCKER_REGISTRY:-quay.io}
+  fi
 fi
 
 ## iterate over and build each Dockerfile
 for file in $(find ${SEARCH_PATH} -type f -name Dockerfile | sort -n); do
     BUILD_DIR="$(dirname "${file}")"
-    IMAGE_TAG="davidalger/warden:$(dirname "${file}" | tr / - | sed 's/--/-/')"
+    IMAGE_TAG="quay.io/warden/$(echo "${BUILD_DIR}" | cut -d/ -f1)"
+    IMAGE_SUFFIX="$(echo "${BUILD_DIR}" | cut -d/ -f2- -s | tr / - | sed 's/^-//')"
+
+    ## due to build matrix requirements, magento1 and magento2 specific varients are built in separate invocation
+    if [[ ${SEARCH_PATH} == "php-fpm" ]] && [[ ${file} =~ php-fpm/magento[1-2] ]]; then
+      continue;
+    fi
 
     ## fpm images will not have each version in a directory tree; require version be passed
     ## in as env variable for use as a build argument
@@ -51,10 +62,14 @@ for file in $(find ${SEARCH_PATH} -type f -name Dockerfile | sort -n); do
 
       export PHP_VERSION
 
-      IMAGE_TAG_PATH="$(echo ${SEARCH_PATH} | sed 's#/$##')"
-      IMAGE_TAG="$(echo ${IMAGE_TAG} | sed -E "s#:${IMAGE_TAG_PATH}#:${IMAGE_TAG_PATH}-${PHP_VERSION}#g")"
+      IMAGE_TAG+=":${PHP_VERSION}"
+      if [[ ${IMAGE_SUFFIX} ]]; then
+        IMAGE_TAG+="-${IMAGE_SUFFIX}"
+      fi
       BUILD_ARGS+=("--build-arg")
       BUILD_ARGS+=("PHP_VERSION")
+    else
+      IMAGE_TAG+=":${IMAGE_SUFFIX}"
     fi
 
     if [[ -d "$(echo ${BUILD_DIR} | cut -d/ -f1)/context" ]]; then
@@ -65,5 +80,5 @@ for file in $(find ${SEARCH_PATH} -type f -name Dockerfile | sort -n); do
 
     printf "\e[01;31m==> building ${IMAGE_TAG} from ${BUILD_DIR}/Dockerfile with context ${BUILD_CONTEXT}\033[0m\n"
     docker build -t "${IMAGE_TAG}" -f ${BUILD_DIR}/Dockerfile ${BUILD_ARGS[@]} ${BUILD_CONTEXT}
-    [[ $PUSH_FLAG ]] && docker push "${IMAGE_TAG}"
+    [[ $PUSH_FLAG ]] && docker push "${IMAGE_TAG}" || true
 done
