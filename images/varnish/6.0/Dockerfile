@@ -1,6 +1,6 @@
 FROM centos:7
 
-ARG RPM_SCRIPT=https://packagecloud.io/install/repositories/varnishcache/varnish41/script.rpm.sh
+ARG RPM_SCRIPT=https://packagecloud.io/install/repositories/varnishcache/varnish60lts/script.rpm.sh
 RUN curl -s "${RPM_SCRIPT}" | bash \
     && yum install -y epel-release \
     && yum install -y varnish \
