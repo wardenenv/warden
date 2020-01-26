@@ -7,7 +7,7 @@ on:
     - version
     - images/php-fpm/**
     branches:
-    - develop
+    - quay
 jobs:
   php-fpm:
     name: FPM ${{ matrix.php_version }}

@@ -7,7 +7,7 @@ on:
     - version
     - images/mailhog/**
     branches:
-    - develop
+    - quay
 jobs:
   mailhog:
     name: Mailhog
