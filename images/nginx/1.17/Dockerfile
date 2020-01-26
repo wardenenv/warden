@@ -16,7 +16,6 @@ COPY etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.template
 COPY etc/nginx/available.d/*.conf /etc/nginx/available.d/
 
 RUN groupmod -g 1000 www-data
-RUN echo "export PS1='\[\033[0;0m\]\u@\h\[\033[0m\]:\[\033[0;31m\]\w\[\033[0m\]# '" >> /root/.bashrc
 
 VOLUME  /var/www/html
 WORKDIR /var/www/html
