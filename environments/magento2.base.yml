@@ -58,7 +58,7 @@ services:
 
   php-debug:
     hostname: "${WARDEN_ENV_NAME}-php-debug"
-    image: quay.io/warden/php-fpm:${PHP_VERSION:-7.3}-debug
+    image: quay.io/warden/php-fpm:${PHP_VERSION:-7.3}-magento2-debug
     environment:
       - TRAEFIK_DOMAIN
       - TRAEFIK_SUBDOMAIN
