@@ -3,7 +3,7 @@ FROM centos:7
 ARG RPM_SCRIPT=https://packagecloud.io/install/repositories/varnishcache/varnish41/script.rpm.sh
 RUN curl -s "${RPM_SCRIPT}" | bash \
     && yum install -y epel-release \
-    && yum install -y varnish \
+    && yum install -y varnish gettext \
     && yum clean all \
     && rm -rf /var/cache/yum
 
