@@ -109,11 +109,11 @@ services:
 
   redis:
     hostname: "${WARDEN_ENV_NAME}-redis"
-    image: redis:${REDIS_VERSION:-5.0}-alpine
+    image: quay.io/warden/redis:${REDIS_VERSION:-5.0}
 
   rabbitmq:
     hostname: "${WARDEN_ENV_NAME}-rabbitmq"
-    image: rabbitmq:${RABBITMQ_VERSION:-3.7.14}-management-alpine
+    image: quay.io/warden/rabbitmq:${RABBITMQ_VERSION:-3.7}
     labels:
       - traefik.enable=true
       - traefik.http.routers.${WARDEN_ENV_NAME}-rabbitmq.tls=true

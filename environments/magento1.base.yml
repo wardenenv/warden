@@ -77,7 +77,7 @@ services:
 
   redis:
     hostname: "${WARDEN_ENV_NAME}-redis"
-    image: redis:${REDIS_VERSION:-5.0}-alpine
+    image: quay.io/warden/redis:${REDIS_VERSION:-5.0}
 
   mailhog:
     hostname: "${WARDEN_ENV_NAME}-mailhog"
