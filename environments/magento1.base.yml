@@ -2,7 +2,7 @@ version: "3.5"
 services:
   nginx:
     hostname: "${WARDEN_ENV_NAME}-nginx"
-    image: davidalger/warden:nginx-${NGINX_VERSION:-1.16}-alpine
+    image: quay.io/warden/nginx:${NGINX_VERSION:-1.16}
     environment:
       - NGINX_TEMPLATE=magento1.conf
     depends_on:
@@ -21,7 +21,7 @@ services:
 
   php-fpm:
     hostname: "${WARDEN_ENV_NAME}-php-fpm"
-    image: davidalger/warden:mage1-fpm-${PHP_VERSION:-7.2}
+    image: quay.io/warden/php-fpm:${PHP_VERSION:-7.2}-magento1
     environment:
       - TRAEFIK_DOMAIN
       - TRAEFIK_SUBDOMAIN
@@ -40,7 +40,7 @@ services:
 
   php-debug:
     hostname: "${WARDEN_ENV_NAME}-php-debug"
-    image: davidalger/warden:mage1-fpm-${PHP_VERSION:-7.2}-debug
+    image: quay.io/warden/php-fpm:${PHP_VERSION:-7.2}-magento1-debug
     environment:
       - TRAEFIK_DOMAIN
       - TRAEFIK_SUBDOMAIN
