@@ -61,7 +61,7 @@ services:
 
   db:
     hostname: "${WARDEN_ENV_NAME}-mariadb"
-    image: mariadb:${MARIADB_VERSION:-10.3}
+    image: quay.io/warden/mariadb:${MARIADB_VERSION:-10.3}
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-laravel}
       - MYSQL_DATABASE=${MYSQL_DATABASE:-laravel}
@@ -79,7 +79,7 @@ services:
 
   mailhog:
     hostname: "${WARDEN_ENV_NAME}-mailhog"
-    image: mailhog/mailhog:${MAILHOG_VERSION:-v1.0.0}
+    image: quay.io/warden/mailhog:${MAILHOG_VERSION:-1.0}
     labels:
       - traefik.enable=true
       - traefik.http.routers.${WARDEN_ENV_NAME}-mailhog.tls=true
