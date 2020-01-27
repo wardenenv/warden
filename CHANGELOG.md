@@ -46,6 +46,7 @@ Docker images have all been re-located and/or mirrored to Quay with all built-in
 
 **Bug fixes:**
 * Fixed broken incorrect Blackfire environment template name for magento1 env type (issue [#48](https://github.com/davidalger/warden/issues/48))
+* Fixed inability to get help content specific to env sub-commands using `warden env <command> -h`
 
 ## Version [0.1.12](https://github.com/davidalger/warden/tree/0.1.12) (2019-12-10)
 [All Commits](https://github.com/davidalger/warden/compare/0.1.11..0.1.12)
