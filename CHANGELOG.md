@@ -14,6 +14,17 @@ Please reference the updated [base environment definitions](https://github.com/d
 
 Environments referencing `laravel.conf` in custom configuration within `.warden` directory must update their configuration to reference the generic `application.conf` instead as the file was renamed in the Nginx image for re-use in the future on additional environment types.
 
+Docker images have all been re-located and/or mirrored to Quay with all built-in environment types having been updated to reference the images at the new location. Images currently on Docker Hub will remain available in order to preserve functionality of Warden 0.1.x release line, but will no longer be updated and compatibility with all functionality in Warden 0.2.0 is not guaranteed. Where these images are referenced in per-project configuration within the `.warden` directory, it is strongly suggested these references be updated to use images at the new locations:
+
+* [https://quay.io/repository/warden/varnish?tab=tags](https://quay.io/repository/warden/varnish?tab=tags)
+* [https://quay.io/repository/warden/redis?tab=tags](https://quay.io/repository/warden/redis?tab=tags)
+* [https://quay.io/repository/warden/rabbitmq?tab=tags](https://quay.io/repository/warden/rabbitmq?tab=tags)
+* [https://quay.io/repository/warden/php-fpm?tab=tags](https://quay.io/repository/warden/php-fpm?tab=tags)
+* [https://quay.io/repository/warden/nginx?tab=tags](https://quay.io/repository/warden/nginx?tab=tags)
+* [https://quay.io/repository/warden/mariadb?tab=tags](https://quay.io/repository/warden/mariadb?tab=tags)
+* [https://quay.io/repository/warden/mailhog?tab=tags](https://quay.io/repository/warden/mailhog?tab=tags)
+* [https://quay.io/repository/warden/elasticsearch?tab=tags](https://quay.io/repository/warden/elasticsearch?tab=tags)
+
 **Enhancements:**
 * Added native support for multi-domain projects without requiring per-project routing configuration. This is accomplished using wildcard rules in the new Traefik labeling configuration allowing Warden to automatically route any sub-domain of the `TRAEFIK_DOMAIN` value in `.env` to the nginx and/or varnish container for handling by the application.
 * Added `warden debug` command which launches user into Xdebug enabled `php-debug` container for debugging CLI based workflows (issue [#33](https://github.com/davidalger/warden/issues/33); [#35](https://github.com/davidalger/warden/pull/35) by [molotovbliss](https://github.com/molotovbliss))
