@@ -4,8 +4,8 @@ services:
     hostname: "${WARDEN_ENV_NAME}-nginx"
     image: quay.io/warden/nginx:${NGINX_VERSION:-1.16}
     environment:
-      - NGINX_TEMPLATE=laravel.conf
       - NGINX_PUBLIC=/public
+      - NGINX_TEMPLATE=application.conf
     depends_on:
       - php-fpm
     volumes:

@@ -8,7 +8,8 @@ ENV NGINX_UPSTREAM_DEBUG_PORT     9000
 ENV NGINX_UPSTREAM_BLACKFIRE_HOST php-blackfire
 ENV NGINX_UPSTREAM_BLACKFIRE_PORT 9000
 ENV NGINX_ROOT                    /var/www/html
-ENV NGINX_TEMPLATE                magento2.conf
+ENV NGINX_PUBLIC                  ''
+ENV NGINX_TEMPLATE                application.conf
 ENV XDEBUG_CONNECT_BACK_HOST      '""'
 
 COPY etc/nginx/fastcgi_params /etc/nginx/fastcgi_params.template
@@ -20,8 +21,7 @@ RUN groupmod -g 1000 www-data
 VOLUME  /var/www/html
 WORKDIR /var/www/html
 
-CMD [ "${NGINX_TEMPLATE}" = "magento2.conf" ] && export NGINX_PUBLIC=/pub; \
-    envsubst '${NGINX_UPSTREAM_HOST} ${NGINX_UPSTREAM_PORT} \
+CMD envsubst '${NGINX_UPSTREAM_HOST} ${NGINX_UPSTREAM_PORT} \
               ${NGINX_UPSTREAM_BLACKFIRE_HOST} ${NGINX_UPSTREAM_BLACKFIRE_PORT} \
               ${NGINX_UPSTREAM_DEBUG_HOST} ${NGINX_UPSTREAM_DEBUG_PORT} \
               ${NGINX_ROOT} ${NGINX_PUBLIC} ${NGINX_TEMPLATE}' \
