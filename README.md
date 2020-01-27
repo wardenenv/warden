@@ -8,7 +8,7 @@ Warden is a CLI utility for orchestrating Docker based developer environments, a
 * [Warden Documentation](https://docs.warden.dev/)
 * [Installing Warden](https://docs.warden.dev/installing.html)
 * [Initializing An Environment](https://docs.warden.dev/environments/initializing.html)
-* [Docker Images](https://hub.docker.com/r/davidalger/warden)
+* [Docker Images](https://docs.warden.dev/images.html)
 
 ## Features
 
