@@ -16,6 +16,12 @@ Multiple top-level domains may also be setup by following the instructions below
     services:
       varnish:
         labels:
+          - traefik.http.routers.${WARDEN_ENV_NAME}-varnish.rule=
+              HostRegexp(`{subdomain:.+}.${TRAEFIK_DOMAIN}`)
+              || HostRegexp(`{subdomain:.+}.alternate1.test`)
+              || HostRegexp(`{subdomain:.+}.alternate2.test`)
+      nginx:
+        labels:
           - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.rule=
               HostRegexp(`{subdomain:.+}.${TRAEFIK_DOMAIN}`)
               || HostRegexp(`{subdomain:.+}.alternate1.test`)
