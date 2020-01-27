@@ -1,4 +1,4 @@
-## Profiling Requests with Blackfire
+## Blackfire Profiling
 
 For information on what Blackfire is, please see the [introduction to Blackfire](https://blackfire.io/docs/introduction) in Blackfire documentation.
 
