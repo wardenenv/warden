@@ -41,6 +41,7 @@ Docker images have all been re-located and/or mirrored to Quay with all built-in
 * Updated Selenium setup for MFTF to use hub and headless nodes by default (issue [#67](https://github.com/davidalger/warden/issues/67); [#68](https://github.com/davidalger/warden/pull/68) by [lbajsarowicz](https://github.com/lbajsarowicz))
 * Updated environment templates to pass `TRAEFIK_DOMAIN` and `TRAEFIK_SUBDOMAIN` into `php-fpm` and `php-debug` for use in documented install routine (issue [#42](https://github.com/davidalger/warden/issues/42))
 * Updated default PHP version for `magento2` environments from 7.2 to 7.3 (issue [#75](https://github.com/davidalger/warden/issues/75))
+* Updated default Varnish version for `magento2` environments from 4.1 to 6.0 (LTS)
 * Changed `laravel.conf` in nginx image to generic `application.conf`
 * Updated defaults for nginx on `magento2` environments to be set in the docker env vs built into the nginx image; the image now defaults to loading the generic `application.conf` with `/var/www/html` as webroot
 

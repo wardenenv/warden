@@ -26,7 +26,7 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
        PHP_VERSION=7.3
        RABBITMQ_VERSION=3.7
        REDIS_VERSION=5.0
-       VARNISH_VERSION=4.1
+       VARNISH_VERSION=6.0
 
        WARDEN_SELENIUM=0
        WARDEN_BLACKFIRE=0

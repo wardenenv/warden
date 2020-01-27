@@ -20,7 +20,7 @@ services:
 
   varnish:
     hostname: "${WARDEN_ENV_NAME}-varnish"
-    image: quay.io/warden/varnish:${VARNISH_VERSION:-4.1}
+    image: quay.io/warden/varnish:${VARNISH_VERSION:-6.0}
     depends_on:
       - nginx
     labels:
