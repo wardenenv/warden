@@ -13,6 +13,9 @@ fi
 ## simply allow the return code from docker-compose to bubble up per normal
 trap '' ERR
 
+## global service containers to be connected with the project docker network
+DOCKER_PEERED_SERVICES=("traefik" "tunnel")
+
 ## configure docker-compose files
 DOCKER_COMPOSE_ARGS=()
 DOCKER_COMPOSE_ARGS+=("-f")
@@ -64,6 +67,14 @@ else
     export WARDEN_SELENIUM_DEBUG=
 fi
 
+## disconnect peered service containers from project network
+if [[ "${WARDEN_PARAMS[0]}" == "down" ]]; then
+    for svc in ${DOCKER_PEERED_SERVICES[@]}; do
+        echo "Disconnecting ${svc} from ${WARDEN_ENV_NAME}_default network"
+        (docker network disconnect "${WARDEN_ENV_NAME}_default" ${svc} 2>&1| grep -v 'is not connected') || true
+    done
+fi
+
 ## lookup internal (warden docker network) IP address of traefik container (do not fail if traefik is stopped)
 export TRAEFIK_ADDRESS="$(docker container inspect traefik \
     --format '{{.NetworkSettings.Networks.warden.IPAddress}}' 2>/dev/null || true)"
@@ -72,3 +83,11 @@ export TRAEFIK_ADDRESS="$(docker container inspect traefik \
 docker-compose \
     --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
     "${DOCKER_COMPOSE_ARGS[@]}" "${WARDEN_PARAMS[@]}" "$@"
+
+## connect peered service containers to project network
+if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
+    for svc in ${DOCKER_PEERED_SERVICES[@]}; do
+        echo "Connecting ${svc} to ${WARDEN_ENV_NAME}_default network"
+        (docker network connect "${WARDEN_ENV_NAME}_default" ${svc} 2>&1| grep -v 'already exists in network') || true
+    done
+fi
