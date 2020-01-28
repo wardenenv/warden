@@ -1,8 +1,8 @@
 version: "3.5"
 services:
   php-blackfire:
-    hostname: php-blackfire
-    image: davidalger/warden:mage1-fpm-${PHP_VERSION:-7.2}-blackfire
+    hostname: "${WARDEN_ENV_NAME}-php-blackfire"
+    image: quay.io/warden/php-fpm:${PHP_VERSION:-7.2}-magento1-blackfire
     depends_on:
       - db
     volumes:
@@ -14,7 +14,7 @@ services:
       - default
 
   blackfire-agent:
-    hostname: blackfire-agent
+    hostname: "${WARDEN_ENV_NAME}-blackfire-agent"
     image: blackfire/blackfire:latest
     environment:
       - BLACKFIRE_CLIENT_ID=${BLACKFIRE_CLIENT_ID}

@@ -1,10 +1,44 @@
 version: "3.5"
 services:
-  selenium:
-    hostname: selenium
-    image: selenium/standalone-chrome-debug:3.8.1
+  selenium-hub:
+    container_name: ${WARDEN_ENV_NAME}_selenium-hub
+    hostname: selenium-hub
+    image: selenium/hub:3.8.1
+    networks:
+      - warden
+      - default
+  selenium-chrome:
+    hostname: ${WARDEN_ENV_NAME}_selenium-chrome
+    image: selenium/node-chrome${WARDEN_SELENIUM_DEBUG:-}:3.8.1
     extra_hosts:
       - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444
+      - START_XVFB=false
+    networks:
+      - warden
+      - default
+
+  allure:
+    hostname: "${WARDEN_ENV_NAME}-allure"
+    image: frankescobar/allure-docker-service
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-allure.tls=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-allure.rule=Host(`allure.${TRAEFIK_DOMAIN}`)
+      - traefik.http.services.${WARDEN_ENV_NAME}-allure.loadbalancer.server.port=4040
+      # TODO; configure the Allure API; these rules result in allure sub-domain no longer routing
+      # - traefik.http.routers.${WARDEN_ENV_NAME}-allure-api.tls=true
+      # - traefik.http.routers.${WARDEN_ENV_NAME}-allure-api.rule=Host(`allure-api.${TRAEFIK_DOMAIN}`)
+      # - traefik.http.services.${WARDEN_ENV_NAME}-allure-api.loadbalancer.server.port=5050
+    volumes:
+      - .${WARDEN_WEB_ROOT:-}/dev/tests/acceptance/tests/_output/allure-results:/app/allure-results
+    environment:
+      CHECK_RESULTS_EVERY_SECONDS: 60
+      KEEP_HISTORY: "TRUE"
     networks:
       - warden
       - default

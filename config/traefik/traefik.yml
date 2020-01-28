@@ -1,0 +1,20 @@
+---
+api:
+  dashboard: true
+providers:
+  file:
+    filename: /etc/traefik/dynamic.yml
+  docker:
+    network: warden
+    defaultRule: "Host(`{{ .Name }}.warden.test`)"
+    exposedByDefault: false
+entryPoints:
+  http:
+    address: ":80"
+  https:
+    address: ":443"
+log:
+  level: info
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
