@@ -21,9 +21,6 @@ services:
       - --max_allowed_packet=1024M
     volumes:
       - salesdbdata:/var/lib/mysql
-    networks:
-      - warden
-      - default
 
 volumes:
   salesdbdata:

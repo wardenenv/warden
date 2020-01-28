@@ -15,9 +15,6 @@ services:
       - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.priority=1
       - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.rule=HostRegexp(`{subdomain:.+}.${TRAEFIK_DOMAIN}`)
       - traefik.http.services.${WARDEN_ENV_NAME}-nginx.loadbalancer.server.port=80
-    networks:
-      - warden
-      - default
 
   php-fpm:
     hostname: "${WARDEN_ENV_NAME}-php-fpm"
@@ -34,9 +31,6 @@ services:
       - ~/.warden/ssl/rootca/certs:/etc/ssl/warden-rootca-cert:ro
       - ~/.composer:/home/www-data/.composer:delegated
       - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
-    networks:
-      - default
-      - warden
 
   php-debug:
     hostname: "${WARDEN_ENV_NAME}-php-debug"
@@ -54,9 +48,6 @@ services:
       - ~/.warden/ssl/rootca/certs:/etc/ssl/warden-rootca-cert:ro
       - ~/.composer:/home/www-data/.composer:delegated
       - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
-    networks:
-      - default
-      - warden
 
   db:
     hostname: "${WARDEN_ENV_NAME}-mariadb"
@@ -71,9 +62,6 @@ services:
       - --max_allowed_packet=1024M
     volumes:
       - dbdata:/var/lib/mysql
-    networks:
-      - warden
-      - default
 
   redis:
     hostname: "${WARDEN_ENV_NAME}-redis"
@@ -87,13 +75,6 @@ services:
       - traefik.http.routers.${WARDEN_ENV_NAME}-mailhog.tls=true
       - traefik.http.routers.${WARDEN_ENV_NAME}-mailhog.rule=Host(`mailhog.${TRAEFIK_DOMAIN}`)
       - traefik.http.services.${WARDEN_ENV_NAME}-mailhog.loadbalancer.server.port=8025
-    networks:
-      - warden
-      - default
 
 volumes:
   dbdata:
-
-networks:
-  warden:
-    external: true
