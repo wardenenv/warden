@@ -1,7 +1,10 @@
 # Change Log
 
-## UNRELEASED [0.2.0](https://github.com/davidalger/warden/tree/0.2.0) (yyyy-mm-dd)
-[All Commits](https://github.com/davidalger/warden/compare/0.1.12..develop)
+## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
+[All Commits](https://github.com/davidalger/warden/compare/0.2.0..develop)
+
+## Version [0.2.0](https://github.com/davidalger/warden/tree/0.2.0) (2020-01-27)
+[All Commits](https://github.com/davidalger/warden/compare/0.1.12..0.2.0)
 
 **Upgrade Notes:**
 
