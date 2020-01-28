@@ -15,6 +15,7 @@ if [[ ${WARDEN_ENV_DEBUG_HOST} == "" ]]; then
     if [[ $OSTYPE =~ ^darwin ]]; then
         WARDEN_ENV_DEBUG_HOST=host.docker.internal
     else
+        ## TODO: With projects no longer member of the 'warden' network this will no longer function
         WARDEN_ENV_DEBUG_HOST=$(
             docker container inspect traefik --format '{{.NetworkSettings.Networks.warden.Gateway}}'
         )

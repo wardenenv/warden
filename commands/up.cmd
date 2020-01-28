@@ -37,5 +37,6 @@ for cert in $(find "${WARDEN_SSL_DIR}/certs" -type f -name "*.crt.pem" | sed -E 
 	EOF
 done
 
+# TODO: Need to loop over running environments and add traefik and tunnel to each network
 pushd "${WARDEN_HOME_DIR}" >/dev/null
 docker-compose -p warden -f "${WARDEN_DIR}/docker/docker-compose.yml" up -d "${WARDEN_PARAMS[@]}" "$@"

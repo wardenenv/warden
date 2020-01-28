@@ -76,6 +76,7 @@ if [[ "${WARDEN_PARAMS[0]}" == "down" ]]; then
 fi
 
 ## lookup internal (warden docker network) IP address of traefik container (do not fail if traefik is stopped)
+## TODO: With projects no longer member of the 'warden' network, this IP address will not be routable
 export TRAEFIK_ADDRESS="$(docker container inspect traefik \
     --format '{{.NetworkSettings.Networks.warden.IPAddress}}' 2>/dev/null || true)"
 
