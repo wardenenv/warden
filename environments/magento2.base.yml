@@ -144,8 +144,10 @@ services:
     command: container-crontab --metrics
     labels:
       - traefik.enable=true
+      - traefik.http.middlewares.${WARDEN_ENV_NAME}-metrics.replacepath.path=/metrics
       - traefik.http.routers.${WARDEN_ENV_NAME}-crontab.tls=true
       - traefik.http.routers.${WARDEN_ENV_NAME}-crontab.rule=Host(`crontab.${TRAEFIK_DOMAIN}`)
+      - traefik.http.routers.${WARDEN_ENV_NAME}-crontab.middlewares=${WARDEN_ENV_NAME}-metrics@docker
       - traefik.http.services.${WARDEN_ENV_NAME}-crontab.loadbalancer.server.port=9191
     networks:
       - warden
