@@ -43,9 +43,6 @@ fi
 ## sub-command execution
 case "${WARDEN_PARAMS[0]}" in
     start)
-        ## start mutagen daemon if not already running
-        mutagen daemon start
-
         ## terminate any existing sessions with matching env label
         mutagen sync terminate --label-selector "warden-sync=${WARDEN_ENV_NAME}"
 
