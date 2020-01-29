@@ -136,6 +136,37 @@ services:
       - warden
       - default
 
+  crontab:
+    hostname: "${WARDEN_ENV_NAME}-crontab"
+    image: navarr/container-crontab:v0.1.0
+    environment:
+      - CRON_GROUP=${WARDEN_ENV_NAME}
+    command: container-crontab --metrics
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-crontab.tls=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-crontab.rule=Host(`crontab.${TRAEFIK_DOMAIN}`)
+      - traefik.http.services.${WARDEN_ENV_NAME}-crontab.loadbalancer.server.port=9191
+    networks:
+      - warden
+      - default
+
+  cronjob:
+    image: quay.io/warden/php-fpm:${PHP_VERSION:-7.3}-magento2
+    command: php bin/magento cron:run
+    environment:
+      - TRAEFIK_DOMAIN
+      - TRAEFIK_SUBDOMAIN
+    depends_on:
+      - db
+      - crontab
+    labels:
+      - cron.schedule=* * * * *
+      - cron.group=${WARDEN_ENV_NAME}
+    networks:
+      - warden
+      - default
+
 volumes:
   dbdata:
   esdata:

@@ -21,5 +21,16 @@ services:
       - .${WARDEN_WEB_ROOT:-}/pub/media:/var/www/html/pub/media:delegated
       - appdata:/var/www/html
 
+  crontab:
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  cronjob:
+    volumes:
+      - ~/.warden/ssl/rootca/certs:/etc/ssl/warden-rootca-cert:ro
+      - ~/.composer:/home/www-data/.composer:delegated
+      - .${WARDEN_WEB_ROOT:-}/pub/media:/var/www/html/pub/media:delegated
+      - appdata:/var/www/html
+
 volumes:
   appdata:
