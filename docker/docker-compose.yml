@@ -2,10 +2,10 @@ version: "3.5"
 services:
   traefik:
     container_name: traefik
-    image: traefik:2.1
+    image: traefik:${TRAEFIK_VERSION:-2.1}
     ports:
-      - "127.0.0.1:80:80"     # The HTTP port
-      - "127.0.0.1:443:443"   # The HTTPS port
+      - "${TRAEFIK_LISTEN:-127.0.0.1}:80:80"     # The HTTP port
+      - "${TRAEFIK_LISTEN:-127.0.0.1}:443:443"   # The HTTPS port
     volumes:
       - ~/.warden/etc/traefik/traefik.yml:/etc/traefik/traefik.yml
       - ~/.warden/etc/traefik/dynamic.yml:/etc/traefik/dynamic.yml
@@ -18,9 +18,9 @@ services:
       - traefik.http.routers.http-redirect.priority=1
       - traefik.http.middlewares.http-redirect.redirectscheme.scheme=https
       - traefik.http.routers.traefik.tls=true
-      - traefik.http.routers.traefik.rule=Host(`traefik.warden.test`)
+      - traefik.http.routers.traefik.rule=Host(`traefik.${WARDEN_SERVICE_DOMAIN:-warden.test}`)
       - traefik.http.routers.traefik.service=api@internal
-    restart: always
+    restart: ${WARDEN_RESTART_POLICY:-always}
 
   portainer:
     container_name: portainer
@@ -31,9 +31,9 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.portainer.tls=true
-      - traefik.http.routers.portainer.rule=Host(`portainer.warden.test`)
+      - traefik.http.routers.portainer.rule=Host(`portainer.${WARDEN_SERVICE_DOMAIN:-warden.test}`)
       - traefik.http.services.portainer.loadbalancer.server.port=9000
-    restart: always
+    restart: ${WARDEN_RESTART_POLICY:-always}
 
   dnsmasq:
     container_name: dnsmasq
@@ -45,9 +45,9 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.dnsmasq.tls=true
-      - traefik.http.routers.dnsmasq.rule=Host(`dnsmasq.warden.test`)
+      - traefik.http.routers.dnsmasq.rule=Host(`dnsmasq.${WARDEN_SERVICE_DOMAIN:-warden.test}`)
       - traefik.http.services.dnsmasq.loadbalancer.server.port=8080
-    restart: always
+    restart: ${WARDEN_RESTART_POLICY:-always}
 
   tunnel:
     container_name: tunnel
@@ -67,7 +67,7 @@ services:
 
       - SSH_USERS=user:2000:2000
       - TCP_FORWARDING=true
-    restart: always
+    restart: ${WARDEN_RESTART_POLICY:-always}
 
 volumes:
   portainer:
