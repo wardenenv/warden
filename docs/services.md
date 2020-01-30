@@ -17,7 +17,7 @@ The following options are available (with default values indicated):
 * `WARDEN_SERVICE_DOMAIN=warden.test` may be set to a domain of your choosing if so desired. Please note that this will not currently change network settings or alter `dnsmasq` configuration. Any TLD other than `test` will require DNS resolution be manually configured.
 
 ``` warning::
-    Setting `TRAEFIK_LISTEN=0.0.0.0` can be quite useful in some cases, but be aware that causing Traefik to listen for requests publicly poses a security risk on when on public WiFi or networks otherwise outside of your control.
+    Setting ``TRAEFIK_LISTEN=0.0.0.0`` can be quite useful in some cases, but be aware that causing Traefik to listen for requests publicly poses a security risk when on public WiFi or networks otherwise outside of your control.
 ```
 
-After changing a setting in `~/.warden/.env`, please run `warden up` to apply.
+After changing settings in `~/.warden/.env`, please run `warden up` to apply.

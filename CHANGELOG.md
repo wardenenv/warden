@@ -5,7 +5,7 @@
 
 **Upgrade Notes:**
 
-If you're upgrading from version 0.1.x to 0.2.x for the first time, please reference the upgrade note for the [Warden 0.2.0](https://docs.warden.dev/changelog.html#version-0-2-0-2020-01-27) release and plan accordingly.
+If you're upgrading from version 0.1.x to 0.2.x for the first time, please reference upgrade notes for [Warden 0.2.0](https://docs.warden.dev/changelog.html#version-0-2-0-2020-01-27) and plan accordingly.
 
 **Enhancements:**
 
