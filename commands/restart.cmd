@@ -4,6 +4,5 @@
 source "${WARDEN_DIR}/utils/install.sh"
 assertWardenInstall
 
-pushd "${WARDEN_DIR}" >/dev/null
-docker-compose -p warden --env-file "${WARDEN_HOME_DIR}/.env" \
-  -f docker/docker-compose.yml restart "${WARDEN_PARAMS[@]}" "$@"
+pushd "${WARDEN_HOME_DIR}" >/dev/null
+docker-compose -p warden -f "${WARDEN_DIR}/docker/docker-compose.yml" restart "${WARDEN_PARAMS[@]}" "$@"
