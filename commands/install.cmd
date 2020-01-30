@@ -26,12 +26,12 @@ if [[ ! -f "${WARDEN_SSL_DIR}/rootca/private/ca.key.pem" ]]; then
 fi
 
 if [[ ! -f "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem" ]]; then
-  echo "==> Signing root certificate (Warden Proxy Local CA)"
+  echo "==> Signing root certificate 'Warden Proxy Local CA ($(hostname -s))'"
   openssl req -new -x509 -days 7300 -sha256 -extensions v3_ca \
     -config "${WARDEN_DIR}/config/openssl/rootca.conf"        \
     -key "${WARDEN_SSL_DIR}/rootca/private/ca.key.pem"        \
     -out "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem"         \
-    -subj "/C=US/O=Warden Proxy Local CA"
+    -subj "/C=US/O=Warden Proxy Local CA ($(hostname -s))"
 fi
 
 ## trust root ca differently on Fedora, Ubuntu and macOS
@@ -49,7 +49,7 @@ elif [[ "$OSTYPE" == "linux-gnu" ]] \
   && [[ ! -f /usr/local/share/ca-certificates/warden-proxy-local-ca.crt ]] \
   ## Ubuntu/Debian
 then
-  echo "==> Trusting root certificate (requires sudo privileges)"  
+  echo "==> Trusting root certificate (requires sudo privileges)"
   sudo cp "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem" /usr/local/share/ca-certificates/warden-proxy-local-ca.crt
   sudo update-ca-certificates
 elif [[ "$OSTYPE" == "darwin"* ]] \

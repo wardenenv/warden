@@ -11,6 +11,7 @@ If you're upgrading from version 0.1.x to 0.2.x for the first time, please refer
 
 * Added support for using `~/.warden/.env` to configure aspects of Global Services ([see docs for details](https://docs.warden.dev/services.html)) (issue [#13](https://github.com/davidalger/warden/issues/13))
 * Updated `sync start` to no longer call `mutagen daemon start` as Mutagen now does this automatically.
+* Updated `warden install` to include short hostname in the common name used when signing the Root CA used by Warden allowing easier identification and interoperability when a single user is running Warden across multiple workstations.
 
 ## Version [0.2.0](https://github.com/davidalger/warden/tree/0.2.0) (2020-01-27)
 [All Commits](https://github.com/davidalger/warden/compare/0.1.12..0.2.0)
