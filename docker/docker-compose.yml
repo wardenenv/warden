@@ -18,7 +18,7 @@ services:
       - traefik.http.routers.http-redirect.priority=1
       - traefik.http.middlewares.http-redirect.redirectscheme.scheme=https
       - traefik.http.routers.traefik.tls=true
-      - traefik.http.routers.traefik.rule=Host(`traefik.warden.test`)
+      - traefik.http.routers.traefik.rule=Host(`traefik.${WARDEN_SERVICE_DOMAIN:-warden.test}`)
       - traefik.http.routers.traefik.service=api@internal
     restart: ${WARDEN_RESTART_POLICY:-always}
 
@@ -31,7 +31,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.portainer.tls=true
-      - traefik.http.routers.portainer.rule=Host(`portainer.warden.test`)
+      - traefik.http.routers.portainer.rule=Host(`portainer.${WARDEN_SERVICE_DOMAIN:-warden.test}`)
       - traefik.http.services.portainer.loadbalancer.server.port=9000
     restart: ${WARDEN_RESTART_POLICY:-always}
 
@@ -45,7 +45,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.dnsmasq.tls=true
-      - traefik.http.routers.dnsmasq.rule=Host(`dnsmasq.warden.test`)
+      - traefik.http.routers.dnsmasq.rule=Host(`dnsmasq.${WARDEN_SERVICE_DOMAIN:-warden.test}`)
       - traefik.http.services.dnsmasq.loadbalancer.server.port=8080
     restart: ${WARDEN_RESTART_POLICY:-always}
 

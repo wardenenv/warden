@@ -4,13 +4,29 @@
 source "${WARDEN_DIR}/utils/install.sh"
 assertWardenInstall
 
+## sign certificate used by global services (by default warden.test)
+if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
+  eval "$(grep "^WARDEN_SERVICE_DOMAIN" "${WARDEN_HOME_DIR}/.env")"
+fi
+
+WARDEN_SERVICE_DOMAIN="${WARDEN_SERVICE_DOMAIN:-warden.test}"
+if [[ ! -f "${WARDEN_SSL_DIR}/certs/${WARDEN_SERVICE_DOMAIN}.crt.pem" ]]; then
+  "${WARDEN_DIR}/bin/warden" sign-certificate "${WARDEN_SERVICE_DOMAIN}"
+fi
+
+## copy configuration files into location where they'll be mounted into containers from
 mkdir -p "${WARDEN_HOME_DIR}/etc/traefik"
 cp "${WARDEN_DIR}/config/traefik/traefik.yml" "${WARDEN_HOME_DIR}/etc/traefik/traefik.yml"
-cp "${WARDEN_DIR}/config/traefik/dynamic.yml" "${WARDEN_HOME_DIR}/etc/traefik/dynamic.yml"
 cp "${WARDEN_DIR}/config/dnsmasq.conf" "${WARDEN_HOME_DIR}/etc/dnsmasq.conf"
 
-cat >> "${WARDEN_HOME_DIR}/etc/traefik/dynamic.yml" <<-EOF
+## generate dynamic traefik ssl termination configuration
+cat > "${WARDEN_HOME_DIR}/etc/traefik/dynamic.yml" <<-EOF
 tls:
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /etc/ssl/certs/${WARDEN_SERVICE_DOMAIN}.crt.pem
+        keyFile: /etc/ssl/certs/${WARDEN_SERVICE_DOMAIN}.key.pem
   certificates:
 EOF
 
