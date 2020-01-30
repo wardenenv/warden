@@ -1,7 +1,0 @@
----
-tls:
-  stores:
-    default:
-      defaultCertificate:
-        certFile: /etc/ssl/certs/warden.test.crt.pem
-        keyFile: /etc/ssl/certs/warden.test.key.pem

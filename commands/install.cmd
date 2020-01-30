@@ -61,11 +61,6 @@ then
     -k /Library/Keychains/System.keychain "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem"
 fi
 
-## sign certificate used by services run on warden.test sub-domains
-if [[ ! -f "${WARDEN_SSL_DIR}/certs/warden.test.crt.pem" ]]; then
-  "${WARDEN_DIR}/bin/warden" sign-certificate warden.test
-fi
-
 ## configure resolver for .test domains; allow linux machines to prevent warden
 ## from touching dns configuration if need be since unlike macOS there is not
 ## support for resolving only *.test domains via /etc/resolver/test settings
