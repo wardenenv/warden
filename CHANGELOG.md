@@ -3,6 +3,14 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.2.1..develop)
 
+**Enhancements:**
+
+* Updated sign-certificates command to specify "O" value and "extendedKeyUsage" to comply with stricter SSL guidelines (issue [#85](https://github.com/davidalger/warden/issues/85))
+
+**Bug Fixes:**
+
+* Fixed missing CN value on CA used to sign SSL certificates (issue [#85](https://github.com/davidalger/warden/issues/85))
+
 ## Version [0.2.1](https://github.com/davidalger/warden/tree/0.2.1) (2020-01-30)
 [All Commits](https://github.com/davidalger/warden/compare/0.2.0..0.2.1)
 

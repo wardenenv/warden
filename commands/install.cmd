@@ -31,7 +31,7 @@ if [[ ! -f "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem" ]]; then
     -config "${WARDEN_DIR}/config/openssl/rootca.conf"        \
     -key "${WARDEN_SSL_DIR}/rootca/private/ca.key.pem"        \
     -out "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem"         \
-    -subj "/C=US/O=Warden Proxy Local CA ($(hostname -s))"
+    -subj "/C=US/O=Warden.dev/CN=Warden Proxy Local CA ($(hostname -s))"
 fi
 
 ## trust root ca differently on Fedora, Ubuntu and macOS
