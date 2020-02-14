@@ -3,6 +3,9 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.2.2..develop)
 
+## Version [0.2.3](https://github.com/davidalger/warden/tree/0.2.3) (2020-02-14)
+[All Commits](https://github.com/davidalger/warden/compare/0.2.2..0.2.3)
+
 **Bug Fixes:**
 
 * Fixed mutagen version check (issue [#95](https://github.com/davidalger/warden/issues/95)); ([#94](https://github.com/davidalger/warden/pull/94) by [blakesaunders](https://github.com/blakesaunders))
