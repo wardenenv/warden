@@ -3,6 +3,10 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.2.2..develop)
 
+**Enhancements:**
+
+* Added `explicit_defaults_for_timestamp=on` to `db` settings on `magento2` environment allowing `setup:db:status` to report clean (2.3.4 and later) (issue [#89](https://github.com/davidalger/warden/issues/89))
+
 ## Version [0.2.2](https://github.com/davidalger/warden/tree/0.2.2) (2020-02-09)
 [All Commits](https://github.com/davidalger/warden/compare/0.2.1..0.2.2)
 
