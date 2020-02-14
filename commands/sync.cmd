@@ -25,9 +25,9 @@ fi
 ## verify mutagen version constraint
 MUTAGEN_VERSION=$(mutagen version 2>/dev/null) || true
 if ! { \
-     (( $(echo ${MUTAGEN_VERSION:-0} | cut -d. -f1) >= 0 )) \
-  && (( $(echo ${MUTAGEN_VERSION:-0} | cut -d. -f2) >= 10 )) \
-  && (( $(echo ${MUTAGEN_VERSION:-0} | cut -d. -f3) >= 3 )); }
+     (( $(echo ${MUTAGEN_VERSION:-0} | cut -d. -f1) >= 1 )) \
+  || (( $(echo ${MUTAGEN_VERSION:-0} | cut -d. -f1) == 0 && $(echo ${MUTAGEN_VERSION:-0} | cut -d. -f2) >= 11 )) \
+  || (( $(echo ${MUTAGEN_VERSION:-0} | cut -d. -f1) == 0 && $(echo ${MUTAGEN_VERSION:-0} | cut -d. -f2) == 10 && $(echo ${MUTAGEN_VERSION:-0} | cut -d. -f3) >= 3 )); }
 then
   >&2 printf "\e[01;31mMutagen version 0.10.3 or greater is required (version ${MUTAGEN_VERSION} is installed).\033[0m"
   >&2 printf "\n\nPlease update Mutagen:\n\n  brew upgrade havoc-io/mutagen/mutagen\n\n"
