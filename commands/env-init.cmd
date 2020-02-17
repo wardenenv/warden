@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 [[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!" && exit 1
 
-WARDEN_ENV_PATH="$(pwd)"
+WARDEN_ENV_PATH="$(pwd -P)"
 
 # TODO: If the .env file already exists; prompt user instead of overwriting
 # TODO: Prompt user for inputs when arguments remain unspecified

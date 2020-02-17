@@ -3,6 +3,10 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.2.2..develop)
 
+**Bug Fixes:**
+
+* Updated environment path (`WARDEN_ENV_PATH` in scripts) to use physical vs logical current working directory to resolve issues with using symlinked file paths (issue [#101](https://github.com/davidalger/warden/issues/101))
+
 ## Version [0.2.3](https://github.com/davidalger/warden/tree/0.2.3) (2020-02-14)
 [All Commits](https://github.com/davidalger/warden/compare/0.2.2..0.2.3)
 
