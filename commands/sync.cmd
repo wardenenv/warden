@@ -53,8 +53,16 @@ case "${WARDEN_PARAMS[0]}" in
         
         ## wait for sync session to complete initial sync before exiting
         echo "Waiting for initial synchronization to complete"
-        while !  mutagen sync list --label-selector "warden-sync=${WARDEN_ENV_NAME}" \
-            | grep -i 'watching for changes'>/dev/null; do printf .; sleep 1; done; echo
+        while ! mutagen sync list --label-selector "warden-sync=${WARDEN_ENV_NAME}" \
+            | grep -i 'watching for changes'>/dev/null;
+                do
+                    if mutagen sync list --label-selector "warden-sync=${WARDEN_ENV_NAME}" \
+                        | grep -i 'Last error' > /dev/null; then
+                        >&2 printf "\033[31\nmmutagen encountered an error during sync.\033[0m"
+                        >&2 printf "\nYou may be able to find out more about this error by running 'mutagen sync list'\n\n"
+                        exit 1
+                    fi
+                    printf .; sleep 1; done; echo
         ;;
     stop)
         ## terminate only sessions labeled with this env name
