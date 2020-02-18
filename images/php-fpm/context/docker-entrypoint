@@ -3,25 +3,25 @@ set -e
 
 # configure php additions.ini
 cat /etc/php.d/05-additions.ini.template \
-	| envsubst '${MAILHOG_HOST} ${MAILHOG_PORT}' \
-	| sudo tee /etc/php.d/05-additions.ini
+  | envsubst '${MAILHOG_HOST} ${MAILHOG_PORT}' \
+  | sudo tee /etc/php.d/05-additions.ini
 
 # append warden issued root ca cert to ca-bundle trusted by curl/openssl
 if [ -f /etc/ssl/warden-rootca-cert/ca.cert.pem ]; then
-	cat /etc/ssl/warden-rootca-cert/ca.cert.pem | sudo tee -a /etc/ssl/certs/ca-bundle.crt >/dev/null
+  cat /etc/ssl/warden-rootca-cert/ca.cert.pem | sudo tee -a /etc/ssl/certs/ca-bundle.crt >/dev/null
 fi
 
 # install requested node version if not already installed
 NODE_INSTALLED="$(node -v | perl -pe 's/^v([0-9]+)\..*$/$1/')";
 if [ "${NODE_INSTALLED}" != "${NODE_VERSION}" ] \
-	|| [ "${NODE_VERSION}" = "latest" ] || [ "${NODE_VERSION}" = "lts" ]
+  || [ "${NODE_VERSION}" = "latest" ] || [ "${NODE_VERSION}" = "lts" ]
 then
-	sudo n "${NODE_VERSION}"
+  sudo n "${NODE_VERSION}"
 fi
 
 # first arg is `-f` or `--some-option`
 if [ "${1#-}" != "$1" ]; then
-	set -- php-fpm "$@"
+  set -- php-fpm "$@"
 fi
 
 exec "$@"
