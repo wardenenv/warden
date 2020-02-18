@@ -4,7 +4,7 @@ FROM davidalger/php:${PHP_VERSION}-fpm
 ENV MAILHOG_HOST    mailhog
 ENV MAILHOG_PORT    1025
 
-RUN yum install -y which pv sudo bind-utils python36-pip mariadb102 bash-completion rsync \
+RUN yum install -y which pv sudo bind-utils python36-pip mariadb102 bash-completion rsync socat \
     && yum clean all \
     && rm -rf /var/cache/yum
 
