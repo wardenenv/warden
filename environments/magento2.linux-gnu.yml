@@ -8,10 +8,12 @@ services:
     volumes:
       - ~/.warden/ssl/rootca/certs:/etc/ssl/warden-rootca-cert:ro
       - ~/.composer:/home/www-data/.composer
+      - ${SSH_AUTH_SOCK:-/dev/null}:/run/host-services/ssh-auth.sock
       - .${WARDEN_WEB_ROOT:-}/:/var/www/html
 
   php-debug:
     volumes:
       - ~/.warden/ssl/rootca/certs:/etc/ssl/warden-rootca-cert:ro
       - ~/.composer:/home/www-data/.composer
+      - ${SSH_AUTH_SOCK:-/dev/null}:/run/host-services/ssh-auth.sock
       - .${WARDEN_WEB_ROOT:-}/:/var/www/html
