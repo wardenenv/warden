@@ -11,6 +11,14 @@ if [ -f /etc/ssl/warden-rootca-cert/ca.cert.pem ]; then
   cat /etc/ssl/warden-rootca-cert/ca.cert.pem | sudo tee -a /etc/ssl/certs/ca-bundle.crt >/dev/null
 fi
 
+# start socat process in background to connect sockets used for agent access within container environment
+if [[ -S /run/host-services/ssh-auth.sock ]] \
+  && [[ "${SSH_AUTH_SOCK}" != "/run/host-services/ssh-auth.sock" ]]
+then
+  sudo bash -c "nohup socat UNIX-CLIENT:/run/host-services/ssh-auth.sock \
+    UNIX-LISTEN:${SSH_AUTH_SOCK},fork,user=www-data,group=www-data 1>/var/log/socat-ssh-auth.log 2>&1 &"
+fi
+
 # install requested node version if not already installed
 NODE_INSTALLED="$(node -v | perl -pe 's/^v([0-9]+)\..*$/$1/')";
 if [ "${NODE_INSTALLED}" != "${NODE_VERSION}" ] \
