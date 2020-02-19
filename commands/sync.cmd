@@ -58,8 +58,9 @@ case "${WARDEN_PARAMS[0]}" in
                 do
                     if mutagen sync list --label-selector "warden-sync=${WARDEN_ENV_NAME}" \
                         | grep -i 'Last error' > /dev/null; then
-                        >&2 printf "\033[31\nmmutagen encountered an error during sync.\033[0m"
-                        >&2 printf "\nYou may be able to find out more about this error by running 'mutagen sync list'\n\n"
+                        MUTAGEN_ERROR=$(mutagen sync list --label-selector "warden-sync=${WARDEN_ENV_NAME}" \
+                            | sed -n 's/Last error: \(.*\)/\1/p')
+                        >&2 printf "\033[31m\nMutagen encountered an error during sync: ${MUTAGEN_ERROR}\n\033[0m"
                         exit 1
                     fi
                     printf .; sleep 1; done; echo
