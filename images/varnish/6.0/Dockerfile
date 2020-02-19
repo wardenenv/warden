@@ -1,5 +1,9 @@
 FROM centos:7
 
+RUN yum upgrade -y \
+    && yum clean all \
+    && rm -rf /var/cache/yum
+
 ARG RPM_SCRIPT=https://packagecloud.io/install/repositories/varnishcache/varnish60lts/script.rpm.sh
 RUN curl -s "${RPM_SCRIPT}" | bash \
     && yum install -y epel-release \
