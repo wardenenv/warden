@@ -7,7 +7,7 @@ Installing Warden
 * `docker-compose` available in your `$PATH` (can be installed via `brew`, `apt`, `dnf`, or `pip3`)
 * [Mutagen](https://mutagen.io/) v0.10.3 or later installed via Homebrew (required on macOS only; Warden will attempt to install this via `brew` if not present when running `warden sync start`).
 
-**Warning: By default Docker Desktop allocates 2GB memory.** This leads to extensive swapping, killed processed and extremely high CPU usage during some Magento actions, like for example running sampledata:deploy and/or installing the application. It is recommended to assign at least 6GB RAM to Docker Desktop prior to deploying any Magento environments on Docker Desktop. This can be corrected via Preferences -> Advanced -> Memory. While you are there, it wouldn't hurt to let Docker have the use of a few more vCPUs (keep it at least 4 less than the maximum CPU allocation however to avoid having macOS contend with Docker for use of cores)
+**Warning: By default Docker Desktop allocates 2GB memory.** This leads to extensive swapping, killed processed and extremely high CPU usage during some Magento actions, like for example running sampledata:deploy and/or installing the application. It is recommended to assign at least 6GB RAM to Docker Desktop prior to deploying any Magento environments on Docker Desktop. This can be corrected via Preferences -> Resources -> Advanced -> Memory. While you are there, it wouldn't hurt to let Docker have the use of a few more vCPUs (keep it at least 4 less than the maximum CPU allocation however to avoid having macOS contend with Docker for use of cores)
 
 ### Installing via Homebrew
 
