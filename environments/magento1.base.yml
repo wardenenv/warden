@@ -28,8 +28,6 @@ services:
       - NODE_VERSION=${NODE_VERSION:-10}
     extra_hosts:
       - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
-    depends_on:
-      - db
     volumes:
       - ~/.warden/ssl/rootca/certs:/etc/ssl/warden-rootca-cert:ro
       - ~/.composer:/home/www-data/.composer:delegated
@@ -48,8 +46,6 @@ services:
       - PHP_IDE_CONFIG=serverName=${WARDEN_ENV_NAME}-docker
     extra_hosts:
       - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
-    depends_on:
-      - db
     volumes:
       - ~/.warden/ssl/rootca/certs:/etc/ssl/warden-rootca-cert:ro
       - ~/.composer:/home/www-data/.composer:delegated
@@ -57,39 +53,6 @@ services:
     networks:
       - default
       - warden
-
-  db:
-    hostname: "${WARDEN_ENV_NAME}-mariadb"
-    image: quay.io/warden/mariadb:${MARIADB_VERSION:-10.3}
-    environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-magento}
-      - MYSQL_DATABASE=${MYSQL_DATABASE:-magento}
-      - MYSQL_USER=${MYSQL_USER:-magento}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-magento}
-    command:
-      - mysqld
-      - --max_allowed_packet=1024M
-    volumes:
-      - dbdata:/var/lib/mysql
-    networks:
-      - warden
-      - default
-
-  redis:
-    hostname: "${WARDEN_ENV_NAME}-redis"
-    image: quay.io/warden/redis:${REDIS_VERSION:-5.0}
-
-  mailhog:
-    hostname: "${WARDEN_ENV_NAME}-mailhog"
-    image: quay.io/warden/mailhog:${MAILHOG_VERSION:-1.0}
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.${WARDEN_ENV_NAME}-mailhog.tls=true
-      - traefik.http.routers.${WARDEN_ENV_NAME}-mailhog.rule=Host(`mailhog.${TRAEFIK_DOMAIN}`)
-      - traefik.http.services.${WARDEN_ENV_NAME}-mailhog.loadbalancer.server.port=8025
-    networks:
-      - warden
-      - default
 
 volumes:
   dbdata:

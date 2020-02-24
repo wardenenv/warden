@@ -18,21 +18,6 @@ services:
       - warden
       - default
 
-  varnish:
-    hostname: "${WARDEN_ENV_NAME}-varnish"
-    image: quay.io/warden/varnish:${VARNISH_VERSION:-6.0}
-    depends_on:
-      - nginx
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.${WARDEN_ENV_NAME}-varnish.tls=true
-      - traefik.http.routers.${WARDEN_ENV_NAME}-varnish.priority=1
-      - traefik.http.routers.${WARDEN_ENV_NAME}-varnish.rule=HostRegexp(`{subdomain:.+}.${TRAEFIK_DOMAIN}`)
-      - traefik.http.services.${WARDEN_ENV_NAME}-varnish.loadbalancer.server.port=80
-    networks:
-      - warden
-      - default
-
   php-fpm:
     hostname: "${WARDEN_ENV_NAME}-php-fpm"
     image: quay.io/warden/php-fpm:${PHP_VERSION:-7.3}-magento2
@@ -42,8 +27,6 @@ services:
       - NODE_VERSION=${NODE_VERSION:-10}
     extra_hosts:
       - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
-    depends_on:
-      - db
     labels:
       - traefik.enable=true
       - traefik.http.routers.${WARDEN_ENV_NAME}-livereload.tls=true
@@ -67,75 +50,9 @@ services:
       - PHP_IDE_CONFIG=serverName=${WARDEN_ENV_NAME}-docker
     extra_hosts:
       - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
-    depends_on:
-      - db
     networks:
       - default
       - warden
-
-  db:
-    hostname: "${WARDEN_ENV_NAME}-mariadb"
-    image: quay.io/warden/mariadb:${MARIADB_VERSION:-10.3}
-    environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-magento}
-      - MYSQL_DATABASE=${MYSQL_DATABASE:-magento}
-      - MYSQL_USER=${MYSQL_USER:-magento}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-magento}
-    command:
-      - mysqld
-      - --max_allowed_packet=1024M
-      - --explicit_defaults_for_timestamp=on
-    volumes:
-      - dbdata:/var/lib/mysql
-    networks:
-      - warden
-      - default
-
-  elasticsearch:
-    hostname: "${WARDEN_ENV_NAME}-elasticsearch"
-    image: quay.io/warden/elasticsearch:${ELASTICSEARCH_VERSION:-6.8}
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.${WARDEN_ENV_NAME}-elasticsearch.tls=true
-      - traefik.http.routers.${WARDEN_ENV_NAME}-elasticsearch.rule=Host(`elasticsearch.${TRAEFIK_DOMAIN}`)
-      - traefik.http.services.${WARDEN_ENV_NAME}-elasticsearch.loadbalancer.server.port=9200
-    environment:
-      - discovery.type=single-node
-      - xpack.security.enabled=false
-      - "ES_JAVA_OPTS=-Xms64m -Xmx512m"
-    volumes:
-      - esdata:/usr/share/elasticsearch/data
-    networks:
-      - warden
-      - default
-
-  redis:
-    hostname: "${WARDEN_ENV_NAME}-redis"
-    image: quay.io/warden/redis:${REDIS_VERSION:-5.0}
-
-  rabbitmq:
-    hostname: "${WARDEN_ENV_NAME}-rabbitmq"
-    image: quay.io/warden/rabbitmq:${RABBITMQ_VERSION:-3.7}
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.${WARDEN_ENV_NAME}-rabbitmq.tls=true
-      - traefik.http.routers.${WARDEN_ENV_NAME}-rabbitmq.rule=Host(`rabbitmq.${TRAEFIK_DOMAIN}`)
-      - traefik.http.services.${WARDEN_ENV_NAME}-rabbitmq.loadbalancer.server.port=15672
-    networks:
-      - warden
-      - default
-
-  mailhog:
-    hostname: "${WARDEN_ENV_NAME}-mailhog"
-    image: quay.io/warden/mailhog:${MAILHOG_VERSION:-1.0}
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.${WARDEN_ENV_NAME}-mailhog.tls=true
-      - traefik.http.routers.${WARDEN_ENV_NAME}-mailhog.rule=Host(`mailhog.${TRAEFIK_DOMAIN}`)
-      - traefik.http.services.${WARDEN_ENV_NAME}-mailhog.loadbalancer.server.port=8025
-    networks:
-      - warden
-      - default
 
 volumes:
   dbdata:

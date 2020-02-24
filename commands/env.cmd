@@ -18,6 +18,42 @@ DOCKER_COMPOSE_ARGS=()
 DOCKER_COMPOSE_ARGS+=("-f")
 DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.base.yml")
 
+if [[ ${WARDEN_MARIADB} -eq 1 && -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.db.base.yml" ]]; then
+    DOCKER_COMPOSE_ARGS+=("-f")
+    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.db.base.yml")
+fi
+
+if [[ ${WARDEN_ELASTICSEARCH} -eq 1 && -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.elasticsearch.base.yml" ]]; then
+    DOCKER_COMPOSE_ARGS+=("-f")
+    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.elasticsearch.base.yml")
+fi
+
+if [[ "${WARDEN_ENV_TYPE}" == "magento2" ]]; then
+    if [[ ${WARDEN_VARNISH} -eq 0 ]]; then
+        export BYPASS_VARNISH=true
+    fi
+fi
+
+if [[ ${WARDEN_VARNISH} -eq 1 && -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.varnish.base.yml" ]]; then
+    DOCKER_COMPOSE_ARGS+=("-f")
+    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.varnish.base.yml")
+fi
+
+if [[ ${WARDEN_RABBITMQ} -eq 1 && -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.rabbitmq.base.yml" ]]; then
+    DOCKER_COMPOSE_ARGS+=("-f")
+    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.rabbitmq.base.yml")
+fi
+
+if [[ ${WARDEN_REDIS} -eq 1 && -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.redis.base.yml" ]]; then
+    DOCKER_COMPOSE_ARGS+=("-f")
+    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.redis.base.yml")
+fi
+
+if [[ ${WARDEN_MAILHOG=1} -eq 1 && -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.mailhog.base.yml" ]]; then
+    DOCKER_COMPOSE_ARGS+=("-f")
+    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.mailhog.base.yml")
+fi
+
 if [[ -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.${WARDEN_ENV_SUBT}.yml" ]]; then
     DOCKER_COMPOSE_ARGS+=("-f")
     DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.${WARDEN_ENV_SUBT}.yml")
