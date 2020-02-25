@@ -26,8 +26,3 @@ Warden may be installed by cloning the repository to the directory of your choic
     echo 'export PATH="/opt/warden/bin:$PATH"' >> ~/.bashrc
     PATH="/opt/warden/bin:$PATH"
     warden up
-
-### Recommended Additions
-
-* `pv` installed and available in your `$PATH` (you can install this via `brew install pv`) for use sending database files to `warden db import` and providing determinate progress indicators for the import. Alternatively `cat` may be used where `pv` is referenced in documentation but will not provide progress indicators.
-* On macOS it is **highly recommended** to install `docker-compose` via `pip3 install --user docker-compose` adding `~/Library/Python/3.7/bin/` to your `$PATH` vs relying on the `docker-compose` binary installed by Docker for Mac (or installing via brew, which Docker for Mac overwrites each time it starts); the binary installed by Docker for Mac out of the box takes roughly 8 to 20 times as long to initialize due to entropy related code (for example a `docker-compose version` command will take 2 to 5 seconds vs what should be a fraction of a second). Installing `docker-compose` via a third-party package manager such as `pip3` to a location other than `/usr/local/bin` (which Docker for Mac overwrites on startup) will resolve the slowness caused by Warden using `docker-compose` under the hood.
