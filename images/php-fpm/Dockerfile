@@ -46,7 +46,11 @@ RUN PHP_VERSION=$(php -v | head -n1 | cut -d' ' -f2 | cut -d. -f1-2) \
 # Install and enable IonCube loader
 RUN PHP_VERSION=$(php -v | head -n1 | cut -d' ' -f2 | cut -d. -f1-2 | cut -d. -f1-2 | sed 's/\.//') \
     && if (( ${PHP_VERSION} >= 73 )); \
-        then echo "php${PHP_VERSION}-ioncube does not exist yet in ius upstream; skipping"; \
+        then mkdir -p /tmp/ioncube \
+            && curl -o /tmp/ioncube/ioncube_loaders_lin_x86-64.tar.gz https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz \
+            && tar -xvzf /tmp/ioncube/ioncube_loaders_lin_x86-64.tar.gz --directory /tmp/ioncube/ \
+            && cp /tmp/ioncube/ioncube/ioncube_loader_lin_7.3.so /usr/lib64/php/modules/ \
+            && echo "zend_extension=/usr/lib64/php/modules/ioncube_loader_lin_7.3.so" > /etc/php.d/05-ioncube.ini; \ 
         else yum install -y php${PHP_VERSION}u-ioncube-loader; \
     fi \
     && yum clean all \
