@@ -44,17 +44,14 @@ RUN PHP_VERSION=$(php -v | head -n1 | cut -d' ' -f2 | cut -d. -f1-2) \
     && rm -rf /tmp/sourceguardian
 
 # Install and enable IonCube loader
-RUN PHP_VERSION=$(php -v | head -n1 | cut -d' ' -f2 | cut -d. -f1-2 | cut -d. -f1-2 | sed 's/\.//') \
-    && if (( ${PHP_VERSION} >= 73 )); \
-        then mkdir -p /tmp/ioncube \
-            && curl -o /tmp/ioncube/ioncube_loaders_lin_x86-64.tar.gz https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz \
-            && tar -xvzf /tmp/ioncube/ioncube_loaders_lin_x86-64.tar.gz --directory /tmp/ioncube/ \
-            && cp /tmp/ioncube/ioncube/ioncube_loader_lin_7.3.so /usr/lib64/php/modules/ \
-            && echo "zend_extension=/usr/lib64/php/modules/ioncube_loader_lin_7.3.so" > /etc/php.d/05-ioncube.ini; \ 
-        else yum install -y php${PHP_VERSION}u-ioncube-loader; \
-    fi \
-    && yum clean all \
-    && rm -rf /var/cache/yum
+RUN PHP_VERSION=$(php -v | head -n1 | cut -d' ' -f2 | cut -d. -f1-2) \
+    && mkdir -p /tmp/ioncube \
+    && cd /tmp/ioncube \
+    && curl -Os https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz \
+    && tar xzf ioncube_loaders_lin_x86-64.tar.gz \
+    && cp ioncube/ioncube_loader_lin_${PHP_VERSION}.so "$(php -i | grep '^extension_dir =' | cut -d' ' -f3)/ioncube_loader.so" \
+    && echo "zend_extension=ioncube_loader.so" > /etc/php.d/01-ioncube-loader.ini \
+    && rm -rf /tmp/ioncube
 
 # Install mhsendmail to support routing email through mailhog
 RUN mkdir -p /tmp/mhsendmail \
