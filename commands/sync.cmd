@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 [[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!" && exit 1
 
+source "${WARDEN_DIR}/utils/core.sh"
 source "${WARDEN_DIR}/utils/env.sh"
 WARDEN_ENV_PATH="$(locateEnvPath)" || exit $?
 loadEnvConfig "${WARDEN_ENV_PATH}" || exit $?
@@ -24,12 +25,9 @@ fi
 
 ## verify mutagen version constraint
 MUTAGEN_VERSION=$(mutagen version 2>/dev/null) || true
-if ! { \
-     (( $(echo ${MUTAGEN_VERSION:-0} | cut -d. -f1) >= 1 )) \
-  || (( $(echo ${MUTAGEN_VERSION:-0} | cut -d. -f1) == 0 && $(echo ${MUTAGEN_VERSION:-0} | cut -d. -f2) >= 11 )) \
-  || (( $(echo ${MUTAGEN_VERSION:-0} | cut -d. -f1) == 0 && $(echo ${MUTAGEN_VERSION:-0} | cut -d. -f2) == 10 && $(echo ${MUTAGEN_VERSION:-0} | cut -d. -f3) >= 3 )); }
-then
-  >&2 printf "\e[01;31mMutagen version 0.10.3 or greater is required (version ${MUTAGEN_VERSION} is installed).\033[0m"
+MUTAGEN_REQUIRE=0.10.3
+if [[ $OSTYPE =~ ^darwin ]] && ! test $(version ${MUTAGEN_VERSION}) -ge $(version ${MUTAGEN_REQUIRE}); then
+  >&2 printf "\e[01;31mMutagen version ${MUTAGEN_REQUIRE} or greater is required (version ${MUTAGEN_VERSION} is installed).\033[0m"
   >&2 printf "\n\nPlease update Mutagen:\n\n  brew upgrade havoc-io/mutagen/mutagen\n\n"
   exit 1
 fi
