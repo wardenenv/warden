@@ -19,6 +19,10 @@ Warden is a CLI utility for orchestrating Docker based developer environments, a
 * Warden issued wildcard SSL certificates for running https on all local development domains.
 * Full support for Magento 1, Magento 2, Laravel, and custom project environment configurations on macOS and Linux.
 
+## Project Templates
+
+* [Magento 2](https://github.com/davidalger/warden-env-magento2)
+
 ## Contributing
 
 All contributions to the Warden project are welcome: use-cases, documentation, code, patches, bug reports, feature requests, etc. Any and all contributions may be made by submitting [Issues](https://github.com/davidalger/warden/issues) and [Pull Requests](https://github.com/davidalger/warden/pulls) here on Github.
