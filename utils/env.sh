@@ -2,7 +2,7 @@
 [[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!" && exit 1
 
 function locateEnvPath () {
-    local WARDEN_ENV_PATH="$(pwd)"
+    local WARDEN_ENV_PATH="$(pwd -P)"
     while [[ "${WARDEN_ENV_PATH}" != "/" ]]; do
         if [[ -f "${WARDEN_ENV_PATH}/.env" ]] \
             && grep "^WARDEN_ENV_NAME" "${WARDEN_ENV_PATH}/.env" >/dev/null \

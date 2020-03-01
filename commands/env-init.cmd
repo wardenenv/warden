@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 [[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!" && exit 1
 
-WARDEN_ENV_PATH="$(pwd)"
+WARDEN_ENV_PATH="$(pwd -P)"
 
 # TODO: If the .env file already exists; prompt user instead of overwriting
 # TODO: Prompt user for inputs when arguments remain unspecified
@@ -36,10 +36,10 @@ if [[ "${WARDEN_ENV_TYPE}" == "magento1" ]]; then
 		WARDEN_SELENIUM_DEBUG=0
 		WARDEN_BLACKFIRE=0
 
-		BLACKFIRE_CLIENT_ID="<client_id>"
-		BLACKFIRE_CLIENT_TOKEN="<client_token>"
-		BLACKFIRE_SERVER_ID="<server_id>"
-		BLACKFIRE_SERVER_TOKEN="<server_token>"
+		BLACKFIRE_CLIENT_ID=
+		BLACKFIRE_CLIENT_TOKEN=
+		BLACKFIRE_SERVER_ID=
+		BLACKFIRE_SERVER_TOKEN=
 	EOT
 fi
 
@@ -62,10 +62,10 @@ if [[ "${WARDEN_ENV_TYPE}" == "magento2" ]]; then
 		WARDEN_SPLIT_SALES=0
 		WARDEN_SPLIT_CHECKOUT=0
 
-		BLACKFIRE_CLIENT_ID="<client_id>"
-		BLACKFIRE_CLIENT_TOKEN="<client_token>"
-		BLACKFIRE_SERVER_ID="<server_id>"
-		BLACKFIRE_SERVER_TOKEN="<server_token>"
+		BLACKFIRE_CLIENT_ID=
+		BLACKFIRE_CLIENT_TOKEN=
+		BLACKFIRE_SERVER_ID=
+		BLACKFIRE_SERVER_TOKEN=
 	EOT
 fi
 

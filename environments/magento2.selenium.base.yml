@@ -4,6 +4,9 @@ services:
     container_name: ${WARDEN_ENV_NAME}_selenium-hub
     hostname: selenium-hub
     image: selenium/hub:3.8.1
+    environment:
+      GRID_TIMEOUT: 0
+      GRID_BROWSER_TIMEOUT: 0
     networks:
       - warden
       - default
