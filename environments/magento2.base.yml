@@ -1,4 +1,10 @@
 version: "3.5"
+networks:
+  default:
+    labels:
+      - dev.warden.environment.name=${WARDEN_ENV_NAME}
+      - dev.warden.environment.type=${WARDEN_ENV_TYPE}
+
 services:
   nginx:
     hostname: "${WARDEN_ENV_NAME}-nginx"

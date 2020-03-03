@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 [[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!" && exit 1
 
+source "${WARDEN_DIR}/utils/core.sh"
 source "${WARDEN_DIR}/utils/env.sh"
+
 WARDEN_ENV_PATH="$(locateEnvPath)" || exit $?
 loadEnvConfig "${WARDEN_ENV_PATH}" || exit $?
 
@@ -12,9 +14,6 @@ fi
 
 ## simply allow the return code from docker-compose to bubble up per normal
 trap '' ERR
-
-## global service containers to be connected with the project docker network
-DOCKER_PEERED_SERVICES=("traefik" "tunnel")
 
 ## configure docker-compose files
 DOCKER_COMPOSE_ARGS=()
@@ -67,31 +66,25 @@ else
     export WARDEN_SELENIUM_DEBUG=
 fi
 
-## disconnect peered service containers from project network
+## disconnect peered service containers from environment network
 if [[ "${WARDEN_PARAMS[0]}" == "down" ]]; then
-    for svc in ${DOCKER_PEERED_SERVICES[@]}; do
-        echo "Disconnecting ${svc} from ${WARDEN_ENV_NAME}_default network"
-        (docker network disconnect "${WARDEN_ENV_NAME}_default" ${svc} 2>&1| grep -v 'is not connected') || true
-    done
+    disconnectPeeredServices "${WARDEN_ENV_NAME}_default"
 fi
 
-## connect peered service containers to project network
+## connect peered service containers to environment network
 if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
-    ## create project network for attachments if it does not already exist
+    ## create environment network for attachments if it does not already exist
     if [[ $(docker network ls -f "name=${WARDEN_ENV_NAME}_default" -q) == "" ]]; then
         docker-compose \
             --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
             "${DOCKER_COMPOSE_ARGS[@]}" up --no-start
     fi
 
-    ## attach globally peered services to the project network
-    for svc in ${DOCKER_PEERED_SERVICES[@]}; do
-        echo "Connecting ${svc} to ${WARDEN_ENV_NAME}_default network"
-        (docker network connect "${WARDEN_ENV_NAME}_default" ${svc} 2>&1| grep -v 'already exists in network') || true
-    done
+    ## connect globally peered services to the environment network
+    connectPeeredServices "${WARDEN_ENV_NAME}_default"
 fi
 
-## lookup address of traefik container on project network
+## lookup address of traefik container on environment network
 export TRAEFIK_ADDRESS="$(docker container inspect traefik \
     --format "{{if .NetworkSettings.Networks.${WARDEN_ENV_NAME}_default}} \
         {{.NetworkSettings.Networks.${WARDEN_ENV_NAME}_default.IPAddress}} \
