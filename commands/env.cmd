@@ -75,20 +75,30 @@ if [[ "${WARDEN_PARAMS[0]}" == "down" ]]; then
     done
 fi
 
-## lookup internal (warden docker network) IP address of traefik container (do not fail if traefik is stopped)
-## TODO: With projects no longer member of the 'warden' network, this IP address will not be routable
-export TRAEFIK_ADDRESS="$(docker container inspect traefik \
-    --format '{{.NetworkSettings.Networks.warden.IPAddress}}' 2>/dev/null || true)"
-
-## anything not caught above is simply passed through to docker-compose to orchestrate
-docker-compose \
-    --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
-    "${DOCKER_COMPOSE_ARGS[@]}" "${WARDEN_PARAMS[@]}" "$@"
-
 ## connect peered service containers to project network
 if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
+    ## create project network for attachments if it does not already exist
+    if [[ $(docker network ls -f "name=${WARDEN_ENV_NAME}_default" -q) == "" ]]; then
+        docker-compose \
+            --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
+            "${DOCKER_COMPOSE_ARGS[@]}" up --no-start
+    fi
+
+    ## attach globally peered services to the project network
     for svc in ${DOCKER_PEERED_SERVICES[@]}; do
         echo "Connecting ${svc} to ${WARDEN_ENV_NAME}_default network"
         (docker network connect "${WARDEN_ENV_NAME}_default" ${svc} 2>&1| grep -v 'already exists in network') || true
     done
 fi
+
+## lookup address of traefik container on project network
+export TRAEFIK_ADDRESS="$(docker container inspect traefik \
+    --format "{{if .NetworkSettings.Networks.${WARDEN_ENV_NAME}_default}} \
+        {{.NetworkSettings.Networks.${WARDEN_ENV_NAME}_default.IPAddress}} \
+    {{end}}" 2>/dev/null || true \
+)"
+
+## anything not caught above is simply passed through to docker-compose to orchestrate
+docker-compose \
+    --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
+    "${DOCKER_COMPOSE_ARGS[@]}" "${WARDEN_PARAMS[@]}" "$@"
