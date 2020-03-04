@@ -3,6 +3,28 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.2.4..develop)
 
+**Upgrade Notes:**
+
+The fix for issue [#65](https://github.com/davidalger/warden/issues/65) required removing the `warden` network from each environment's services (see commit [36cb0174](https://github.com/davidalger/warden/commit/36cb0174399a40c7f3eb4c39ae70d33afd39c4a3)) and as a result environments referencing the `warden` network in per-project `.warden/*.yml` configuration files may need to be updated for compatibility with Warden 0.3.0.
+
+Should you see an error like the following when running `warden env ...` then this applies to you:
+
+```
+ERROR: Service "nginx" uses an undefined network "warden"
+```
+
+To resolve this issue, simply remove the following from each service defined in `.warden/*.yml` files on the project similar to what was done in commit [36cb0174](https://github.com/davidalger/warden/commit/36cb0174399a40c7f3eb4c39ae70d33afd39c4a3) on the base environment definitions:
+
+```
+networks:
+  - warden
+  - default
+```
+
+**Bug Fixes:**
+
+* Updated to no longer connect environment containers to `warden` network and instead peer `traefik` and `tunnel` containers with each project when it is started (issue [#65](https://github.com/davidalger/warden/issues/65))
+
 ## Version [0.2.4](https://github.com/davidalger/warden/tree/0.2.4) (2020-02-29)
 [All Commits](https://github.com/davidalger/warden/compare/0.2.3..0.2.4)
 
