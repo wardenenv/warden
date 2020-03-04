@@ -24,6 +24,7 @@ Warden version $(cat ${WARDEN_DIR}/version)
   down              Stop and remove containers, networks, and services
   env-init          Configure environment by adding '.env' file to the current working directory
   env               Controls an environment from any point within the root project directory
+  db                Interacts with the db service on an environment (see 'warden db -h' for details)
   install           Initializes or updates warden configuration on host machine
   restart           Restarts warden managed containers
   shell             Launches into a shell within the current project environment
