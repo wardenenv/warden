@@ -25,6 +25,10 @@ networks:
 
 * Updated to no longer connect environment containers to `warden` network and instead peer `traefik` and `tunnel` containers with each project when it is started (issue [#65](https://github.com/davidalger/warden/issues/65))
 
+**Enhancements:**
+
+* Added automatic start of Mutagen sync on `env up` and `env start` when sync is not connected (issue [#90](https://github.com/davidalger/warden/issues/90))
+
 ## Version [0.2.4](https://github.com/davidalger/warden/tree/0.2.4) (2020-02-29)
 [All Commits](https://github.com/davidalger/warden/compare/0.2.3..0.2.4)
 

@@ -95,3 +95,11 @@ export TRAEFIK_ADDRESS="$(docker container inspect traefik \
 docker-compose \
     --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
     "${DOCKER_COMPOSE_ARGS[@]}" "${WARDEN_PARAMS[@]}" "$@"
+
+## start mutagen sync if needed
+if ([[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]])\
+    && [[ $OSTYPE =~ ^darwin ]] \
+    && [[ $(warden sync list | grep -i 'Connection state: Connected' | wc -l | awk '{print $1}') != "2" ]]
+then
+    warden sync start
+fi
