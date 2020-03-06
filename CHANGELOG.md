@@ -28,6 +28,7 @@ networks:
 **Enhancements:**
 
 * Added automatic start of Mutagen sync on `env up` and `env start` when sync is not connected (issue [#90](https://github.com/davidalger/warden/issues/90))
+* Updated routing rules so Traefik will now by default route both example.com and *.example.com to application ([#111](https://github.com/davidalger/warden/pull/111) by [davidalger](https://github.com/davidalger))
 
 ## Version [0.2.4](https://github.com/davidalger/warden/tree/0.2.4) (2020-02-29)
 [All Commits](https://github.com/davidalger/warden/compare/0.2.3..0.2.4)

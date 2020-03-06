@@ -19,7 +19,8 @@ services:
       - traefik.enable=true
       - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.tls=true
       - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.priority=1
-      - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.rule=HostRegexp(`{subdomain:.+}.${TRAEFIK_DOMAIN}`)
+      - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.rule=
+          HostRegexp(`{subdomain:.+}.${TRAEFIK_DOMAIN}`) || Host(`${TRAEFIK_DOMAIN}`)
       - traefik.http.services.${WARDEN_ENV_NAME}-nginx.loadbalancer.server.port=80
 
   php-fpm:
@@ -30,6 +31,7 @@ services:
       - TRAEFIK_SUBDOMAIN
       - NODE_VERSION=${NODE_VERSION:-10}
     extra_hosts:
+      - ${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
       - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
     depends_on:
       - db
@@ -47,6 +49,7 @@ services:
       - NODE_VERSION=${NODE_VERSION:-10}
       - PHP_IDE_CONFIG=serverName=${WARDEN_ENV_NAME}-docker
     extra_hosts:
+      - ${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
       - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
     depends_on:
       - db
