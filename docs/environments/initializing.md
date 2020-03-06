@@ -45,9 +45,14 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
 4. Next you'll want to start the project environment:
 
        warden env up -d
-       warden sync start   ## Omit this if running on a Linux host (or if not used by env type)
 
-   If you encounter an error about `Mounts denied…`, follow the instructions in the error message and run `warden env up -d` again.
+``` warning::
+    If you encounter an error about `Mounts denied…`, follow the instructions in the error message and run `warden env up -d` again.
+```
+
+``` note::
+    On macOS when using Warden versions prior to 0.3.0, you will need to start the Mutagen sync session manually be running `warden sync start` whenever starting the environment. In Warden 0.3.0 and later the sync session is started and stopped automatically when running commands such as `up`, `start`, `down`, and `stop`.
+```
 
 5. Drop into a shell within the project environment. Commands following this step in the setup procedure will be run from within the `php-fpm` docker container this launches you into:
 
@@ -147,4 +152,6 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
     * https://rabbitmq.exampleproject.test/
     * https://elasticsearch.exampleproject.test/
 
-Note: To completely destroy the `exampleproject` environment we just created, run `warden env down -v` to tear down the project's Docker containers, volumes, etc, then `warden sync stop` as needed to terminate the Mutagen session.
+``` note::
+    To completely destroy the `exampleproject` environment we just created, run `warden env down -v` to tear down the project's Docker containers, volumes, etc.
+```
