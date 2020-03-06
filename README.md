@@ -7,6 +7,7 @@ Warden is a CLI utility for orchestrating Docker based developer environments, a
 * [Warden Website](https://warden.dev/)
 * [Warden Documentation](https://docs.warden.dev/)
 * [Installing Warden](https://docs.warden.dev/installing.html)
+* [Environment Types](https://docs.warden.dev/environments/types.html)
 * [Initializing An Environment](https://docs.warden.dev/environments/initializing.html)
 * [Docker Images](https://docs.warden.dev/images.html)
 
@@ -18,10 +19,6 @@ Warden is a CLI utility for orchestrating Docker based developer environments, a
 * An SSH tunnel for connecting from Sequel Pro or TablePlus into any one of multiple running database containers.
 * Warden issued wildcard SSL certificates for running https on all local development domains.
 * Full support for Magento 1, Magento 2, Laravel, and custom project environment configurations on macOS and Linux.
-
-## Project Templates
-
-* [Magento 2](https://github.com/davidalger/warden-env-magento2)
 
 ## Contributing
 
