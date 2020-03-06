@@ -15,6 +15,8 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
 
        WARDEN_ENV_NAME=exampleproject
        WARDEN_ENV_TYPE=magento2
+       WARDEN_WEB_ROOT=/
+
        TRAEFIK_DOMAIN=exampleproject.test
        TRAEFIK_SUBDOMAIN=app
 
@@ -29,14 +31,15 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
        VARNISH_VERSION=6.0
 
        WARDEN_SELENIUM=0
+       WARDEN_SELENIUM_DEBUG=0
        WARDEN_BLACKFIRE=0
        WARDEN_SPLIT_SALES=0
        WARDEN_SPLIT_CHECKOUT=0
 
-       BLACKFIRE_CLIENT_ID="<client_id>"
-       BLACKFIRE_CLIENT_TOKEN="<client_token>"
-       BLACKFIRE_SERVER_ID="<server_id>"
-       BLACKFIRE_SERVER_TOKEN="<server_token>"
+       BLACKFIRE_CLIENT_ID=
+       BLACKFIRE_CLIENT_TOKEN=
+       BLACKFIRE_SERVER_ID=
+       BLACKFIRE_SERVER_TOKEN=
 
 3. Sign an SSL certificate for use with the project (the input here should match the value of `TRAEFIK_DOMAIN` in the above `.env` example file):
 
