@@ -46,23 +46,27 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
 
        warden env up -d
 
-``` warning::
-    If you encounter an error about `Mounts denied…`, follow the instructions in the error message and run `warden env up -d` again.
-```
+   ``` warning::
+       If you encounter an error about ``Mounts denied``, follow the instructions in the error message and run ``warden env up -d`` again.
+   ```
 
-``` note::
-    On macOS when using Warden versions prior to 0.3.0, you will need to start the Mutagen sync session manually be running `warden sync start` whenever starting the environment. In Warden 0.3.0 and later the sync session is started and stopped automatically when running commands such as `up`, `start`, `down`, and `stop`.
-```
+   ``` note::
+       On macOS when using Warden versions prior to 0.3.0, you will need to start the Mutagen sync session manually be running ``warden sync start`` whenever starting the environment. In Warden 0.3.0 and later the sync session is started and stopped automatically when running commands such as ``up``, ``start``, ``down``, and ``stop``.
+   ```
 
 5. Drop into a shell within the project environment. Commands following this step in the setup procedure will be run from within the `php-fpm` docker container this launches you into:
 
        warden shell
 
-6. If you already have Magento Marketplace credentials configured, you may skip this step (`~/.composer/` on the host is mounted into the container to share composer cache between projects, and has the effect of persisting the `auth.json` on the host machine as well):
-
-    Note: To locate your authentication keys for Magento 2 repository, reference [this page on DevDocs](https://devdocs.magento.com/guides/v2.3/install-gde/prereq/connect-auth.html).
+6. Configure global Magento Marketplace credentials
 
        composer global config http-basic.repo.magento.com <username> <password>
+
+    ``` note::
+        To locate your authentication keys for Magento 2 repository, `reference DevDocs <https://devdocs.magento.com/guides/v2.3/install-gde/prereq/connect-auth.html>`_.
+
+        If you have previously configured global credentials, you may skip this step, as ``~/.composer/`` is mounted into the container from the host machine in order to share composer cache between projects, and also shares the global ``auth.json`` from the host machine.
+    ```
 
 7. Initialize project source files using composer create-project and then move them into place:
 
@@ -146,12 +150,12 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
 
 9. Launch the application in your browser:
 
-    * https://app.exampleproject.test/
-    * https://app.exampleproject.test/backend/
-    * https://mailhog.exampleproject.test/
-    * https://rabbitmq.exampleproject.test/
-    * https://elasticsearch.exampleproject.test/
+    * [https://app.exampleproject.test/](https://app.exampleproject.test/)
+    * [https://app.exampleproject.test/backend/](https://app.exampleproject.test/backend/)
+    * [https://mailhog.exampleproject.test/](https://mailhog.exampleproject.test/)
+    * [https://rabbitmq.exampleproject.test/](https://rabbitmq.exampleproject.test/)
+    * [https://elasticsearch.exampleproject.test/](https://elasticsearch.exampleproject.test/)
 
 ``` note::
-    To completely destroy the `exampleproject` environment we just created, run `warden env down -v` to tear down the project's Docker containers, volumes, etc.
+    To completely destroy the ``exampleproject`` environment we just created, run ``warden env down -v`` to tear down the project's Docker containers, volumes, etc.
 ```
