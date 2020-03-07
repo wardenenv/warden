@@ -1,7 +1,14 @@
 # Change Log
 
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
-[All Commits](https://github.com/davidalger/warden/compare/0.3.0..develop)
+[All Commits](https://github.com/davidalger/warden/compare/0.3.1..develop)
+
+## Version [0.3.1](https://github.com/davidalger/warden/tree/0.3.1) (2020-03-06)
+[All Commits](https://github.com/davidalger/warden/compare/0.3.0..0.3.1)
+
+**Upgrade Notes:**
+
+If you're upgrading from version 0.2.x to 0.3.x for the first time, please reference upgrade notes for [Warden 0.3.0](https://docs.warden.dev/changelog.html#version-0-3-0-2020-03-06) and plan accordingly.
 
 **Bug Fixes:**
 
