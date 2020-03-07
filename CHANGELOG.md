@@ -3,6 +3,11 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.3.0..develop)
 
+**Bug Fixes:**
+
+* Fixed issue where `env up` and `env start` would exit with an error on env types not using Mutagen sessions
+* Fixed issue where `env down` and `env stop` would exit with an error on env types not using Mutagen sessions
+
 ## Version [0.3.0](https://github.com/davidalger/warden/tree/0.3.0) (2020-03-06)
 [All Commits](https://github.com/davidalger/warden/compare/0.2.4..0.3.0)
 
