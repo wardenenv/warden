@@ -2,29 +2,41 @@
 
 ### Common Commands
 
-Drop into a shell within the project environment (this command opens a bash shell in the `php-fpm` container)
+Launch a shell session within the project environment's `php-fpm` container:
 
     warden shell
 
-Stopping a running environment (on linux, drop the `sync` command, it's not used on Linux)
+Stopping a running environment:
 
-    warden env stop && warden sync stop
+    warden env stop
 
-Starting a stopped environment (on linux, drop the `sync` command, it's not used on Linux)
+Starting a stopped environment:
 
-    warden env start && warden sync start
+    warden env start
 
-Watch the database processlist:
+Import a database (if you don't have `pv` installed, use `cat` instead):
+
+    pv /path/to/dump.sql.gz | gunzip -c | warden db import
+
+Monitor database processlist:
 
     watch -n 3 "warden db connect -A -e 'show processlist'"
 
-Tail environment access logs:
+Tail environment nginx and php logs:
 
     warden env logs --tail 0 -f nginx php-fpm php-debug
 
 Tail the varnish activity log:
 
     warden env exec -T varnish varnishlog
+
+Connect to redis:
+
+    warden env exec redis redis-cli
+
+Flush redis completely:
+
+    warden env exec -T redis redis-cli flushall
 
 ### Further Information
 

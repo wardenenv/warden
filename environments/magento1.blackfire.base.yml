@@ -9,9 +9,6 @@ services:
       - ~/.warden/ssl/rootca/certs:/etc/ssl/warden-rootca-cert:ro
       - ~/.composer:/home/www-data/.composer:delegated
       - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
-    networks:
-      - warden
-      - default
 
   blackfire-agent:
     hostname: "${WARDEN_ENV_NAME}-blackfire-agent"
@@ -21,6 +18,3 @@ services:
       - BLACKFIRE_CLIENT_TOKEN=${BLACKFIRE_CLIENT_TOKEN}
       - BLACKFIRE_SERVER_ID=${BLACKFIRE_SERVER_ID}
       - BLACKFIRE_SERVER_TOKEN=${BLACKFIRE_SERVER_TOKEN}
-    networks:
-      - warden
-      - default

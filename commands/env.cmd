@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 [[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!" && exit 1
 
+source "${WARDEN_DIR}/utils/core.sh"
 source "${WARDEN_DIR}/utils/env.sh"
+
 WARDEN_ENV_PATH="$(locateEnvPath)" || exit $?
 loadEnvConfig "${WARDEN_ENV_PATH}" || exit $?
 
@@ -64,11 +66,47 @@ else
     export WARDEN_SELENIUM_DEBUG=
 fi
 
-## lookup internal (warden docker network) IP address of traefik container (do not fail if traefik is stopped)
+## disconnect peered service containers from environment network
+if [[ "${WARDEN_PARAMS[0]}" == "down" ]]; then
+    disconnectPeeredServices "${WARDEN_ENV_NAME}_default"
+fi
+
+## connect peered service containers to environment network
+if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
+    ## create environment network for attachments if it does not already exist
+    if [[ $(docker network ls -f "name=${WARDEN_ENV_NAME}_default" -q) == "" ]]; then
+        docker-compose \
+            --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
+            "${DOCKER_COMPOSE_ARGS[@]}" up --no-start
+    fi
+
+    ## connect globally peered services to the environment network
+    connectPeeredServices "${WARDEN_ENV_NAME}_default"
+fi
+
+## lookup address of traefik container on environment network
 export TRAEFIK_ADDRESS="$(docker container inspect traefik \
-    --format '{{.NetworkSettings.Networks.warden.IPAddress}}' 2>/dev/null || true)"
+    --format "{{if .NetworkSettings.Networks.${WARDEN_ENV_NAME}_default}} \
+        {{.NetworkSettings.Networks.${WARDEN_ENV_NAME}_default.IPAddress}} \
+    {{end}}" 2>/dev/null || true \
+)"
 
 ## anything not caught above is simply passed through to docker-compose to orchestrate
 docker-compose \
     --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
     "${DOCKER_COMPOSE_ARGS[@]}" "${WARDEN_PARAMS[@]}" "$@"
+
+## start mutagen sync if needed
+if ([[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]]) \
+    && [[ $OSTYPE =~ ^darwin ]] \
+    && [[ $(warden sync list | grep -i 'Connection state: Connected' | wc -l | awk '{print $1}') != "2" ]]
+then
+    warden sync start
+fi
+
+## stop mutagen sync if needed
+if ([[ "${WARDEN_PARAMS[0]}" == "down" ]] || [[ "${WARDEN_PARAMS[0]}" == "stop" ]]) \
+    && [[ $OSTYPE =~ ^darwin ]]
+then
+    warden sync stop
+fi

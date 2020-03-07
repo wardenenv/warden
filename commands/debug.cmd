@@ -16,7 +16,8 @@ if [[ ${WARDEN_ENV_DEBUG_HOST} == "" ]]; then
         WARDEN_ENV_DEBUG_HOST=host.docker.internal
     else
         WARDEN_ENV_DEBUG_HOST=$(
-            docker container inspect traefik --format '{{.NetworkSettings.Networks.warden.Gateway}}'
+            docker container inspect $(warden env ps -q php-debug) \
+                --format '{{range .NetworkSettings.Networks}}{{println .Gateway}}{{end}}' | head -n1
         )
     fi
 fi

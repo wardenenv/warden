@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 [[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!" && exit 1
 
+source "${WARDEN_DIR}/utils/core.sh"
 source "${WARDEN_DIR}/utils/install.sh"
 assertWardenInstall
 
@@ -39,3 +40,8 @@ done
 
 pushd "${WARDEN_HOME_DIR}" >/dev/null
 docker-compose -p warden -f "${WARDEN_DIR}/docker/docker-compose.yml" up -d "${WARDEN_PARAMS[@]}" "$@"
+
+## connect peered service containers to environment networks
+for network in $(docker network ls -f label=dev.warden.environment.name --format {{.Name}}); do
+  connectPeeredServices "${network}"
+done
