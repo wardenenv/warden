@@ -86,9 +86,10 @@ fi
 
 ## lookup address of traefik container on environment network
 export TRAEFIK_ADDRESS="$(docker container inspect traefik \
-    --format "{{if .NetworkSettings.Networks.${WARDEN_ENV_NAME}_default}} \
-        {{.NetworkSettings.Networks.${WARDEN_ENV_NAME}_default.IPAddress}} \
-    {{end}}" 2>/dev/null || true \
+    --format '
+        {{- $network := index .NetworkSettings.Networks "'"${WARDEN_ENV_NAME}_default"'" -}}
+        {{- if $network }}{{ $network.IPAddress }}{{ end -}}
+    ' 2>/dev/null || true
 )"
 
 ## anything not caught above is simply passed through to docker-compose to orchestrate
