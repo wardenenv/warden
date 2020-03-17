@@ -75,8 +75,8 @@ That's it! Now you are ready to run your first Integration Tests.
 
 There's one thing you should be aware of: **always provide full path to `phpunit.xml`**.
 
-- To run all tests declared in `phpunit.xml` execute `vendor/bin/phpunit -c $(pwd)/dev/tests/integration/phpunit.xml`
-- If you need to run only specific directory, execute `vendor/bin/phpunit -c $(pwd)/dev/tests/integration/phpunit.xml {ABSOLUTE PATH TO TESTS}` 
+- To run all tests declared in `phpunit.xml` execute:<br> `vendor/bin/phpunit -c $(pwd)/dev/tests/integration/phpunit.xml`
+- If you need to run only specific directory, execute:<br> `vendor/bin/phpunit -c $(pwd)/dev/tests/integration/phpunit.xml {ABSOLUTE PATH TO TESTS}` 
 
 ## Running API Functional Tests
 
@@ -146,8 +146,8 @@ All the necessary files are located in `dev/tests/api-functional/`.
 
 There's one thing you should be aware of: **always provide full path to `phpunit.xml`**.
 
-- To run all tests declared in `phpunit_{type}.xml` execute `vendor/bin/phpunit -c $(pwd)/dev/tests/api-functional/phpunit_{type}.xml`
-- If you need to run only specific directory, execute `vendor/bin/phpunit -c $(pwd)/dev/tests/api-functional/phpunit_{type}.xml {ABSOLUTE PATH TO TESTS}` 
+- To run all tests declared in `phpunit_{type}.xml` execute:<br> `vendor/bin/phpunit -c $(pwd)/dev/tests/api-functional/phpunit_{type}.xml`
+- If you need to run only specific directory, execute:<br> `vendor/bin/phpunit -c $(pwd)/dev/tests/api-functional/phpunit_{type}.xml {ABSOLUTE PATH TO TESTS}` 
 
 ### Debugging
 
