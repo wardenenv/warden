@@ -1,6 +1,10 @@
 ARG PHP_VERSION=
 FROM davidalger/php:${PHP_VERSION}-fpm
 
+# Clear undesired settings from base fpm images
+ENV COMPOSER_ALLOW_SUPERUSER=
+ENV COMPOSER_HOME=
+
 ENV MAILHOG_HOST    mailhog
 ENV MAILHOG_PORT    1025
 
