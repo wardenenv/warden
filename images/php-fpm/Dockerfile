@@ -22,21 +22,6 @@ COPY etc/profile.d/*.sh /etc/profile.d/
 COPY etc/php.d/*.ini /etc/php.d/
 COPY etc/php.d/05-additions.ini.template /etc/php.d/
 
-# pecl-amqp is not natively required by Magento but utilized
-# by https://github.com/php-enqueue and projects relying on it
-RUN PHP_VERSION=$(php -v | head -n1 | cut -d' ' -f2 | cut -d. -f1-2 | cut -d. -f1-2 | sed 's/\.//') \
-    && if (( ${PHP_VERSION} >= 73 )); \
-        then PHP_PKG_PREFIX=php${PHP_VERSION}; \
-        else PHP_PKG_PREFIX=php${PHP_VERSION}u; \
-    fi \
-    && if (( ${PHP_VERSION} >= 71 )); \
-        then yum install -y ${PHP_PKG_PREFIX}-pecl-amqp; \
-        else echo "${PHP_PKG_PREFIX}-pecl-amqp is not available for PHP 7.0 and lower; skippnig"; \
-    fi \
-    && yum install -y ${PHP_PKG_PREFIX}-gmp \
-    && yum clean all \
-    && rm -rf /var/cache/yum
-
 # Install and enable Source Gaurdian loader
 RUN PHP_VERSION=$(php -v | head -n1 | cut -d' ' -f2 | cut -d. -f1-2) \
     && mkdir -p /tmp/sourceguardian \
