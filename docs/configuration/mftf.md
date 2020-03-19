@@ -34,9 +34,3 @@ To preview the process of testing, you need any **VLC** client that provides **S
 ### Remmina
 
   ![Remmina Configuration](screenshots/remmina-ssh-tunnel.png)
-
-### Allure reports
-
-To access Allure reports generated (automatically updated each 60 seconds), you need to open in your browser:
-
-* https://allure.exampleproject.test/

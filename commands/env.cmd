@@ -55,6 +55,11 @@ if [[ -f "${WARDEN_ENV_PATH}/.warden/warden-env.${WARDEN_ENV_SUBT}.yml" ]]; then
     DOCKER_COMPOSE_ARGS+=("${WARDEN_ENV_PATH}/.warden/warden-env.${WARDEN_ENV_SUBT}.yml")
 fi
 
+if [[ ${WARDEN_ALLURE} -eq 1 && -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.allure.yml" ]]; then
+    DOCKER_COMPOSE_ARGS+=("-f")
+    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.allure.yml")
+fi
+
 if [[ ${WARDEN_SELENIUM} -eq 1 && -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.selenium.base.yml" ]]; then
     DOCKER_COMPOSE_ARGS+=("-f")
     DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.selenium.base.yml")
