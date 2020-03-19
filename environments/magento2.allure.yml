@@ -13,18 +13,18 @@ services:
       # - traefik.http.routers.${WARDEN_ENV_NAME}-allure-api.rule=Host(`allure-api.${TRAEFIK_DOMAIN}`)
       # - traefik.http.services.${WARDEN_ENV_NAME}-allure-api.loadbalancer.server.port=5050
     volumes:
-      - tmp-reports:/app/allure-results
+      - allure-results:/app/allure-results
     environment:
       CHECK_RESULTS_EVERY_SECONDS: 5
       KEEP_HISTORY: "TRUE"
 
   php-fpm:
     volumes:
-      - tmp-reports:/var/allure-results
+      - allure-results:/var/allure-results
 
   php-debug:
     volumes:
-      - tmp-reports:/var/allure-results
+      - allure-results:/var/allure-results
 
 volumes:
-  tmp-reports:
+  allure-results:
