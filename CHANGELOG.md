@@ -3,9 +3,9 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.3.1..develop)
 
-
 **Enhancements:**
 
+* Added MySQL 5.6 and 5.7 images to Quay repository for use with Warden environments
 * Native support for Integration Tests with `MySQL 5.7` running on `tempfs` memory
 
 **Bug Fixes:**
