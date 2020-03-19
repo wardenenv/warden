@@ -25,7 +25,7 @@ if [[ -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.${WARDEN_ENV_SUBT}.yml" 
     DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.${WARDEN_ENV_SUBT}.yml")
 fi
 
-if [[ ${MAGENTO_TESTS} -eq 1 && -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.tests.yml" ]]; then
+if [[ ${WARDEN_INTEGRATION_TESTS} -eq 1 && -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.tests.yml" ]]; then
     DOCKER_COMPOSE_ARGS+=("-f")
     DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.tests.yml")
 fi

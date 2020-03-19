@@ -3,8 +3,9 @@
 **Warden** is the first Development Environment that has testing in the blood.
 
 That is why we introduced additional configuration switch:
+
 ```
-MAGENTO_TESTS=1
+WARDEN_INTEGRATION_TESTS=1
 ```
 
 That builds additional `MySQL 5.7` database instance running directly on `tempfs` (blazing-fast memory).
