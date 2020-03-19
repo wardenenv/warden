@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-[[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!" && exit 1
+[[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
 
 WARDEN_ENV_PATH="$(pwd -P)"
 
@@ -58,6 +58,7 @@ if [[ "${WARDEN_ENV_TYPE}" == "magento2" ]]; then
 		REDIS_VERSION=5.0
 		VARNISH_VERSION=6.0
 
+		WARDEN_ALLURE=0
 		WARDEN_SELENIUM=0
 		WARDEN_SELENIUM_DEBUG=0
 		WARDEN_BLACKFIRE=0

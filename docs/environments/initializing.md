@@ -34,6 +34,7 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
        REDIS_VERSION=5.0
        VARNISH_VERSION=6.0
 
+       WARDEN_ALLURE=0
        WARDEN_SELENIUM=0
        WARDEN_SELENIUM_DEBUG=0
        WARDEN_BLACKFIRE=0
