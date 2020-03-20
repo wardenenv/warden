@@ -2,15 +2,15 @@
 
 **Warden** is the first Development Environment that has testing in the blood.
 
-That is why we introduced additional configuration switch:
+To enable testing components, set the following configuration in your project's `.env` file:
 
 ```
 WARDEN_INTEGRATION_TESTS=1
 ```
 
-That builds additional `MySQL 5.7` database instance running directly on `tempfs` (blazing-fast memory).
+This will launch an additional MySQL 5.7 database instance running on `tempfs` (blazing-fast memory) storage.
 
-Additionally, we've mounted locations of temporary files to `tempfs` memory too:
+Temporary file locations have also been mounted into `tempfs` memory stoage:
 
 - `/var/www/html/dev/tests/integration/tmp/`
 
