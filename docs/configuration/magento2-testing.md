@@ -5,7 +5,7 @@
 To enable testing components, set the following configuration in your project's `.env` file:
 
 ```
-WARDEN_INTEGRATION_TESTS=1
+WARDEN_TEST_DB=1
 ```
 
 This will launch an additional MySQL 5.7 database instance running on `tempfs` (blazing-fast memory) storage.
