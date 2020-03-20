@@ -17,7 +17,7 @@ BROWSER=chrome
 
 ### Running Tests
 
-We provide complex instruction on [How to run MFTF Tests](magento2-testing.md#running-mftf-tests)
+We provide complex instruction on [How to run MFTF Tests](magento2-testing.md#running-mftf-tests) in Warden environment.
 
 ### Debugging MFTF Tests
 
