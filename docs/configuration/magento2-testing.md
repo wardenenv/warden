@@ -1,4 +1,4 @@
-# Magento 2 Testing Environment
+# Testing Magento 2
 
 **Warden** is the first Development Environment that has testing in the blood.
 
@@ -14,11 +14,34 @@ Temporary file locations have also been mounted into `tempfs` memory stoage:
 
 - `/var/www/html/dev/tests/integration/tmp/`
 
+## Running Unit Tests
+
+Create your `phpunit.xml` using contents of `phpunit.xml.dist`. We recommend customizing values of:
+
+- Memory usage `TESTS_MEM_USAGE_LIMIT` with value of `8G` should be enough
+
+   ```xml
+   <php>
+       <const name="TESTS_MEM_USAGE_LIMIT" value="8G"/>
+   </php> 
+   ```
+      
+That's it! Now you are ready to run Unit Tests.
+
+### Execution
+
+- To run all tests declared in `phpunit.xml` execute:<br> `vendor/bin/phpunit -c dev/tests/unit/phpunit.xml`
+- If you need to run only specific directory, execute:<br> `vendor/bin/phpunit -c dev/tests/unit/phpunit.xml {PATH TO TESTS}` 
+
+### Debugging
+
+If you have [configured Xdebug](xdebug.md), run Unit tests inside **Debug** console (`warden debug` instead of `warden shell`). The code execution will stop at the breakpoints.
+
 ## Running Integration Tests
 
 All the necessary files are located in `dev/tests/integration/`:
 
-1. Create your `phpunit.xml` using contents of `phpunit.xml.dist`. We recommend to customize values of:
+1. Create your `phpunit.xml` using contents of `phpunit.xml.dist`. We recommend customizing values of:
 
     - Maximum memory usage `TESTS_MEM_USAGE_LIMIT` with value of `8G` should be enough
     - Magento deployment mode `TESTS_MAGENTO_MODE` should be covered both for `developer` and `production`
@@ -78,6 +101,10 @@ There's one thing you should be aware of: **always provide full path to `phpunit
 
 - To run all tests declared in `phpunit.xml` execute:<br> `vendor/bin/phpunit -c $(pwd)/dev/tests/integration/phpunit.xml`
 - If you need to run only specific directory, execute:<br> `vendor/bin/phpunit -c $(pwd)/dev/tests/integration/phpunit.xml {ABSOLUTE PATH TO TESTS}` 
+
+### Debugging
+
+If you have [configured Xdebug](xdebug.md), run Integration tests inside **Debug** console (`warden debug` instead of `warden shell`). The code execution will stop at the breakpoints.
 
 ## Running API Functional Tests
 
@@ -156,3 +183,39 @@ When debugging APIs you may need to use Xdebug - configure your `phpunit_{type}.
 
    - `TESTS_XDEBUG_ENABLED` to `true`
    - `TESTS_XDEBUG_SESSION` to `phpstorm`
+   
+## Running MFTF Tests
+
+All the MFTF-related operations are operated by `vendor/bin/mftf`, necessary files are located in `dev/tests/acceptance/`.
+
+To run Acceptance tests you need to [configure the MFTF environment](mftf.md). Once you've done that, follow these steps to run the tests.
+
+1. Run `vendor/bin/mftf build:project`, the configuration files will be generated in `dev/tests/acceptance`.
+1. Adjust `dev/tests/acceptance/.env` file by setting:
+    - `MAGENTO_BASE_URL`
+    - `MAGENTO_BACKEND_NAME` to your Backend path (Check with `bin/magento info:adminuri`)
+    - `MAGENTO_ADMIN_USERNAME` and `MAGENTO_ADMIN_PASSWORD`
+    - `SELENIUM_HOST` (by default it is `selenium-hub`)
+
+   Sample configuration
+   ```
+   MAGENTO_BASE_URL=https://app.magento2.test/
+   MAGENTO_BACKEND_NAME=backend
+   MAGENTO_ADMIN_USERNAME=admin
+   MAGENTO_ADMIN_PASSWORD=123123q
+   BROWSER=chrome
+   MODULE_WHITELIST=Magento_Framework,ConfigurableProductWishlist,ConfigurableProductCatalogSearch
+   ELASTICSEARCH_VERSION=7
+   SELENIUM_HOST=selenium-hub
+   ```
+   More details can be found [in Magento DevDocs](https://devdocs.magento.com/mftf/docs/configuration.html).
+
+### Execution
+
+* Execute single test<br>`vendor/bin/mftf run:test -r AdminLoginTest`
+* Execute group/suite of tests<br>`vendor/bin/mftf run:group -r customer`
+
+### Debugging
+
+For more information about Debugging MFTF - please follow the [Magento Functional Testing Framework](mftf.md) section.
+The process of debugging is based on VNC connection to the Chrome instance.

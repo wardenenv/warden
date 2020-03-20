@@ -15,6 +15,10 @@ SELENIUM_HOST=selenium-hub
 BROWSER=chrome
 ```
 
+### Running Tests
+
+We provide complex instruction on [How to run MFTF Tests](magento2-testing.md#running-mftf-tests)
+
 ### Debugging MFTF Tests
 
 By default Warden uses headless Chrome browser. If you want to preview the tests - you need to extend `.env` file and update environment containers (`warden env up -d`)
