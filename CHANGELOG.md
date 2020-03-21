@@ -6,7 +6,9 @@
 **Enhancements:**
 
 * Added MySQL 5.6 and 5.7 images to Quay repository for use with Warden environments
-* Native support for Integration Tests with `MySQL 5.7` running on `tempfs` memory
+* Added support for Integration, Unit and API Tests leveraging a `MySQL 5.7` container running on `tempfs` memory disk ([#121](https://github.com/davidalger/warden/pull/115) by @lbajsarowicz
+* Added `WARDEN_ALLURE` setting to control Allure separately from Selenium for use reporting on Integration and Unit tests ([#121](https://github.com/davidalger/warden/pull/117) by @lbajsarowicz
+* Added ssh agent forwarding support on both macOS and Linux hosts ([#121](https://github.com/davidalger/warden/pull/121) by @davidalger
 
 **Bug Fixes:**
 
