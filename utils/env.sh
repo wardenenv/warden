@@ -42,9 +42,21 @@ function loadEnvConfig () {
     if [[ ${WARDEN_ENV_SUBT} =~ ^darwin ]]; then
         WARDEN_ENV_SUBT=darwin
     fi
+    assertValidEnvType
+}
 
-    if [[ ! -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.base.yml" ]]; then
+function assertValidEnvType () {
+    if [[ ! -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.base.yml" ]]; then
         >&2 echo -e "\033[31mInvalid environment type \"${WARDEN_ENV_TYPE}\" specified.\033[0m"
         return 1
+    fi
+}
+
+function appendEnvPartialIfExists () {
+    local PARTIAL_NAME="${1}"
+    local PARTIAL_PATH="${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.${PARTIAL_NAME}.yml"
+
+    if [[ -f "${PARTIAL_PATH}" ]]; then
+        DOCKER_COMPOSE_ARGS+=("-f" "${PARTIAL_PATH}")
     fi
 }

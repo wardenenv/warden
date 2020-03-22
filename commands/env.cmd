@@ -17,38 +17,29 @@ trap '' ERR
 
 ## configure docker-compose files
 DOCKER_COMPOSE_ARGS=()
-DOCKER_COMPOSE_ARGS+=("-f")
-DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.base.yml")
 
-if [[ -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.${WARDEN_ENV_SUBT}.yml" ]]; then
-    DOCKER_COMPOSE_ARGS+=("-f")
-    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.${WARDEN_ENV_SUBT}.yml")
+appendEnvPartialIfExists "base"
+appendEnvPartialIfExists "${WARDEN_ENV_SUBT}"
+
+[[ ${WARDEN_TEST_DB} -eq 1 ]] \
+    && appendEnvPartialIfExists "tests"
+
+[[ ${WARDEN_SPLIT_SALES} -eq 1 ]] \
+    && appendEnvPartialIfExists "splitdb.sales"
+
+[[ ${WARDEN_SPLIT_CHECKOUT} -eq 1 ]] \
+    && appendEnvPartialIfExists "splitdb.checkout"
+
+if [[ ${WARDEN_BLACKFIRE} -eq 1 ]]; then
+    appendEnvPartialIfExists "blackfire.base"
+    appendEnvPartialIfExists "blackfire.${WARDEN_ENV_SUBT}"
 fi
 
-if [[ ${WARDEN_TEST_DB} -eq 1 && -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.tests.yml" ]]; then
-    DOCKER_COMPOSE_ARGS+=("-f")
-    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.tests.yml")
-fi
+[[ ${WARDEN_ALLURE} -eq 1 ]] \
+    && appendEnvPartialIfExists "allure"
 
-if [[ ${WARDEN_SPLIT_SALES} -eq 1 && -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.splitdb.sales.yml" ]]; then
-    DOCKER_COMPOSE_ARGS+=("-f")
-    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.splitdb.sales.yml")
-fi
-
-if [[ ${WARDEN_SPLIT_CHECKOUT} -eq 1 && -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.splitdb.checkout.yml" ]]; then
-    DOCKER_COMPOSE_ARGS+=("-f")
-    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.splitdb.checkout.yml")
-fi
-
-if [[ ${WARDEN_BLACKFIRE} -eq 1 && -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.blackfire.base.yml" ]]; then
-    DOCKER_COMPOSE_ARGS+=("-f")
-    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.blackfire.base.yml")
-fi
-
-if [[ ${WARDEN_BLACKFIRE} -eq 1 && -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.blackfire.${WARDEN_ENV_SUBT}.yml" ]]; then
-    DOCKER_COMPOSE_ARGS+=("-f")
-    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.blackfire.${WARDEN_ENV_SUBT}.yml")
-fi
+[[ ${WARDEN_SELENIUM} -eq 1 ]] \
+    && appendEnvPartialIfExists "selenium.base"
 
 if [[ -f "${WARDEN_ENV_PATH}/.warden/warden-env.yml" ]]; then
     DOCKER_COMPOSE_ARGS+=("-f")
@@ -58,16 +49,6 @@ fi
 if [[ -f "${WARDEN_ENV_PATH}/.warden/warden-env.${WARDEN_ENV_SUBT}.yml" ]]; then
     DOCKER_COMPOSE_ARGS+=("-f")
     DOCKER_COMPOSE_ARGS+=("${WARDEN_ENV_PATH}/.warden/warden-env.${WARDEN_ENV_SUBT}.yml")
-fi
-
-if [[ ${WARDEN_ALLURE} -eq 1 && -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.allure.yml" ]]; then
-    DOCKER_COMPOSE_ARGS+=("-f")
-    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.allure.yml")
-fi
-
-if [[ ${WARDEN_SELENIUM} -eq 1 && -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.selenium.base.yml" ]]; then
-    DOCKER_COMPOSE_ARGS+=("-f")
-    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.selenium.base.yml")
 fi
 
 if [[ ${WARDEN_SELENIUM_DEBUG} -eq 1 ]]; then
