@@ -8,8 +8,11 @@ cat /etc/php.d/05-additions.ini.template \
 
 # append warden issued root ca cert to ca-bundle trusted by curl/openssl
 if [ -f /etc/ssl/warden-rootca-cert/ca.cert.pem ]; then
-  cat /etc/ssl/warden-rootca-cert/ca.cert.pem | sudo tee -a /etc/ssl/certs/ca-bundle.crt >/dev/null
+  sudo cp /etc/ssl/warden-rootca-cert/ca.cert.pem /etc/pki/ca-trust/source/anchors/warden-rootca-cert.pem
 fi
+
+# update trust outside if condition above to allow mounting PEM files into /etc/pki/ca-trust/source/anchors
+sudo update-ca-trust
 
 # start socat process in background to connect sockets used for agent access within container environment
 if [[ -S /run/host-services/ssh-auth.sock ]] \
