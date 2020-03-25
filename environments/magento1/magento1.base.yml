@@ -54,7 +54,7 @@ services:
       - ${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
       - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
     depends_on:
-      - db
+      - php-fpm
     volumes:
       - ~/.warden/ssl/rootca/certs:/etc/ssl/warden-rootca-cert:ro
       - ~/.composer:/home/www-data/.composer:delegated

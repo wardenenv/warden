@@ -71,7 +71,7 @@ services:
       - ${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
       - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
     depends_on:
-      - db
+      - php-fpm
 
   db:
     hostname: "${WARDEN_ENV_NAME}-mariadb"

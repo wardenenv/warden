@@ -4,7 +4,7 @@ services:
     hostname: "${WARDEN_ENV_NAME}-php-blackfire"
     image: quay.io/warden/php-fpm:${PHP_VERSION:-7.3}-magento2-blackfire
     depends_on:
-      - db
+      - php-fpm
 
   blackfire-agent:
     hostname: "${WARDEN_ENV_NAME}-blackfire-agent"
