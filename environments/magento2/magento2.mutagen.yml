@@ -18,6 +18,12 @@ sync:
         # IDE files
         - ".idea"
 
+        # Exclude large files from sync
+        - "*.sql"
+        - "*.gz"
+        - "*.zip"
+        - "*.bz2"
+
         # Magento files
         - "/pub/media"
         - "/pub/static/**"

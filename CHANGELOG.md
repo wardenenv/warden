@@ -10,6 +10,7 @@
 * Added `WARDEN_ALLURE` setting to control Allure separately from Selenium for use reporting on Integration and Unit tests ([#121](https://github.com/davidalger/warden/pull/117) by @lbajsarowicz
 * Added ssh agent forwarding support on both macOS and Linux hosts ([#121](https://github.com/davidalger/warden/pull/121) by @davidalger
 * Updated entrypoint in php-fpm images to support mounting PEM files into `/etc/pki/ca-trust/source/anchors` ([3a841b7d](https://github.com/davidalger/warden/commit/3a841b7dd80c6827bc8bf238ae8ff53b2519a258))
+* Updated config for Mutagen sync to exclude large files (*.sql, *.gz, *.zip, *.bz2) from sync sessions
 
 **Bug Fixes:**
 
