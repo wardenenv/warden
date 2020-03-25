@@ -90,7 +90,7 @@ docker-compose \
 
 ## start mutagen sync if needed
 if ([[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]]) \
-    && [[ $OSTYPE =~ ^darwin ]] && [[ -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.mutagen.yml" ]] \
+    && [[ $OSTYPE =~ ^darwin ]] && [[ -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.mutagen.yml" ]] \
     && [[ $(warden sync list | grep -i 'Connection state: Connected' | wc -l | awk '{print $1}') != "2" ]]
 then
     warden sync start
@@ -98,7 +98,7 @@ fi
 
 ## stop mutagen sync if needed
 if ([[ "${WARDEN_PARAMS[0]}" == "down" ]] || [[ "${WARDEN_PARAMS[0]}" == "stop" ]]) \
-    && [[ $OSTYPE =~ ^darwin ]] && [[ -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.mutagen.yml" ]]
+    && [[ $OSTYPE =~ ^darwin ]] && [[ -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.mutagen.yml" ]]
 then
     warden sync stop
 fi
