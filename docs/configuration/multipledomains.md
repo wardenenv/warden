@@ -32,6 +32,29 @@ Multiple top-level domains may also be setup by following the instructions below
 
 4. Run `warden env up -d` to update the containers, after which each of the URLs should work as expected.
 
+    ``` note::
+        If these alternate domains must be resolvable from within the FPM containers, you must also leverage ``extra_hosts`` to add each specific sub-domain to the ``/etc/hosts`` file of the container as dnsmasq is used only on the host machine, not inside the containers. This should look something like the following excerpt.
+
+    ```
+
+    ```yaml
+    version: "3.5"
+    services:
+      php-fpm:
+       extra_hosts:
+         - sub1.alternate1.test:${TRAEFIK_ADDRESS:-0.0.0.0}
+         - sub2.alternate1.test:${TRAEFIK_ADDRESS:-0.0.0.0}
+         - sub1.alternate2.test:${TRAEFIK_ADDRESS:-0.0.0.0}
+         - sub2.alternate2.test:${TRAEFIK_ADDRESS:-0.0.0.0}
+
+      php-debug:
+       extra_hosts:
+         - sub1.alternate1.test:${TRAEFIK_ADDRESS:-0.0.0.0}
+         - sub2.alternate1.test:${TRAEFIK_ADDRESS:-0.0.0.0}
+         - sub1.alternate2.test:${TRAEFIK_ADDRESS:-0.0.0.0}
+         - sub2.alternate2.test:${TRAEFIK_ADDRESS:-0.0.0.0}
+    ```
+
 ### Magento 2 Run Params
 
 When multiple domains are being used to load different stores or websites on Magento 2, the following configuration should be defined in order to set run codes and types as needed.
