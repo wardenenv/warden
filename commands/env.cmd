@@ -59,26 +59,26 @@ fi
 
 ## disconnect peered service containers from environment network
 if [[ "${WARDEN_PARAMS[0]}" == "down" ]]; then
-    disconnectPeeredServices "${WARDEN_ENV_NAME}_default"
+    disconnectPeeredServices "$(renderEnvNetworkName)"
 fi
 
 ## connect peered service containers to environment network
 if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
     ## create environment network for attachments if it does not already exist
-    if [[ $(docker network ls -f "name=${WARDEN_ENV_NAME}_default" -q) == "" ]]; then
+    if [[ $(docker network ls -f "name=$(renderEnvNetworkName)" -q) == "" ]]; then
         docker-compose \
             --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
             "${DOCKER_COMPOSE_ARGS[@]}" up --no-start
     fi
 
     ## connect globally peered services to the environment network
-    connectPeeredServices "${WARDEN_ENV_NAME}_default"
+    connectPeeredServices "$(renderEnvNetworkName)"
 fi
 
 ## lookup address of traefik container on environment network
 export TRAEFIK_ADDRESS="$(docker container inspect traefik \
     --format '
-        {{- $network := index .NetworkSettings.Networks "'"${WARDEN_ENV_NAME}_default"'" -}}
+        {{- $network := index .NetworkSettings.Networks "'"$(renderEnvNetworkName)"'" -}}
         {{- if $network }}{{ $network.IPAddress }}{{ end -}}
     ' 2>/dev/null || true
 )"

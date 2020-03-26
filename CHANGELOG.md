@@ -16,6 +16,7 @@
 
 * Fixed issue where `-` in `WARDEN_ENV_NAME` would results in `0.0.0.0` being used in `extra_hosts` passed to containers
 * Fixed race condition caused by docker-compose starting two containers with identical mounts simultaneously (issue [#110](https://github.com/davidalger/warden/issues/110))
+* Fixed issue with incorrect network name reference when uppercase characters are present in `WARDEN_ENV_NAME` (issue [#127](https://github.com/davidalger/warden/issues/127))
 
 ## Version [0.3.1](https://github.com/davidalger/warden/tree/0.3.1) (2020-03-06)
 [All Commits](https://github.com/davidalger/warden/compare/0.3.0..0.3.1)
