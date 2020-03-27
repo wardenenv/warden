@@ -91,7 +91,8 @@ docker-compose \
 ## start mutagen sync if needed
 if ([[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]]) \
     && [[ $OSTYPE =~ ^darwin ]] && [[ -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.mutagen.yml" ]] \
-    && [[ $(warden sync list | grep -i 'Connection state: Connected' | wc -l | awk '{print $1}') != "2" ]]
+    && [[ $(warden sync list | grep -i 'Connection state: Connected' | wc -l | awk '{print $1}') != "2" ]] \
+    && warden env ps | grep -iv exit | grep php-fpm >/dev/null
 then
     warden sync start
 fi
