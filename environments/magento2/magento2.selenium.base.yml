@@ -4,6 +4,10 @@ services:
     container_name: ${WARDEN_ENV_NAME}_selenium-hub
     hostname: selenium-hub
     image: selenium/hub:latest
+    healthcheck:
+      test: /opt/bin/check-grid.sh --host 0.0.0.0 --port 4444
+      interval: 20s
+      retries: 3
     environment:
       GRID_TIMEOUT: 0
       GRID_BROWSER_TIMEOUT: 0
