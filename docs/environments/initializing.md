@@ -34,12 +34,14 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
        REDIS_VERSION=5.0
        VARNISH_VERSION=6.0
 
+       WARDEN_ALLURE=0
        WARDEN_SELENIUM=0
        WARDEN_SELENIUM_DEBUG=0
        WARDEN_BLACKFIRE=0
        WARDEN_SPLIT_SALES=0
        WARDEN_SPLIT_CHECKOUT=0
-
+       WARDEN_TEST_DB=0
+       
        BLACKFIRE_CLIENT_ID=
        BLACKFIRE_CLIENT_TOKEN=
        BLACKFIRE_SERVER_ID=

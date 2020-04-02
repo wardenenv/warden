@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-[[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!" && exit 1
+[[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
 
 source "${WARDEN_DIR}/utils/env.sh"
 WARDEN_ENV_PATH="$(locateEnvPath)" || exit $?
@@ -12,14 +12,20 @@ fi
 
 ## load connection information for the mysql service
 eval "$(grep "^MYSQL_" "${WARDEN_ENV_PATH}/.env")"
-eval "$(grep -E '^\W+- MYSQL_.*=\$\{.*\}' "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.base.yml" | sed -E 's/.*- //g')"
+eval "$(
+    grep -E '^\W+- MYSQL_.*=\$\{.*\}' "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.base.yml" \
+        | sed -E 's/.*- //g'
+)"
 
 if [[ -f "${WARDEN_ENV_PATH}/.warden/warden-env.yml" ]]; then
     eval "$(grep -E '^\W+- MYSQL_.*=\$\{.*\}' "${WARDEN_ENV_PATH}/.warden/warden-env.yml" | sed -E 's/.*- //g')"
 fi
 
 if [[ -f "${WARDEN_ENV_PATH}/.warden/warden-env.${WARDEN_ENV_SUBT}.yml" ]]; then
-    eval "$(grep -E '^\W+- MYSQL_.*=\$\{.*\}' "${WARDEN_ENV_PATH}/.warden/warden-env.${WARDEN_ENV_SUBT}.yml" | sed -E 's/.*- //g')"
+    eval "$(
+        grep -E '^\W+- MYSQL_.*=\$\{.*\}' "${WARDEN_ENV_PATH}/.warden/warden-env.${WARDEN_ENV_SUBT}.yml" \
+            | sed -E 's/.*- //g'
+    )"
 fi
 
 ## sub-command execution

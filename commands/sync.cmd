@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-[[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!" && exit 1
+[[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
 
 source "${WARDEN_DIR}/utils/core.sh"
 source "${WARDEN_DIR}/utils/env.sh"
@@ -34,7 +34,7 @@ if [[ $OSTYPE =~ ^darwin ]] && ! test $(version ${MUTAGEN_VERSION}) -ge $(versio
 fi
 
 ## if no mutagen configuration file exists for the environment type, exit with error
-if [[ ! -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.mutagen.yml" ]]; then
+if [[ ! -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.mutagen.yml" ]]; then
     >&2 echo -e "\033[31mMutagen configuration does not exist for environment type \"${WARDEN_ENV_TYPE}\"\033[0m"
     exit 1
 fi
@@ -46,7 +46,7 @@ case "${WARDEN_PARAMS[0]}" in
         mutagen sync terminate --label-selector "warden-sync=${WARDEN_ENV_NAME}"
 
         ## create sync session based on environment type configuration
-        mutagen sync create -c "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}.mutagen.yml" \
+        mutagen sync create -c "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.mutagen.yml" \
             --label "warden-sync=${WARDEN_ENV_NAME}" \
             "${WARDEN_ENV_PATH}${WARDEN_WEB_ROOT:-}" "docker://$(warden env ps -q php-fpm)/var/www/html"
         

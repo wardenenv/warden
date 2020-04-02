@@ -1,27 +1,8 @@
 version: "3.5"
 services:
-  selenium-hub:
-    container_name: ${WARDEN_ENV_NAME}_selenium-hub
-    hostname: selenium-hub
-    image: selenium/hub:3.8.1
-    environment:
-      GRID_TIMEOUT: 0
-      GRID_BROWSER_TIMEOUT: 0
-  selenium-chrome:
-    hostname: ${WARDEN_ENV_NAME}_selenium-chrome
-    image: selenium/node-chrome${WARDEN_SELENIUM_DEBUG:-}:3.8.1
-    extra_hosts:
-      - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
-    depends_on:
-      - selenium-hub
-    environment:
-      - HUB_HOST=selenium-hub
-      - HUB_PORT=4444
-      - START_XVFB=false
-
   allure:
     hostname: "${WARDEN_ENV_NAME}-allure"
-    image: frankescobar/allure-docker-service
+    image: frankescobar/allure-docker-service:latest
     labels:
       - traefik.enable=true
       - traefik.http.routers.${WARDEN_ENV_NAME}-allure.tls=true
@@ -32,7 +13,18 @@ services:
       # - traefik.http.routers.${WARDEN_ENV_NAME}-allure-api.rule=Host(`allure-api.${TRAEFIK_DOMAIN}`)
       # - traefik.http.services.${WARDEN_ENV_NAME}-allure-api.loadbalancer.server.port=5050
     volumes:
-      - .${WARDEN_WEB_ROOT:-}/dev/tests/acceptance/tests/_output/allure-results:/app/allure-results
+      - allure-results:/app/allure-results
     environment:
-      CHECK_RESULTS_EVERY_SECONDS: 60
+      CHECK_RESULTS_EVERY_SECONDS: 5
       KEEP_HISTORY: "TRUE"
+
+  php-fpm:
+    volumes:
+      - allure-results:/var/allure-results
+
+  php-debug:
+    volumes:
+      - allure-results:/var/allure-results
+
+volumes:
+  allure-results:

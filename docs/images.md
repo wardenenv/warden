@@ -10,5 +10,6 @@ Please reference the following pages for a list of available image versions:
 * [https://quay.io/repository/warden/php-fpm?tab=tags](https://quay.io/repository/warden/php-fpm?tab=tags)
 * [https://quay.io/repository/warden/nginx?tab=tags](https://quay.io/repository/warden/nginx?tab=tags)
 * [https://quay.io/repository/warden/mariadb?tab=tags](https://quay.io/repository/warden/mariadb?tab=tags)
+* [https://quay.io/repository/warden/mysql?tab=tags](https://quay.io/repository/warden/mysql?tab=tags)
 * [https://quay.io/repository/warden/mailhog?tab=tags](https://quay.io/repository/warden/mailhog?tab=tags)
 * [https://quay.io/repository/warden/elasticsearch?tab=tags](https://quay.io/repository/warden/elasticsearch?tab=tags)

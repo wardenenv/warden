@@ -11,6 +11,7 @@ services:
     volumes:
       - ~/.warden/ssl/rootca/certs:/etc/ssl/warden-rootca-cert:ro
       - ~/.composer:/home/www-data/.composer:delegated
+      - /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock
       - .${WARDEN_WEB_ROOT:-}/pub/media:/var/www/html/pub/media:delegated
       - appdata:/var/www/html
 
@@ -18,6 +19,7 @@ services:
     volumes:
       - ~/.warden/ssl/rootca/certs:/etc/ssl/warden-rootca-cert:ro
       - ~/.composer:/home/www-data/.composer:delegated
+      - /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock
       - .${WARDEN_WEB_ROOT:-}/pub/media:/var/www/html/pub/media:delegated
       - appdata:/var/www/html
 

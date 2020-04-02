@@ -2,9 +2,13 @@ version: "3.5"
 services:
   php-blackfire:
     hostname: "${WARDEN_ENV_NAME}-php-blackfire"
-    image: quay.io/warden/php-fpm:${PHP_VERSION:-7.3}-magento2-blackfire
+    image: quay.io/warden/php-fpm:${PHP_VERSION:-7.2}-magento1-blackfire
     depends_on:
-      - db
+      - php-fpm
+    volumes:
+      - ~/.warden/ssl/rootca/certs:/etc/ssl/warden-rootca-cert:ro
+      - ~/.composer:/home/www-data/.composer:delegated
+      - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
 
   blackfire-agent:
     hostname: "${WARDEN_ENV_NAME}-blackfire-agent"
