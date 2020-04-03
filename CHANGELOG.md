@@ -8,7 +8,7 @@
 
 **Upgrade Notes:**
 
-The introduction of SSH Agent Forwarding support in [PR #121](https://github.com/davidalger/warden/pull/121) result in Warden now requiring Docker Desktop 2.2.0.0 or later for macOS clients. Please upgrade Docker Desktop prior to upgrading to the latest Warden release to avoid errors relating to un-authorized mounts.
+The introduction of SSH Agent Forwarding support in [PR #121](https://github.com/davidalger/warden/pull/121) results in Warden now requiring Docker Desktop 2.2.0.0 or later for macOS clients. Please upgrade Docker Desktop prior to upgrading to the latest Warden release to avoid errors relating to unauthorized mounts.
 
 **Enhancements:**
 
