@@ -16,24 +16,8 @@ services:
       - tmp-cache:/var/cache
       - tmp-dbdata:/var/lib/mysql
 
-  php-fpm:
-    volumes:
-      - tmp-files:/var/www/html/dev/tests/integration/tmp/
-
-  php-debug:
-    volumes:
-      - tmp-files:/var/www/html/dev/tests/integration/tmp/
-
 volumes:
   tmp-dbdata:
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
-  tmp-cache:
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
-  tmp-files:
     driver_opts:
       type: tmpfs
       device: tmpfs
