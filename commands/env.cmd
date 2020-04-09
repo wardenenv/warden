@@ -41,6 +41,9 @@ fi
 [[ ${WARDEN_SELENIUM} -eq 1 ]] \
     && appendEnvPartialIfExists "selenium.base"
 
+[[ ${WARDEN_MAGEPACK} -eq 1 ]] \
+    && appendEnvPartialIfExists "magepack.base"
+
 if [[ -f "${WARDEN_ENV_PATH}/.warden/warden-env.yml" ]]; then
     DOCKER_COMPOSE_ARGS+=("-f")
     DOCKER_COMPOSE_ARGS+=("${WARDEN_ENV_PATH}/.warden/warden-env.yml")

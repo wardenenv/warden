@@ -1,0 +1,19 @@
+version: "3.5"
+services:
+  magepack:
+    hostname: magepack
+    build:
+      context: ./environments/magento2/magepack
+      dockerfile: Dockerfile
+    environment:
+      - TRAEFIK_DOMAIN
+      - TRAEFIK_SUBDOMAIN
+    extra_hosts:
+      - ${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
+      - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
+    depends_on:
+      - nginx
+    volumes:
+      - appdata:/var/www/html
+    networks:
+      - default
