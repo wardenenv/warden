@@ -3,6 +3,10 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.4.0..develop)
 
+**Bug Fixes:**
+
+* Removed `tmpfs` volumes from sub-directories of `/var/www/html` when `WARDEN_TEST_DB=1` was set due to compatibility issues ([#139](https://github.com/davidalger/warden/pull/139) by @lbajsarowicz)
+
 ## Version [0.4.0](https://github.com/davidalger/warden/tree/0.4.0) (2020-04-02)
 [All Commits](https://github.com/davidalger/warden/compare/0.3.1..0.4.0)
 
