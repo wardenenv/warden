@@ -3,7 +3,8 @@ Installing Warden
 
 ### Prerequisites
 
-* [Docker for Mac](https://hub.docker.com/editions/community/docker-ce-desktop-mac) or [Docker for Linux](https://docs.docker.com/install/) (Warden has been tested on Fedora 29 and Ubuntu 18.10)
+* [Docker Desktop for Mac
+](https://hub.docker.com/editions/community/docker-ce-desktop-mac) 2.2.0.0 or later; or [Docker for Linux](https://docs.docker.com/install/) (Warden has been tested on Fedora 29 and Ubuntu 18.10)
 * `docker-compose` available in your `$PATH` (can be installed via `brew`, `apt`, `dnf`, or `pip3`)
 * [Mutagen](https://mutagen.io/) v0.10.3 or later installed via Homebrew (required on macOS only; Warden will attempt to install this via `brew` if not present)
 

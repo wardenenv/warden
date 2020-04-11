@@ -10,6 +10,11 @@ WARDEN_USAGE=$(cat <<EOF
   -v, --verbose     Increases verbosity of output
 
 \033[33mEnvironment Types:\033[0m
+  local               Declares the docker-compose version and labels the project
+                      network allowing Warden to recognize it. Must be coupled with
+                      per-project configuration. See documentation for details:
+                      https://docs.warden.dev/environments/types.html#local
+
   magento2            Nginx, varnish, php-fpm, db (mariadb), elasticsearch, redis,
                       rabbitmq, and mailhog services pre configured for Magento 2;
                       on macOS systems code files are synced into container using
