@@ -13,7 +13,6 @@ services:
       - --max_allowed_packet=1024M
       - --explicit_defaults_for_timestamp=on
     volumes:
-      - tmp-cache:/var/cache
       - tmp-dbdata:/var/lib/mysql
 
 volumes:
