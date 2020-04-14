@@ -64,6 +64,18 @@ case "${WARDEN_PARAMS[0]}" in
                     fi
                     printf .; sleep 1; done; echo
         ;;
+    monitor)
+        ## monitor only sessions labeled with this env name
+        mutagen sync monitor --label-selector "warden-sync=${WARDEN_ENV_NAME}"
+        ;;
+    pause)
+        ## pause only sessions labeled with this env name
+        mutagen sync pause --label-selector "warden-sync=${WARDEN_ENV_NAME}"
+        ;;
+    resume)
+        ## resume only sessions labeled with this env name
+        mutagen sync resume --label-selector "warden-sync=${WARDEN_ENV_NAME}"
+        ;;
     stop)
         ## terminate only sessions labeled with this env name
         mutagen sync terminate --label-selector "warden-sync=${WARDEN_ENV_NAME}"

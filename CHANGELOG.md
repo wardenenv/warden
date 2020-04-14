@@ -3,6 +3,11 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.4.0..develop)
 
+**Enhancements:**
+
+* Added pause, resume and monitor to `warden sync` command
+* Changed Mutagen sync to pause on `warden env stop` and resume on `warden env up -d`
+
 ## Version [0.4.1](https://github.com/davidalger/warden/tree/0.4.1) (2020-04-11)
 [All Commits](https://github.com/davidalger/warden/compare/0.4.0..0.4.1)
 
