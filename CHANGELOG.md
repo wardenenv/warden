@@ -3,6 +3,9 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.4.0..develop)
 
+## Version [0.4.2](https://github.com/davidalger/warden/tree/0.4.2) (2020-04-15)
+[All Commits](https://github.com/davidalger/warden/compare/0.4.1..0.4.2)
+
 **Enhancement:**
 
 * Added `WARDEN_SYNC_IGNORE` to support passing a comma-separated list of additional [per-session-ignores](https://mutagen.io/documentation/synchronization/ignores#per-session-ignores) to Mutagen when sync sessions are started ([#142](https://github.com/davidalger/warden/pull/142) by @davidalger)
