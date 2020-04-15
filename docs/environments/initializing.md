@@ -26,6 +26,8 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
 
        BYPASS_VARNISH=false
 
+       WARDEN_SYNC_IGNORE=
+
        ELASTICSEARCH_VERSION=6.8
        MARIADB_VERSION=10.3
        NODE_VERSION=10
