@@ -3,6 +3,19 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.4.0..develop)
 
+## Version [0.4.2](https://github.com/davidalger/warden/tree/0.4.2) (2020-04-15)
+[All Commits](https://github.com/davidalger/warden/compare/0.4.1..0.4.2)
+
+**Enhancement:**
+
+* Added `WARDEN_SYNC_IGNORE` to support passing a comma-separated list of additional [per-session-ignores](https://mutagen.io/documentation/synchronization/ignores#per-session-ignores) to Mutagen when sync sessions are started ([#142](https://github.com/davidalger/warden/pull/142) by @davidalger)
+* Added pause, resume and monitor to `warden sync` command
+* Changed Mutagen sync to pause on `warden env stop` and resume on `warden env up -d`
+
+**Bug Fixes:**
+
+* Removed exclusion of (commonly large) files types (*.sql, *.gz, *.zip, *.bz2) from sync sessions (as introduced in 0.4.0) because it broke the ability to use artifact repositories with composer ([#142](https://github.com/davidalger/warden/pull/142) by @davidalger)
+
 ## Version [0.4.1](https://github.com/davidalger/warden/tree/0.4.1) (2020-04-11)
 [All Commits](https://github.com/davidalger/warden/compare/0.4.0..0.4.1)
 
