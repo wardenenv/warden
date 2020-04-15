@@ -6,6 +6,8 @@
 **Enhancement:**
 
 * Added `WARDEN_SYNC_IGNORE` to support passing a comma-separated list of additional [per-session-ignores](https://mutagen.io/documentation/synchronization/ignores#per-session-ignores) to Mutagen when sync sessions are started ([#142](https://github.com/davidalger/warden/pull/142) by @davidalger)
+* Added pause, resume and monitor to `warden sync` command
+* Changed Mutagen sync to pause on `warden env stop` and resume on `warden env up -d`
 
 **Bug Fixes:**
 

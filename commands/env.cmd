@@ -83,10 +83,28 @@ export TRAEFIK_ADDRESS="$(docker container inspect traefik \
     ' 2>/dev/null || true
 )"
 
+## pause mutagen sync if needed
+if [[ "${WARDEN_PARAMS[0]}" == "stop" ]] \
+    && [[ $OSTYPE =~ ^darwin ]] && [[ -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.mutagen.yml" ]]
+then
+    warden sync pause
+fi
+
 ## anything not caught above is simply passed through to docker-compose to orchestrate
 docker-compose \
     --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
     "${DOCKER_COMPOSE_ARGS[@]}" "${WARDEN_PARAMS[@]}" "$@"
+
+## resume mutagen sync if available and php-fpm container id hasn't changed
+if ([[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]]) \
+    && [[ $OSTYPE =~ ^darwin ]] && [[ -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.mutagen.yml" ]] \
+    && [[ $(warden sync list | grep -i 'Status: \[Paused\]' | wc -l | awk '{print $1}') == "1" ]] \
+    && [[ $(warden env ps -q php-fpm) ]] \
+    && [[ $(docker container inspect $(warden env ps -q php-fpm) --format '{{ .State.Status }}') = "running" ]] \
+    && [[ $(warden env ps -q php-fpm) = $(warden sync list | grep -i 'URL: docker' | awk -F'/' '{print $3}') ]]
+then
+    warden sync resume
+fi
 
 ## start mutagen sync if needed
 if ([[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]]) \
@@ -99,7 +117,7 @@ then
 fi
 
 ## stop mutagen sync if needed
-if ([[ "${WARDEN_PARAMS[0]}" == "down" ]] || [[ "${WARDEN_PARAMS[0]}" == "stop" ]]) \
+if [[ "${WARDEN_PARAMS[0]}" == "down" ]] \
     && [[ $OSTYPE =~ ^darwin ]] && [[ -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.mutagen.yml" ]]
 then
     warden sync stop
