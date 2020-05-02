@@ -3,6 +3,13 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.4.0..develop)
 
+**Enhancements:**
+
+* Updated init routine allowing `WARDEN_HOME_DIR` and `WARDEN_COMPOSER_DIR` to be overriden via environment variables
+* Updated environment configuration to reference `WARDEN_SSL_DIR` eliminating hard-coded `~/.warden/ssl` references
+* Updated warden global docker config to reference `WARDEN_HOME_DIR` eliminating hard-coded `~/.warden` references
+* Updated `warden up` to return an error when docker is not running rather than blindly attempt to start global services
+
 ## Version [0.4.2](https://github.com/davidalger/warden/tree/0.4.2) (2020-04-15)
 [All Commits](https://github.com/davidalger/warden/compare/0.4.1..0.4.2)
 
