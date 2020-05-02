@@ -37,8 +37,8 @@ services:
     depends_on:
       - db
     volumes:
-      - ~/.warden/ssl/rootca/certs:/etc/ssl/warden-rootca-cert:ro
-      - ~/.composer:/home/www-data/.composer:delegated
+      - ${WARDEN_SSL_DIR}/rootca/certs:/etc/ssl/warden-rootca-cert:ro
+      - ${WARDEN_COMPOSER_DIR}:/home/www-data/.composer:delegated
       - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
 
   php-debug:
@@ -56,8 +56,8 @@ services:
     depends_on:
       - php-fpm
     volumes:
-      - ~/.warden/ssl/rootca/certs:/etc/ssl/warden-rootca-cert:ro
-      - ~/.composer:/home/www-data/.composer:delegated
+      - ${WARDEN_SSL_DIR}/rootca/certs:/etc/ssl/warden-rootca-cert:ro
+      - ${WARDEN_COMPOSER_DIR}:/home/www-data/.composer:delegated
       - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
 
   db:
