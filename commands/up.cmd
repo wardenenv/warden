@@ -38,6 +38,12 @@ for cert in $(find "${WARDEN_SSL_DIR}/certs" -type f -name "*.crt.pem" | sed -E 
 	EOF
 done
 
+## verify docker is running
+if ! docker system info >/dev/null 2>&1; then
+  >&2 printf "\e[01;31mERROR\033[0m: Docker does not appear to be running. Please start Docker.\n"
+  exit 1
+fi
+
 pushd "${WARDEN_HOME_DIR}" >/dev/null
 docker-compose -p warden -f "${WARDEN_DIR}/docker/docker-compose.yml" up -d "${WARDEN_PARAMS[@]}" "$@"
 
