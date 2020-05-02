@@ -7,9 +7,9 @@ services:
       - "${TRAEFIK_LISTEN:-127.0.0.1}:80:80"     # The HTTP port
       - "${TRAEFIK_LISTEN:-127.0.0.1}:443:443"   # The HTTPS port
     volumes:
-      - ~/.warden/etc/traefik/traefik.yml:/etc/traefik/traefik.yml
-      - ~/.warden/etc/traefik/dynamic.yml:/etc/traefik/dynamic.yml
-      - ~/.warden/ssl/certs:/etc/ssl/certs
+      - ${WARDEN_HOME_DIR}/etc/traefik/traefik.yml:/etc/traefik/traefik.yml
+      - ${WARDEN_HOME_DIR}/etc/traefik/dynamic.yml:/etc/traefik/dynamic.yml
+      - ${WARDEN_HOME_DIR}/ssl/certs:/etc/ssl/certs
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
       - traefik.enable=true
@@ -41,7 +41,7 @@ services:
     ports:
       - "127.0.0.1:53:53/udp"
     volumes:
-      - ~/.warden/etc/dnsmasq.conf:/etc/dnsmasq.conf
+      - ${WARDEN_HOME_DIR}/etc/dnsmasq.conf:/etc/dnsmasq.conf
     labels:
       - traefik.enable=true
       - traefik.http.routers.dnsmasq.tls=true
@@ -55,7 +55,7 @@ services:
     ports:
       - "127.0.0.1:2222:22"
     volumes:
-      - ~/.warden/tunnel/ssh_key.pub:/etc/authorized_keys/user
+      - ${WARDEN_HOME_DIR}/tunnel/ssh_key.pub:/etc/authorized_keys/user
       - sshd_keys:/etc/ssh/keys
     environment:
       - |

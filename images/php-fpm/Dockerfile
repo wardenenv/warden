@@ -38,7 +38,11 @@ RUN PHP_VERSION=$(php -v | head -n1 | cut -d' ' -f2 | cut -d. -f1-2) \
     && cd /tmp/ioncube \
     && curl -Os https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz \
     && tar xzf ioncube_loaders_lin_x86-64.tar.gz \
-    && cp ioncube/ioncube_loader_lin_${PHP_VERSION}.so "$(php -i | grep '^extension_dir =' | cut -d' ' -f3)/ioncube_loader.so" \
+    && curl -Os https://www.ioncube.com/php-7.4.0-beta-loaders/ioncube_loaders_lin_x86-64_7.4_BETA2.tar.gz \
+    && tar xzf ioncube_loaders_lin_x86-64.tar.gz \
+    && tar xzf ioncube_loaders_lin_x86-64_7.4_BETA2.tar.gz -C ioncube \
+    && cp "$(find . -regex "./ioncube/ioncube_loader_lin_${PHP_VERSION}[0-9\.\_]*\(beta[0-9]*\|\)\.so")" \
+        "$(php -i | grep '^extension_dir =' | cut -d' ' -f3)/ioncube_loader.so" \
     && echo "zend_extension=ioncube_loader.so" > /etc/php.d/01-ioncube-loader.ini \
     && rm -rf /tmp/ioncube
 
