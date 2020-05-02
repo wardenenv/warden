@@ -3,6 +3,9 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.4.0..develop)
 
+## Version [0.4.3](https://github.com/davidalger/warden/tree/0.4.3) (2020-05-02)
+[All Commits](https://github.com/davidalger/warden/compare/0.4.2..0.4.3)
+
 **Enhancements:**
 
 * Updated init routine allowing `WARDEN_HOME_DIR` and `WARDEN_COMPOSER_DIR` to be overriden via environment variables
