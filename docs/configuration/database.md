@@ -12,4 +12,4 @@
 
 ### Navicat for MySQL
 ![Navicat Connection Config](screenshots/navicat-connection-config.png)
-![PHPStorm Tunnel Config](screenshots/navicat-ssh-tunnel-config.png)
+![Navicat Tunnel Config](screenshots/navicat-ssh-tunnel-config.png)
