@@ -50,3 +50,7 @@ When it receives the first request, PHP Storm should prompt you if the "Server" 
 * Use path mappings must be enabled, with a mapping to map the project root on the host to `/var/www/html` within the container.
 
 ![clnt-docker-xdebug-config](screenshots/xdebug-phpstorm.png)
+
+Additional configurations may be required, such as configuring ``DBGp Proxy`` port.
+
+![clnt-docker-xdebug-additional-config](screenshots/phpstorm-additional-xdebug-configs.png)
