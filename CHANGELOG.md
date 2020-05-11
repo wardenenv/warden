@@ -6,6 +6,7 @@
 **Enhancements:**
 
 * Updated `php-fpm` images to use `fpm-loaders` variant of base image to include IonCube & SourceGuardian from upstream images
+* Updated `php-fpm` images fix for directory ownership of mounted volume paths for future flexibility by moving it to the `docker-entrypoint` script with an env var `CHOWN_DIR_LIST` to specify what directories to chown on container startup
 
 ## Version [0.4.3](https://github.com/davidalger/warden/tree/0.4.3) (2020-05-02)
 [All Commits](https://github.com/davidalger/warden/compare/0.4.2..0.4.3)

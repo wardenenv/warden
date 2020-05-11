@@ -2,6 +2,9 @@ ARG PHP_VERSION
 FROM quay.io/warden/php-fpm:${PHP_VERSION}
 USER root
 
+# Resolve permission issues stemming from directories auto-created by docker due to mounts in sub-directories
+ENV CHOWN_DIR_LIST "pub/media"
+
 RUN npm install -g grunt-cli gulp yarn
 
 RUN set -eux \
@@ -23,9 +26,6 @@ RUN set -eux \
     && curl -o /etc/bash_completion.d/n98-magerun2.phar.bash \
         https://raw.githubusercontent.com/netz98/n98-magerun2/${MAGERUN_BASH_REF}/res/autocompletion/bash/n98-magerun2.phar.bash \
     && perl -pi -e 's/^(complete -o default .*)$/$1 n98-magerun/' /etc/bash_completion.d/n98-magerun2.phar.bash
-
-# Prevent pub dir from being auto-created by docker with wrong permissions when mounting pub/media
-RUN mkdir /var/www/html/pub && chown www-data:www-data /var/www/html/pub
 
 # Create mr alias for n98-magerun
 RUN ln -s /usr/local/bin/n98-magerun /usr/local/bin/mr
