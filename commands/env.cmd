@@ -15,11 +15,20 @@ fi
 ## simply allow the return code from docker-compose to bubble up per normal
 trap '' ERR
 
+## configure environment type defaults
+if [[ ${WARDEN_ENV_TYPE} =~ ^magento ]]; then
+    export WARDEN_SVC_PHP_VARIANT=-${WARDEN_ENV_TYPE}
+fi
+
 ## configure docker-compose files
 DOCKER_COMPOSE_ARGS=()
 
 appendEnvPartialIfExists "base"
 appendEnvPartialIfExists "${WARDEN_ENV_SUBT}"
+
+[[ ${WARDEN_ENV_TYPE} != local ]] \
+    && appendEnvPartialIfExists "php-fpm.base" \
+    && appendEnvPartialIfExists "php-fpm.${WARDEN_ENV_SUBT}"
 
 [[ ${WARDEN_TEST_DB} -eq 1 ]] \
     && appendEnvPartialIfExists "tests"

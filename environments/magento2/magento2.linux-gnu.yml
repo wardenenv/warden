@@ -1,19 +1,14 @@
 version: "3.5"
+
+x-volumes: &volumes
+  - .${WARDEN_WEB_ROOT:-}/:/var/www/html
+
 services:
   nginx:
-    volumes:
-      - .${WARDEN_WEB_ROOT:-}/:/var/www/html
+    volumes: *volumes
 
   php-fpm:
-    volumes:
-      - ${WARDEN_SSL_DIR}/rootca/certs:/etc/ssl/warden-rootca-cert:ro
-      - ${WARDEN_COMPOSER_DIR}:/home/www-data/.composer
-      - ${SSH_AUTH_SOCK:-/dev/null}:/run/host-services/ssh-auth.sock
-      - .${WARDEN_WEB_ROOT:-}/:/var/www/html
+    volumes: *volumes
 
   php-debug:
-    volumes:
-      - ${WARDEN_SSL_DIR}/rootca/certs:/etc/ssl/warden-rootca-cert:ro
-      - ${WARDEN_COMPOSER_DIR}:/home/www-data/.composer
-      - ${SSH_AUTH_SOCK:-/dev/null}:/run/host-services/ssh-auth.sock
-      - .${WARDEN_WEB_ROOT:-}/:/var/www/html
+    volumes: *volumes

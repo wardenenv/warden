@@ -6,8 +6,14 @@ services:
 
   php-fpm:
     volumes:
+      - ${WARDEN_SSL_DIR}/rootca/certs:/etc/ssl/warden-rootca-cert:ro
+      - ${WARDEN_COMPOSER_DIR}:/home/www-data/.composer:delegated
       - /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock
+      - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
 
   php-debug:
     volumes:
+      - ${WARDEN_SSL_DIR}/rootca/certs:/etc/ssl/warden-rootca-cert:ro
+      - ${WARDEN_COMPOSER_DIR}:/home/www-data/.composer:delegated
       - /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock
+      - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
