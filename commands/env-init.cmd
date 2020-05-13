@@ -78,6 +78,11 @@ fi
 if [[ "${WARDEN_ENV_TYPE}" == "laravel" ]]; then
   cat >> "${WARDEN_ENV_PATH}/.env" <<-EOT
 
+		MARIADB_VERSION=10.3
+		NODE_VERSION=10
+		PHP_VERSION=7.2
+		REDIS_VERSION=5.0
+
 		## Laravel Config
 		APP_URL=http://app.${WARDEN_ENV_NAME}.test
 		APP_KEY=base64:$(dd if=/dev/urandom bs=1 count=32 2>/dev/null | base64)

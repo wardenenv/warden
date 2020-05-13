@@ -11,6 +11,7 @@ If `PHP_VERSION` is not defined in a project's `.env` type the default version i
 
 * Updated `php-fpm` images to use `fpm-loaders` variant of base image to include IonCube & SourceGuardian from upstream images
 * Updated `php-fpm` images fix for directory ownership of mounted volume paths for future flexibility by moving it to the `docker-entrypoint` script with an env var `CHOWN_DIR_LIST` to specify what directories to chown on container startup
+* Updated `env-init` command to include locked values for `MARIADB_VERSION`, `NODE_VERSION`, `PHP_VERSION`, and `REDIS_VERSION` for `laravel` environment types
 
 **Bug Fixes:**
 
