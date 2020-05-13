@@ -1,4 +1,9 @@
 version: "3.5"
+
+x-extra_hosts: &extra_hosts
+  - ${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
+  - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
+
 services:
   php-blackfire:
     hostname: "${WARDEN_ENV_NAME}-php-blackfire"
@@ -8,9 +13,7 @@ services:
       - TRAEFIK_SUBDOMAIN
       - SSH_AUTH_SOCK=/tmp/ssh-auth.sock
       - NODE_VERSION=${NODE_VERSION:-10}
-    extra_hosts:
-      - ${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
-      - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
+    extra_hosts: *extra_hosts
     depends_on:
       - php-fpm
 
@@ -22,6 +25,4 @@ services:
       - BLACKFIRE_CLIENT_TOKEN=${BLACKFIRE_CLIENT_TOKEN}
       - BLACKFIRE_SERVER_ID=${BLACKFIRE_SERVER_ID}
       - BLACKFIRE_SERVER_TOKEN=${BLACKFIRE_SERVER_TOKEN}
-    extra_hosts:
-      - ${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
-      - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
+    extra_hosts: *extra_hosts

@@ -1,13 +1,11 @@
 version: "3.5"
 
-x-defaults: &defaults
-  extra_hosts:
-    - ${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
-    - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
+x-extra_hosts: &extra_hosts
+  - ${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
+  - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
 
 services:
   php-fpm:
-    <<: *defaults
     hostname: "${WARDEN_ENV_NAME}-php-fpm"
     image: quay.io/warden/php-fpm:${PHP_VERSION:-7.3}${WARDEN_SVC_PHP_VARIANT:-}
     environment:
@@ -15,11 +13,11 @@ services:
       - TRAEFIK_SUBDOMAIN
       - SSH_AUTH_SOCK=/tmp/ssh-auth.sock
       - NODE_VERSION=${NODE_VERSION:-10}
+    extra_hosts: *extra_hosts
     depends_on:
       - db
 
   php-debug:
-    <<: *defaults
     hostname: "${WARDEN_ENV_NAME}-php-debug"
     image: quay.io/warden/php-fpm:${PHP_VERSION:-7.3}${WARDEN_SVC_PHP_VARIANT:-}-debug
     environment:
@@ -28,5 +26,6 @@ services:
       - SSH_AUTH_SOCK=/tmp/ssh-auth.sock
       - NODE_VERSION=${NODE_VERSION:-10}
       - PHP_IDE_CONFIG=serverName=${WARDEN_ENV_NAME}-docker
+    extra_hosts: *extra_hosts
     depends_on:
       - php-fpm
