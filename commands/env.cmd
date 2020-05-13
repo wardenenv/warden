@@ -56,7 +56,7 @@ fi
     && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.allure"
 
 [[ ${WARDEN_SELENIUM} -eq 1 ]] \
-    && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.selenium"
+    && appendEnvPartialIfExists "selenium"
 
 if [[ -f "${WARDEN_ENV_PATH}/.warden/warden-env.yml" ]]; then
     DOCKER_COMPOSE_ARGS+=("-f")

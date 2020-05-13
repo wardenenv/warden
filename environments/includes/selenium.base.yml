@@ -11,6 +11,7 @@ services:
     environment:
       GRID_TIMEOUT: 0
       GRID_BROWSER_TIMEOUT: 0
+
   selenium-chrome:
     hostname: ${WARDEN_ENV_NAME}_selenium-chrome
     image: selenium/node-chrome${WARDEN_SELENIUM_DEBUG:-}:3.8.1
