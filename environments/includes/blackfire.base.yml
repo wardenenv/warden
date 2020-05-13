@@ -11,9 +11,6 @@ services:
     extra_hosts:
       - ${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
       - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
-    volumes:
-      - ${WARDEN_SSL_DIR}/rootca/certs:/etc/ssl/warden-rootca-cert:ro
-      - ${WARDEN_COMPOSER_DIR}:/home/www-data/.composer:delegated
     depends_on:
       - php-fpm
 
