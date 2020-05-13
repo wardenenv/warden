@@ -32,6 +32,7 @@ if [[ ${WARDEN_ENV_TYPE} != local ]]; then
     appendEnvPartialIfExists "mailhog"
 fi
 
+[[ ${WARDEN_ENV_TYPE} == "magento2" ]] && appendEnvPartialIfExists "varnish"
 [[ ${WARDEN_ENV_TYPE} == "magento2" ]] && appendEnvPartialIfExists "elasticsearch"
 [[ ${WARDEN_ENV_TYPE} == "magento2" ]] && appendEnvPartialIfExists "rabbitmq"
 
