@@ -33,28 +33,28 @@ if [[ ${WARDEN_ENV_TYPE} != local ]]; then
     appendEnvPartialIfExists "redis.${WARDEN_ENV_SUBT}"
 fi
 
-appendEnvPartialIfExists "base"
-appendEnvPartialIfExists "${WARDEN_ENV_SUBT}"
+appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.base"
+appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.${WARDEN_ENV_SUBT}"
 
 [[ ${WARDEN_TEST_DB} -eq 1 ]] \
-    && appendEnvPartialIfExists "tests"
+    && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.tests"
 
 [[ ${WARDEN_SPLIT_SALES} -eq 1 ]] \
-    && appendEnvPartialIfExists "splitdb.sales"
+    && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.splitdb.sales"
 
 [[ ${WARDEN_SPLIT_CHECKOUT} -eq 1 ]] \
-    && appendEnvPartialIfExists "splitdb.checkout"
+    && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.splitdb.checkout"
 
 if [[ ${WARDEN_BLACKFIRE} -eq 1 ]]; then
-    appendEnvPartialIfExists "blackfire.base"
-    appendEnvPartialIfExists "blackfire.${WARDEN_ENV_SUBT}"
+    appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.blackfire.base"
+    appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.blackfire.${WARDEN_ENV_SUBT}"
 fi
 
 [[ ${WARDEN_ALLURE} -eq 1 ]] \
-    && appendEnvPartialIfExists "allure"
+    && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.allure"
 
 [[ ${WARDEN_SELENIUM} -eq 1 ]] \
-    && appendEnvPartialIfExists "selenium.base"
+    && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.selenium.base"
 
 if [[ -f "${WARDEN_ENV_PATH}/.warden/warden-env.yml" ]]; then
     DOCKER_COMPOSE_ARGS+=("-f")
