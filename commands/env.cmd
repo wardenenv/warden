@@ -28,6 +28,7 @@ appendEnvPartialIfExists "networks"
 if [[ ${WARDEN_ENV_TYPE} != local ]]; then
     appendEnvPartialIfExists "php-fpm"
     appendEnvPartialIfExists "redis"
+    appendEnvPartialIfExists "mailhog"
 fi
 
 appendEnvPartialIfExists "${WARDEN_ENV_TYPE}"
