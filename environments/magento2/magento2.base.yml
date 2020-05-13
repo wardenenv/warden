@@ -76,10 +76,6 @@ services:
     volumes:
       - esdata:/usr/share/elasticsearch/data
 
-  redis:
-    hostname: "${WARDEN_ENV_NAME}-redis"
-    image: quay.io/warden/redis:${REDIS_VERSION:-5.0}
-
   rabbitmq:
     hostname: "${WARDEN_ENV_NAME}-rabbitmq"
     image: quay.io/warden/rabbitmq:${RABBITMQ_VERSION:-3.7}
