@@ -32,6 +32,9 @@ if [[ ${WARDEN_ENV_TYPE} != local ]]; then
     appendEnvPartialIfExists "mailhog"
 fi
 
+[[ ${WARDEN_ENV_TYPE} == "magento2" ]] && appendEnvPartialIfExists "elasticsearch"
+[[ ${WARDEN_ENV_TYPE} == "magento2" ]] && appendEnvPartialIfExists "rabbitmq"
+
 appendEnvPartialIfExists "${WARDEN_ENV_TYPE}"
 
 [[ ${WARDEN_TEST_DB} -eq 1 ]] \
