@@ -25,8 +25,10 @@ DOCKER_COMPOSE_ARGS=()
 
 appendEnvPartialIfExists "base"
 appendEnvPartialIfExists "${WARDEN_ENV_SUBT}"
+appendEnvPartialIfExists "networks"
 
 if [[ ${WARDEN_ENV_TYPE} != local ]]; then
+
     appendEnvPartialIfExists "php-fpm.base"
     appendEnvPartialIfExists "php-fpm.${WARDEN_ENV_SUBT}"
 

@@ -62,7 +62,7 @@ function appendEnvPartialIfExists () {
 
     if [[ -f "${PARTIAL_PATH}/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.${PARTIAL_NAME}.yml" ]]; then
         DOCKER_COMPOSE_ARGS+=("-f" "${PARTIAL_PATH}/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.${PARTIAL_NAME}.yml")
-    elif [[ -f "${PARTIAL_PATH}/services/${PARTIAL_NAME}.yml" ]]; then
-        DOCKER_COMPOSE_ARGS+=("-f" "${PARTIAL_PATH}/services/${PARTIAL_NAME}.yml")
+    elif [[ -f "${PARTIAL_PATH}/common/${PARTIAL_NAME}.yml" ]]; then
+        DOCKER_COMPOSE_ARGS+=("-f" "${PARTIAL_PATH}/common/${PARTIAL_NAME}.yml")
     fi
 }
