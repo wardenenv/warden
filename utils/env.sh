@@ -58,11 +58,16 @@ function assertValidEnvType () {
 
 function appendEnvPartialIfExists () {
     local PARTIAL_NAME="${1}"
-    local PARTIAL_PATH="${WARDEN_DIR}/environments"
+    local PARTIAL_PATH=""
 
-    if [[ -f "${PARTIAL_PATH}/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.yml" ]]; then
-        DOCKER_COMPOSE_ARGS+=("-f" "${PARTIAL_PATH}/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.yml")
-    elif [[ -f "${PARTIAL_PATH}/common/${PARTIAL_NAME}.yml" ]]; then
-        DOCKER_COMPOSE_ARGS+=("-f" "${PARTIAL_PATH}/common/${PARTIAL_NAME}.yml")
-    fi
+    for PARTIAL_PATH in \
+        "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.base.yml" \
+        "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml" \
+        "${WARDEN_DIR}/environments/common/${PARTIAL_NAME}.base.yml" \
+        "${WARDEN_DIR}/environments/common/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml"
+    do
+        if [[ -f "${PARTIAL_PATH}" ]]; then
+            DOCKER_COMPOSE_ARGS+=("-f" "${PARTIAL_PATH}")
+        fi
+    done
 }

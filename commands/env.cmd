@@ -26,15 +26,11 @@ DOCKER_COMPOSE_ARGS=()
 appendEnvPartialIfExists "networks"
 
 if [[ ${WARDEN_ENV_TYPE} != local ]]; then
-    appendEnvPartialIfExists "php-fpm.base"
-    appendEnvPartialIfExists "php-fpm.${WARDEN_ENV_SUBT}"
-
-    appendEnvPartialIfExists "redis.base"
-    appendEnvPartialIfExists "redis.${WARDEN_ENV_SUBT}"
+    appendEnvPartialIfExists "php-fpm"
+    appendEnvPartialIfExists "redis"
 fi
 
-appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.base"
-appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.${WARDEN_ENV_SUBT}"
+appendEnvPartialIfExists "${WARDEN_ENV_TYPE}"
 
 [[ ${WARDEN_TEST_DB} -eq 1 ]] \
     && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.tests"
@@ -46,15 +42,14 @@ appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.${WARDEN_ENV_SUBT}"
     && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.splitdb.checkout"
 
 if [[ ${WARDEN_BLACKFIRE} -eq 1 ]]; then
-    appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.blackfire.base"
-    appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.blackfire.${WARDEN_ENV_SUBT}"
+    appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.blackfire"
 fi
 
 [[ ${WARDEN_ALLURE} -eq 1 ]] \
     && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.allure"
 
 [[ ${WARDEN_SELENIUM} -eq 1 ]] \
-    && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.selenium.base"
+    && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.selenium"
 
 if [[ -f "${WARDEN_ENV_PATH}/.warden/warden-env.yml" ]]; then
     DOCKER_COMPOSE_ARGS+=("-f")
