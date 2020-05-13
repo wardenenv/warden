@@ -3,6 +3,10 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.4.0..develop)
 
+**Upgrade Notes:**
+
+If `PHP_VERSION` is not defined in a project's `.env` type the default version is now 7.3 across the board for all environment types. This should not pose any issues for recent `magento1` or `magento2` setups, but `laravel` environments will likely require an update to the project's `.env` to continue using PHP 7.2 or rather than 7.3 for local development.
+
 **Enhancements:**
 
 * Updated `php-fpm` images to use `fpm-loaders` variant of base image to include IonCube & SourceGuardian from upstream images
