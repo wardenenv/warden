@@ -26,6 +26,7 @@ DOCKER_COMPOSE_ARGS=()
 appendEnvPartialIfExists "networks"
 
 if [[ ${WARDEN_ENV_TYPE} != local ]]; then
+    appendEnvPartialIfExists "nginx"
     appendEnvPartialIfExists "php-fpm"
     appendEnvPartialIfExists "redis"
     appendEnvPartialIfExists "mailhog"
