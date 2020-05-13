@@ -53,7 +53,7 @@ if [[ ${WARDEN_BLACKFIRE} -eq 1 ]]; then
 fi
 
 [[ ${WARDEN_ALLURE} -eq 1 ]] \
-    && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.allure"
+    && appendEnvPartialIfExists "allure"
 
 [[ ${WARDEN_SELENIUM} -eq 1 ]] \
     && appendEnvPartialIfExists "selenium"
