@@ -63,8 +63,8 @@ function appendEnvPartialIfExists () {
     for PARTIAL_PATH in \
         "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.base.yml" \
         "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml" \
-        "${WARDEN_DIR}/environments/common/${PARTIAL_NAME}.base.yml" \
-        "${WARDEN_DIR}/environments/common/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml"
+        "${WARDEN_DIR}/environments/includes/${PARTIAL_NAME}.base.yml" \
+        "${WARDEN_DIR}/environments/includes/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml"
     do
         if [[ -f "${PARTIAL_PATH}" ]]; then
             DOCKER_COMPOSE_ARGS+=("-f" "${PARTIAL_PATH}")
