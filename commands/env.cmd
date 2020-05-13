@@ -48,6 +48,7 @@ appendEnvPartialIfExists "${WARDEN_ENV_TYPE}"
     && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.splitdb.checkout"
 
 if [[ ${WARDEN_BLACKFIRE} -eq 1 ]]; then
+    appendEnvPartialIfExists "blackfire"
     appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.blackfire"
 fi
 
