@@ -14,3 +14,6 @@ services:
       - "ES_JAVA_OPTS=-Xms64m -Xmx512m"
     volumes:
       - esdata:/usr/share/elasticsearch/data
+
+volumes:
+  esdata:

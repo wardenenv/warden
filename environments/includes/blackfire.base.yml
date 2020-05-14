@@ -1,8 +1,8 @@
 version: "3.5"
 
 x-extra_hosts: &extra_hosts
-  - ${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
-  - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
+    - ${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
+    - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
 
 services:
   php-blackfire:
@@ -13,6 +13,9 @@ services:
       - TRAEFIK_SUBDOMAIN
       - SSH_AUTH_SOCK=/tmp/ssh-auth.sock
       - NODE_VERSION=${NODE_VERSION:-10}
+    volumes:
+      - ${WARDEN_SSL_DIR}/rootca/certs:/etc/ssl/warden-rootca-cert:ro
+      - ${WARDEN_COMPOSER_DIR}:/home/www-data/.composer:delegated
     extra_hosts: *extra_hosts
     depends_on:
       - php-fpm

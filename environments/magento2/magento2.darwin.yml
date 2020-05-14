@@ -10,11 +10,8 @@ services:
       - XDEBUG_CONNECT_BACK_HOST=${XDEBUG_CONNECT_BACK_HOST:-host.docker.internal}
     volumes: *volumes
 
-  php-fpm:
-    volumes: *volumes
-
-  php-debug:
-    volumes: *volumes
+  php-fpm: { volumes: *volumes }
+  php-debug: { volumes: *volumes }
 
 volumes:
   appdata:
