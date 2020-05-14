@@ -30,6 +30,21 @@ then
   sudo n "${NODE_VERSION}"
 fi
 
+# Resolve permission issues with directories auto-created by volume mounts; to use set CHOWN_DIR_LIST to
+# a list of directories (relative to working directory) to chown, walking up the paths to also chown each
+# specified parent directory. Example: "dir1/dir2 dir3" will chown dir1/dir2, then dir1 followed by dir3
+for DIR in ${CHOWN_DIR_LIST:-}; do
+  if [[ -d "${DIR}" ]]; then
+    while :; do
+      sudo chown www-data:www-data "${DIR}"
+      DIR=$(dirname "${DIR}")
+      if [[ ${DIR} == "." ]] || [[ ${DIR} == "/" ]]; then
+        break;
+      fi
+    done
+  fi
+done
+
 # first arg is `-f` or `--some-option`
 if [ "${1#-}" != "$1" ]; then
   set -- php-fpm "$@"

@@ -37,11 +37,21 @@ function loadEnvConfig () {
 
     WARDEN_ENV_NAME="${WARDEN_ENV_NAME:-}"
     WARDEN_ENV_TYPE="${WARDEN_ENV_TYPE:-}"
+    WARDEN_ENV_SUBT=""
 
-    WARDEN_ENV_SUBT="${OSTYPE:-undefined}"
-    if [[ ${WARDEN_ENV_SUBT} =~ ^darwin ]]; then
-        WARDEN_ENV_SUBT=darwin
-    fi
+    case "${OSTYPE:-undefined}" in
+        darwin*)
+            WARDEN_ENV_SUBT=darwin
+        ;;
+        linux*)
+            WARDEN_ENV_SUBT=linux-gnu
+        ;;
+        *)
+            >&2 printf "\e[01;31mERROR\033[0m: Unsupported OSTYPE '${OSTYPE:-undefined}'\n"
+            exit 1
+        ;;
+    esac
+
     assertValidEnvType
 }
 
