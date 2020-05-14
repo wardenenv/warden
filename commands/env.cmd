@@ -20,6 +20,18 @@ if [[ ${WARDEN_ENV_TYPE} =~ ^magento ]]; then
     export WARDEN_SVC_PHP_VARIANT=-${WARDEN_ENV_TYPE}
 fi
 
+if [[ ${WARDEN_ENV_TYPE} != local ]]; then
+    WARDEN_MARIADB=${WARDEN_MARIADB:-1}
+    WARDEN_REDIS=${WARDEN_REDIS:-1}
+    WARDEN_MAILHOG=${WARDEN_MAILHOG:-1}
+fi
+
+if [[ ${WARDEN_ENV_TYPE} == "magento2" ]]; then
+    WARDEN_VARNISH=${WARDEN_VARNISH:-1}
+    WARDEN_ELASTICSEARCH=${WARDEN_ELASTICSEARCH:-1}
+    WARDEN_RABBITMQ=${WARDEN_RABBITMQ:-1}
+fi
+
 ## configure docker-compose files
 DOCKER_COMPOSE_ARGS=()
 
@@ -28,13 +40,28 @@ appendEnvPartialIfExists "networks"
 if [[ ${WARDEN_ENV_TYPE} != local ]]; then
     appendEnvPartialIfExists "nginx"
     appendEnvPartialIfExists "php-fpm"
-    appendEnvPartialIfExists "redis"
-    appendEnvPartialIfExists "mailhog"
 fi
 
-[[ ${WARDEN_ENV_TYPE} == "magento2" ]] && appendEnvPartialIfExists "varnish"
-[[ ${WARDEN_ENV_TYPE} == "magento2" ]] && appendEnvPartialIfExists "elasticsearch"
-[[ ${WARDEN_ENV_TYPE} == "magento2" ]] && appendEnvPartialIfExists "rabbitmq"
+[[ ${WARDEN_MARIADB} -eq 1 ]] \
+    && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.db"
+
+[[ ${WARDEN_ELASTICSEARCH} -eq 1 ]] \
+    && appendEnvPartialIfExists "elasticsearch"
+
+if [[ ${WARDEN_VARNISH} -eq 1 ]]; then
+    appendEnvPartialIfExists "varnish"
+else
+    export BYPASS_VARNISH=true
+fi
+
+[[ ${WARDEN_RABBITMQ} -eq 1 ]] \
+    && appendEnvPartialIfExists "rabbitmq"
+
+[[ ${WARDEN_REDIS} -eq 1 ]] \
+    && appendEnvPartialIfExists "redis"
+
+[[ ${WARDEN_MAILHOG} -eq 1 ]] \
+    && appendEnvPartialIfExists "mailhog"
 
 appendEnvPartialIfExists "${WARDEN_ENV_TYPE}"
 

@@ -5,6 +5,11 @@ source "${WARDEN_DIR}/utils/env.sh"
 WARDEN_ENV_PATH="$(locateEnvPath)" || exit $?
 loadEnvConfig "${WARDEN_ENV_PATH}" || exit $?
 
+if [[ ${WARDEN_MARIADB} -eq 0 ]]; then
+    echo -e "\033[33mDatabase environment is not used."
+    exit 1
+fi
+
 if (( ${#WARDEN_PARAMS[@]} == 0 )); then
     echo -e "\033[33mThis command has required params, please use --help for details."
     exit 1
