@@ -104,7 +104,6 @@ fi
 
 if [[ "${WARDEN_ENV_TYPE}" == "symfony" ]]; then
   cat >> "${WARDEN_ENV_PATH}/.env" <<-EOT
-    WARDEN_WEB_ROOT=/web
 
 		MARIADB_VERSION=10.3
 		NODE_VERSION=10
