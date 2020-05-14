@@ -17,7 +17,7 @@ The versions of MariaDB, Elasticsearch, Varnish, Redis, and NodeJS may also be s
 
 Start of some environments could be skipped by using variables in `.env` file:
 
-  * `WARDEN_MARIADB=0`
+  * `WARDEN_DB=0`
   * `WARDEN_REDIS=0`
   * `WARDEN_MAILHOG=0`
 

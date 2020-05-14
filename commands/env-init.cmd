@@ -29,7 +29,7 @@ EOF
 if [[ "${WARDEN_ENV_TYPE}" == "magento1" ]]; then
   cat >> "${WARDEN_ENV_PATH}/.env" <<-EOT
 
-		WARDEN_MARIADB=1
+		WARDEN_DB=1
 		WARDEN_REDIS=1
 		WARDEN_MAILHOG=1
 
@@ -52,7 +52,7 @@ fi
 if [[ "${WARDEN_ENV_TYPE}" == "magento2" ]]; then
   cat >> "${WARDEN_ENV_PATH}/.env" <<-EOT
 
-		WARDEN_MARIADB=1
+		WARDEN_DB=1
 		WARDEN_ELASTICSEARCH=1
 		WARDEN_VARNISH=1
 		WARDEN_RABBITMQ=1
@@ -94,7 +94,7 @@ if [[ "${WARDEN_ENV_TYPE}" == "laravel" ]]; then
 		PHP_VERSION=7.2
 		REDIS_VERSION=5.0
 
-		WARDEN_MARIADB=1
+		WARDEN_DB=1
 		WARDEN_REDIS=1
 		WARDEN_MAILHOG=1
 

@@ -21,7 +21,7 @@ if [[ ${WARDEN_ENV_TYPE} =~ ^magento ]]; then
 fi
 
 if [[ ${WARDEN_ENV_TYPE} != local ]]; then
-    WARDEN_MARIADB=${WARDEN_MARIADB:-1}
+    WARDEN_DB=${WARDEN_DB:-1}
     WARDEN_REDIS=${WARDEN_REDIS:-1}
     WARDEN_MAILHOG=${WARDEN_MAILHOG:-1}
 fi
@@ -42,7 +42,7 @@ if [[ ${WARDEN_ENV_TYPE} != local ]]; then
     appendEnvPartialIfExists "php-fpm"
 fi
 
-[[ ${WARDEN_MARIADB} -eq 1 ]] \
+[[ ${WARDEN_DB} -eq 1 ]] \
     && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.db"
 
 [[ ${WARDEN_ELASTICSEARCH} -eq 1 ]] \
