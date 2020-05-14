@@ -39,6 +39,10 @@ function loadEnvConfig () {
     WARDEN_ENV_TYPE="${WARDEN_ENV_TYPE:-}"
 
     WARDEN_ENV_SUBT="${OSTYPE:-undefined}"
+    if [[ ${WARDEN_ENV_SUBT} =~ ^linux ]]; then
+        WARDEN_ENV_SUBT=linux-gnu
+    fi
+
     if [[ ${WARDEN_ENV_SUBT} =~ ^darwin ]]; then
         WARDEN_ENV_SUBT=darwin
     fi

@@ -36,7 +36,7 @@ if [[ ! -f "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem" ]]; then
 fi
 
 ## trust root ca differently on Fedora, Ubuntu and macOS
-if [[ "$OSTYPE" == "linux-gnu" ]] \
+if [[ "$OSTYPE" =~ ^linux ]] \
   && [[ -d /etc/pki/ca-trust/source/anchors ]] \
   && [[ ! -f /etc/pki/ca-trust/source/anchors/warden-proxy-local-ca.cert.pem ]] \
   ## Fedora/CentOS
@@ -45,7 +45,7 @@ then
   sudo cp "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem" /etc/pki/ca-trust/source/anchors/warden-proxy-local-ca.cert.pem
   sudo update-ca-trust
   sudo update-ca-trust enable
-elif [[ "$OSTYPE" == "linux-gnu" ]] \
+elif [[ "$OSTYPE" =~ ^linux ]] \
   && [[ -d /usr/local/share/ca-certificates ]] \
   && [[ ! -f /usr/local/share/ca-certificates/warden-proxy-local-ca.crt ]] \
   ## Ubuntu/Debian
@@ -65,7 +65,7 @@ fi
 ## configure resolver for .test domains; allow linux machines to prevent warden
 ## from touching dns configuration if need be since unlike macOS there is not
 ## support for resolving only *.test domains via /etc/resolver/test settings
-if [[ "$OSTYPE" == "linux-gnu" ]] && [[ ! -f "${WARDEN_HOME_DIR}/nodnsconfig" ]]; then
+if [[ "$OSTYPE" =~ ^linux ]] && [[ ! -f "${WARDEN_HOME_DIR}/nodnsconfig" ]]; then
   if systemctl status NetworkManager | grep 'active (running)' >/dev/null \
     && ! grep '^nameserver 127.0.0.1$' /etc/resolv.conf >/dev/null
   then
@@ -122,7 +122,7 @@ if [[ ! -d ~/.composer ]]; then
 fi
 
 ## since bind mounts are native on linux to use .pub file as authorized_keys file in tunnel it must have proper perms
-if [[ "$OSTYPE" == "linux-gnu" ]] && [[ "$(stat -c '%U' "${WARDEN_HOME_DIR}/tunnel/ssh_key.pub")" != "root" ]]; then
+if [[ "$OSTYPE" =~ ^linux ]] && [[ "$(stat -c '%U' "${WARDEN_HOME_DIR}/tunnel/ssh_key.pub")" != "root" ]]; then
   sudo chown root:root "${WARDEN_HOME_DIR}/tunnel/ssh_key.pub"
 fi
 
