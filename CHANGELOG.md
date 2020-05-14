@@ -7,6 +7,8 @@
 
 If `PHP_VERSION` is not defined in a project's `.env` type the default version is now 7.3 across the board for all environment types. This should not pose any issues for recent `magento1` or `magento2` setups, but `laravel` environments will likely require an update to the project's `.env` to continue using PHP 7.2 or rather than 7.3 for local development.
 
+There is a **breaking change** where custom environment config specific to Linux has been used in the form of placing a `.warden/warden-env.linux-gnu.yml` file in the project directory. The value used for `WARDEN_ENV_SUBT` on Linux is now `linux` rather than `linux-gnu`. After upgrading, these files will need to be re-named from `.warden/warden-env.linux-gnu.yml` to `.warden/warden-env.linux.yml`. Where continued compatibility with prior versions of Warden is desired (for example, to not require the entire team to upgrade Warden at once), a symlink may be placed to point the old file name to the new one allowing Warden to load the definition correctly on both new and old implementations: `warden-env.linux-gnu.yml -> warden-env.linux.yml`
+
 **Enhancements:**
 
 * Updated `php-fpm` images to use `fpm-loaders` variant of base image to include IonCube & SourceGuardian from upstream images

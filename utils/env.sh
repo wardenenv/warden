@@ -44,7 +44,7 @@ function loadEnvConfig () {
             WARDEN_ENV_SUBT=darwin
         ;;
         linux*)
-            WARDEN_ENV_SUBT=linux-gnu
+            WARDEN_ENV_SUBT=linux
         ;;
         *)
             >&2 printf "\e[01;31mERROR\033[0m: Unsupported OSTYPE '${OSTYPE:-undefined}'\n"
