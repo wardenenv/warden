@@ -79,12 +79,6 @@ if [[ ${WARDEN_BLACKFIRE} -eq 1 ]]; then
     appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.blackfire"
 fi
 
-[[ ${WARDEN_ELASTICSEARCH} -eq 1 ]] \
-    && appendEnvPartialIfExists "elasticsearch"
-
-[[ ${WARDEN_VARNISH} -eq 1 ]] \
-    && appendEnvPartialIfExists "varnish"
-
 [[ ${WARDEN_ALLURE} -eq 1 ]] \
     && appendEnvPartialIfExists "allure"
 

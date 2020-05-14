@@ -3,22 +3,3 @@ services:
   nginx:
     environment:
       - XDEBUG_CONNECT_BACK_HOST=${XDEBUG_CONNECT_BACK_HOST:-host.docker.internal}
-    volumes:
-      - appdata:/var/www/html
-
-  php-fpm:
-    volumes:
-      - ${WARDEN_SSL_DIR}/rootca/certs:/etc/ssl/warden-rootca-cert:ro
-      - ${WARDEN_COMPOSER_DIR}:/home/www-data/.composer:delegated
-      - /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock
-      - appdata:/var/www/html
-
-  php-debug:
-    volumes:
-      - ${WARDEN_SSL_DIR}/rootca/certs:/etc/ssl/warden-rootca-cert:ro
-      - ${WARDEN_COMPOSER_DIR}:/home/www-data/.composer:delegated
-      - /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock
-      - appdata:/var/www/html
-
-volumes:
-  appdata:
