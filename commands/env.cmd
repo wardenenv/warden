@@ -15,24 +15,68 @@ fi
 ## simply allow the return code from docker-compose to bubble up per normal
 trap '' ERR
 
+## configure environment type defaults
+if [[ ${WARDEN_ENV_TYPE} =~ ^magento ]]; then
+    export WARDEN_SVC_PHP_VARIANT=-${WARDEN_ENV_TYPE}
+fi
+
+if [[ ${WARDEN_ENV_TYPE} != local ]]; then
+    WARDEN_MARIADB=${WARDEN_MARIADB:-1}
+    WARDEN_REDIS=${WARDEN_REDIS:-1}
+    WARDEN_MAILHOG=${WARDEN_MAILHOG:-1}
+fi
+
+if [[ ${WARDEN_ENV_TYPE} == "magento2" ]]; then
+    WARDEN_VARNISH=${WARDEN_VARNISH:-1}
+    WARDEN_ELASTICSEARCH=${WARDEN_ELASTICSEARCH:-1}
+    WARDEN_RABBITMQ=${WARDEN_RABBITMQ:-1}
+fi
+
 ## configure docker-compose files
 DOCKER_COMPOSE_ARGS=()
 
-appendEnvPartialIfExists "base"
-appendEnvPartialIfExists "${WARDEN_ENV_SUBT}"
+appendEnvPartialIfExists "networks"
+
+if [[ ${WARDEN_ENV_TYPE} != local ]]; then
+    appendEnvPartialIfExists "nginx"
+    appendEnvPartialIfExists "php-fpm"
+fi
+
+[[ ${WARDEN_MARIADB} -eq 1 ]] \
+    && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.db"
+
+[[ ${WARDEN_ELASTICSEARCH} -eq 1 ]] \
+    && appendEnvPartialIfExists "elasticsearch"
+
+if [[ ${WARDEN_VARNISH} -eq 1 ]]; then
+    appendEnvPartialIfExists "varnish"
+else
+    export BYPASS_VARNISH=true
+fi
+
+[[ ${WARDEN_RABBITMQ} -eq 1 ]] \
+    && appendEnvPartialIfExists "rabbitmq"
+
+[[ ${WARDEN_REDIS} -eq 1 ]] \
+    && appendEnvPartialIfExists "redis"
+
+[[ ${WARDEN_MAILHOG} -eq 1 ]] \
+    && appendEnvPartialIfExists "mailhog"
+
+appendEnvPartialIfExists "${WARDEN_ENV_TYPE}"
 
 [[ ${WARDEN_TEST_DB} -eq 1 ]] \
-    && appendEnvPartialIfExists "tests"
+    && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.tests"
 
 [[ ${WARDEN_SPLIT_SALES} -eq 1 ]] \
-    && appendEnvPartialIfExists "splitdb.sales"
+    && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.splitdb.sales"
 
 [[ ${WARDEN_SPLIT_CHECKOUT} -eq 1 ]] \
-    && appendEnvPartialIfExists "splitdb.checkout"
+    && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.splitdb.checkout"
 
 if [[ ${WARDEN_BLACKFIRE} -eq 1 ]]; then
-    appendEnvPartialIfExists "blackfire.base"
-    appendEnvPartialIfExists "blackfire.${WARDEN_ENV_SUBT}"
+    appendEnvPartialIfExists "blackfire"
+    appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.blackfire"
 fi
 
 [[ ${WARDEN_ELASTICSEARCH} -eq 1 ]] \
@@ -45,7 +89,7 @@ fi
     && appendEnvPartialIfExists "allure"
 
 [[ ${WARDEN_SELENIUM} -eq 1 ]] \
-    && appendEnvPartialIfExists "selenium.base"
+    && appendEnvPartialIfExists "selenium"
 
 if [[ -f "${WARDEN_ENV_PATH}/.warden/warden-env.yml" ]]; then
     DOCKER_COMPOSE_ARGS+=("-f")
