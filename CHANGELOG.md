@@ -3,6 +3,9 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.4.0..develop)
 
+## Version [0.4.4](https://github.com/davidalger/warden/tree/0.4.4) (2020-05-14)
+[All Commits](https://github.com/davidalger/warden/compare/0.4.3..0.4.4)
+
 **Enhancements:**
 
 * Updated `php-fpm` images to use `fpm-loaders` variant of base image to include IonCube & SourceGuardian from upstream images
