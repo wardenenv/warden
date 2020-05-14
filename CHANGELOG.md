@@ -21,6 +21,7 @@ There is a **breaking change** where custom environment config specific to Linux
 
 * Fixed missing SSH agent forwarding in `php-blackfire` container
 * Fixed lack of `extra_hosts` in `php-blackfire` and `blackfire-agent` containers (issue [#145](https://github.com/davidalger/warden/issues/145))
+* Fixed missing `extra_hosts` line for non-subdomain entry in `/etc/hosts` on `selenium` container
 * Fixed `$OSTYPE` check for compatibility with OpenSUSE which uses `linux` rather than `linux-gnu` ([#149](https://github.com/davidalger/warden/pull/149) by @Den4ik)
 
 ## Version [0.4.3](https://github.com/davidalger/warden/tree/0.4.3) (2020-05-02)
