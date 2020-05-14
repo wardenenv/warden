@@ -12,6 +12,7 @@
 
 * Fixed missing SSH agent forwarding in `php-blackfire` container
 * Fixed lack of `extra_hosts` in `php-blackfire` and `blackfire-agent` containers (issue [#145](https://github.com/davidalger/warden/issues/145))
+* Fixed missing `extra_hosts` line for non-subdomain entry in `/etc/hosts` on `selenium` container
 
 ## Version [0.4.3](https://github.com/davidalger/warden/tree/0.4.3) (2020-05-02)
 [All Commits](https://github.com/davidalger/warden/compare/0.4.2..0.4.3)
