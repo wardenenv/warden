@@ -19,6 +19,7 @@ If `PHP_VERSION` is not defined in a project's `.env` type the default version i
 
 * Fixed missing SSH agent forwarding in `php-blackfire` container
 * Fixed lack of `extra_hosts` in `php-blackfire` and `blackfire-agent` containers (issue [#145](https://github.com/davidalger/warden/issues/145))
+* Fixed `$OSTYPE` check for compatibility with OpenSUSE which uses `linux` rather than `linux-gnu` ([#149](https://github.com/davidalger/warden/pull/149) by @Den4ik)
 
 ## Version [0.4.3](https://github.com/davidalger/warden/tree/0.4.3) (2020-05-02)
 [All Commits](https://github.com/davidalger/warden/compare/0.4.2..0.4.3)
