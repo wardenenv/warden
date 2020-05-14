@@ -2,8 +2,7 @@ version: "3.5"
 services:
   php-blackfire:
     volumes:
-      - ${WARDEN_SSL_DIR}/rootca/certs:/etc/ssl/warden-rootca-cert:ro
-      - ${WARDEN_COMPOSER_DIR}:/home/www-data/.composer:delegated
+      - /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock
       - .${WARDEN_WEB_ROOT:-}/pub/media:/var/www/html/pub/media:delegated
       - appdata:/var/www/html
 

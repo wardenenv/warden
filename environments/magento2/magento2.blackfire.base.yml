@@ -3,6 +3,17 @@ services:
   php-blackfire:
     hostname: "${WARDEN_ENV_NAME}-php-blackfire"
     image: quay.io/warden/php-fpm:${PHP_VERSION:-7.3}-magento2-blackfire
+    environment:
+      - TRAEFIK_DOMAIN
+      - TRAEFIK_SUBDOMAIN
+      - SSH_AUTH_SOCK=/tmp/ssh-auth.sock
+      - NODE_VERSION=${NODE_VERSION:-10}
+    volumes:
+      - ${WARDEN_SSL_DIR}/rootca/certs:/etc/ssl/warden-rootca-cert:ro
+      - ${WARDEN_COMPOSER_DIR}:/home/www-data/.composer:delegated
+    extra_hosts:
+      - ${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
+      - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
     depends_on:
       - php-fpm
 
@@ -14,3 +25,6 @@ services:
       - BLACKFIRE_CLIENT_TOKEN=${BLACKFIRE_CLIENT_TOKEN}
       - BLACKFIRE_SERVER_ID=${BLACKFIRE_SERVER_ID}
       - BLACKFIRE_SERVER_TOKEN=${BLACKFIRE_SERVER_TOKEN}
+    extra_hosts:
+      - ${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
+      - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
