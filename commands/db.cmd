@@ -5,7 +5,7 @@ source "${WARDEN_DIR}/utils/env.sh"
 WARDEN_ENV_PATH="$(locateEnvPath)" || exit $?
 loadEnvConfig "${WARDEN_ENV_PATH}" || exit $?
 
-if [[ ${WARDEN_DB} -eq 0 ]]; then
+if [[ ${WARDEN_DB:-1} -eq 0 ]]; then
     echo -e "\033[33mDatabase environment is not used."
     exit 1
 fi
@@ -18,7 +18,7 @@ fi
 ## load connection information for the mysql service
 eval "$(grep "^MYSQL_" "${WARDEN_ENV_PATH}/.env")"
 eval "$(
-    grep -E '^\W+- MYSQL_.*=\$\{.*\}' "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.base.yml" \
+    grep -E '^\W+- MYSQL_.*=\$\{.*\}' "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.db.base.yml" \
         | sed -E 's/.*- //g'
 )"
 
