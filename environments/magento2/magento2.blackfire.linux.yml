@@ -1,0 +1,8 @@
+version: "3.5"
+
+x-volumes: &volumes
+  - .${WARDEN_WEB_ROOT:-}/:/var/www/html
+
+services:
+  php-blackfire:
+    volumes: *volumes

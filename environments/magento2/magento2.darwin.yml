@@ -1,23 +1,17 @@
 version: "3.5"
+
+x-volumes: &volumes
+  - .${WARDEN_WEB_ROOT:-}/pub/media:/var/www/html/pub/media:delegated
+  - appdata:/var/www/html
+
 services:
   nginx:
     environment:
       - XDEBUG_CONNECT_BACK_HOST=${XDEBUG_CONNECT_BACK_HOST:-host.docker.internal}
-    volumes:
-      - .${WARDEN_WEB_ROOT:-}/pub/media:/var/www/html/pub/media:delegated
-      - appdata:/var/www/html
+    volumes: *volumes
 
-  php-fpm:
-    volumes:
-      - /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock
-      - .${WARDEN_WEB_ROOT:-}/pub/media:/var/www/html/pub/media:delegated
-      - appdata:/var/www/html
-
-  php-debug:
-    volumes:
-      - /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock
-      - .${WARDEN_WEB_ROOT:-}/pub/media:/var/www/html/pub/media:delegated
-      - appdata:/var/www/html
+  php-fpm: { volumes: *volumes }
+  php-debug: { volumes: *volumes }
 
 volumes:
   appdata:

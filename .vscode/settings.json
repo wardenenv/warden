@@ -1,5 +1,8 @@
 {
   "files.exclude": {
     "docs/_build": true
-  }
+  },
+  "cSpell.words": [
+    "appdata"
+  ]
 }

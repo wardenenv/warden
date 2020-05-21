@@ -8,7 +8,7 @@ The `local` environment type does nothing more than declare the `docker-compose`
 
 When this type is used, a `.warden/warden-env.yml` may be placed in the root directory of the project workspace to define the desired containers, volumes, etc needed for the project. An example of a `local` environment type being used can be found in the [m2demo project](https://github.com/davidalger/m2demo).
 
-Similar to the other environment type's base definitions, Warden supports a `warden-env.darwin.yml` and `warden-env.linux-gnu.yml`
+Similar to the other environment type's base definitions, Warden supports a `warden-env.darwin.yml` and `warden-env.linux.yml`
 
 #### Magento 2
 
@@ -52,7 +52,7 @@ In addition to the above, each environment type (with the exception of the `loca
 
 Where PHP is specified in the above list, there should be two `fpm` containers, `php-fpm` and `php-debug` in order to provide Xdebug support. Use of Xdebug is enabled by setting the `XDEBUG_SESSION` cookie in your browser to direct the request to the `php-debug` container. Shell sessions opened in the debug container via `warden debug` will also connect PHP process for commands on the CLI to Xdebug.
 
-The configuration of each environment leverages a `base` configuration YAML file, and optionally a `darwin` and `linux-gnu` file to add to `base` configuration anything which may be specific to a given host architecture (this is, for example, how the `magento2` environment type works seamlessly on macOS with Mutagen sync sessions while using native filesystem mounts on Linux hosts).
+The configuration of each environment leverages a `base` configuration YAML file, and optionally a `darwin` and `linux` file to add to `base` configuration anything which may be specific to a given host architecture (this is, for example, how the `magento2` environment type works seamlessly on macOS with Mutagen sync sessions while using native filesystem mounts on Linux hosts).
 
 ### Environment Templates
 

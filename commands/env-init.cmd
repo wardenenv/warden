@@ -29,6 +29,10 @@ EOF
 if [[ "${WARDEN_ENV_TYPE}" == "magento1" ]]; then
   cat >> "${WARDEN_ENV_PATH}/.env" <<-EOT
 
+		WARDEN_DB=1
+		WARDEN_REDIS=1
+		WARDEN_MAILHOG=1
+
 		MARIADB_VERSION=10.3
 		NODE_VERSION=10
 		PHP_VERSION=7.2
@@ -48,7 +52,12 @@ fi
 if [[ "${WARDEN_ENV_TYPE}" == "magento2" ]]; then
   cat >> "${WARDEN_ENV_PATH}/.env" <<-EOT
 
-		BYPASS_VARNISH=false
+		WARDEN_DB=1
+		WARDEN_ELASTICSEARCH=1
+		WARDEN_VARNISH=1
+		WARDEN_RABBITMQ=1
+		WARDEN_REDIS=1
+		WARDEN_MAILHOG=1
 
 		ELASTICSEARCH_VERSION=6.8
 		MARIADB_VERSION=10.3
@@ -77,6 +86,15 @@ fi
 
 if [[ "${WARDEN_ENV_TYPE}" == "laravel" ]]; then
   cat >> "${WARDEN_ENV_PATH}/.env" <<-EOT
+
+		MARIADB_VERSION=10.3
+		NODE_VERSION=10
+		PHP_VERSION=7.2
+		REDIS_VERSION=5.0
+
+		WARDEN_DB=1
+		WARDEN_REDIS=1
+		WARDEN_MAILHOG=1
 
 		## Laravel Config
 		APP_URL=http://app.${WARDEN_ENV_NAME}.test
