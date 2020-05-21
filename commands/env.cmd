@@ -48,11 +48,8 @@ fi
 [[ ${WARDEN_ELASTICSEARCH} -eq 1 ]] \
     && appendEnvPartialIfExists "elasticsearch"
 
-if [[ ${WARDEN_VARNISH} -eq 1 ]]; then
-    appendEnvPartialIfExists "varnish"
-else
-    export BYPASS_VARNISH=true
-fi
+[[ ${WARDEN_VARNISH} -eq 1 ]] \
+    && appendEnvPartialIfExists "varnish"
 
 [[ ${WARDEN_RABBITMQ} -eq 1 ]] \
     && appendEnvPartialIfExists "rabbitmq"
