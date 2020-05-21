@@ -13,9 +13,17 @@ The `BYPASS_VARNISH` flag will continue to work as before but has been **depreca
 
 **Enhancements:**
 
-* Updated `env-init` command to include locked values for `MARIADB_VERSION`, `NODE_VERSION`, `PHP_VERSION`, and `REDIS_VERSION` for `laravel` environment types
-* Updated so `WARDEN_ALLURE` will now enable Allure container on any environment type
-* Updated so `WARDEN_SELENIUM` will now enable Selenium containers on any environment type
+* Added new feature flag `WARDEN_DB` to enable/disable service on per-project basis.
+* Added new feature flag `WARDEN_ELASTICSEARCH` to enable/disable service on per-project basis.
+* Added new feature flag `WARDEN_VARNISH` to enable/disable service on per-project basis.
+* Added new feature flag `WARDEN_RABBITMQ` to enable/disable service on per-project basis.
+* Added new feature flag `WARDEN_REDIS` to enable/disable service on per-project basis.
+* Added new feature flag `WARDEN_MAILHOG` to enable/disable service on per-project basis.
+* Updated `WARDEN_ALLURE` to now enable Allure container on any environment type.
+* Updated `WARDEN_SELENIUM` to now enable Selenium containers on any environment type.
+* Updated `WARDEN_BLACKFIRE` to now enable Blackfire containers on any environment type.
+* Updated `env-init` command to include locked values for `MARIADB_VERSION`, `NODE_VERSION`, `PHP_VERSION`, and `REDIS_VERSION` for `laravel` environment types.
+* Updated `local` env type so it can now include common services by adding the above feature flags to the project `.env` file.
 
 ## Version [0.4.4](https://github.com/davidalger/warden/tree/0.4.4) (2020-05-14)
 [All Commits](https://github.com/davidalger/warden/compare/0.4.3..0.4.4)
