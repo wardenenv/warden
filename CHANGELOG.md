@@ -13,7 +13,7 @@ The `BYPASS_VARNISH` flag will continue to work as before but has been **depreca
 
 **Enhancements:**
 
-* Added `laravel` environment type for use with Laravel 4+ ([#146](https://github.com/davidalger/warden/pull/146) by @lbajsarowicz)
+* Added `symfony` environment type for use with Symfony 4+ ([#146](https://github.com/davidalger/warden/pull/146) by @lbajsarowicz)
 * Added `COMPOSER_MEMORY_LIMIT=-1` to env on all `php-*` containers ([#154](https://github.com/davidalger/warden/pull/154) by @navarr)
 * Added new feature flag `WARDEN_DB` to enable/disable service on per-project basis.
 * Added new feature flag `WARDEN_ELASTICSEARCH` to enable/disable service on per-project basis.

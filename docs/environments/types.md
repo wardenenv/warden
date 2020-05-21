@@ -46,6 +46,20 @@ The `laravel` environment type supports development of Laravel projects, launchi
 
 Files are currently mounted using a delegated mount on macOS and natively on Linux.
 
+#### Symfony
+
+The `symfony` environment type supports development of Symfony 4+ projects, launching containers including:
+
+* Nginx
+* PHP-FPM
+* MariaDB
+* Redis
+* RabbitMQ
+* Varnish (disabled by default)
+* Elasticsearch (disabled by default)
+
+Files are currently mounted using a delegated mount on macOS and natively on Linux.
+
 #### Commonalities
 
 In addition to the above, each environment type (with the exception of the `local` type) come with a pre-configured Mailhog service, with PHP setup to use `mhsendmail` to ensure outbound email does not inadvertently leave your network and to support simpler testing of email functionality. You can use [Traefik](https://traefik.warden.test/) to find the Mailhog URL for each project.
