@@ -14,6 +14,7 @@ The `BYPASS_VARNISH` flag will continue to work as before but has been **depreca
 **Enhancements:**
 
 * Added `laravel` environment type for use with Laravel 4+ ([#146](https://github.com/davidalger/warden/pull/146) by @lbajsarowicz)
+* Added `COMPOSER_MEMORY_LIMIT=-1` to env on all `php-*` containers ([#154](https://github.com/davidalger/warden/pull/154) by @navarr)
 * Added new feature flag `WARDEN_DB` to enable/disable service on per-project basis.
 * Added new feature flag `WARDEN_ELASTICSEARCH` to enable/disable service on per-project basis.
 * Added new feature flag `WARDEN_VARNISH` to enable/disable service on per-project basis.
@@ -25,7 +26,6 @@ The `BYPASS_VARNISH` flag will continue to work as before but has been **depreca
 * Updated `WARDEN_BLACKFIRE` to now enable Blackfire containers on any environment type.
 * Updated `env-init` command to include locked values for `MARIADB_VERSION`, `NODE_VERSION`, `PHP_VERSION`, and `REDIS_VERSION` for `laravel` environment types.
 * Updated `local` env type so it can now include common services by adding the above feature flags to the project `.env` file.
-* Added `laravel` environment type for use with Laravel 4+ ([#146](https://github.com/davidalger/warden/pull/146) by @lbajsarowicz)
 
 ## Version [0.4.4](https://github.com/davidalger/warden/tree/0.4.4) (2020-05-14)
 [All Commits](https://github.com/davidalger/warden/compare/0.4.3..0.4.4)
