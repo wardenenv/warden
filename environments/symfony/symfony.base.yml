@@ -1,0 +1,16 @@
+version: "3.5"
+services:
+  nginx:
+    environment:
+      - NGINX_PUBLIC=/public
+      - NGINX_TEMPLATE=application.conf
+    volumes:
+      - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
+
+  php-fpm:
+    volumes:
+      - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
+
+  php-debug:
+    volumes:
+      - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
