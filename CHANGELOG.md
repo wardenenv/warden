@@ -1,7 +1,34 @@
 # Change Log
 
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
-[All Commits](https://github.com/davidalger/warden/compare/0.4.0..develop)
+[All Commits](https://github.com/davidalger/warden/compare/0.5.0..develop)
+
+## Version [0.5.0](https://github.com/davidalger/warden/tree/0.5.0) (2020-05-21)
+[All Commits](https://github.com/davidalger/warden/compare/0.4.4..0.5.0)
+
+**Upgrade Notes:**
+
+If `PHP_VERSION` is not defined in a project's `.env` type the default version is now 7.3 across the board for all environment types. This should not pose any issues for recent `magento1` or `magento2` setups, but `laravel` environments will likely require an update to the project's `.env` to continue using PHP 7.2 or rather than 7.3 for local development.
+
+There is a **breaking change** where custom environment config specific to Linux has been used in the form of placing a `.warden/warden-env.linux-gnu.yml` file in the project directory. The value used for `WARDEN_ENV_SUBT` on Linux is now `linux` rather than `linux-gnu`. After upgrading, these files will need to be re-named from `.warden/warden-env.linux-gnu.yml` to `.warden/warden-env.linux.yml`. Where continued compatibility with prior versions of Warden is desired (for example, to not require the entire team to upgrade Warden at once), a symlink may be placed to point the old file name to the new one allowing Warden to load the definition correctly on both new and old implementations: `warden-env.linux-gnu.yml -> warden-env.linux.yml`
+
+The `BYPASS_VARNISH` flag will continue to work as before but has been **deprecated** to be removed in a future release. It will no longer be included in the `.env` file created for new `magento2` environments.Please use the new feature toggle `WARDEN_VARNISH=0` to disable Varnish instead.
+
+**Enhancements:**
+
+* Added `symfony` environment type for use with Symfony 4+ ([#146](https://github.com/davidalger/warden/pull/146) by @lbajsarowicz)
+* Added `COMPOSER_MEMORY_LIMIT=-1` to env on all `php-*` containers ([#154](https://github.com/davidalger/warden/pull/154) by @navarr)
+* Added new feature flag `WARDEN_DB` to enable/disable service on per-project basis.
+* Added new feature flag `WARDEN_ELASTICSEARCH` to enable/disable service on per-project basis.
+* Added new feature flag `WARDEN_VARNISH` to enable/disable service on per-project basis.
+* Added new feature flag `WARDEN_RABBITMQ` to enable/disable service on per-project basis.
+* Added new feature flag `WARDEN_REDIS` to enable/disable service on per-project basis.
+* Added new feature flag `WARDEN_MAILHOG` to enable/disable service on per-project basis.
+* Updated `WARDEN_ALLURE` to now enable Allure container on any environment type.
+* Updated `WARDEN_SELENIUM` to now enable Selenium containers on any environment type.
+* Updated `WARDEN_BLACKFIRE` to now enable Blackfire containers on any environment type.
+* Updated `env-init` command to include locked values for `MARIADB_VERSION`, `NODE_VERSION`, `PHP_VERSION`, and `REDIS_VERSION` for `laravel` environment types.
+* Updated `local` env type so it can now include common services by adding the above feature flags to the project `.env` file.
 
 ## Version [0.4.4](https://github.com/davidalger/warden/tree/0.4.4) (2020-05-14)
 [All Commits](https://github.com/davidalger/warden/compare/0.4.3..0.4.4)

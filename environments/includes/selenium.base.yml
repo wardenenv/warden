@@ -11,12 +11,13 @@ services:
     environment:
       GRID_TIMEOUT: 0
       GRID_BROWSER_TIMEOUT: 0
+
   selenium-chrome:
     hostname: ${WARDEN_ENV_NAME}_selenium-chrome
     image: selenium/node-chrome${WARDEN_SELENIUM_DEBUG:-}:3.8.1
     extra_hosts:
-    - ${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
-    - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
+      - ${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
+      - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
     depends_on:
       - selenium-hub
     environment:

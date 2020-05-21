@@ -44,7 +44,7 @@ function loadEnvConfig () {
             WARDEN_ENV_SUBT=darwin
         ;;
         linux*)
-            WARDEN_ENV_SUBT=linux-gnu
+            WARDEN_ENV_SUBT=linux
         ;;
         *)
             >&2 printf "\e[01;31mERROR\033[0m: Unsupported OSTYPE '${OSTYPE:-undefined}'\n"
@@ -68,9 +68,16 @@ function assertValidEnvType () {
 
 function appendEnvPartialIfExists () {
     local PARTIAL_NAME="${1}"
-    local PARTIAL_PATH="${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.${PARTIAL_NAME}.yml"
+    local PARTIAL_PATH=""
 
-    if [[ -f "${PARTIAL_PATH}" ]]; then
-        DOCKER_COMPOSE_ARGS+=("-f" "${PARTIAL_PATH}")
-    fi
+    for PARTIAL_PATH in \
+        "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.base.yml" \
+        "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml" \
+        "${WARDEN_DIR}/environments/includes/${PARTIAL_NAME}.base.yml" \
+        "${WARDEN_DIR}/environments/includes/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml"
+    do
+        if [[ -f "${PARTIAL_PATH}" ]]; then
+            DOCKER_COMPOSE_ARGS+=("-f" "${PARTIAL_PATH}")
+        fi
+    done
 }

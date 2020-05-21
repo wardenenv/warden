@@ -29,6 +29,10 @@ EOF
 if [[ "${WARDEN_ENV_TYPE}" == "magento1" ]]; then
   cat >> "${WARDEN_ENV_PATH}/.env" <<-EOT
 
+		WARDEN_DB=1
+		WARDEN_REDIS=1
+		WARDEN_MAILHOG=1
+
 		MARIADB_VERSION=10.3
 		NODE_VERSION=10
 		PHP_VERSION=7.2
@@ -48,7 +52,12 @@ fi
 if [[ "${WARDEN_ENV_TYPE}" == "magento2" ]]; then
   cat >> "${WARDEN_ENV_PATH}/.env" <<-EOT
 
-		BYPASS_VARNISH=false
+		WARDEN_DB=1
+		WARDEN_ELASTICSEARCH=1
+		WARDEN_VARNISH=1
+		WARDEN_RABBITMQ=1
+		WARDEN_REDIS=1
+		WARDEN_MAILHOG=1
 
 		ELASTICSEARCH_VERSION=6.8
 		MARIADB_VERSION=10.3
@@ -78,6 +87,15 @@ fi
 if [[ "${WARDEN_ENV_TYPE}" == "laravel" ]]; then
   cat >> "${WARDEN_ENV_PATH}/.env" <<-EOT
 
+		MARIADB_VERSION=10.3
+		NODE_VERSION=10
+		PHP_VERSION=7.2
+		REDIS_VERSION=5.0
+
+		WARDEN_DB=1
+		WARDEN_REDIS=1
+		WARDEN_MAILHOG=1
+
 		## Laravel Config
 		APP_URL=http://app.${WARDEN_ENV_NAME}.test
 		APP_KEY=base64:$(dd if=/dev/urandom bs=1 count=32 2>/dev/null | base64)
@@ -99,5 +117,24 @@ if [[ "${WARDEN_ENV_TYPE}" == "laravel" ]]; then
 		REDIS_PORT=6379
 		
 		MAIL_DRIVER=sendmail
+	EOT
+fi
+
+if [[ "${WARDEN_ENV_TYPE}" == "symfony" ]]; then
+  cat >> "${WARDEN_ENV_PATH}/.env" <<-EOT
+
+		MARIADB_VERSION=10.3
+		NODE_VERSION=10
+		PHP_VERSION=7.4
+		RABBITMQ_VERSION=3.7
+		REDIS_VERSION=5.0
+		VARNISH_VERSION=6.0
+
+		WARDEN_MARIADB=1
+		WARDEN_REDIS=1
+		WARDEN_MAILHOG=1
+		WARDEN_RABBITMQ=1
+		WARDEN_ELASTICSEARCH=0
+		WARDEN_VARNISH=0
 	EOT
 fi
