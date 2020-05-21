@@ -17,6 +17,7 @@ services:
       - TRAEFIK_SUBDOMAIN
       - SSH_AUTH_SOCK=/tmp/ssh-auth.sock
       - NODE_VERSION=${NODE_VERSION:-10}
+      - COMPOSER_MEMORY_LIMIT=-1
     volumes: *volumes
     extra_hosts: *extra_hosts
     depends_on:
