@@ -8,7 +8,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.tls=true
-      - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.priority=1
+      - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.priority=2
       - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.rule=
           HostRegexp(`{subdomain:.+}.${TRAEFIK_DOMAIN}`) || Host(`${TRAEFIK_DOMAIN}`)
       - traefik.http.services.${WARDEN_ENV_NAME}-nginx.loadbalancer.server.port=80
