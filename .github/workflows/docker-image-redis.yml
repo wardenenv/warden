@@ -5,6 +5,7 @@ on:
   push:
     paths:
     - version
+    - images/.trigger
     - images/redis/**
     branches:
     - develop
