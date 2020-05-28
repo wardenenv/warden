@@ -33,10 +33,10 @@ fi
 if [[ ${PUSH_FLAG} ]]; then
   if [[ ${DOCKER_USERNAME:-} ]]; then
     echo "Attempting non-interactive docker login (via provided credentials)"
-    echo "${DOCKER_PASSWORD:-}" | docker login -u "${DOCKER_USERNAME:-}" --password-stdin ${DOCKER_REGISTRY:-quay.io}
+    echo "${DOCKER_PASSWORD:-}" | docker login -u "${DOCKER_USERNAME:-}" --password-stdin ${DOCKER_REGISTRY:-docker.io}
   elif [[ -t 1 ]]; then
     echo "Attempting interactive docker login (tty)"
-    docker login ${DOCKER_REGISTRY:-quay.io}
+    docker login ${DOCKER_REGISTRY:-docker.io}
   fi
 fi
 
