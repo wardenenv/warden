@@ -2,7 +2,7 @@ version: "3.5"
 services:
   mailhog:
     hostname: "${WARDEN_ENV_NAME}-mailhog"
-    image: quay.io/warden/mailhog:${MAILHOG_VERSION:-1.0}
+    image: docker.io/wardenenv/mailhog:${MAILHOG_VERSION:-1.0}
     labels:
       - traefik.enable=true
       - traefik.http.routers.${WARDEN_ENV_NAME}-mailhog.tls=true

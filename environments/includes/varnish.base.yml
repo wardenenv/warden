@@ -9,7 +9,7 @@ services:
 
   varnish:
     hostname: "${WARDEN_ENV_NAME}-varnish"
-    image: quay.io/warden/varnish:${VARNISH_VERSION:-6.0}
+    image: docker.io/wardenenv/varnish:${VARNISH_VERSION:-6.0}
     depends_on:
       - nginx
     labels:

@@ -6,7 +6,7 @@ services:
 
   db:
     hostname: "${WARDEN_ENV_NAME}-mariadb"
-    image: quay.io/warden/mariadb:${MARIADB_VERSION:-10.3}
+    image: docker.io/wardenenv/mariadb:${MARIADB_VERSION:-10.3}
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-symfony}
       - MYSQL_DATABASE=${MYSQL_DATABASE:-symfony}
