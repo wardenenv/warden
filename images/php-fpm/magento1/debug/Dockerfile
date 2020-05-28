@@ -1,5 +1,5 @@
 ARG PHP_VERSION
-FROM quay.io/warden/php-fpm:${PHP_VERSION}-magento1
+FROM docker.io/wardenenv/php-fpm:${PHP_VERSION}-magento1
 USER root
 
 RUN set -eux \
