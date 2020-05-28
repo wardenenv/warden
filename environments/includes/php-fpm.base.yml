@@ -11,7 +11,7 @@ x-extra_hosts: &extra_hosts
 services:
   php-fpm:
     hostname: "${WARDEN_ENV_NAME}-php-fpm"
-    image: quay.io/warden/php-fpm:${PHP_VERSION:-7.3}${WARDEN_SVC_PHP_VARIANT:-}
+    image: docker.io/wardenenv/php-fpm:${PHP_VERSION:-7.3}${WARDEN_SVC_PHP_VARIANT:-}
     environment:
       - TRAEFIK_DOMAIN
       - TRAEFIK_SUBDOMAIN
@@ -23,7 +23,7 @@ services:
 
   php-debug:
     hostname: "${WARDEN_ENV_NAME}-php-debug"
-    image: quay.io/warden/php-fpm:${PHP_VERSION:-7.3}${WARDEN_SVC_PHP_VARIANT:-}-debug
+    image: docker.io/wardenenv/php-fpm:${PHP_VERSION:-7.3}${WARDEN_SVC_PHP_VARIANT:-}-debug
     environment:
       - TRAEFIK_DOMAIN
       - TRAEFIK_SUBDOMAIN

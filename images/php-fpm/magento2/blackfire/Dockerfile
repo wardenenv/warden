@@ -1,5 +1,5 @@
 ARG PHP_VERSION
-FROM quay.io/warden/php-fpm:${PHP_VERSION}-magento2
+FROM docker.io/wardenenv/php-fpm:${PHP_VERSION}-magento2
 USER root
 
 RUN yum install -y pygpgme \

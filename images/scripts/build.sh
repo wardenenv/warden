@@ -33,17 +33,17 @@ fi
 if [[ ${PUSH_FLAG} ]]; then
   if [[ ${DOCKER_USERNAME:-} ]]; then
     echo "Attempting non-interactive docker login (via provided credentials)"
-    echo "${DOCKER_PASSWORD:-}" | docker login -u "${DOCKER_USERNAME:-}" --password-stdin ${DOCKER_REGISTRY:-quay.io}
+    echo "${DOCKER_PASSWORD:-}" | docker login -u "${DOCKER_USERNAME:-}" --password-stdin ${DOCKER_REGISTRY:-docker.io}
   elif [[ -t 1 ]]; then
     echo "Attempting interactive docker login (tty)"
-    docker login ${DOCKER_REGISTRY:-quay.io}
+    docker login ${DOCKER_REGISTRY:-docker.io}
   fi
 fi
 
 ## iterate over and build each Dockerfile
 for file in $(find ${SEARCH_PATH} -type f -name Dockerfile | sort -V); do
     BUILD_DIR="$(dirname "${file}")"
-    IMAGE_TAG="quay.io/warden/$(echo "${BUILD_DIR}" | cut -d/ -f1)"
+    IMAGE_TAG="docker.io/wardenenv/$(echo "${BUILD_DIR}" | cut -d/ -f1)"
     IMAGE_SUFFIX="$(echo "${BUILD_DIR}" | cut -d/ -f2- -s | tr / - | sed 's/^-//')"
 
     ## due to build matrix requirements, magento1 and magento2 specific varients are built in separate invocation

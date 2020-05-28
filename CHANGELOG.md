@@ -3,6 +3,27 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.5.0..develop)
 
+## Version [0.5.1](https://github.com/davidalger/warden/tree/0.5.1) (2020-05-28)
+[All Commits](https://github.com/davidalger/warden/compare/0.5.0..0.5.1)
+
+**Upgrade Notes:**
+
+All docker images have been re-located to a [new Docker Hub organization](https://hub.docker.com/u/wardenenv) created specifically for use with Warden. All built-in environment types having been updated to reference the images on `docker.io/wardenenv` rather than `quay.io/warden`. Images currently on Quay will remain available (for at least the next 90-days) in order to preserve functionality of Warden prior to the 0.5.1 release, but these will no longer be updated and are considered deprecated immediately. Where references to `quay.io/warden` exist in per-project configuration within the `.warden` directory, it is strongly recommended these references be updated to use images from `docker.io/wardenenv`. You can quickly check an environment's configuration for references to images on Quay via the following command:
+
+```
+warden env config | grep quay.io
+```
+
+The backstory, and reason for moving the images, is that in Warden 0.2.0 (circa January 2020) images were relocated from a single Docker Hub repository to individual repositories on Quay.io both as a means of breaking down a mon-repo and also to leverage images scanning of Quay.io. Since that time, Quay.io has had multiple outages, including a recent one which lasted for 19 hours with intermittent inability to pull images as even read-only operations were failing as the service failed to be scaled. This morning [Quay.io is down yet again](https://github.com/davidalger/warden/issues/157), prompting all-out inability to pull images. Given the saddening instability of Quay.io and the inability to [setup a local mirror as you can with Docker Hub](https://docs.docker.com/registry/recipes/mirror/) it has become painstakingly obvious that the images must be moved back to Docker Hub for a long-term and stable home, with the added benefit that you will now be able to use a local registry service as a pass-through mirror for reducing network bandwidth and/or ensuring you have a copy of all images local to your network should at any time Docker Hub encounter issues in the future.
+
+The new long-term home for Warden docker images can be found here at [https://hub.docker.com/u/wardenenv](https://hub.docker.com/u/wardenenv).
+
+**Change Summary:**
+
+* Updated images to reside in the `docker.io/wardenenv` registry on [Docker Hub](https://hub.docker.com/u/wardenenv)
+* Removed usages of images previously on `quay.io/warden`
+* Deprecated images on `quay.io/warden` for planned removal at some point in the future (to be not less than 90-days from today)
+
 ## Version [0.5.0](https://github.com/davidalger/warden/tree/0.5.0) (2020-05-21)
 [All Commits](https://github.com/davidalger/warden/compare/0.4.4..0.5.0)
 
@@ -200,7 +221,7 @@ Please reference the updated [base environment definitions](https://github.com/d
 
 Environments referencing `laravel.conf` in custom configuration within `.warden` directory must update their configuration to reference the generic `application.conf` instead as the file was renamed in the Nginx image for re-use in the future on additional environment types.
 
-Docker images have all been re-located and/or mirrored to Quay with all built-in environment types having been updated to reference the images at the new location. Images currently on Docker Hub will remain available in order to preserve functionality of Warden 0.1.x release line, but will no longer be updated and compatibility with all functionality in Warden 0.2.0 is not guaranteed. Where these images are referenced in per-project configuration within the `.warden` directory, it is strongly suggested these references be updated to use images at the new locations:
+Docker images have all been re-located and/or mirrored to Quay with all built-in environment types having been updated to reference the images at the new location. Images currently on Docker Hub will remain available in order to preserve functionality of Warden 0.1.x release line *(**UPDATE** These images have been removed as of May 28th, 2020)*, but will no longer be updated and compatibility with all functionality in Warden 0.2.0 is not guaranteed. Where these images are referenced in per-project configuration within the `.warden` directory, it is strongly suggested these references be updated to use images at the new locations:
 
 * [https://quay.io/repository/warden/varnish?tab=tags](https://quay.io/repository/warden/varnish?tab=tags)
 * [https://quay.io/repository/warden/redis?tab=tags](https://quay.io/repository/warden/redis?tab=tags)

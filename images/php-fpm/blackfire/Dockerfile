@@ -1,5 +1,5 @@
 ARG PHP_VERSION=
-FROM quay.io/warden/php-fpm:${PHP_VERSION}
+FROM docker.io/wardenenv/php-fpm:${PHP_VERSION}
 USER root
 
 RUN yum install -y pygpgme \

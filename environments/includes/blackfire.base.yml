@@ -11,7 +11,7 @@ x-extra_hosts: &extra_hosts
 services:
   php-blackfire:
     hostname: "${WARDEN_ENV_NAME}-php-blackfire"
-    image: quay.io/warden/php-fpm:${PHP_VERSION:-7.3}${WARDEN_SVC_PHP_VARIANT:-}-blackfire
+    image: docker.io/wardenenv/php-fpm:${PHP_VERSION:-7.3}${WARDEN_SVC_PHP_VARIANT:-}-blackfire
     environment:
       - TRAEFIK_DOMAIN
       - TRAEFIK_SUBDOMAIN
