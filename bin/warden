@@ -33,7 +33,7 @@ export readonly WARDEN_COMPOSER_DIR="${WARDEN_COMPOSER_DIR:-"$HOME/.composer"}"
 declare WARDEN_HELP=
 declare WARDEN_PARAMS=()
 declare WARDEN_COMMAND=
-declare WARDEN_ANYARGS=(env db shell)
+declare WARDEN_ANYARGS=(env db shell debug)
 declare WARDEN_VERBOSE=
 
 ## parse first argument as command and determine validity
