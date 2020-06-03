@@ -10,6 +10,6 @@ RUN mkdir -p /var/www/html && \
     npm install -g magepack@^2.3 && \
     npm cache clean --force
 
-ENTRYPOINT ["tail", "-f", "/dev/null"]
+CMD tail -f /dev/null
 
 USER chrome
