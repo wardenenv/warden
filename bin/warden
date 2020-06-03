@@ -24,15 +24,16 @@ containsElement () {
 ## define environment requirements
 readonly WARDEN_REQUIRED_DOCKER_COMPOSE="1.18.0"
 
-## define global directory paths by commands
-readonly WARDEN_HOME_DIR=~/.warden
-readonly WARDEN_SSL_DIR="${WARDEN_HOME_DIR}/ssl"
+## define and export global shared directory paths
+export readonly WARDEN_HOME_DIR="${WARDEN_HOME_DIR:-"$HOME/.warden"}"
+export readonly WARDEN_SSL_DIR="${WARDEN_HOME_DIR}/ssl"
+export readonly WARDEN_COMPOSER_DIR="${WARDEN_COMPOSER_DIR:-"$HOME/.composer"}"
 
 ## declare variables for flags and arguments
 declare WARDEN_HELP=
 declare WARDEN_PARAMS=()
 declare WARDEN_COMMAND=
-declare WARDEN_ANYARGS=(env db shell)
+declare WARDEN_ANYARGS=(env db shell debug)
 declare WARDEN_VERBOSE=
 
 ## parse first argument as command and determine validity

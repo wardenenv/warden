@@ -1,0 +1,26 @@
+version: '3.5'
+services:
+  php-fpm:
+    depends_on:
+      - checkoutdb
+
+  php-debug:
+    depends_on:
+      - checkoutdb
+
+  checkoutdb:
+    hostname: "${WARDEN_ENV_NAME}-checkoutdb"
+    image: docker.io/wardenenv/mariadb:${MARIADB_VERSION:-10.3}
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-magento}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-magento}
+      - MYSQL_USER=${MYSQL_USER:-magento}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-magento}
+    command:
+      - mysqld
+      - --max_allowed_packet=1024M
+    volumes:
+      - checkoutdbdata:/var/lib/mysql
+
+volumes:
+  checkoutdbdata:

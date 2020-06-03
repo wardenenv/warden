@@ -1,0 +1,37 @@
+version: "3.5"
+
+x-volumes: &volumes
+  - ${WARDEN_SSL_DIR}/rootca/certs:/etc/ssl/warden-rootca-cert:ro
+  - ${WARDEN_COMPOSER_DIR}:/home/www-data/.composer:delegated
+
+x-extra_hosts: &extra_hosts
+    - ${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
+    - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
+
+services:
+  php-fpm:
+    hostname: "${WARDEN_ENV_NAME}-php-fpm"
+    image: docker.io/wardenenv/php-fpm:${PHP_VERSION:-7.3}${WARDEN_SVC_PHP_VARIANT:-}
+    environment:
+      - TRAEFIK_DOMAIN
+      - TRAEFIK_SUBDOMAIN
+      - SSH_AUTH_SOCK=/tmp/ssh-auth.sock
+      - NODE_VERSION=${NODE_VERSION:-10}
+      - COMPOSER_MEMORY_LIMIT=-1
+    volumes: *volumes
+    extra_hosts: *extra_hosts
+
+  php-debug:
+    hostname: "${WARDEN_ENV_NAME}-php-debug"
+    image: docker.io/wardenenv/php-fpm:${PHP_VERSION:-7.3}${WARDEN_SVC_PHP_VARIANT:-}-debug
+    environment:
+      - TRAEFIK_DOMAIN
+      - TRAEFIK_SUBDOMAIN
+      - SSH_AUTH_SOCK=/tmp/ssh-auth.sock
+      - NODE_VERSION=${NODE_VERSION:-10}
+      - COMPOSER_MEMORY_LIMIT=-1
+      - PHP_IDE_CONFIG=serverName=${WARDEN_ENV_NAME}-docker
+    volumes: *volumes
+    extra_hosts: *extra_hosts
+    depends_on:
+      - php-fpm

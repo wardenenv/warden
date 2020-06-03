@@ -1,7 +1,104 @@
 # Change Log
 
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
-[All Commits](https://github.com/davidalger/warden/compare/0.4.0..develop)
+[All Commits](https://github.com/davidalger/warden/compare/0.5.1..develop)
+
+**Enhancements:**
+
+* Fixed inability to run `warden debug -c '<command>'` in like manner to `warden shell -c ...`
+
+## Version [0.5.1](https://github.com/davidalger/warden/tree/0.5.1) (2020-05-28)
+[All Commits](https://github.com/davidalger/warden/compare/0.5.0..0.5.1)
+
+**Upgrade Notes:**
+
+All docker images have been re-located to a [new Docker Hub organization](https://hub.docker.com/u/wardenenv) created specifically for use with Warden. All built-in environment types having been updated to reference the images on `docker.io/wardenenv` rather than `quay.io/warden`. Images currently on Quay will remain available (for at least the next 90-days) in order to preserve functionality of Warden prior to the 0.5.1 release, but these will no longer be updated and are considered deprecated immediately. Where references to `quay.io/warden` exist in per-project configuration within the `.warden` directory, it is strongly recommended these references be updated to use images from `docker.io/wardenenv`. You can quickly check an environment's configuration for references to images on Quay via the following command:
+
+```
+warden env config | grep quay.io
+```
+
+The backstory, and reason for moving the images, is that in Warden 0.2.0 (circa January 2020) images were relocated from a single Docker Hub repository to individual repositories on Quay.io both as a means of breaking down a mon-repo and also to leverage images scanning of Quay.io. Since that time, Quay.io has had multiple outages, including a recent one which lasted for 19 hours with intermittent inability to pull images as even read-only operations were failing as the service failed to be scaled. This morning [Quay.io is down yet again](https://github.com/davidalger/warden/issues/157), prompting all-out inability to pull images. Given the saddening instability of Quay.io and the inability to [setup a local mirror as you can with Docker Hub](https://docs.docker.com/registry/recipes/mirror/) it has become painstakingly obvious that the images must be moved back to Docker Hub for a long-term and stable home, with the added benefit that you will now be able to use a local registry service as a pass-through mirror for reducing network bandwidth and/or ensuring you have a copy of all images local to your network should at any time Docker Hub encounter issues in the future.
+
+The new long-term home for Warden docker images can be found here at [https://hub.docker.com/u/wardenenv](https://hub.docker.com/u/wardenenv).
+
+**Change Summary:**
+
+* Updated images to reside in the `docker.io/wardenenv` registry on [Docker Hub](https://hub.docker.com/u/wardenenv)
+* Removed usages of images previously on `quay.io/warden`
+* Deprecated images on `quay.io/warden` for planned removal at some point in the future (to be not less than 90-days from today)
+
+## Version [0.5.0](https://github.com/davidalger/warden/tree/0.5.0) (2020-05-21)
+[All Commits](https://github.com/davidalger/warden/compare/0.4.4..0.5.0)
+
+**Upgrade Notes:**
+
+If `PHP_VERSION` is not defined in a project's `.env` type the default version is now 7.3 across the board for all environment types. This should not pose any issues for recent `magento1` or `magento2` setups, but `laravel` environments will likely require an update to the project's `.env` to continue using PHP 7.2 or rather than 7.3 for local development.
+
+There is a **breaking change** where custom environment config specific to Linux has been used in the form of placing a `.warden/warden-env.linux-gnu.yml` file in the project directory. The value used for `WARDEN_ENV_SUBT` on Linux is now `linux` rather than `linux-gnu`. After upgrading, these files will need to be re-named from `.warden/warden-env.linux-gnu.yml` to `.warden/warden-env.linux.yml`. Where continued compatibility with prior versions of Warden is desired (for example, to not require the entire team to upgrade Warden at once), a symlink may be placed to point the old file name to the new one allowing Warden to load the definition correctly on both new and old implementations: `warden-env.linux-gnu.yml -> warden-env.linux.yml`
+
+The `BYPASS_VARNISH` flag will continue to work as before but has been **deprecated** to be removed in a future release. It will no longer be included in the `.env` file created for new `magento2` environments.Please use the new feature toggle `WARDEN_VARNISH=0` to disable Varnish instead.
+
+**Enhancements:**
+
+* Added `symfony` environment type for use with Symfony 4+ ([#146](https://github.com/davidalger/warden/pull/146) by @lbajsarowicz)
+* Added `COMPOSER_MEMORY_LIMIT=-1` to env on all `php-*` containers ([#154](https://github.com/davidalger/warden/pull/154) by @navarr)
+* Added new feature flag `WARDEN_DB` to enable/disable service on per-project basis.
+* Added new feature flag `WARDEN_ELASTICSEARCH` to enable/disable service on per-project basis.
+* Added new feature flag `WARDEN_VARNISH` to enable/disable service on per-project basis.
+* Added new feature flag `WARDEN_RABBITMQ` to enable/disable service on per-project basis.
+* Added new feature flag `WARDEN_REDIS` to enable/disable service on per-project basis.
+* Added new feature flag `WARDEN_MAILHOG` to enable/disable service on per-project basis.
+* Updated `WARDEN_ALLURE` to now enable Allure container on any environment type.
+* Updated `WARDEN_SELENIUM` to now enable Selenium containers on any environment type.
+* Updated `WARDEN_BLACKFIRE` to now enable Blackfire containers on any environment type.
+* Updated `env-init` command to include locked values for `MARIADB_VERSION`, `NODE_VERSION`, `PHP_VERSION`, and `REDIS_VERSION` for `laravel` environment types.
+* Updated `local` env type so it can now include common services by adding the above feature flags to the project `.env` file.
+
+## Version [0.4.4](https://github.com/davidalger/warden/tree/0.4.4) (2020-05-14)
+[All Commits](https://github.com/davidalger/warden/compare/0.4.3..0.4.4)
+
+**Enhancements:**
+
+* Updated `php-fpm` images to use `fpm-loaders` variant of base image to include IonCube & SourceGuardian from upstream images
+* Updated `php-fpm` images fix for directory ownership of mounted volume paths for future flexibility by moving it to the `docker-entrypoint` script with an env var `CHOWN_DIR_LIST` to specify what directories to chown on container startup
+
+**Bug Fixes:**
+
+* Fixed missing SSH agent forwarding in `php-blackfire` container
+* Fixed lack of `extra_hosts` in `php-blackfire` and `blackfire-agent` containers (issue [#145](https://github.com/davidalger/warden/issues/145))
+* Fixed missing `extra_hosts` line for non-subdomain entry in `/etc/hosts` on `selenium` container
+* Fixed `$OSTYPE` check for compatibility with OpenSUSE which uses `linux` rather than `linux-gnu` ([#149](https://github.com/davidalger/warden/pull/149) by @Den4ik)
+
+## Version [0.4.3](https://github.com/davidalger/warden/tree/0.4.3) (2020-05-02)
+[All Commits](https://github.com/davidalger/warden/compare/0.4.2..0.4.3)
+
+**Enhancements:**
+
+* Updated init routine allowing `WARDEN_HOME_DIR` and `WARDEN_COMPOSER_DIR` to be overriden via environment variables
+* Updated environment configuration to reference `WARDEN_SSL_DIR` eliminating hard-coded `~/.warden/ssl` references
+* Updated warden global docker config to reference `WARDEN_HOME_DIR` eliminating hard-coded `~/.warden` references
+* Updated `warden up` to return an error when docker is not running rather than blindly attempt to start global services
+
+## Version [0.4.2](https://github.com/davidalger/warden/tree/0.4.2) (2020-04-15)
+[All Commits](https://github.com/davidalger/warden/compare/0.4.1..0.4.2)
+
+**Enhancements:**
+
+* Added `WARDEN_SYNC_IGNORE` to support passing a comma-separated list of additional [per-session-ignores](https://mutagen.io/documentation/synchronization/ignores#per-session-ignores) to Mutagen when sync sessions are started ([#142](https://github.com/davidalger/warden/pull/142) by @davidalger)
+* Added pause, resume and monitor to `warden sync` command ([#141](https://github.com/davidalger/warden/pull/141) by @fooman)
+* Changed Mutagen sync to pause on `warden env stop` and resume on `warden env up -d` ([#141](https://github.com/davidalger/warden/pull/141) by @fooman)
+
+**Bug Fixes:**
+
+* Removed exclusion of (commonly large) files types (*.sql, *.gz, *.zip, *.bz2) from sync sessions (as introduced in 0.4.0) because it broke the ability to use artifact repositories with composer ([#142](https://github.com/davidalger/warden/pull/142) by @davidalger)
+
+## Version [0.4.1](https://github.com/davidalger/warden/tree/0.4.1) (2020-04-11)
+[All Commits](https://github.com/davidalger/warden/compare/0.4.0..0.4.1)
+
+**Bug Fixes:**
+
+* Removed `tmpfs` volumes from sub-directories of `/var/www/html` when `WARDEN_TEST_DB=1` was set due to compatibility issues ([#139](https://github.com/davidalger/warden/pull/139) by @lbajsarowicz)
 
 ## Version [0.4.0](https://github.com/davidalger/warden/tree/0.4.0) (2020-04-02)
 [All Commits](https://github.com/davidalger/warden/compare/0.3.1..0.4.0)
@@ -128,7 +225,7 @@ Please reference the updated [base environment definitions](https://github.com/d
 
 Environments referencing `laravel.conf` in custom configuration within `.warden` directory must update their configuration to reference the generic `application.conf` instead as the file was renamed in the Nginx image for re-use in the future on additional environment types.
 
-Docker images have all been re-located and/or mirrored to Quay with all built-in environment types having been updated to reference the images at the new location. Images currently on Docker Hub will remain available in order to preserve functionality of Warden 0.1.x release line, but will no longer be updated and compatibility with all functionality in Warden 0.2.0 is not guaranteed. Where these images are referenced in per-project configuration within the `.warden` directory, it is strongly suggested these references be updated to use images at the new locations:
+Docker images have all been re-located and/or mirrored to Quay with all built-in environment types having been updated to reference the images at the new location. Images currently on Docker Hub will remain available in order to preserve functionality of Warden 0.1.x release line *(**UPDATE** These images have been removed as of May 28th, 2020)*, but will no longer be updated and compatibility with all functionality in Warden 0.2.0 is not guaranteed. Where these images are referenced in per-project configuration within the `.warden` directory, it is strongly suggested these references be updated to use images at the new locations:
 
 * [https://quay.io/repository/warden/varnish?tab=tags](https://quay.io/repository/warden/varnish?tab=tags)
 * [https://quay.io/repository/warden/redis?tab=tags](https://quay.io/repository/warden/redis?tab=tags)

@@ -1,0 +1,14 @@
+version: "3.5"
+services:
+  nginx:
+    hostname: "${WARDEN_ENV_NAME}-nginx"
+    image: docker.io/wardenenv/nginx:${NGINX_VERSION:-1.16}
+    depends_on:
+      - php-fpm
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.tls=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.priority=2
+      - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.rule=
+          HostRegexp(`{subdomain:.+}.${TRAEFIK_DOMAIN}`) || Host(`${TRAEFIK_DOMAIN}`)
+      - traefik.http.services.${WARDEN_ENV_NAME}-nginx.loadbalancer.server.port=80

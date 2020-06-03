@@ -24,7 +24,14 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
        TRAEFIK_DOMAIN=exampleproject.test
        TRAEFIK_SUBDOMAIN=app
 
-       BYPASS_VARNISH=false
+       WARDEN_DB=1
+       WARDEN_ELASTICSEARCH=1
+       WARDEN_VARNISH=1
+       WARDEN_RABBITMQ=1
+       WARDEN_REDIS=1
+       WARDEN_MAILHOG=1
+
+       WARDEN_SYNC_IGNORE=
 
        ELASTICSEARCH_VERSION=6.8
        MARIADB_VERSION=10.3

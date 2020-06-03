@@ -1,0 +1,34 @@
+version: "3.5"
+
+x-volumes: &volumes
+  - ${WARDEN_SSL_DIR}/rootca/certs:/etc/ssl/warden-rootca-cert:ro
+  - ${WARDEN_COMPOSER_DIR}:/home/www-data/.composer:delegated
+
+x-extra_hosts: &extra_hosts
+    - ${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
+    - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
+
+services:
+  php-blackfire:
+    hostname: "${WARDEN_ENV_NAME}-php-blackfire"
+    image: docker.io/wardenenv/php-fpm:${PHP_VERSION:-7.3}${WARDEN_SVC_PHP_VARIANT:-}-blackfire
+    environment:
+      - TRAEFIK_DOMAIN
+      - TRAEFIK_SUBDOMAIN
+      - SSH_AUTH_SOCK=/tmp/ssh-auth.sock
+      - NODE_VERSION=${NODE_VERSION:-10}
+      - COMPOSER_MEMORY_LIMIT=-1
+    volumes: *volumes
+    extra_hosts: *extra_hosts
+    depends_on:
+      - php-fpm
+
+  blackfire-agent:
+    hostname: "${WARDEN_ENV_NAME}-blackfire-agent"
+    image: blackfire/blackfire:latest
+    environment:
+      - BLACKFIRE_CLIENT_ID=${BLACKFIRE_CLIENT_ID}
+      - BLACKFIRE_CLIENT_TOKEN=${BLACKFIRE_CLIENT_TOKEN}
+      - BLACKFIRE_SERVER_ID=${BLACKFIRE_SERVER_ID}
+      - BLACKFIRE_SERVER_TOKEN=${BLACKFIRE_SERVER_TOKEN}
+    extra_hosts: *extra_hosts

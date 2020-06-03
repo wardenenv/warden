@@ -1,0 +1,10 @@
+version: "3.5"
+services:
+  mailhog:
+    hostname: "${WARDEN_ENV_NAME}-mailhog"
+    image: docker.io/wardenenv/mailhog:${MAILHOG_VERSION:-1.0}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-mailhog.tls=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-mailhog.rule=Host(`mailhog.${TRAEFIK_DOMAIN}`)
+      - traefik.http.services.${WARDEN_ENV_NAME}-mailhog.loadbalancer.server.port=8025

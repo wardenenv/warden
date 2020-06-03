@@ -1,0 +1,10 @@
+version: "3.5"
+services:
+  rabbitmq:
+    hostname: "${WARDEN_ENV_NAME}-rabbitmq"
+    image: docker.io/wardenenv/rabbitmq:${RABBITMQ_VERSION:-3.7}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-rabbitmq.tls=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-rabbitmq.rule=Host(`rabbitmq.${TRAEFIK_DOMAIN}`)
+      - traefik.http.services.${WARDEN_ENV_NAME}-rabbitmq.loadbalancer.server.port=15672

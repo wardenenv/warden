@@ -14,5 +14,8 @@ WARDEN_USAGE=$(cat <<EOF
   stop            Stops the mutagen sync for the current project environment
   list            Lists mutagen session status for current project environment
                   and optionally (with -v) the full configuration
+  pause           Pauses the mutagen sync for the current project environment
+  resume          Resumes the mutagen sync for the current project environment
+  monitor         Continously lists mutagen session status for current project environment               
 EOF
 )

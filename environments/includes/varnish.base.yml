@@ -1,0 +1,21 @@
+version: "3.5"
+services:
+  nginx:
+    labels:
+      # TODO Remove BYPASS_VARNISH variable in Warden 0.6.0 as it was deprecated
+      # in 0.5.0 release and replaced by WARDEN_VARNISH feature toggle.
+      - traefik.enable=${BYPASS_VARNISH:-false}
+      - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.priority=2
+
+  varnish:
+    hostname: "${WARDEN_ENV_NAME}-varnish"
+    image: docker.io/wardenenv/varnish:${VARNISH_VERSION:-6.0}
+    depends_on:
+      - nginx
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-varnish.tls=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-varnish.priority=1
+      - traefik.http.routers.${WARDEN_ENV_NAME}-varnish.rule=
+          HostRegexp(`{subdomain:.+}.${TRAEFIK_DOMAIN}`) || Host(`${TRAEFIK_DOMAIN}`)
+      - traefik.http.services.${WARDEN_ENV_NAME}-varnish.loadbalancer.server.port=80

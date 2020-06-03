@@ -2,7 +2,7 @@ version: "3.5"
 services:
   tmp-mysql:
     hostname: "${WARDEN_ENV_NAME}-mysql"
-    image: quay.io/warden/mysql:5.7
+    image: docker.io/wardenenv/mysql:5.7
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-magento}
       - MYSQL_DATABASE=magento_integration_tests
@@ -13,27 +13,10 @@ services:
       - --max_allowed_packet=1024M
       - --explicit_defaults_for_timestamp=on
     volumes:
-      - tmp-cache:/var/cache
       - tmp-dbdata:/var/lib/mysql
-
-  php-fpm:
-    volumes:
-      - tmp-files:/var/www/html/dev/tests/integration/tmp/
-
-  php-debug:
-    volumes:
-      - tmp-files:/var/www/html/dev/tests/integration/tmp/
 
 volumes:
   tmp-dbdata:
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
-  tmp-cache:
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
-  tmp-files:
     driver_opts:
       type: tmpfs
       device: tmpfs

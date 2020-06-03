@@ -1,11 +1,8 @@
 version: "3.5"
-services:
-  php-blackfire:
-    volumes:
-      - ~/.warden/ssl/rootca/certs:/etc/ssl/warden-rootca-cert:ro
-      - ~/.composer:/home/www-data/.composer:delegated
-      - .${WARDEN_WEB_ROOT:-}/pub/media:/var/www/html/pub/media:delegated
-      - appdata:/var/www/html
 
-volumes:
-  appdata:
+x-volumes: &volumes
+  - .${WARDEN_WEB_ROOT:-}/pub/media:/var/www/html/pub/media:delegated
+  - appdata:/var/www/html
+
+services:
+  php-blackfire: { volumes: *volumes }

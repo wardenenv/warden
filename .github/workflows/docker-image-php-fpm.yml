@@ -5,6 +5,7 @@ on:
   push:
     paths:
     - version
+    - images/.trigger
     - images/php-fpm/**
     branches:
     - develop
@@ -14,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php_version: ["5.5", "5.6", "7.0", "7.1", "7.2", "7.3"]
+        php_version: ["5.5", "5.6", "7.0", "7.1", "7.2", "7.3", "7.4"]
     steps:
     - uses: actions/checkout@v1
     - run: ./images/scripts/build.sh --push "${BUILD_GROUP}"
@@ -30,7 +31,7 @@ jobs:
     needs: php-fpm
     strategy:
       matrix:
-        php_version: ["5.5", "5.6", "7.0", "7.1", "7.2", "7.3"]
+        php_version: ["5.5", "5.6", "7.0", "7.1", "7.2", "7.3", "7.4"]
     steps:
     - uses: actions/checkout@v1
     - run: ./images/scripts/build.sh --push "${BUILD_GROUP}"
@@ -46,7 +47,7 @@ jobs:
     needs: php-fpm
     strategy:
       matrix:
-        php_version: ["7.0", "7.1", "7.2", "7.3"]
+        php_version: ["7.0", "7.1", "7.2", "7.3", "7.4"]
     steps:
     - uses: actions/checkout@v1
     - run: ./images/scripts/build.sh --push "${BUILD_GROUP}"
