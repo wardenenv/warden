@@ -1,0 +1,8 @@
+version: "3.5"
+
+x-volumes: &volumes
+  - .${WARDEN_WEB_ROOT:-}/pub/media:/var/www/html/pub/media:delegated
+  - appdata:/var/www/html
+
+services:
+  magepack: { volumes: *volumes }

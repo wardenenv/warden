@@ -13,7 +13,5 @@ services:
       - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
     depends_on:
       - nginx
-    volumes:
-      - appdata:/var/www/html
     networks:
       - default
