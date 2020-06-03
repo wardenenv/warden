@@ -83,7 +83,7 @@ fi
     && appendEnvPartialIfExists "selenium"
 
 [[ ${WARDEN_MAGEPACK} -eq 1 ]] \
-    && appendEnvPartialIfExists "magepack.base"
+    && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.magepack"
 
 if [[ -f "${WARDEN_ENV_PATH}/.warden/warden-env.yml" ]]; then
     DOCKER_COMPOSE_ARGS+=("-f")
