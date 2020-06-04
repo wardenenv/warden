@@ -5,6 +5,11 @@
 
 **Enhancements:**
 
+* Updated default version of Elasticsearch to 7.0
+* Updated default version of PHP to 7.4 (with exception of magento1 env type which remains defaulted at 7.2)
+* Updated default version of RabbitMQ to 6.8
+* Updated default version of MariaDB to 10.4 (with exception of magento1 env type which remains defaulted at 10.3)
+
 * Fixed inability to run `warden debug -c '<command>'` in like manner to `warden shell -c ...`
 
 ## Version [0.5.1](https://github.com/davidalger/warden/tree/0.5.1) (2020-05-28)
