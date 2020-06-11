@@ -6,6 +6,7 @@
 **Enhancements:**
 
 * Fixed inability to run `warden debug -c '<command>'` in like manner to `warden shell -c ...`
+* Fixed issue where GTID related SET statements in a database dump failed the import (issue [#162](https://github.com/davidalger/warden/issues/162))
 
 ## Version [0.5.1](https://github.com/davidalger/warden/tree/0.5.1) (2020-05-28)
 [All Commits](https://github.com/davidalger/warden/compare/0.5.0..0.5.1)
