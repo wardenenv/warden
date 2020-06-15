@@ -3,6 +3,10 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.5.2..develop)
 
+**Enhancements:**
+
+* Updated default version of Elasticsearch from 6.8 to 7.7
+
 ## Version [0.5.2](https://github.com/davidalger/warden/tree/0.5.2) (2020-06-11)
 [All Commits](https://github.com/davidalger/warden/compare/0.5.1..0.5.2)
 
