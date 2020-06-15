@@ -37,7 +37,7 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
        MARIADB_VERSION=10.3
        NODE_VERSION=10
        PHP_VERSION=7.3
-       RABBITMQ_VERSION=3.7
+       RABBITMQ_VERSION=3.8
        REDIS_VERSION=5.0
        VARNISH_VERSION=6.0
 
