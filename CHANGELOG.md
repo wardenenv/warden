@@ -7,8 +7,8 @@
 
 * Updated default version of Elasticsearch from 6.8 to 7.7
 * Updated default version of RabbitMQ from 3.7 to 3.8
-* Updated default version of MariaDB to 10.4
-* Updated default version of PHP to 7.4
+* Updated default version of MariaDB to 10.4 (when unspecified in .env this version will be used; new project .env files differ by type)
+* Updated default version of PHP to 7.4 (when unspecified in .env this version will be used; new project .env files differ by type)
 
 ## Version [0.5.2](https://github.com/davidalger/warden/tree/0.5.2) (2020-06-11)
 [All Commits](https://github.com/davidalger/warden/compare/0.5.1..0.5.2)
