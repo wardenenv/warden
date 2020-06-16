@@ -126,45 +126,45 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
             --page-cache-redis-db=1 \
             --page-cache-redis-port=6379
 
-       ## Configure Application
-       bin/magento config:set --lock-env web/unsecure/base_url \
-           "https://${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}/"
+        ## Configure Application
+        bin/magento config:set --lock-env web/unsecure/base_url \
+            "https://${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}/"
 
-       bin/magento config:set --lock-env web/secure/base_url \
-           "https://${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}/"
+        bin/magento config:set --lock-env web/secure/base_url \
+            "https://${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}/"
 
-       bin/magento config:set --lock-env web/secure/offloader_header X-Forwarded-Proto
+        bin/magento config:set --lock-env web/secure/offloader_header X-Forwarded-Proto
 
-       bin/magento config:set --lock-env web/secure/use_in_frontend 1
-       bin/magento config:set --lock-env web/secure/use_in_adminhtml 1
-       bin/magento config:set --lock-env web/seo/use_rewrites 1
+        bin/magento config:set --lock-env web/secure/use_in_frontend 1
+        bin/magento config:set --lock-env web/secure/use_in_adminhtml 1
+        bin/magento config:set --lock-env web/seo/use_rewrites 1
 
-       bin/magento config:set --lock-env system/full_page_cache/caching_application 2
-       bin/magento config:set --lock-env system/full_page_cache/ttl 604800
+        bin/magento config:set --lock-env system/full_page_cache/caching_application 2
+        bin/magento config:set --lock-env system/full_page_cache/ttl 604800
 
-       bin/magento config:set --lock-env catalog/search/enable_eav_indexer 1
+        bin/magento config:set --lock-env catalog/search/enable_eav_indexer 1
 
-       bin/magento config:set --lock-env dev/static/sign 0
+        bin/magento config:set --lock-env dev/static/sign 0
 
-       bin/magento deploy:mode:set -s developer
-       bin/magento cache:disable block_html full_page
+        bin/magento deploy:mode:set -s developer
+        bin/magento cache:disable block_html full_page
 
-       bin/magento indexer:reindex
-       bin/magento cache:flush
+        bin/magento indexer:reindex
+        bin/magento cache:flush
 
-       ## Generate an admin user
-       ADMIN_PASS="$(pwgen -n1 16)"
-       ADMIN_USER=localadmin
+        ## Generate an admin user
+        ADMIN_PASS="$(pwgen -n1 16)"
+        ADMIN_USER=localadmin
 
-       bin/magento admin:user:create \
-           --admin-password="${ADMIN_PASS}" \
-           --admin-user="${ADMIN_USER}" \
-           --admin-firstname="Local" \
-           --admin-lastname="Admin" \
-           --admin-email="${ADMIN_USER}@example.com"
-       printf "u: %s\np: %s\n" "${ADMIN_USER}" "${ADMIN_PASS}"
+        bin/magento admin:user:create \
+            --admin-password="${ADMIN_PASS}" \
+            --admin-user="${ADMIN_USER}" \
+            --admin-firstname="Local" \
+            --admin-lastname="Admin" \
+            --admin-email="${ADMIN_USER}@example.com"
+        printf "u: %s\np: %s\n" "${ADMIN_USER}" "${ADMIN_PASS}"
 
-9. Launch the application in your browser:
+ 9. Launch the application in your browser:
 
     * [https://app.exampleproject.test/](https://app.exampleproject.test/)
     * [https://app.exampleproject.test/backend/](https://app.exampleproject.test/backend/)
