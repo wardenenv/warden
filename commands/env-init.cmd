@@ -87,9 +87,9 @@ fi
 if [[ "${WARDEN_ENV_TYPE}" == "laravel" ]]; then
   cat >> "${WARDEN_ENV_PATH}/.env" <<-EOT
 
-		MARIADB_VERSION=10.3
+		MARIADB_VERSION=10.4
 		NODE_VERSION=10
-		PHP_VERSION=7.2
+		PHP_VERSION=7.4
 		REDIS_VERSION=5.0
 
 		WARDEN_DB=1
@@ -123,7 +123,7 @@ fi
 if [[ "${WARDEN_ENV_TYPE}" == "symfony" ]]; then
   cat >> "${WARDEN_ENV_PATH}/.env" <<-EOT
 
-		MARIADB_VERSION=10.3
+		MARIADB_VERSION=10.4
 		NODE_VERSION=10
 		PHP_VERSION=7.4
 		RABBITMQ_VERSION=3.8
