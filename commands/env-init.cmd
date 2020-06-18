@@ -16,6 +16,8 @@ if test -f "${WARDEN_ENV_PATH}/.env"; then
   done
 fi
 
+# TODO: Prompt user for inputs when arguments remain unspecified
+
 WARDEN_ENV_NAME="${WARDEN_PARAMS[0]:-}"
 WARDEN_ENV_TYPE="${WARDEN_PARAMS[1]:-}"
 
