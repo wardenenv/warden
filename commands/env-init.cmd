@@ -4,6 +4,7 @@
 source "${WARDEN_DIR}/utils/env.sh"
 WARDEN_ENV_PATH="$(pwd -P)"
 
+# Prompt user if there is an extant .env file to ensure they intend to overwrite
 if test -f "${WARDEN_ENV_PATH}/.env"; then
   while true; do
     read -p $'\033[32mA warden env file already exists at '"${WARDEN_ENV_PATH}/.env"$'; would you like to overwrite? y/n\033[0m ' resp
@@ -14,8 +15,6 @@ if test -f "${WARDEN_ENV_PATH}/.env"; then
     esac
   done
 fi
-
-# TODO: Prompt user for inputs when arguments remain unspecified
 
 WARDEN_ENV_NAME="${WARDEN_PARAMS[0]:-}"
 WARDEN_ENV_TYPE="${WARDEN_PARAMS[1]:-}"
