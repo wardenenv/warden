@@ -22,7 +22,7 @@ containsElement () {
 }
 
 ## define environment requirements
-readonly WARDEN_REQUIRED_DOCKER_COMPOSE="1.18.0"
+readonly WARDEN_REQUIRED_DOCKER_COMPOSE="1.25.0"
 
 ## define and export global shared directory paths
 export readonly WARDEN_HOME_DIR="${WARDEN_HOME_DIR:-"$HOME/.warden"}"

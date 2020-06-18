@@ -10,7 +10,7 @@ fi
 
 DOCKER_COMPOSE_VERSION="$(docker-compose -v | grep -oE '[0-9\.]+' | head -n1)"
 if ! test $(version ${DOCKER_COMPOSE_VERSION}) -ge $(version ${WARDEN_REQUIRED_DOCKER_COMPOSE}); then
-    echo -e "\033[31mdocker-compose version should be $WARDEN_REQUIRED_DOCKER_COMPOSE or higher ($DOCKER_COMPOSE_VERSION installed)" && exit 1
+    echo -e "\033[31mdocker-compose version should be ${WARDEN_REQUIRED_DOCKER_COMPOSE} or higher (${DOCKER_COMPOSE_VERSION} installed)" && exit 1
 fi
 
 if [[ ! -d "${WARDEN_SSL_DIR}/rootca" ]]; then
