@@ -12,6 +12,12 @@ if (( ${#WARDEN_PARAMS[@]} == 0 )); then
     exit 1
 fi
 
+## verify docker is running
+if ! docker system info >/dev/null 2>&1; then
+  >&2 printf "\e[01;31mERROR\033[0m: Docker does not appear to be running. Please start Docker.\n"
+  exit 1
+fi
+
 ## simply allow the return code from docker-compose to bubble up per normal
 trap '' ERR
 
@@ -131,7 +137,7 @@ then
     warden sync pause
 fi
 
-## anything not caught above is simply passed through to docker-compose to orchestrate
+## pass ochestration through to docker-compose
 docker-compose \
     --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
     "${DOCKER_COMPOSE_ARGS[@]}" "${WARDEN_PARAMS[@]}" "$@"

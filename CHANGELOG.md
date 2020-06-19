@@ -3,17 +3,32 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.5.2..develop)
 
+**Upgrade Notes:**
+
+* Per the announcement on [issue #165](https://github.com/davidalger/warden/issues/165) Warden now requires `docker-compose` 1.25.0 or later.
+
+**Enhancements:**
+
+* Added `svc` command to control global services replacing `start`, `stop`, `up`, `down`, and `restart` and offering further flexibility as this works similar to `env` in that any verb known to `docker-compose` may be used in orchestrating global services such as `traefik`, `dnsmasq` and `portainer`
+* Updated `env` to report an error if Docker does not appear to be running.
+* The following version defaults were updated (these defaults apply when versions remain unspecified in a project's `.env` file; new project `.env` files may differ by environment type)
+  * PHP-FPM default updated from 7.3 to 7.4
+  * Elasticsearch default updated from 6.8 to 7.7
+  * RabbitMQ default updated from 3.7 to 3.8
+  * MariaDB default updated from 10.3 to 10.4
+
 **Bug Fixes:**
 
 * Fixed issue where specifying `-v` flag would short circuit argument parsing
 * Fixed bug where quoted arguments like `"foo bar"` would be passed into sub-route as two arguments, `foo` and `bar`
 
-**Enhancements:**
+**Deprecated Functionality:**
 
-* Updated default version of Elasticsearch from 6.8 to 7.7
-* Updated default version of RabbitMQ from 3.7 to 3.8
-* Updated default version of MariaDB to 10.4 (when unspecified in .env this version will be used; new project .env files differ by type)
-* Updated default version of PHP to 7.4 (when unspecified in .env this version will be used; new project .env files differ by type)
+* The `warden start` command has been deprecated and will be removed in the 0.7.0 release; please use `warden svc start` instead.
+* The `warden stop` command has been deprecated and will be removed in the 0.7.0 release; please use `warden svc stop` instead.
+* The `warden up` command has been deprecated and will be removed in the 0.7.0 release; please use `warden svc up` instead.
+* The `warden down` command has been deprecated and will be removed in the 0.7.0 release; please use `warden svc down` instead.
+* The `warden restart` command has been deprecated and will be removed in the 0.7.0 release; please use `warden svc restart` instead.
 
 ## Version [0.5.2](https://github.com/davidalger/warden/tree/0.5.2) (2020-06-11)
 [All Commits](https://github.com/davidalger/warden/compare/0.5.1..0.5.2)

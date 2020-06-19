@@ -4,6 +4,20 @@
 ## global service containers to be connected with the project docker network
 DOCKER_PEERED_SERVICES=("traefik" "tunnel")
 
+## setup functions for use throughout the script
+function warning {
+  >&2 printf "\033[33mWARNING\033[0m: $@\n" 
+}
+
+function error {
+  >&2 printf "\033[31mERROR\033[0m: $@\n"
+}
+
+function fatal {
+  error "$@"
+  exit -1
+}
+
 function version {
   echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }';
 }

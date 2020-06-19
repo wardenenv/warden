@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 [[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
 
-source "${WARDEN_DIR}/utils/install.sh"
-assertWardenInstall
+source "${WARDEN_DIR}/utils/core.sh"
+warning "This command is deprecated as of 0.6.0 and will be removed in 0.7.0; please use 'warden svc start' instead."
 
-pushd "${WARDEN_HOME_DIR}" >/dev/null
-docker-compose -p warden -f "${WARDEN_DIR}/docker/docker-compose.yml" start "${WARDEN_PARAMS[@]}" "$@"
+trap '' ERR
+"${WARDEN_DIR}/bin/warden" svc start "${WARDEN_PARAMS[@]}" "$@"
