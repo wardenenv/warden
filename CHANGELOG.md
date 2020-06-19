@@ -6,6 +6,7 @@
 **Bug Fixes:**
 
 * Fixed issue where specifying `-v` flag would short circuit argument parsing
+* Fixed bug where quoted arguments like `"foo bar"` would be passed into sub-route as two arguments, `foo` and `bar`
 
 **Enhancements:**
 
