@@ -4,7 +4,18 @@
 source "${WARDEN_DIR}/utils/env.sh"
 WARDEN_ENV_PATH="$(pwd -P)"
 
-# TODO: If the .env file already exists; prompt user instead of overwriting
+# Prompt user if there is an extant .env file to ensure they intend to overwrite
+if test -f "${WARDEN_ENV_PATH}/.env"; then
+  while true; do
+    read -p $'\033[32mA warden env file already exists at '"${WARDEN_ENV_PATH}/.env"$'; would you like to overwrite? y/n\033[0m ' resp
+    case $resp in
+      [Yy]*) echo "Overwriting extant .env file"; break;;
+      [Nn]*) exit;;
+      *) echo "Please answer (y)es or (n)o";;
+    esac
+  done
+fi
+
 # TODO: Prompt user for inputs when arguments remain unspecified
 
 WARDEN_ENV_NAME="${WARDEN_PARAMS[0]:-}"
@@ -112,10 +123,10 @@ if [[ "${WARDEN_ENV_TYPE}" == "laravel" ]]; then
 
 		CACHE_DRIVER=redis
 		SESSION_DRIVER=redis
-		
+
 		REDIS_HOST=redis
 		REDIS_PORT=6379
-		
+
 		MAIL_DRIVER=sendmail
 	EOT
 fi
