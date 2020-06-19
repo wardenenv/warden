@@ -3,6 +3,10 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.5.2..develop)
 
+**Bug Fixes:**
+
+* Fixed issue where specifying `-v` flag would short circuit argument parsing
+
 **Enhancements:**
 
 * Updated default version of Elasticsearch from 6.8 to 7.7

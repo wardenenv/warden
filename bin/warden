@@ -53,7 +53,7 @@ while (( "$#" )); do
       ;;
     -v|--verbose)
       WARDEN_VERBOSE=1
-      break
+      shift
       ;;
     --) # end argument parsing (unless command is on 'anyargs' list and consumes anything as params)
       shift
