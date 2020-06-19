@@ -16,6 +16,7 @@
   * Elasticsearch default updated from 6.8 to 7.7
   * RabbitMQ default updated from 3.7 to 3.8
   * MariaDB default updated from 10.3 to 10.4
+* Updated `env-init` command to prompt user before overwriting an existing `.env` file in a project directory ([#166](https://github.com/davidalger/warden/pull/166) by @Lunaetic)
 
 **Bug Fixes:**
 
