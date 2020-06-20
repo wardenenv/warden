@@ -118,6 +118,12 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
 
     ## connect globally peered services to the environment network
     connectPeeredServices "$(renderEnvNetworkName)"
+
+    ## always execute env up using --detach mode
+    if ! (containsElement "-d" "$@" || containsElement "--detach" "$@"); then
+        WARDEN_PARAMS=("${WARDEN_PARAMS[@]:1}")
+        WARDEN_PARAMS=(up -d "${WARDEN_PARAMS[@]}")
+    fi
 fi
 
 ## lookup address of traefik container on environment network

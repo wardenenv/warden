@@ -11,6 +11,7 @@
 
 * Added `svc` command to control global services replacing `start`, `stop`, `up`, `down`, and `restart` and offering further flexibility as this works similar to `env` in that any verb known to `docker-compose` may be used in orchestrating global services such as `traefik`, `dnsmasq` and `portainer`
 * Updated `env` to report an error if Docker does not appear to be running.
+* Updated `env up` to imply `-d` (`--detach`) to work in like manner to `warden svc up` (formerly `warden up`)
 * The following version defaults were updated (these defaults apply when versions remain unspecified in a project's `.env` file; new project `.env` files may differ by environment type)
   * PHP-FPM default updated from 7.3 to 7.4
   * Elasticsearch default updated from 6.8 to 7.7
