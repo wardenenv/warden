@@ -5,6 +5,11 @@ source "${WARDEN_DIR}/utils/env.sh"
 WARDEN_ENV_PATH="$(locateEnvPath)" || exit $?
 loadEnvConfig "${WARDEN_ENV_PATH}" || exit $?
 
+## verify docker is running
+if ! docker system info >/dev/null 2>&1; then
+  fatal "Docker does not appear to be running. Please start Docker."
+fi
+
 if [[ ${WARDEN_DB:-1} -eq 0 ]]; then
     fatal "Database environment is not used."
 fi
