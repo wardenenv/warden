@@ -5,7 +5,8 @@
 
 **Upgrade Notes:**
 
-* Per the announcement on [issue #165](https://github.com/davidalger/warden/issues/165) Warden now requires `docker-compose` 1.25.0 or later.
+* Warden now requires `docker-compose` 1.25.0 or later; see [issue #165](https://github.com/davidalger/warden/issues/165)
+* Warden now requires `mutagen` 0.11.4 or later for environments leveraging sync sessions on Mac OS.
 
 **Enhancements:**
 
