@@ -61,8 +61,10 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
     done
 
     ## always execute svc up using --detach mode
-    WARDEN_PARAMS=("${WARDEN_PARAMS[@]:1}")
-    WARDEN_PARAMS=(up -d "${WARDEN_PARAMS[@]}")
+    if ! (containsElement "-d" "$@" || containsElement "--detach" "$@"); then
+        WARDEN_PARAMS=("${WARDEN_PARAMS[@]:1}")
+        WARDEN_PARAMS=(up -d "${WARDEN_PARAMS[@]}")
+    fi
 fi
 
 ## pass ochestration through to docker-compose
