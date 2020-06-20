@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -e
-trap '>&2 printf "\n\e[01;31mERROR\033[0m: Command \`%s\` on line $LINENO failed with exit code $?\n" "$BASH_COMMAND"' ERR
+trap 'error "$(printf "Command \`%s\` on line $LINENO failed with exit code $?" "$BASH_COMMAND")"' ERR
 
 ## find directory where this script is located following symlinks if neccessary
 readonly WARDEN_DIR="$(
@@ -12,14 +12,7 @@ readonly WARDEN_DIR="$(
   )/.." >/dev/null \
   && pwd
 )"
-
-## function for determining if a value is present in an array
-containsElement () {
-  local e match="$1"
-  shift
-  for e; do [[ "$e" == "$match" ]] && return 0; done
-  return 1
-}
+source "${WARDEN_DIR}/utils/core.sh"
 
 ## define environment requirements
 readonly WARDEN_REQUIRED_DOCKER_COMPOSE="1.25.0"

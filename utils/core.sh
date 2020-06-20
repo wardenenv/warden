@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-[[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
+[[ ! ${WARDEN_DIR} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
 
 ## global service containers to be connected with the project docker network
 DOCKER_PEERED_SERVICES=("traefik" "tunnel")
 
-## setup functions for use throughout the script
+## messaging functions
 function warning {
   >&2 printf "\033[33mWARNING\033[0m: $@\n" 
 }
@@ -20,6 +20,18 @@ function fatal {
 
 function version {
   echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }';
+}
+
+## determines if value is present in an array; returns 0 if element is present
+## in array, otherwise returns 1
+##
+## usage: containsElement <needle> <haystack>
+##
+containsElement () {
+  local e match="$1"
+  shift
+  for e; do [[ "$e" == "$match" ]] && return 0; done
+  return 1
 }
 
 function connectPeeredServices {
