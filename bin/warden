@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -e
-trap 'error "$(printf "Command \`%s\` on line $LINENO failed with exit code $?" "$BASH_COMMAND")"' ERR
+trap 'error "$(printf "Command \`%s\` at $BASH_SOURCE:$LINENO failed with exit code $?" "$BASH_COMMAND")"' ERR
 
 ## find directory where this script is located following symlinks if neccessary
 readonly WARDEN_DIR="$(
