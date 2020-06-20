@@ -3,17 +3,13 @@
 
 source "${WARDEN_DIR}/utils/install.sh"
 assertWardenInstall
+assertDockerRunning
 
 if (( ${#WARDEN_PARAMS[@]} == 0 )); then
   fatal "This command has required params which are passed through to docker-compose, please use --help for details."
 fi
 
-## verify docker is running
-if ! docker system info >/dev/null 2>&1; then
-  fatal "Docker does not appear to be running. Please start Docker."
-fi
-
-## simply allow the return code from docker-compose to bubble up per normal
+## allow return codes from sub-process to bubble up normally
 trap '' ERR
 
 ## configure docker-compose files

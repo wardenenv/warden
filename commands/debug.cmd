@@ -22,7 +22,7 @@ if [[ ${WARDEN_ENV_DEBUG_HOST} == "" ]]; then
     fi
 fi
 
-## simply allow the return code from sub-command to bubble up per normal
+## allow return codes from sub-process to bubble up normally
 trap '' ERR
 
 "${WARDEN_DIR}/bin/warden" env exec -e "XDEBUG_REMOTE_HOST=${WARDEN_ENV_DEBUG_HOST}" \

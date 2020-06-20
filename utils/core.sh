@@ -27,13 +27,21 @@ function version {
 ##
 ## usage: containsElement <needle> <haystack>
 ##
-containsElement () {
+function containsElement {
   local e match="$1"
   shift
   for e; do [[ "$e" == "$match" ]] && return 0; done
   return 1
 }
 
+## verify docker is running
+function assertDockerRunning {
+  if ! docker system info >/dev/null 2>&1; then
+    fatal "Docker does not appear to be running. Please start Docker."
+  fi
+}
+
+## methods to peer global services requiring network connectivity with project networks
 function connectPeeredServices {
   for svc in ${DOCKER_PEERED_SERVICES[@]}; do
     echo "Connecting ${svc} to $1 network"
