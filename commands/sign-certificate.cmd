@@ -4,8 +4,7 @@
 mkdir -p "${WARDEN_SSL_DIR}/certs"
 
 if [[ ! -f "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem" ]]; then
-  echo -e "\033[31mError: Missing the root CA file. Please run 'warden install' and try again."
-  exit -1
+  fatal "Missing the root CA file. Please run 'warden install' and try again."
 fi
 
 if (( ${#WARDEN_PARAMS[@]} == 0 )); then

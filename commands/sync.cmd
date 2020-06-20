@@ -6,14 +6,12 @@ WARDEN_ENV_PATH="$(locateEnvPath)" || exit $?
 loadEnvConfig "${WARDEN_ENV_PATH}" || exit $?
 
 if (( ${#WARDEN_PARAMS[@]} == 0 )); then
-    echo -e "\033[33mThis command has required params, please use --help for details.\033[0m"
-    exit 1
+    fatal "This command has required params. Please use --help for details."
 fi
 
 ## disable sync command on non-darwin environments where it should not be used
 if [[ ${WARDEN_ENV_SUBT} != "darwin" ]]; then
-    >&2 echo -e "\033[31mMutagen sync sessions are not used on \"${WARDEN_ENV_SUBT}\" host environments\033[0m"
-    exit 1
+    fatal "Mutagen sync sessions are not used on \"${WARDEN_ENV_SUBT}\" host environments."
 fi
 
 ## attempt to install mutagen if not already present
@@ -26,15 +24,14 @@ fi
 MUTAGEN_VERSION=$(mutagen version 2>/dev/null) || true
 MUTAGEN_REQUIRE=0.11.4
 if [[ $OSTYPE =~ ^darwin ]] && ! test $(version ${MUTAGEN_VERSION}) -ge $(version ${MUTAGEN_REQUIRE}); then
-  >&2 printf "\e[01;31mMutagen version ${MUTAGEN_REQUIRE} or greater is required (version ${MUTAGEN_VERSION} is installed).\033[0m"
-  >&2 printf "\n\nPlease update Mutagen:\n\n  brew upgrade havoc-io/mutagen/mutagen\n\n"
+  error "Mutagen version ${MUTAGEN_REQUIRE} or greater is required (version ${MUTAGEN_VERSION} is installed)."
+  >&2 printf "\nPlease update Mutagen:\n\n  brew upgrade havoc-io/mutagen/mutagen\n\n"
   exit 1
 fi
 
 ## if no mutagen configuration file exists for the environment type, exit with error
 if [[ ! -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.mutagen.yml" ]]; then
-    >&2 echo -e "\033[31mMutagen configuration does not exist for environment type \"${WARDEN_ENV_TYPE}\"\033[0m"
-    exit 1
+    fatal "Mutagen configuration does not exist for environment type \"${WARDEN_ENV_TYPE}\""
 fi
 
 ## sub-command execution
@@ -57,8 +54,7 @@ case "${WARDEN_PARAMS[0]}" in
                         | grep -i 'Last error' > /dev/null; then
                         MUTAGEN_ERROR=$(mutagen sync list --label-selector "warden-sync=${WARDEN_ENV_NAME}" \
                             | sed -n 's/Last error: \(.*\)/\1/p')
-                        >&2 printf "\033[31m\nMutagen encountered an error during sync: ${MUTAGEN_ERROR}\n\033[0m"
-                        exit 1
+                        fatal "Mutagen encountered an error during sync: ${MUTAGEN_ERROR}"
                     fi
                     printf .; sleep 1; done; echo
         ;;
@@ -84,7 +80,6 @@ case "${WARDEN_PARAMS[0]}" in
         mutagen sync list ${MUTAGEN_ARGS} --label-selector "warden-sync=${WARDEN_ENV_NAME}"
         ;;
     *)
-        echo -e "\033[33mThe command \"${WARDEN_PARAMS[0]}\" does not exist. Please use --help for usage."
-        exit 1
+        fatal "The command \"${WARDEN_PARAMS[0]}\" does not exist. Please use --help for usage."
         ;;
 esac

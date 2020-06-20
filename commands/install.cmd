@@ -4,12 +4,12 @@
 source "${WARDEN_DIR}/utils/install.sh"
 
 if ! ( hash docker-compose 2>/dev/null); then
-    echo -e "\033[31mdocker-compose is not installed" && exit 1
+  fatal "docker-compose is not installed"
 fi
 
 DOCKER_COMPOSE_VERSION="$(docker-compose -v | grep -oE '[0-9\.]+' | head -n1)"
 if ! test $(version ${DOCKER_COMPOSE_VERSION}) -ge $(version ${WARDEN_REQUIRED_DOCKER_COMPOSE}); then
-    echo -e "\033[31mdocker-compose version should be ${WARDEN_REQUIRED_DOCKER_COMPOSE} or higher (${DOCKER_COMPOSE_VERSION} installed)" && exit 1
+  fatal "docker-compose version should be ${WARDEN_REQUIRED_DOCKER_COMPOSE} or higher (${DOCKER_COMPOSE_VERSION} installed)"
 fi
 
 if [[ ! -d "${WARDEN_SSL_DIR}/rootca" ]]; then

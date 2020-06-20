@@ -47,8 +47,7 @@ function loadEnvConfig () {
             WARDEN_ENV_SUBT=linux
         ;;
         *)
-            >&2 printf "\e[01;31mERROR\033[0m: Unsupported OSTYPE '${OSTYPE:-undefined}'\n"
-            exit 1
+            fatal "Unsupported OSTYPE '${OSTYPE:-undefined}'"
         ;;
     esac
 

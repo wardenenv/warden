@@ -22,7 +22,9 @@ WARDEN_ENV_NAME="${WARDEN_PARAMS[0]:-}"
 WARDEN_ENV_TYPE="${WARDEN_PARAMS[1]:-}"
 
 # Require the user inputs the required environment name parameter
-[[ ! ${WARDEN_ENV_NAME} ]] && >&2 echo -e "\033[31mMissing required argument. Please use --help to to print usage.\033[0m" && exit 1
+if [[ ! ${WARDEN_ENV_NAME} ]] || [[ ! ${WARDEN_ENV_TYPE} ]]; then
+  fatal "Missing required argument. Please use --help to to print usage."
+fi
 
 # Verify the auto-select and/or type path resolves correctly before setting it
 assertValidEnvType || exit $?

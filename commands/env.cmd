@@ -6,14 +6,12 @@ WARDEN_ENV_PATH="$(locateEnvPath)" || exit $?
 loadEnvConfig "${WARDEN_ENV_PATH}" || exit $?
 
 if (( ${#WARDEN_PARAMS[@]} == 0 )); then
-    echo -e "\033[33mThis command has required params which are passed through to docker-compose, please use --help for details.\033[0m"
-    exit 1
+  fatal "This command has required params which are passed through to docker-compose, please use --help for details."
 fi
 
 ## verify docker is running
 if ! docker system info >/dev/null 2>&1; then
-  >&2 printf "\e[01;31mERROR\033[0m: Docker does not appear to be running. Please start Docker.\n"
-  exit 1
+  fatal "Docker does not appear to be running. Please start Docker."
 fi
 
 ## simply allow the return code from docker-compose to bubble up per normal

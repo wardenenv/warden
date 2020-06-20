@@ -6,13 +6,11 @@ WARDEN_ENV_PATH="$(locateEnvPath)" || exit $?
 loadEnvConfig "${WARDEN_ENV_PATH}" || exit $?
 
 if [[ ${WARDEN_DB:-1} -eq 0 ]]; then
-    echo -e "\033[33mDatabase environment is not used."
-    exit 1
+    fatal "Database environment is not used."
 fi
 
 if (( ${#WARDEN_PARAMS[@]} == 0 )); then
-    echo -e "\033[33mThis command has required params, please use --help for details."
-    exit 1
+    fatal "This command has required params. Please use --help for details."
 fi
 
 ## load connection information for the mysql service
@@ -46,7 +44,6 @@ case "${WARDEN_PARAMS[0]}" in
             mysql -u"${MYSQL_USER}" -p"${MYSQL_PASSWORD}" "${MYSQL_DATABASE}"
         ;;
     *)
-        echo -e "\033[33mThe command \"${WARDEN_PARAMS[0]}\" does not exist. Please use --help for usage."
-        exit 1
+        fatal "The command \"${WARDEN_PARAMS[0]}\" does not exist. Please use --help for usage."
         ;;
 esac
