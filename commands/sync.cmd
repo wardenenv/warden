@@ -6,18 +6,18 @@ WARDEN_ENV_PATH="$(locateEnvPath)" || exit $?
 loadEnvConfig "${WARDEN_ENV_PATH}" || exit $?
 
 if (( ${#WARDEN_PARAMS[@]} == 0 )); then
-    fatal "This command has required params. Please use --help for details."
+  fatal "This command has required params; use --help for details."
 fi
 
 ## disable sync command on non-darwin environments where it should not be used
 if [[ ${WARDEN_ENV_SUBT} != "darwin" ]]; then
-    fatal "Mutagen sync sessions are not used on \"${WARDEN_ENV_SUBT}\" host environments."
+  fatal "Mutagen sync sessions are not used on \"${WARDEN_ENV_SUBT}\" host environments."
 fi
 
 ## attempt to install mutagen if not already present
 if ! which mutagen >/dev/null; then
-    echo -e "\033[33mMutagen could not be found; attempting install via brew.\033[0m"
-    brew install havoc-io/mutagen/mutagen
+  echo -e "\033[33mMutagen could not be found; attempting install via brew.\033[0m"
+  brew install havoc-io/mutagen/mutagen
 fi
 
 ## verify mutagen version constraint
@@ -31,7 +31,7 @@ fi
 
 ## if no mutagen configuration file exists for the environment type, exit with error
 if [[ ! -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.mutagen.yml" ]]; then
-    fatal "Mutagen configuration does not exist for environment type \"${WARDEN_ENV_TYPE}\""
+  fatal "Mutagen configuration does not exist for environment type \"${WARDEN_ENV_TYPE}\""
 fi
 
 ## sub-command execution

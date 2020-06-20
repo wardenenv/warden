@@ -7,11 +7,11 @@ loadEnvConfig "${WARDEN_ENV_PATH}" || exit $?
 assertDockerRunning
 
 if [[ ${WARDEN_DB:-1} -eq 0 ]]; then
-    fatal "Database environment is not used."
+  fatal "Database environment is not used (WARDEN_DB=0)."
 fi
 
 if (( ${#WARDEN_PARAMS[@]} == 0 )); then
-    fatal "This command has required params. Please use --help for details."
+  fatal "This command has required params; use --help for details."
 fi
 
 ## load connection information for the mysql service

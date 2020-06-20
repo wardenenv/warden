@@ -6,7 +6,7 @@ assertWardenInstall
 assertDockerRunning
 
 if (( ${#WARDEN_PARAMS[@]} == 0 )); then
-  fatal "This command has required params which are passed through to docker-compose, please use --help for details."
+  fatal "This command has required params which are passed through to docker-compose; use --help for details."
 fi
 
 ## allow return codes from sub-process to bubble up normally
