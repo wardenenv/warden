@@ -55,6 +55,6 @@ openssl x509 -req -days 365 -sha256 -extensions v3_req            \
 if [[ "$(cd "${WARDEN_HOME_DIR}" && docker-compose -p warden -f "${WARDEN_DIR}/docker/docker-compose.yml" ps -q traefik)" ]]
 then
   echo "==> Updating traefik"
-  "${WARDEN_DIR}/bin/warden" up traefik
-  "${WARDEN_DIR}/bin/warden" restart traefik
+  "${WARDEN_DIR}/bin/warden" svc up traefik
+  "${WARDEN_DIR}/bin/warden" svc restart traefik
 fi
