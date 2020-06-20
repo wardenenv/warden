@@ -134,6 +134,20 @@ if [[ "${WARDEN_ENV_TYPE}" == "laravel" ]]; then
 	EOT
 fi
 
+if [[ "${WARDEN_ENV_TYPE}" == "shopware" ]]; then
+  cat >> "${WARDEN_ENV_PATH}/.env" <<-EOT
+
+		MARIADB_VERSION=10.4
+		NODE_VERSION=10
+		PHP_VERSION=7.4
+		REDIS_VERSION=5.0
+
+		WARDEN_DB=1
+		WARDEN_REDIS=1
+		WARDEN_MAILHOG=1
+	EOT
+fi
+
 if [[ "${WARDEN_ENV_TYPE}" == "symfony" ]]; then
   cat >> "${WARDEN_ENV_PATH}/.env" <<-EOT
 
