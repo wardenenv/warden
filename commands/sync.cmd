@@ -58,26 +58,15 @@ case "${WARDEN_PARAMS[0]}" in
                     fi
                     printf .; sleep 1; done; echo
         ;;
-    monitor)
-        ## monitor only sessions labeled with this env name
-        mutagen sync monitor --label-selector "warden-sync=${WARDEN_ENV_NAME}"
-        ;;
-    pause)
-        ## pause only sessions labeled with this env name
-        mutagen sync pause --label-selector "warden-sync=${WARDEN_ENV_NAME}"
-        ;;
-    resume)
-        ## resume only sessions labeled with this env name
-        mutagen sync resume --label-selector "warden-sync=${WARDEN_ENV_NAME}"
-        ;;
     stop)
-        ## terminate only sessions labeled with this env name
         mutagen sync terminate --label-selector "warden-sync=${WARDEN_ENV_NAME}"
         ;;
     list)
-        ## list only sessions labeled with this env name
         [[ ${WARDEN_VERBOSE} ]] && MUTAGEN_ARGS=" -l " || MUTAGEN_ARGS=
         mutagen sync list ${MUTAGEN_ARGS} --label-selector "warden-sync=${WARDEN_ENV_NAME}"
+        ;;
+    flush|monitor|pause|reset|resume)
+        mutagen sync "${WARDEN_PARAMS[0]}" --label-selector "warden-sync=${WARDEN_ENV_NAME}"
         ;;
     *)
         fatal "The command \"${WARDEN_PARAMS[0]}\" does not exist. Please use --help for usage."
