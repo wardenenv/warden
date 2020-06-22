@@ -41,7 +41,6 @@ case "${WARDEN_PARAMS[0]}" in
         ;;
     import)
         LC_ALL=C sed -E 's/DEFINER[ ]*=[ ]*`[^`]+`@`[^`]+`/DEFINER=CURRENT_USER/g' \
-            | grep -Ev '\@\@(GLOBAL\.GTID_PURGED|SESSION\.SQL_LOG_BIN)' \
             | "${WARDEN_DIR}/bin/warden" env exec -T db \
             mysql -u"${MYSQL_USER}" -p"${MYSQL_PASSWORD}" "${MYSQL_DATABASE}"
         ;;

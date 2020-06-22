@@ -3,6 +3,13 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.5.2..develop)
 
+## Version [0.5.3](https://github.com/davidalger/warden/tree/0.5.3) (2020-06-23)
+[All Commits](https://github.com/davidalger/warden/compare/0.5.2..0.5.3)
+
+**Bug Fixes:**
+
+* Reverted filtering of GTID SET commands as added in 0.5.2 release to resolve db import errors (issue [#162](https://github.com/davidalger/warden/issues/162))
+
 ## Version [0.5.2](https://github.com/davidalger/warden/tree/0.5.2) (2020-06-11)
 [All Commits](https://github.com/davidalger/warden/compare/0.5.1..0.5.2)
 
