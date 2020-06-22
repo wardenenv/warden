@@ -27,6 +27,7 @@
 * Fixed issue where specifying `-v` flag would short circuit argument parsing
 * Fixed bug where quoted arguments like `"foo bar"` would be passed into sub-route as two arguments, `foo` and `bar`
 * Fixed incorrect var name in output of env-init for Laravel env type
+* Reverted filtering of GTID SET commands as added in 0.5.2 release to resolve db import errors (issue [#162](https://github.com/davidalger/warden/issues/162))
 
 **Deprecated Functionality:**
 
