@@ -1,18 +1,16 @@
 #!/usr/bin/env bash
-[[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
+[[ ! ${WARDEN_DIR} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
 
-source "${WARDEN_DIR}/utils/core.sh"
 source "${WARDEN_DIR}/utils/env.sh"
-
 WARDEN_ENV_PATH="$(locateEnvPath)" || exit $?
 loadEnvConfig "${WARDEN_ENV_PATH}" || exit $?
+assertDockerRunning
 
 if (( ${#WARDEN_PARAMS[@]} == 0 )); then
-    echo -e "\033[33mThis command has required params which are passed through to docker-compose, please use --help for details.\033[0m"
-    exit 1
+  fatal "This command has required params which are passed through to docker-compose; use --help for details."
 fi
 
-## simply allow the return code from docker-compose to bubble up per normal
+## allow return codes from sub-process to bubble up normally
 trap '' ERR
 
 ## configure environment type defaults
@@ -82,6 +80,9 @@ fi
 [[ ${WARDEN_SELENIUM} -eq 1 ]] \
     && appendEnvPartialIfExists "selenium"
 
+[[ ${WARDEN_MAGEPACK} -eq 1 ]] \
+    && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.magepack"
+
 if [[ -f "${WARDEN_ENV_PATH}/.warden/warden-env.yml" ]]; then
     DOCKER_COMPOSE_ARGS+=("-f")
     DOCKER_COMPOSE_ARGS+=("${WARDEN_ENV_PATH}/.warden/warden-env.yml")
@@ -114,6 +115,12 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
 
     ## connect globally peered services to the environment network
     connectPeeredServices "$(renderEnvNetworkName)"
+
+    ## always execute env up using --detach mode
+    if ! (containsElement "-d" "$@" || containsElement "--detach" "$@"); then
+        WARDEN_PARAMS=("${WARDEN_PARAMS[@]:1}")
+        WARDEN_PARAMS=(up -d "${WARDEN_PARAMS[@]}")
+    fi
 fi
 
 ## lookup address of traefik container on environment network
@@ -131,7 +138,7 @@ then
     warden sync pause
 fi
 
-## anything not caught above is simply passed through to docker-compose to orchestrate
+## pass ochestration through to docker-compose
 docker-compose \
     --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
     "${DOCKER_COMPOSE_ARGS[@]}" "${WARDEN_PARAMS[@]}" "$@"

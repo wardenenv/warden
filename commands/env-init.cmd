@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-[[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
+[[ ! ${WARDEN_DIR} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
 
 source "${WARDEN_DIR}/utils/env.sh"
 WARDEN_ENV_PATH="$(pwd -P)"
@@ -93,6 +93,7 @@ if [[ "${WARDEN_ENV_TYPE}" == "magento2" ]]; then
 		WARDEN_SPLIT_SALES=0
 		WARDEN_SPLIT_CHECKOUT=0
 		WARDEN_TEST_DB=0
+		WARDEN_MAGEPACK=0
 
 		BLACKFIRE_CLIENT_ID=
 		BLACKFIRE_CLIENT_TOKEN=
@@ -147,7 +148,7 @@ if [[ "${WARDEN_ENV_TYPE}" == "symfony" ]]; then
 		REDIS_VERSION=5.0
 		VARNISH_VERSION=6.0
 
-		WARDEN_MARIADB=1
+		WARDEN_DB=1
 		WARDEN_REDIS=1
 		WARDEN_MAILHOG=1
 		WARDEN_RABBITMQ=1

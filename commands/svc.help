@@ -3,7 +3,7 @@
 
 COMPOSE_USAGE=$(docker-compose "${WARDEN_PARAMS[@]}" "$@" \
   | grep -vE '(--file|--project-name|--project-directory|default: docker-compose.yml|default: directory name)' \
-  | sed '1d;2d;s/docker-compose/env/' \
+  | sed '1d;2d;s/docker-compose/svc/' \
   | sed -E "s/^(Usage|Options|Commands):/$(echo -e "\033[33m\\1:\033[0m")/g"
 )
 

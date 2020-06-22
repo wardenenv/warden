@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
-[[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
+[[ ! ${WARDEN_DIR} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
 
 mkdir -p "${WARDEN_SSL_DIR}/certs"
 
 if [[ ! -f "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem" ]]; then
-  echo -e "\033[31mError: Missing the root CA file. Please run 'warden install' and try again."
-  exit -1
+  fatal "Missing the root CA file. Please run 'warden install' and try again."
 fi
 
 if (( ${#WARDEN_PARAMS[@]} == 0 )); then
@@ -55,6 +54,6 @@ openssl x509 -req -days 365 -sha256 -extensions v3_req            \
 if [[ "$(cd "${WARDEN_HOME_DIR}" && docker-compose -p warden -f "${WARDEN_DIR}/docker/docker-compose.yml" ps -q traefik)" ]]
 then
   echo "==> Updating traefik"
-  "${WARDEN_DIR}/bin/warden" up traefik
-  "${WARDEN_DIR}/bin/warden" restart traefik
+  "${WARDEN_DIR}/bin/warden" svc up traefik
+  "${WARDEN_DIR}/bin/warden" svc restart traefik
 fi

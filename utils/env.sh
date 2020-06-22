@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-[[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
+[[ ! ${WARDEN_DIR} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
 
 function locateEnvPath () {
     local WARDEN_ENV_PATH="$(pwd -P)"
@@ -47,8 +47,7 @@ function loadEnvConfig () {
             WARDEN_ENV_SUBT=linux
         ;;
         *)
-            >&2 printf "\e[01;31mERROR\033[0m: Unsupported OSTYPE '${OSTYPE:-undefined}'\n"
-            exit 1
+            fatal "Unsupported OSTYPE '${OSTYPE:-undefined}'"
         ;;
     esac
 

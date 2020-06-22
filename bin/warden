@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -e
-trap '>&2 printf "\n\e[01;31mERROR\033[0m: Command \`%s\` on line $LINENO failed with exit code $?\n" "$BASH_COMMAND"' ERR
+trap 'error "$(printf "Command \`%s\` at $BASH_SOURCE:$LINENO failed with exit code $?" "$BASH_COMMAND")"' ERR
 
 ## find directory where this script is located following symlinks if neccessary
 readonly WARDEN_DIR="$(
@@ -12,17 +12,19 @@ readonly WARDEN_DIR="$(
   )/.." >/dev/null \
   && pwd
 )"
+source "${WARDEN_DIR}/utils/core.sh"
 
-## function for determining if a value is present in an array
-containsElement () {
-  local e match="$1"
-  shift
-  for e; do [[ "$e" == "$match" ]] && return 0; done
-  return 1
-}
+## verify docker-compose is installed
+if ! which docker-compose >/dev/null; then
+  fatal "docker-compose could not be found; please install and try again."
+fi
 
-## define environment requirements
-readonly WARDEN_REQUIRED_DOCKER_COMPOSE="1.18.0"
+## verify docker-compose meets version constraint
+DOCKER_COMPOSE_REQUIRE="1.25.0"
+DOCKER_COMPOSE_VERSION="$(docker-compose -v | grep -oE '[0-9\.]+' | head -n1)"
+if ! test $(version ${DOCKER_COMPOSE_VERSION}) -ge $(version ${DOCKER_COMPOSE_REQUIRE}); then
+  fatal "docker-compose version should be ${DOCKER_COMPOSE_REQUIRE} or higher (${DOCKER_COMPOSE_VERSION} installed)"
+fi
 
 ## define and export global shared directory paths
 export readonly WARDEN_HOME_DIR="${WARDEN_HOME_DIR:-"$HOME/.warden"}"
@@ -33,7 +35,7 @@ export readonly WARDEN_COMPOSER_DIR="${WARDEN_COMPOSER_DIR:-"$HOME/.composer"}"
 declare WARDEN_HELP=
 declare WARDEN_PARAMS=()
 declare WARDEN_COMMAND=
-declare WARDEN_ANYARGS=(env db shell debug)
+declare WARDEN_ANYARGS=(svc env db shell debug)
 declare WARDEN_VERBOSE=
 
 ## parse first argument as command and determine validity
@@ -53,7 +55,7 @@ while (( "$#" )); do
       ;;
     -v|--verbose)
       WARDEN_VERBOSE=1
-      break
+      shift
       ;;
     --) # end argument parsing (unless command is on 'anyargs' list and consumes anything as params)
       shift
@@ -61,11 +63,10 @@ while (( "$#" )); do
       ;;
     -*|--*=) # unsupported flags (unless command is on 'anyargs' list and consumes anything as params)
       containsElement "${WARDEN_COMMAND}" "${WARDEN_ANYARGS[@]}" && break
-      >&2 printf "\e[01;31mERROR\033[0m: Unsupported flag $1\n"
-      exit 1
+      fatal "Unsupported flag $1"
       ;;
     *) # preserve positional arguments
-      WARDEN_PARAMS+=($1)
+      WARDEN_PARAMS+=("$1")
       shift
       ;;
   esac
