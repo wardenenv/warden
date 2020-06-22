@@ -22,6 +22,7 @@
 * Updated `env-init` command to prompt user before overwriting an existing `.env` file in a project directory ([#166](https://github.com/davidalger/warden/pull/166) by @Lunaetic)
 * Updated `env-init` command to prompt user for required arguments when missing ([#170](https://github.com/davidalger/warden/pull/170) by @Lunaetic)
 * Added support for Magepack advanced JS bundling ([#138](https://github.com/davidalger/warden/pull/138) by @vbuck)
+* Added a new `shopware6` environment type including Mutagen configuration for file sync on macOS (issue [#169](https://github.com/davidalger/warden/issues/169))
 
 **Bug Fixes:**
 
