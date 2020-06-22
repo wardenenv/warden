@@ -35,7 +35,7 @@ export readonly WARDEN_COMPOSER_DIR="${WARDEN_COMPOSER_DIR:-"$HOME/.composer"}"
 declare WARDEN_HELP=
 declare WARDEN_PARAMS=()
 declare WARDEN_COMMAND=
-declare WARDEN_ANYARGS=(svc env db shell debug)
+declare WARDEN_ANYARGS=(svc env db sync shell debug)
 
 ## parse first argument as command and determine validity
 if (( "$#" )) && [[ -f "${WARDEN_DIR}/commands/${1}.cmd" ]]; then

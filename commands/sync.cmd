@@ -61,12 +61,8 @@ case "${WARDEN_PARAMS[0]}" in
     stop)
         mutagen sync terminate --label-selector "warden-sync=${WARDEN_ENV_NAME}"
         ;;
-    list)
-        [[ ${WARDEN_VERBOSE} ]] && MUTAGEN_ARGS=" -l " || MUTAGEN_ARGS=
-        mutagen sync list ${MUTAGEN_ARGS} --label-selector "warden-sync=${WARDEN_ENV_NAME}"
-        ;;
-    flush|monitor|pause|reset|resume)
-        mutagen sync "${WARDEN_PARAMS[0]}" --label-selector "warden-sync=${WARDEN_ENV_NAME}"
+    list|flush|monitor|pause|reset|resume)
+        mutagen sync "${WARDEN_PARAMS[@]}" "${@}" --label-selector "warden-sync=${WARDEN_ENV_NAME}"
         ;;
     *)
         fatal "The command \"${WARDEN_PARAMS[0]}\" does not exist. Please use --help for usage."
