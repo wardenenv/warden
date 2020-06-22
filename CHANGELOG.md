@@ -20,6 +20,7 @@
   * RabbitMQ default updated from 3.7 to 3.8
   * MariaDB default updated from 10.3 to 10.4
 * Updated `env-init` command to prompt user before overwriting an existing `.env` file in a project directory ([#166](https://github.com/davidalger/warden/pull/166) by @Lunaetic)
+* Updated `env-init` command to prompt user for required arguments when missing ([#170](https://github.com/davidalger/warden/pull/170) by @Lunaetic)
 * Added support for Magepack advanced JS bundling ([#138](https://github.com/davidalger/warden/pull/138) by @vbuck)
 
 **Bug Fixes:**
