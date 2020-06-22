@@ -18,7 +18,6 @@ Warden version $(cat ${WARDEN_DIR}/version)
 
 \033[33mOptions:\033[0m
   -h, --help        Display this help menu
-  -v, --verbose     Increases verbosity of output
 
 \033[33mCommands:\033[0m
   svc               Orchestrates global services such as traefik, portainer and dnsmasq via docker-compose

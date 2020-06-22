@@ -7,7 +7,6 @@ WARDEN_USAGE=$(cat <<EOF
 
 \033[33mOptions:\033[0m
   -h, --help        Display this help menu
-  -v, --verbose     Increases verbosity of output
 
 \033[33mEnvironment Types:\033[0m
   local               Declares the docker-compose version and labels the project

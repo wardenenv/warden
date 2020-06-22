@@ -36,7 +36,6 @@ declare WARDEN_HELP=
 declare WARDEN_PARAMS=()
 declare WARDEN_COMMAND=
 declare WARDEN_ANYARGS=(svc env db shell debug)
-declare WARDEN_VERBOSE=
 
 ## parse first argument as command and determine validity
 if (( "$#" )) && [[ -f "${WARDEN_DIR}/commands/${1}.cmd" ]]; then
@@ -52,10 +51,6 @@ while (( "$#" )); do
     -h|--help)
       WARDEN_HELP=1
       break
-      ;;
-    -v|--verbose)
-      WARDEN_VERBOSE=1
-      shift
       ;;
     --) # end argument parsing (unless command is on 'anyargs' list and consumes anything as params)
       shift

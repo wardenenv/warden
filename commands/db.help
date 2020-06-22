@@ -7,7 +7,6 @@ WARDEN_USAGE=$(cat <<EOF
 
 \033[33mOptions:\033[0m
   -h, --help        Display this help menu
-  -v, --verbose     Increases verbosity of output
 
 \033[33mCommands:\033[0m
   connect           Launches an interactive mysql session within the current project environment
