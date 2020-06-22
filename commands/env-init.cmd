@@ -16,13 +16,19 @@ if test -f "${WARDEN_ENV_PATH}/.env"; then
   done
 fi
 
-# TODO: Prompt user for inputs when arguments remain unspecified
-
 WARDEN_ENV_NAME="${WARDEN_PARAMS[0]:-}"
+
+# If warden environment name was not provided, prompt user for it
+if [ -z "$WARDEN_ENV_NAME"]; then
+  read -p $'\033[32mAn environment name was not provided; please enter one:\033[0m ' WARDEN_ENV_NAME
+fi
+
 WARDEN_ENV_TYPE="${WARDEN_PARAMS[1]:-}"
 
-# Require the user inputs the required environment name parameter
-[[ ! ${WARDEN_ENV_NAME} ]] && >&2 echo -e "\033[31mMissing required argument. Please use --help to to print usage.\033[0m" && exit 1
+# If warden environment type was not provided, prompt user for it
+if [ -z "$WARDEN_ENV_TYPE"]; then
+  read -p $'\033[32mAn environment type was not provided; please choose one of [magento1, magento2, laravel, symfony]:\033[0m ' WARDEN_ENV_TYPE
+fi
 
 # Verify the auto-select and/or type path resolves correctly before setting it
 assertValidEnvType || exit $?
