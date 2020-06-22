@@ -58,6 +58,14 @@ function renderEnvNetworkName() {
     echo "${WARDEN_ENV_NAME}_default" | tr '[:upper:]' '[:lower:]'
 }
 
+function fetchValidEnvTypes () {
+    echo $(
+        ls -1 "${WARDEN_DIR}/environments/"*/*".base.yml" \
+            | sed -E "s#^${WARDEN_DIR}/environments/##" \
+            | cut -d/ -f1 | uniq | sort | grep -v includes
+    )
+}
+
 function assertValidEnvType () {
     if [[ ! -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.base.yml" ]]; then
         >&2 echo -e "\033[31mInvalid environment type \"${WARDEN_ENV_TYPE}\" specified.\033[0m"

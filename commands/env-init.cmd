@@ -19,22 +19,17 @@ fi
 WARDEN_ENV_NAME="${WARDEN_PARAMS[0]:-}"
 
 # If warden environment name was not provided, prompt user for it
-while [ -z "$WARDEN_ENV_NAME" ]; do
+while [ -z "${WARDEN_ENV_NAME}" ]; do
   read -p $'\033[32mAn environment name was not provided; please enter one:\033[0m ' WARDEN_ENV_NAME
 done
 
 WARDEN_ENV_TYPE="${WARDEN_PARAMS[1]:-}"
 
 # If warden environment type was not provided, prompt user for it
-if [ -z "$WARDEN_ENV_TYPE" ]; then
+if [ -z "${WARDEN_ENV_TYPE}" ]; then
   while true; do
-    read -p $'\033[32mAn environment type was not provided; please choose one of [magento1, magento2, laravel, symfony]:\033[0m ' WARDEN_ENV_TYPE
-    case $WARDEN_ENV_TYPE in
-      magento1) break;;
-      magento2) break;;
-      laravel) break;;
-      symfony) break;;
-    esac
+    read -p $'\033[32mAn environment type was not provided; please choose one of ['"$(fetchValidEnvTypes)"$']:\033[0m ' WARDEN_ENV_TYPE
+    assertValidEnvType && break
   done
 fi
 
