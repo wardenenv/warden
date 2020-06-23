@@ -16,11 +16,6 @@ COPY etc/nginx/fastcgi_params /etc/nginx/fastcgi_params.template
 COPY etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.template
 COPY etc/nginx/available.d/*.conf /etc/nginx/available.d/
 
-RUN groupmod -g 1000 www-data
-
-VOLUME  /var/www/html
-WORKDIR /var/www/html
-
 CMD envsubst '${NGINX_UPSTREAM_HOST} ${NGINX_UPSTREAM_PORT} \
               ${NGINX_UPSTREAM_BLACKFIRE_HOST} ${NGINX_UPSTREAM_BLACKFIRE_PORT} \
               ${NGINX_UPSTREAM_DEBUG_HOST} ${NGINX_UPSTREAM_DEBUG_PORT} \
@@ -29,3 +24,5 @@ CMD envsubst '${NGINX_UPSTREAM_HOST} ${NGINX_UPSTREAM_PORT} \
     && envsubst '${XDEBUG_CONNECT_BACK_HOST}' \
         < /etc/nginx/fastcgi_params.template > /etc/nginx/fastcgi_params \
     && nginx -g "daemon off;"
+
+WORKDIR /var/www/html
