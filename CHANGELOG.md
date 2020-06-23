@@ -1,7 +1,7 @@
 # Change Log
 
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
-[All Commits](https://github.com/davidalger/warden/compare/0.5.2..develop)
+[All Commits](https://github.com/davidalger/warden/compare/0.5.3..develop)
 
 **Upgrade Notes:**
 
@@ -29,7 +29,6 @@
 * Fixed issue where specifying `-v` flag would short circuit argument parsing
 * Fixed bug where quoted arguments like `"foo bar"` would be passed into sub-route as two arguments, `foo` and `bar`
 * Fixed incorrect var name in output of env-init for Laravel env type
-* Reverted filtering of GTID SET commands as added in 0.5.2 release to resolve db import errors (issue [#162](https://github.com/davidalger/warden/issues/162))
 
 **Deprecated Functionality:**
 
@@ -38,6 +37,13 @@
 * The `warden up` command has been deprecated and will be removed in the 0.7.0 release; please use `warden svc up` instead.
 * The `warden down` command has been deprecated and will be removed in the 0.7.0 release; please use `warden svc down` instead.
 * The `warden restart` command has been deprecated and will be removed in the 0.7.0 release; please use `warden svc restart` instead.
+
+## Version [0.5.3](https://github.com/davidalger/warden/tree/0.5.3) (2020-06-23)
+[All Commits](https://github.com/davidalger/warden/compare/0.5.2..0.5.3)
+
+**Bug Fixes:**
+
+* Reverted filtering of GTID SET commands as added in 0.5.2 release to resolve db import errors (issue [#162](https://github.com/davidalger/warden/issues/162))
 
 ## Version [0.5.2](https://github.com/davidalger/warden/tree/0.5.2) (2020-06-11)
 [All Commits](https://github.com/davidalger/warden/compare/0.5.1..0.5.2)
