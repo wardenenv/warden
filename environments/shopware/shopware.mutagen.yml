@@ -18,6 +18,10 @@ sync:
         # IDE files
         - ".idea"
 
+        # Application files
+        - "/public/media"
+        - "/var"
+
     permissions:
       defaultFileMode: "0644"
       defaultDirectoryMode: "0755"
