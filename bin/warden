@@ -52,11 +52,13 @@ if (( "$#" )); then
     shift
   elif [[ -f "${WARDEN_ENV_PATH}/.warden/commands/${1}.cmd" ]]; then
     WARDEN_CMD_VERB="$1"
+    WARDEN_CMD_ANYARGS+=("$1")
     WARDEN_CMD_EXEC="${WARDEN_ENV_PATH}/.warden/commands/${1}.cmd"
     WARDEN_CMD_HELP="${WARDEN_ENV_PATH}/.warden/commands/${1}.help"
     shift
   elif [[ -f "${WARDEN_HOME_DIR}/commands/${1}.cmd" ]]; then
     WARDEN_CMD_VERB="$1"
+    WARDEN_CMD_ANYARGS+=("$1")
     WARDEN_CMD_EXEC="${WARDEN_HOME_DIR}/commands/${1}.cmd"
     WARDEN_CMD_HELP="${WARDEN_HOME_DIR}/commands/${1}.help"
     shift
