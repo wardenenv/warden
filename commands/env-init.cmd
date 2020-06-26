@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 [[ ! ${WARDEN_DIR} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
 
-source "${WARDEN_DIR}/utils/env.sh"
 WARDEN_ENV_PATH="$(pwd -P)"
 
 # Prompt user if there is an extant .env file to ensure they intend to overwrite
