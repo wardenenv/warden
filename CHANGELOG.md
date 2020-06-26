@@ -23,6 +23,7 @@
 * Updated `env-init` command to prompt user for required arguments when missing ([#170](https://github.com/davidalger/warden/pull/170) by @Lunaetic)
 * Added support for Magepack advanced JS bundling ([#138](https://github.com/davidalger/warden/pull/138) by @vbuck)
 * Added a new `shopware` environment type including Mutagen configuration for file sync on macOS (issue [#169](https://github.com/davidalger/warden/issues/169))
+* Added support for implementing custom commands in `~/.warden/commands` or `<project>/.warden/commands` ([#172](https://github.com/davidalger/warden/pull/172) by @davidalger)
 
 **Bug Fixes:**
 

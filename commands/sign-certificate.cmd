@@ -8,7 +8,7 @@ if [[ ! -f "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem" ]]; then
 fi
 
 if (( ${#WARDEN_PARAMS[@]} == 0 )); then
-  echo -e "\033[33mCommand '${WARDEN_COMMAND}' requires a hostname as an argument, please use --help for details."
+  echo -e "\033[33mCommand '${WARDEN_CMD_VERB}' requires a hostname as an argument, please use --help for details."
   exit -1
 fi
 

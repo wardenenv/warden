@@ -34,6 +34,7 @@ function locateEnvPath () {
 function loadEnvConfig () {
     local WARDEN_ENV_PATH="${1}"
     eval "$(grep "^WARDEN_" "${WARDEN_ENV_PATH}/.env")"
+    eval "$(grep "^TRAEFIK_" "${WARDEN_ENV_PATH}/.env")"
 
     WARDEN_ENV_NAME="${WARDEN_ENV_NAME:-}"
     WARDEN_ENV_TYPE="${WARDEN_ENV_TYPE:-}"
