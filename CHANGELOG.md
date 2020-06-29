@@ -24,6 +24,7 @@
 * Added support for Magepack advanced JS bundling ([#138](https://github.com/davidalger/warden/pull/138) by @vbuck)
 * Added a new `shopware` environment type including Mutagen configuration for file sync on macOS (issue [#169](https://github.com/davidalger/warden/issues/169))
 * Added support for implementing custom commands in `~/.warden/commands` or `<project>/.warden/commands` ([#172](https://github.com/davidalger/warden/pull/172) by @davidalger)
+* Added new feature flag `WARDEN_NGINX` to enable/disable service on per-project basis. This will allow (for example) using a `local` env type for a static site by adding `WARDEN_NGINX=1` to the project's `.env` file.
 
 **Bug Fixes:**
 

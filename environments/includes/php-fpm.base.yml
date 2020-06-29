@@ -10,6 +10,10 @@ x-extra_hosts: &extra_hosts
     - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
 
 services:
+  nginx:
+    depends_on:
+      - php-fpm
+
   php-fpm:
     hostname: "${WARDEN_ENV_NAME}-php-fpm"
     image: docker.io/wardenenv/php-fpm:${PHP_VERSION:-7.4}${WARDEN_SVC_PHP_VARIANT:-}

@@ -3,8 +3,6 @@ services:
   nginx:
     hostname: "${WARDEN_ENV_NAME}-nginx"
     image: docker.io/wardenenv/nginx:${NGINX_VERSION:-1.16}
-    depends_on:
-      - php-fpm
     labels:
       - traefik.enable=true
       - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.tls=true

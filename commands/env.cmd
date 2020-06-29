@@ -18,6 +18,7 @@ if [[ ${WARDEN_ENV_TYPE} =~ ^magento ]]; then
 fi
 
 if [[ ${WARDEN_ENV_TYPE} != local ]]; then
+    WARDEN_NGINX=${WARDEN_NGINX:-1}
     WARDEN_DB=${WARDEN_DB:-1}
     WARDEN_REDIS=${WARDEN_REDIS:-1}
     WARDEN_MAILHOG=${WARDEN_MAILHOG:-1}
@@ -35,9 +36,11 @@ DOCKER_COMPOSE_ARGS=()
 appendEnvPartialIfExists "networks"
 
 if [[ ${WARDEN_ENV_TYPE} != local ]]; then
-    appendEnvPartialIfExists "nginx"
     appendEnvPartialIfExists "php-fpm"
 fi
+
+[[ ${WARDEN_NGINX} -eq 1 ]] \
+    && appendEnvPartialIfExists "nginx"
 
 [[ ${WARDEN_DB} -eq 1 ]] \
     && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.db"
