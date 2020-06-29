@@ -3,4 +3,3 @@ services:
   nginx:
     environment:
       - NGINX_PUBLIC=/public
-      - NGINX_TEMPLATE=application.conf

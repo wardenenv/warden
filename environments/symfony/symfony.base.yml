@@ -3,7 +3,6 @@ services:
   nginx:
     environment:
       - NGINX_PUBLIC=/public
-      - NGINX_TEMPLATE=application.conf
     volumes:
       - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
 
