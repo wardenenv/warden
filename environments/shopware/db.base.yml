@@ -7,7 +7,7 @@ services:
           - mysql
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE:-shopware}
-      DB_AUTO_CREATE_DB: ${DB_AUTO_CREATE_DB:-${MYSQL_DATABASE:-shopware} shopware_e2e shopware_test}
+      DB_AUTO_CREATE_DB: ${DB_AUTO_CREATE_DB:-shopware shopware_e2e shopware_test}
       DB_AUTO_CREATE_SH: |-
         if [ -n "$$MYSQL_USER" ] && [ -n "$$DB_AUTO_CREATE_DB" ]; then
           for MYSQL_DATABASE in $$DB_AUTO_CREATE_DB; do
