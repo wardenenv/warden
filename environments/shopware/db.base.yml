@@ -1,8 +1,7 @@
 version: "3.5"
 services:
   db:
-    environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-shopware}
-      - MYSQL_DATABASE=${MYSQL_DATABASE:-shopware}
-      - MYSQL_USER=${MYSQL_USER:-shopware}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-shopware}
+    networks:
+      default:
+        aliases:
+          - mysql
