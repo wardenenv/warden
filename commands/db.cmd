@@ -14,22 +14,18 @@ if (( ${#WARDEN_PARAMS[@]} == 0 )); then
 fi
 
 ## load connection information for the mysql service
-eval "$(grep "^MYSQL_" "${WARDEN_ENV_PATH}/.env")"
+DB_CONTAINER=$(warden env ps -q db)
+if [[ ! ${DB_CONTAINER} ]]; then
+    fatal "No container found for db service."
+fi
+
 eval "$(
-    grep -E '^\W+- MYSQL_.*=\$\{.*\}' "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.db.base.yml" \
-        | sed -E 's/.*- //g'
+    docker container inspect ${DB_CONTAINER} --format '
+        {{- range .Config.Env }}{{with split . "=" -}}
+            {{- index . 0 }}='\''{{ range $i, $v := . }}{{ if $i }}{{ $v }}{{ end }}{{ end }}'\''{{println}}
+        {{- end }}{{ end -}}
+    ' | grep "^MYSQL_"
 )"
-
-if [[ -f "${WARDEN_ENV_PATH}/.warden/warden-env.yml" ]]; then
-    eval "$(grep -E '^\W+- MYSQL_.*=\$\{.*\}' "${WARDEN_ENV_PATH}/.warden/warden-env.yml" | sed -E 's/.*- //g')"
-fi
-
-if [[ -f "${WARDEN_ENV_PATH}/.warden/warden-env.${WARDEN_ENV_SUBT}.yml" ]]; then
-    eval "$(
-        grep -E '^\W+- MYSQL_.*=\$\{.*\}' "${WARDEN_ENV_PATH}/.warden/warden-env.${WARDEN_ENV_SUBT}.yml" \
-            | sed -E 's/.*- //g'
-    )"
-fi
 
 ## sub-command execution
 case "${WARDEN_PARAMS[0]}" in
