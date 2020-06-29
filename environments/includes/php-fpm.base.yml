@@ -3,6 +3,7 @@ version: "3.5"
 x-volumes: &volumes
   - ${WARDEN_SSL_DIR}/rootca/certs:/etc/ssl/warden-rootca-cert:ro
   - ${WARDEN_COMPOSER_DIR}:/home/www-data/.composer:delegated
+  - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
 
 x-extra_hosts: &extra_hosts
     - ${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}

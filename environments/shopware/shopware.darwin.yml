@@ -8,17 +8,9 @@ x-environment: &environment
   - CHOWN_DIR_LIST=public/media
 
 services:
-  nginx:
-    environment:
-      - XDEBUG_CONNECT_BACK_HOST=${XDEBUG_CONNECT_BACK_HOST:-host.docker.internal}
-    volumes: *volumes
-
-  php-fpm:
-    volumes: *volumes
-    environment: *environment
-  php-debug:
-    volumes: *volumes
-    environment: *environment
+  nginx: { volumes: *volumes }
+  php-fpm: { volumes: *volumes, environment: *environment }
+  php-debug: { volumes: *volumes, environment: *environment }
 
 volumes:
   appdata:

@@ -3,13 +3,3 @@ services:
   nginx:
     environment:
       - NGINX_PUBLIC=/public
-    volumes:
-      - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
-
-  php-fpm:
-    volumes:
-      - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
-
-  php-debug:
-    volumes:
-      - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
