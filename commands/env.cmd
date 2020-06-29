@@ -43,7 +43,7 @@ fi
     && appendEnvPartialIfExists "nginx"
 
 [[ ${WARDEN_DB} -eq 1 ]] \
-    && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.db"
+    && appendEnvPartialIfExists "db"
 
 [[ ${WARDEN_ELASTICSEARCH} -eq 1 ]] \
     && appendEnvPartialIfExists "elasticsearch"
