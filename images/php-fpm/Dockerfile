@@ -8,7 +8,7 @@ ENV COMPOSER_HOME=
 ENV MAILHOG_HOST    mailhog
 ENV MAILHOG_PORT    1025
 
-RUN yum install -y which pv sudo bind-utils python36-pip mariadb102 bash-completion rsync socat oathtool \
+RUN yum install -y which pv sudo bind-utils python3-pip mariadb102 bash-completion rsync socat oathtool \
         wget ack make gcc gcc-c++ \
     && yum clean all \
     && rm -rf /var/cache/yum
