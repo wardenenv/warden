@@ -65,6 +65,8 @@ if (( "$#" )); then
   else
     WARDEN_HELP=1
   fi
+else
+  WARDEN_HELP=1
 fi
 
 ## parse arguments
