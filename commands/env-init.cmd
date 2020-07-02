@@ -1,17 +1,36 @@
 #!/usr/bin/env bash
-[[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
+[[ ! ${WARDEN_DIR} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
 
-source "${WARDEN_DIR}/utils/env.sh"
 WARDEN_ENV_PATH="$(pwd -P)"
 
-# TODO: If the .env file already exists; prompt user instead of overwriting
-# TODO: Prompt user for inputs when arguments remain unspecified
+# Prompt user if there is an extant .env file to ensure they intend to overwrite
+if test -f "${WARDEN_ENV_PATH}/.env"; then
+  while true; do
+    read -p $'\033[32mA warden env file already exists at '"${WARDEN_ENV_PATH}/.env"$'; would you like to overwrite? y/n\033[0m ' resp
+    case $resp in
+      [Yy]*) echo "Overwriting extant .env file"; break;;
+      [Nn]*) exit;;
+      *) echo "Please answer (y)es or (n)o";;
+    esac
+  done
+fi
 
 WARDEN_ENV_NAME="${WARDEN_PARAMS[0]:-}"
+
+# If warden environment name was not provided, prompt user for it
+while [ -z "${WARDEN_ENV_NAME}" ]; do
+  read -p $'\033[32mAn environment name was not provided; please enter one:\033[0m ' WARDEN_ENV_NAME
+done
+
 WARDEN_ENV_TYPE="${WARDEN_PARAMS[1]:-}"
 
-# Require the user inputs the required environment name parameter
-[[ ! ${WARDEN_ENV_NAME} ]] && >&2 echo -e "\033[31mMissing required argument. Please use --help to to print usage.\033[0m" && exit 1
+# If warden environment type was not provided, prompt user for it
+if [ -z "${WARDEN_ENV_TYPE}" ]; then
+  while true; do
+    read -p $'\033[32mAn environment type was not provided; please choose one of ['"$(fetchValidEnvTypes)"$']:\033[0m ' WARDEN_ENV_TYPE
+    assertValidEnvType && break
+  done
+fi
 
 # Verify the auto-select and/or type path resolves correctly before setting it
 assertValidEnvType || exit $?
@@ -59,11 +78,11 @@ if [[ "${WARDEN_ENV_TYPE}" == "magento2" ]]; then
 		WARDEN_REDIS=1
 		WARDEN_MAILHOG=1
 
-		ELASTICSEARCH_VERSION=6.8
+		ELASTICSEARCH_VERSION=7.7
 		MARIADB_VERSION=10.3
 		NODE_VERSION=10
 		PHP_VERSION=7.3
-		RABBITMQ_VERSION=3.7
+		RABBITMQ_VERSION=3.8
 		REDIS_VERSION=5.0
 		VARNISH_VERSION=6.0
 
@@ -76,6 +95,7 @@ if [[ "${WARDEN_ENV_TYPE}" == "magento2" ]]; then
 		WARDEN_SPLIT_SALES=0
 		WARDEN_SPLIT_CHECKOUT=0
 		WARDEN_TEST_DB=0
+		WARDEN_MAGEPACK=0
 
 		BLACKFIRE_CLIENT_ID=
 		BLACKFIRE_CLIENT_TOKEN=
@@ -87,9 +107,9 @@ fi
 if [[ "${WARDEN_ENV_TYPE}" == "laravel" ]]; then
   cat >> "${WARDEN_ENV_PATH}/.env" <<-EOT
 
-		MARIADB_VERSION=10.3
+		MARIADB_VERSION=10.4
 		NODE_VERSION=10
-		PHP_VERSION=7.2
+		PHP_VERSION=7.4
 		REDIS_VERSION=5.0
 
 		WARDEN_DB=1
@@ -112,29 +132,29 @@ if [[ "${WARDEN_ENV_TYPE}" == "laravel" ]]; then
 
 		CACHE_DRIVER=redis
 		SESSION_DRIVER=redis
-		
+
 		REDIS_HOST=redis
 		REDIS_PORT=6379
-		
+
 		MAIL_DRIVER=sendmail
 	EOT
 fi
 
-if [[ "${WARDEN_ENV_TYPE}" == "symfony" ]]; then
+if [[ "${WARDEN_ENV_TYPE}" =~ ^symfony|shopware$ ]]; then
   cat >> "${WARDEN_ENV_PATH}/.env" <<-EOT
 
-		MARIADB_VERSION=10.3
-		NODE_VERSION=10
-		PHP_VERSION=7.4
-		RABBITMQ_VERSION=3.7
-		REDIS_VERSION=5.0
-		VARNISH_VERSION=6.0
-
-		WARDEN_MARIADB=1
+		WARDEN_DB=1
 		WARDEN_REDIS=1
 		WARDEN_MAILHOG=1
-		WARDEN_RABBITMQ=1
+		WARDEN_RABBITMQ=0
 		WARDEN_ELASTICSEARCH=0
 		WARDEN_VARNISH=0
+
+		MARIADB_VERSION=10.4
+		NODE_VERSION=10
+		PHP_VERSION=7.4
+		RABBITMQ_VERSION=3.8
+		REDIS_VERSION=5.0
+		VARNISH_VERSION=6.0
 	EOT
 fi

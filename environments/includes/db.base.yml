@@ -1,0 +1,19 @@
+version: "3.5"
+services:
+  php-fpm:
+    depends_on:
+      - db
+
+  db:
+    hostname: "${WARDEN_ENV_NAME}-mariadb"
+    image: docker.io/wardenenv/mariadb:${MARIADB_VERSION:-10.4}
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-app}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-app}
+      - MYSQL_USER=${MYSQL_USER:-app}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-app}
+    volumes:
+      - dbdata:/var/lib/mysql
+
+volumes:
+  dbdata:

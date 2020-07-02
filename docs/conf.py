@@ -19,6 +19,7 @@ lexers['json'] = JsonLexer(startinline=True)
 extensions = [
   'recommonmark',
   'sphinx_rtd_theme',
+  'sphinx_copybutton',
 ]
 
 source_suffix = ['.rst', '.md']

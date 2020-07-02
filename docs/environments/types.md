@@ -54,11 +54,25 @@ The `symfony` environment type supports development of Symfony 4+ projects, laun
 * PHP-FPM
 * MariaDB
 * Redis
-* RabbitMQ
+* RabbitMQ (disabled by default)
 * Varnish (disabled by default)
 * Elasticsearch (disabled by default)
 
 Files are currently mounted using a delegated mount on macOS and natively on Linux.
+
+#### Shopware
+
+The `shopware` environment type supports development of Shopware 6 projects, launching containers including:
+
+* Nginx
+* PHP-FPM
+* MariaDB
+* Redis
+* RabbitMQ (disabled by default)
+* Varnish (disabled by default)
+* Elasticsearch (disabled by default)
+
+In order to achieve a well performing experience on macOS, files in the webroot are synced into the container using a Mutagen sync session with the exception of `public/media` which remains mounted using a delegated mount.
 
 #### Commonalities
 

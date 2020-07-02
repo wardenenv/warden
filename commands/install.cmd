@@ -1,17 +1,7 @@
 #!/usr/bin/env bash
-[[ ! ${WARDEN_COMMAND} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
+[[ ! ${WARDEN_DIR} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
 
-source "${WARDEN_DIR}/utils/core.sh"
 source "${WARDEN_DIR}/utils/install.sh"
-
-if ! ( hash docker-compose 2>/dev/null); then
-    echo -e "\033[31mdocker-compose is not installed" && exit 1
-fi
-
-DOCKER_COMPOSE_VERSION="$(docker-compose -v | grep -oE '[0-9\.]+' | head -n1)"
-if ! test $(version ${DOCKER_COMPOSE_VERSION}) -ge $(version ${WARDEN_REQUIRED_DOCKER_COMPOSE}); then
-    echo -e "\033[31mdocker-compose version should be $WARDEN_REQUIRED_DOCKER_COMPOSE or higher ($DOCKER_COMPOSE_VERSION installed)" && exit 1
-fi
 
 if [[ ! -d "${WARDEN_SSL_DIR}/rootca" ]]; then
     mkdir -p "${WARDEN_SSL_DIR}/rootca"/{certs,crl,newcerts,private}

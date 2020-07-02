@@ -5,9 +5,4 @@ x-volumes: &volumes
   - appdata:/var/www/html
 
 services:
-  nginx: { volumes: *volumes }
-  php-fpm: { volumes: *volumes }
-  php-debug: { volumes: *volumes }
-
-volumes:
-  appdata:
+  magepack: { volumes: *volumes }
