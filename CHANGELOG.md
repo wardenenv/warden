@@ -9,21 +9,21 @@
 **Upgrade Notes:**
 
 * Warden now requires `docker-compose` 1.25.0 or later; see [issue #165](https://github.com/davidalger/warden/issues/165)
-* Warden now requires `mutagen` 0.11.4 or later for environments leveraging sync sessions on Mac OS.
+* Warden now requires `mutagen` 0.11.4 or later for environments leveraging sync sessions on Mac OS (currently Magento 2 and Shopware 6 use Mutagen).
 
 **Enhancements:**
 
-* Added `svc` command to control global services replacing `start`, `stop`, `up`, `down`, and `restart` and offering further flexibility as this works similar to `env` in that any verb known to `docker-compose` may be used in orchestrating global services such as `traefik`, `dnsmasq` and `portainer`
-* Updated `env` to report an error if Docker does not appear to be running.
-* Updated `env up` to imply `-d` (`--detach`) to work in like manner to `warden svc up` (formerly `warden up`)
-* The `sync` command now allows use of mutagen sub-commands `flush` and `reset`
+* Added `warden svc` command to control global services replacing `warden start`, `warden stop`, `warden up`, `warden down`, and `warden restart` and offering further flexibility as this works similar to `warden env` in that any verb known to `docker-compose` may be used in orchestrating global services such as `traefik`, `dnsmasq` and `portainer`; for example, `warden svc up` does what `warden up` did previously.
+* Updated `warden env` to report an error if Docker does not appear to be running.
+* Updated `warden env up` to imply `-d` (`--detach`) to work in like manner to `warden svc up` (formerly `warden up`)
+* The `warden sync` command now allows use of mutagen sub-commands `flush` and `reset`
 * The following version defaults were updated (these defaults apply when versions remain unspecified in a project's `.env` file; new project `.env` files may differ by environment type)
   * PHP-FPM default updated from 7.3 to 7.4
   * Elasticsearch default updated from 6.8 to 7.7
   * RabbitMQ default updated from 3.7 to 3.8
   * MariaDB default updated from 10.3 to 10.4
-* Updated `env-init` command to prompt user before overwriting an existing `.env` file in a project directory ([#166](https://github.com/davidalger/warden/pull/166) by @Lunaetic)
-* Updated `env-init` command to prompt user for required arguments when missing ([#170](https://github.com/davidalger/warden/pull/170) by @Lunaetic)
+* Updated `warden env-init` command to prompt user before overwriting an existing `.env` file in a project directory ([#166](https://github.com/davidalger/warden/pull/166) by @Lunaetic)
+* Updated `warden env-init` command to prompt user for required arguments when missing ([#170](https://github.com/davidalger/warden/pull/170) by @Lunaetic)
 * Added support for Magepack advanced JS bundling ([#138](https://github.com/davidalger/warden/pull/138) by @vbuck)
 * Added a new `shopware` environment type including Mutagen configuration for file sync on macOS (issue [#169](https://github.com/davidalger/warden/issues/169))
 * Added support for implementing custom commands in `~/.warden/commands` or `<project>/.warden/commands` ([#172](https://github.com/davidalger/warden/pull/172) by @davidalger)
@@ -32,9 +32,9 @@
 
 **Bug Fixes:**
 
-* Fixed issue where specifying `-v` flag would short circuit argument parsing
-* Fixed bug where quoted arguments like `"foo bar"` would be passed into sub-route as two arguments, `foo` and `bar`
-* Fixed incorrect var name in output of env-init for Laravel env type
+* Fixed issue where specifying `-v` flag would short circuit argument parsing (this flag was removed; previously was only used with `warden sync list` where `warden sync list -l` now accomplishes the same thing by passing the `-l` flag to mutagen to list in detail)
+* Fixed bug where quoted arguments like `"foo bar"` would be passed into sub-route as two arguments, `foo` and `bar` (technical detail of argument parsing; no known cases where this caused an issue)
+* Fixed incorrect var name in output of `warden env-init` for Laravel env type
 
 **Deprecated Functionality:**
 
