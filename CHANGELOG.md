@@ -3,6 +3,14 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.6.0..develop)
 
+**Upgrade Notes:**
+
+* With `mailhog` being changed from running on a per-project basis to running as a global service (see issue [#175](https://github.com/davidalger/warden/issues/175)) you will need to ensure `warden svc up` has been run after updating Warden. On pre-existing projects that already had their own Mailhog container running, `warden env up --remove-orphans` will clean it up.
+
+**Enhancements:**
+
+* Changed `mailhog` service to run as a single global service rather than as a per-project service (issue [#175](https://github.com/davidalger/warden/issues/175))
+
 ## Version [0.6.0](https://github.com/davidalger/warden/tree/0.6.0) (2020-07-02)
 [All Commits](https://github.com/davidalger/warden/compare/0.5.3..0.6.0)
 

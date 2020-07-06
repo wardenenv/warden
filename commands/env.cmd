@@ -21,7 +21,6 @@ if [[ ${WARDEN_ENV_TYPE} != local ]]; then
     WARDEN_NGINX=${WARDEN_NGINX:-1}
     WARDEN_DB=${WARDEN_DB:-1}
     WARDEN_REDIS=${WARDEN_REDIS:-1}
-    WARDEN_MAILHOG=${WARDEN_MAILHOG:-1}
 fi
 
 if [[ ${WARDEN_ENV_TYPE} == "magento2" ]]; then
@@ -56,9 +55,6 @@ fi
 
 [[ ${WARDEN_REDIS} -eq 1 ]] \
     && appendEnvPartialIfExists "redis"
-
-[[ ${WARDEN_MAILHOG} -eq 1 ]] \
-    && appendEnvPartialIfExists "mailhog"
 
 appendEnvPartialIfExists "${WARDEN_ENV_TYPE}"
 

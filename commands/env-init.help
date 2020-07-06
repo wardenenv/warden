@@ -15,18 +15,18 @@ WARDEN_USAGE=$(cat <<EOF
                       https://docs.warden.dev/environments/types.html#local
 
   magento2            Nginx, varnish, php-fpm, db (mariadb), elasticsearch, redis,
-                      rabbitmq, and mailhog services pre configured for Magento 2;
-                      on macOS systems code files are synced into container using
-                      mutagen session with pub/media, pub/static and var dirs
-                      excluded. On Linux code is mounted natively.
+                      and rabbitmq services pre configured for Magento 2; on macOS
+                      systems code files are synced into container using mutagen
+                      session with pub/media, pub/static and var dirs excluded.
+                      On Linux code is mounted natively.
 
-  magento1            Nginx, php-fpm, db (mariadb), redis, and mailhog services
+  magento1            Nginx, php-fpm, db (mariadb), and redis services
                       pre-configured for running Magento 1
 
-  laravel             Nginx, php-fpm, db (mariadb), redis, and mailhog services
+  laravel             Nginx, php-fpm, db (mariadb), and redis services
                       pre-configured for running Laravel
 
-  symfony             Nginx, php-fpm, db (mariadb), redis, and mailhog services
+  symfony             Nginx, php-fpm, db (mariadb), and redis services
                       pre-configured for running Symfony 4+
                       Due to the fact that Symfony uses `.env` file too,
                       WEBROOT value of `/web/` is used by default
