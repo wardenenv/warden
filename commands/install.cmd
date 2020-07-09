@@ -32,9 +32,8 @@ if [[ "$OSTYPE" =~ ^linux ]] \
   ## Fedora/CentOS
 then
   echo "==> Trusting root certificate (requires sudo privileges)"  
-  sudo cp "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem" /etc/pki/ca-trust/source/anchors/warden-proxy-local-ca.cert.pem
-  sudo update-ca-trust
-  sudo update-ca-trust enable
+  sudo cp "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem" /usr/share/pki/ca-trust-source/anchors/warden-proxy-local-ca.cert.pem
+  sudo update-ca-trust extract
 elif [[ "$OSTYPE" =~ ^linux ]] \
   && [[ -d /usr/local/share/ca-certificates ]] \
   && [[ ! -f /usr/local/share/ca-certificates/warden-proxy-local-ca.crt ]] \
