@@ -59,6 +59,12 @@ if [[ "$OSTYPE" =~ ^linux ]] && [[ ! -f "${WARDEN_HOME_DIR}/nodnsconfig" ]]; the
   if systemctl status NetworkManager | grep 'active (running)' >/dev/null \
     && ! grep '^nameserver 127.0.0.1$' /etc/resolv.conf >/dev/null
   then
+
+    if [ -f /etc/redhat-release ]; then
+      echo "==> Configuring NetworkManager to use dhclient (requires sudo privileges)"
+      echo -e "[main] \n dhcp=dhclient" > /etc/NetworkManager/conf.d/00-warden.conf
+    fi
+
     echo "==> Configuring resolver for .test domains (requires sudo privileges)"
     if ! sudo grep '^prepend domain-name-servers 127.0.0.1;$' /etc/dhcp/dhclient.conf >/dev/null 2>&1; then
       echo "  + Configuring dhclient to prepend dns with 127.0.0.1 resolver (requires sudo privileges)"
