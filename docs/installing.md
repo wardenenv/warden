@@ -28,4 +28,4 @@ Warden may be installed by cloning the repository to the directory of your choic
     git clone -b master https://github.com/davidalger/warden.git /opt/warden
     echo 'export PATH="/opt/warden/bin:$PATH"' >> ~/.bashrc
     PATH="/opt/warden/bin:$PATH"
-    warden up
+    warden svc up
