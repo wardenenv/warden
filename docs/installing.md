@@ -17,7 +17,7 @@ Installing Warden
 Warden may be installed via [Homebrew](https://brew.sh/) on both macOS and Linux hosts:
 
     brew install davidalger/warden/warden
-    warden up
+    warden svc up
 
 ### Alternative Installation
 
@@ -28,4 +28,4 @@ Warden may be installed by cloning the repository to the directory of your choic
     git clone -b master https://github.com/davidalger/warden.git /opt/warden
     echo 'export PATH="/opt/warden/bin:$PATH"' >> ~/.bashrc
     PATH="/opt/warden/bin:$PATH"
-    warden up
+    warden svc up
