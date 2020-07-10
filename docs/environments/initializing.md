@@ -29,7 +29,6 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
        WARDEN_VARNISH=1
        WARDEN_RABBITMQ=1
        WARDEN_REDIS=1
-       WARDEN_MAILHOG=1
 
        WARDEN_SYNC_IGNORE=
 
@@ -168,7 +167,6 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
 
     * [https://app.exampleproject.test/](https://app.exampleproject.test/)
     * [https://app.exampleproject.test/backend/](https://app.exampleproject.test/backend/)
-    * [https://mailhog.exampleproject.test/](https://mailhog.exampleproject.test/)
     * [https://rabbitmq.exampleproject.test/](https://rabbitmq.exampleproject.test/)
     * [https://elasticsearch.exampleproject.test/](https://elasticsearch.exampleproject.test/)
 
