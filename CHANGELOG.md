@@ -3,6 +3,10 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.6.0..develop)
 
+**Enhancements:**
+
+* Added `warden blackfire` command for easily running profiles via the CLI tool ([#188](https://github.com/davidalger/warden/pull/188) by @navarr)
+
 ## Version [0.6.0](https://github.com/davidalger/warden/tree/0.6.0) (2020-07-02)
 [All Commits](https://github.com/davidalger/warden/compare/0.5.3..0.6.0)
 
