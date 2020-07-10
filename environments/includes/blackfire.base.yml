@@ -19,6 +19,8 @@ services:
       - SSH_AUTH_SOCK=/tmp/ssh-auth.sock
       - NODE_VERSION=${NODE_VERSION:-10}
       - COMPOSER_MEMORY_LIMIT=-1
+      - BLACKFIRE_CLIENT_ID=${BLACKFIRE_CLIENT_ID}
+      - BLACKFIRE_CLIENT_TOKEN=${BLACKFIRE_CLIENT_TOKEN}
     volumes: *volumes
     extra_hosts: *extra_hosts
     depends_on:

@@ -14,3 +14,9 @@ BLACKFIRE_SERVER_TOKEN=<server_token>
 ```
 
 Note: You can obtain the IDs and Tokens used in the above from within your Blackfire account under Account Settings -> Credentials or from the credentials are of the environment you're pushing profile information into.
+
+### CLI Tool
+
+To use the Blackfire CLI Tool, you can run `warden blackfire [arguments]`.
+
+For more information on the CLI tool, please see [Profiling CLI Commands](https://blackfire.io/docs/cookbooks/profiling-cli) in Blackfire's documentation. 
