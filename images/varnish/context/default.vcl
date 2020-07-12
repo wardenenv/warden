@@ -1,13 +1,22 @@
+# VCL version 5.0 is not supported so it should be 4.0 even though actually used Varnish version is 6
 vcl 4.0;
 
 import std;
-# The minimal Varnish version is 4.0
+# The minimal Varnish version is 6.0
+# For SSL offloading, pass the following header in your proxy server or load balancer: 'X-Forwarded-Proto: https'
 
 backend default {
     .host = "${BACKEND_HOST}";
     .port = "${BACKEND_PORT}";
     .first_byte_timeout = 3600s;
     .between_bytes_timeout = 300s;
+    .probe = {
+        .url = "/pub/health_check.php";
+        .timeout = 2s;
+        .interval = 5s;
+        .window = 10;
+        .threshold = 5;
+   }
 }
 
 acl purge {
@@ -66,9 +75,12 @@ sub vcl_recv {
     }
 
     # Bypass health check requests
-    if (req.url ~ "/health.php") {
+    if (req.url ~ "/pub/health_check.php") {
         return (pass);
     }
+
+    # Set initial grace period usage status
+    set req.http.grace = "none";
 
     # normalize url in case of leading HTTP scheme and domain
     set req.url = regsub(req.url, "^http[s]?://", "");
@@ -101,6 +113,16 @@ sub vcl_recv {
     if (req.url ~ "^/(pub/)?(media|static)/") {
         # Static files should not be cached by default
         return (pass);
+
+        # But if you use a few locales and don't use CDN you can enable caching static files by commenting previous line (#return (pass);) and uncommenting next 3 lines
+        #unset req.http.Https;
+        #unset req.http.X-Forwarded-Proto;
+        #unset req.http.Cookie;
+    }
+
+    # Authenticated GraphQL requests should not be cached by default
+    if (req.url ~ "/graphql" && req.http.Authorization ~ "^Bearer") {
+        return (pass);
     }
 
     return (hash);
@@ -114,6 +136,13 @@ sub vcl_hash {
     # Cache AJAX replies seperately than non-AJAX
     if (req.http.X-Requested-With) {
         hash_data(req.http.X-Requested-With);
+    }
+
+    # For multi site configurations to not cache each other's content
+    if (req.http.host) {
+        hash_data(req.http.host);
+    } else {
+        hash_data(server.ip);
     }
 
     # To make sure http users don't see ssl warning
@@ -136,6 +165,8 @@ sub process_graphql_headers {
 }
 
 sub vcl_backend_response {
+    set beresp.grace = 3d;
+
     if (beresp.http.content-type ~ "text") {
         set beresp.do_esi = true;
     }
@@ -150,10 +181,12 @@ sub vcl_backend_response {
 
     # cache only successfully responses and 404s
     if (beresp.status != 200 && beresp.status != 404) {
-        set beresp.ttl = 0s;
+        set beresp.ttl = 120s;
         set beresp.uncacheable = true;
         return (deliver);
-    } elsif (beresp.http.Cache-Control ~ "private") {
+    } elseif (beresp.status != 200 &&
+            beresp.status != 404 &&
+            beresp.http.Cache-Control ~ "private") {
         set beresp.uncacheable = true;
         set beresp.ttl = 86400s;
         return (deliver);
@@ -180,8 +213,11 @@ sub vcl_backend_response {
 
 sub vcl_deliver {
     if (resp.http.X-Magento-Debug) {
-        if (resp.http.x-varnish ~ " ") {
+        if (obj.uncacheable) {
+            set resp.http.X-Magento-Cache-Debug = "UNCACHEABLE";
+        } else if (obj.hits) {    
             set resp.http.X-Magento-Cache-Debug = "HIT";
+            set resp.http.Grace = req.http.grace;
         } else {
             set resp.http.X-Magento-Cache-Debug = "MISS";
         }
@@ -194,5 +230,34 @@ sub vcl_deliver {
         set resp.http.Pragma = "no-cache";
         set resp.http.Expires = "-1";
         set resp.http.Cache-Control = "no-store, no-cache, must-revalidate, max-age=0";
+    }
+
+    unset resp.http.X-Magento-Debug;
+    unset resp.http.X-Magento-Tags;
+    unset resp.http.X-Powered-By;
+    unset resp.http.Server;
+    unset resp.http.X-Varnish;
+    unset resp.http.Via;
+    unset resp.http.Link;
+}
+
+sub vcl_hit {
+    if (obj.ttl >= 0s) {
+        # Hit within TTL period
+        return (deliver);
+    }
+    if (std.healthy(req.backend_hint)) {
+        if (obj.ttl + 300s > 0s) {
+            # Hit after TTL expiration, but within grace period
+            set req.http.grace = "normal (healthy server)";
+            return (deliver);
+        } else {
+            # Hit after TTL and grace expiration
+            return (restart);
+        }
+    } else {
+        # server is not healthy, retrieve from cache
+        set req.http.grace = "unlimited (unhealthy server)";
+        return (deliver);
     }
 }
