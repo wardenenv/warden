@@ -47,6 +47,7 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
        WARDEN_SPLIT_SALES=0
        WARDEN_SPLIT_CHECKOUT=0
        WARDEN_TEST_DB=0
+       WARDEN_MAGEPACK=0
        
        BLACKFIRE_CLIENT_ID=
        BLACKFIRE_CLIENT_TOKEN=
@@ -86,7 +87,7 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
 7. Initialize project source files using composer create-project and then move them into place:
 
        composer create-project --repository-url=https://repo.magento.com/ \
-           magento/project-community-edition /tmp/exampleproject 2.3.x
+           magento/project-community-edition /tmp/exampleproject 2.4.x
 
        rsync -a /tmp/exampleproject/ /var/www/html/
        rm -rf /tmp/exampleproject/
@@ -104,7 +105,7 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
            --db-name=magento \
            --db-user=magento \
            --db-password=magento \
-           --http-cache-hosts=varnish:80 \
+           --http-cache-hosts="varnish:80" \
            --session-save=redis \
            --session-save-redis-host=redis \
            --session-save-redis-port=6379 \
@@ -118,6 +119,12 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
            --page-cache-redis-server=redis \
            --page-cache-redis-db=1 \
            --page-cache-redis-port=6379
+           --search-engine=elasticsearch7 \
+           --elasticsearch-host=elasticsearch \
+           --elasticsearch-port=9200 \
+           --elasticsearch-enable-auth=0 \
+           --elasticsearch-index-prefix=magento2 \
+           --elasticsearch-timeout=15
 
        ## Configure Application
        bin/magento config:set --lock-env web/unsecure/base_url \
@@ -135,13 +142,7 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
        bin/magento config:set --lock-env system/full_page_cache/caching_application 2
        bin/magento config:set --lock-env system/full_page_cache/ttl 604800
 
-       bin/magento config:set --lock-env catalog/search/engine elasticsearch7
        bin/magento config:set --lock-env catalog/search/enable_eav_indexer 1
-       bin/magento config:set --lock-env catalog/search/elasticsearch7_server_hostname elasticsearch
-       bin/magento config:set --lock-env catalog/search/elasticsearch7_server_port 9200
-       bin/magento config:set --lock-env catalog/search/elasticsearch7_index_prefix magento2
-       bin/magento config:set --lock-env catalog/search/elasticsearch7_enable_auth 0
-       bin/magento config:set --lock-env catalog/search/elasticsearch7_server_timeout 15
 
        bin/magento config:set --lock-env dev/static/sign 0
 
@@ -162,6 +163,10 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
            --admin-lastname="Admin" \
            --admin-email="${ADMIN_USER}@example.com"
        printf "u: %s\np: %s\n" "${ADMIN_USER}" "${ADMIN_PASS}"
+       
+``` note::
+    Prior to Magento ``2.4.x`` it was not required to enter search-engine and elasticsearch configuration during installation.  These were configured via ``bin/magento config:set``
+```
 
 9. Launch the application in your browser:
 
