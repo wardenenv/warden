@@ -50,7 +50,6 @@ if [[ "${WARDEN_ENV_TYPE}" == "magento1" ]]; then
 
 		WARDEN_DB=1
 		WARDEN_REDIS=1
-		WARDEN_MAILHOG=1
 
 		MARIADB_VERSION=10.3
 		NODE_VERSION=10
@@ -76,7 +75,6 @@ if [[ "${WARDEN_ENV_TYPE}" == "magento2" ]]; then
 		WARDEN_VARNISH=1
 		WARDEN_RABBITMQ=1
 		WARDEN_REDIS=1
-		WARDEN_MAILHOG=1
 
 		ELASTICSEARCH_VERSION=7.7
 		MARIADB_VERSION=10.3
@@ -114,7 +112,6 @@ if [[ "${WARDEN_ENV_TYPE}" == "laravel" ]]; then
 
 		WARDEN_DB=1
 		WARDEN_REDIS=1
-		WARDEN_MAILHOG=1
 
 		## Laravel Config
 		APP_URL=http://app.${WARDEN_ENV_NAME}.test
@@ -145,7 +142,6 @@ if [[ "${WARDEN_ENV_TYPE}" =~ ^symfony|shopware$ ]]; then
 
 		WARDEN_DB=1
 		WARDEN_REDIS=1
-		WARDEN_MAILHOG=1
 		WARDEN_RABBITMQ=0
 		WARDEN_ELASTICSEARCH=0
 		WARDEN_VARNISH=0

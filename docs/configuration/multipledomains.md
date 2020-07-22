@@ -1,6 +1,6 @@
 ## Multiple Domains
 
-If you need multiple domains configured for your project, Warden will now automatically route all sub-domains of the configured `TRAEFIK_DOMAIN` (as given when running `env-init`) to the Varnish/Nginx containers provided there is not a more specific rule such as for example `mailhog.exampleproject.com` which routes to the `mailhog` service.
+If you need multiple domains configured for your project, Warden will now automatically route all sub-domains of the configured `TRAEFIK_DOMAIN` (as given when running `env-init`) to the Varnish/Nginx containers provided there is not a more specific rule such as for example `rabbitmq.exampleproject.com` which routes to the `rabbitmq` service for the project.
 
 Multiple top-level domains may also be setup by following the instructions below:
 

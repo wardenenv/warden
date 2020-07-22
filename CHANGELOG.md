@@ -1,7 +1,21 @@
 # Change Log
 
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
-[All Commits](https://github.com/davidalger/warden/compare/0.6.0..develop)
+[All Commits](https://github.com/davidalger/warden/compare/0.7.0..develop)
+
+## Version [0.7.0](https://github.com/davidalger/warden/tree/0.7.0) (2020-07-22)
+[All Commits](https://github.com/davidalger/warden/compare/0.6.0..0.7.0)
+
+**Upgrade Notes:**
+
+* With `mailhog` being changed from running on a per-project basis to running as a global service (see issue [#175](https://github.com/davidalger/warden/issues/175)) you will need to ensure `warden svc up` has been run after updating Warden. On pre-existing projects that already had their own Mailhog container running, `warden env up --remove-orphans` will clean it up.
+
+**Enhancements:**
+
+* Added `warden blackfire` command for easily running profiles via the CLI tool ([#188](https://github.com/davidalger/warden/pull/188) by @navarr)
+* Changed `mailhog` service to run as a single global service rather than as a per-project service (issue [#175](https://github.com/davidalger/warden/issues/175))
+* Updated `warden db import` to strip usages of `@@GLOBAL.GITD_PURGED` and `@@SESSION.SQL_LOG_BIN` from database dumps during import process to avoid failures importing databases originating from Amazon RDS (issue [#162](https://github.com/davidalger/warden/issues/162))
+* Added Mutagen sync configuration for `magento1` environment type (issue [#97](https://github.com/davidalger/warden/issues/97))
 
 ## Version [0.6.0](https://github.com/davidalger/warden/tree/0.6.0) (2020-07-02)
 [All Commits](https://github.com/davidalger/warden/compare/0.5.3..0.6.0)

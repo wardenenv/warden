@@ -5,6 +5,7 @@ After running `warden up` for the first time following installation, the followi
 * [https://traefik.warden.test/](https://traefik.warden.test/)
 * [https://portainer.warden.test/](https://portainer.warden.test/)
 * [https://dnsmasq.warden.test/](https://dnsmasq.warden.test/)
+* [https://mailhog.warden.test/](https://mailhog.warden.test/)
 
 ### Customizable Settings
 
@@ -20,4 +21,4 @@ The following options are available (with default values indicated):
     Setting ``TRAEFIK_LISTEN=0.0.0.0`` can be quite useful in some cases, but be aware that causing Traefik to listen for requests publicly poses a security risk when on public WiFi or networks otherwise outside of your control.
 ```
 
-After changing settings in `~/.warden/.env`, please run `warden up` to apply.
+After changing settings in `~/.warden/.env`, please run `warden svc up` to apply.
