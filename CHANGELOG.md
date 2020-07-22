@@ -1,7 +1,10 @@
 # Change Log
 
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
-[All Commits](https://github.com/davidalger/warden/compare/0.6.0..develop)
+[All Commits](https://github.com/davidalger/warden/compare/0.7.0..develop)
+
+## Version [0.7.0](https://github.com/davidalger/warden/tree/0.7.0) (2020-07-22)
+[All Commits](https://github.com/davidalger/warden/compare/0.6.0..0.7.0)
 
 **Upgrade Notes:**
 
