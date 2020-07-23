@@ -11,7 +11,7 @@ WARDEN_ENV_DEBUG_CONTAINER=${WARDEN_ENV_DEBUG_CONTAINER:-php-debug}
 WARDEN_ENV_DEBUG_HOST=${WARDEN_ENV_DEBUG_HOST:-}
 
 if [[ ${WARDEN_ENV_DEBUG_HOST} == "" ]]; then
-    if [[ $OSTYPE =~ ^darwin ]]; then
+    if [[ $OSTYPE =~ ^darwin || "$(< /proc/sys/kernel/osrelease)" == *Microsoft ]]; then
         WARDEN_ENV_DEBUG_HOST=host.docker.internal
     else
         WARDEN_ENV_DEBUG_HOST=$(
