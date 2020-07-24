@@ -12,3 +12,5 @@ services:
       - traefik.http.services.${WARDEN_ENV_NAME}-nginx.loadbalancer.server.port=80
     volumes:
       - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
+    environment:
+      - XDEBUG_CONNECT_BACK_HOST=${XDEBUG_CONNECT_BACK_HOST}
