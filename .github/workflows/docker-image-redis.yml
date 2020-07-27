@@ -1,7 +1,7 @@
 name: Docker Image Redis
 on:
   schedule:
-  - cron: "0 6 * * 1"   # 6 AM UTC on Monday
+  - cron: "0 6 1 * *"   # 6 AM UTC on 1st day of month
   push:
     paths:
     - version

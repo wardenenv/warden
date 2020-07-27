@@ -9,8 +9,8 @@ if [[ ${WARDEN_DB:-1} -eq 0 ]]; then
   fatal "Database environment is not used (WARDEN_DB=0)."
 fi
 
-if (( ${#WARDEN_PARAMS[@]} == 0 )); then
-  fatal "This command has required params; use --help for details."
+if (( ${#WARDEN_PARAMS[@]} == 0 )) || [[ "${WARDEN_PARAMS[0]}" == "help" ]]; then
+  warden db --help || exit $? && exit $?
 fi
 
 ## load connection information for the mysql service

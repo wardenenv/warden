@@ -2,7 +2,7 @@ version: "3.5"
 services:
   traefik:
     container_name: traefik
-    image: traefik:${TRAEFIK_VERSION:-2.1}
+    image: traefik:${TRAEFIK_VERSION:-2.2}
     ports:
       - "${TRAEFIK_LISTEN:-127.0.0.1}:80:80"     # The HTTP port
       - "${TRAEFIK_LISTEN:-127.0.0.1}:443:443"   # The HTTPS port
@@ -13,10 +13,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
       - traefik.enable=true
-      - traefik.http.routers.http-redirect.middlewares=http-redirect
-      - traefik.http.routers.http-redirect.rule=HostRegexp(`{domain:.+}`)
-      - traefik.http.routers.http-redirect.priority=1
-      - traefik.http.middlewares.http-redirect.redirectscheme.scheme=https
       - traefik.http.routers.traefik.tls=true
       - traefik.http.routers.traefik.rule=Host(`traefik.${WARDEN_SERVICE_DOMAIN:-warden.test}`)
       - traefik.http.routers.traefik.service=api@internal

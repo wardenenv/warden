@@ -1,7 +1,7 @@
 vcl 4.0;
 
 import std;
-# The minimal Varnish version is 4.0
+# The minimal Varnish version is 6.0
 
 backend default {
     .host = "${BACKEND_HOST}";
@@ -66,7 +66,7 @@ sub vcl_recv {
     }
 
     # Bypass health check requests
-    if (req.url ~ "/health.php") {
+    if (req.url ~ "^/(pub/)?(health_check.php|health.php)$") {
         return (pass);
     }
 
@@ -100,6 +100,11 @@ sub vcl_recv {
     # Static files caching
     if (req.url ~ "^/(pub/)?(media|static)/") {
         # Static files should not be cached by default
+        return (pass);
+    }
+
+    # Authenticated GraphQL requests should not be cached by default
+    if (req.url ~ "/graphql" && req.http.Authorization ~ "^Bearer") {
         return (pass);
     }
 
@@ -179,15 +184,13 @@ sub vcl_backend_response {
 }
 
 sub vcl_deliver {
-    if (resp.http.X-Magento-Debug) {
-        if (resp.http.x-varnish ~ " ") {
-            set resp.http.X-Magento-Cache-Debug = "HIT";
-        } else {
-            set resp.http.X-Magento-Cache-Debug = "MISS";
-        }
+    # Always include hit/miss information in response
+    if (resp.http.x-varnish ~ " ") {
+        set resp.http.X-Cache = "HIT";
     } else {
-        unset resp.http.Age;
+        set resp.http.X-Cache = "MISS";
     }
+    set resp.http.X-Cache-Hits = obj.hits;
 
     # Not letting browser to cache non-static files.
     if (resp.http.Cache-Control !~ "private" && req.url !~ "^/(pub/)?(media|static)/") {
