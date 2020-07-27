@@ -3,6 +3,11 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.7.0..develop)
 
+**Upgrade Notes:**
+
+* To ensure Traefik 2.2 version update takes effect, run `warden svc up` after updating.
+* Pre-existing projects may need to be re-created to avoid warnings from docker-compose regarding unused named volumes.
+
 **Enhancements:**
 
 * Added `warden vnc` command to launch VNC tunnel via SSH or (when installed) launch Remmina ([#116](https://github.com/davidalger/warden/pull/116) by @lbajsarowicz)
