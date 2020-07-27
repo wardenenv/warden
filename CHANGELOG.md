@@ -11,6 +11,7 @@
 * To ensure Traefik 2.2 version update takes effect, run `warden svc up` after updating.
 * Pre-existing projects may need to be re-created to avoid warnings from docker-compose regarding unused named volumes.
 * The `BYPASS_VARNISH` flag (deprecated in 0.5.0) has been removed. Use toggle `WARDEN_VARNISH=0` to disable Varnish.
+* Recently updated `php-fpm` images now include the `crontabs` package with `crond` running in the background. Be sure you have the latest images by running `warden env pull` in the project directory followed by `warden env up` to use this functionality. To configure a crontab that is persistent, a crontab file may be mounted at `/var/spool/cron/www-data` (std crontab path) via custom configuration in the project's `.warden/warden-env.yml` file.
 
 **Enhancements:**
 

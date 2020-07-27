@@ -9,7 +9,7 @@ ENV MAILHOG_HOST    mailhog
 ENV MAILHOG_PORT    1025
 
 RUN yum install -y which pv sudo bind-utils python3-pip mariadb102 bash-completion rsync socat oathtool \
-        wget ack make gcc gcc-c++ automake autoconf \
+        wget ack make gcc gcc-c++ automake autoconf crontabs \
     && yum clean all \
     && rm -rf /var/cache/yum
 

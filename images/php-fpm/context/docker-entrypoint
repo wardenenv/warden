@@ -22,6 +22,9 @@ then
     UNIX-LISTEN:${SSH_AUTH_SOCK},fork,user=www-data,group=www-data 1>/var/log/socat-ssh-auth.log 2>&1 &"
 fi
 
+# start crond as a background process
+sudo crond
+
 # install requested node version if not already installed
 NODE_INSTALLED="$(node -v | perl -pe 's/^v([0-9]+)\..*$/$1/')";
 if [ "${NODE_INSTALLED}" != "${NODE_VERSION}" ] \
