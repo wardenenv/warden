@@ -171,7 +171,6 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
         .. code::
 
             bin/magento config:set --lock-env catalog/search/engine elasticsearch6
-            bin/magento config:set --lock-env catalog/search/enable_eav_indexer 1
             bin/magento config:set --lock-env catalog/search/elasticsearch6_server_hostname elasticsearch
             bin/magento config:set --lock-env catalog/search/elasticsearch6_server_port 9200
             bin/magento config:set --lock-env catalog/search/elasticsearch6_index_prefix magento2
