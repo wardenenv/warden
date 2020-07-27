@@ -1,0 +1,26 @@
+version: "3.5"
+services:
+  db:
+    networks:
+      default:
+        aliases:
+          - mysql
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-shopware}
+      DB_AUTO_CREATE_DB: ${DB_AUTO_CREATE_DB:-shopware shopware_e2e shopware_test}
+      DB_AUTO_CREATE_SH: |-
+        if [ -n "$$MYSQL_USER" ] && [ -n "$$DB_AUTO_CREATE_DB" ]; then
+          for MYSQL_DATABASE in $$DB_AUTO_CREATE_DB; do
+            mysql_note "Creating database $${MYSQL_DATABASE}"
+            docker_process_sql --database=mysql <<<"CREATE DATABASE IF NOT EXISTS \`$$MYSQL_DATABASE\`;"
+
+            mysql_note "Giving user $${MYSQL_USER} access to schema $${MYSQL_DATABASE}"
+            docker_process_sql --database=mysql <<<"GRANT ALL ON \`$${MYSQL_DATABASE//_/\\_}\`.* TO '$$MYSQL_USER'@'%';"
+          done
+          docker_process_sql --database=mysql <<<"FLUSH PRIVILEGES;"
+        fi
+    entrypoint: |
+      /bin/bash -c '
+        echo "$$DB_AUTO_CREATE_SH" > /docker-entrypoint-initdb.d/db-auto-create.sh
+        exec /usr/local/bin/docker-entrypoint.sh mysqld
+      '

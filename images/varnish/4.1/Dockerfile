@@ -20,7 +20,7 @@ COPY default.vcl /etc/varnish/default.vcl.template
 
 ENV BACKEND_HOST    nginx
 ENV BACKEND_PORT    80
-ENV ACL_PURGE_HOST  php-fpm
+ENV ACL_PURGE_HOST  0.0.0.0/0
 
 EXPOSE 	80
 CMD envsubst '${BACKEND_HOST} ${BACKEND_PORT} ${ACL_PURGE_HOST}' \

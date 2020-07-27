@@ -1,0 +1,22 @@
+name: Docker Image Magepack
+on:
+  schedule:
+  - cron: "0 6 1 * *"   # 6 AM UTC on 1st day of month
+  push:
+    paths:
+    - version
+    - images/.trigger
+    - images/magepack/**
+    branches:
+    - develop
+jobs:
+  magepack:
+    name: Magepack
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - run: ./images/scripts/build.sh --push "${BUILD_GROUP}"
+      env:
+        BUILD_GROUP: magepack
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}

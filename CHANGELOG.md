@@ -1,14 +1,74 @@
 # Change Log
 
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
-[All Commits](https://github.com/davidalger/warden/compare/0.5.2..develop)
+[All Commits](https://github.com/davidalger/warden/compare/0.7.0..develop)
 
 **Enhancements:**
 
-* Updated default version of Elasticsearch from 6.8 to 7.7
-* Updated default version of RabbitMQ from 3.7 to 3.8
-* Updated default version of MariaDB to 10.4 (when unspecified in .env this version will be used; new project .env files differ by type)
-* Updated default version of PHP to 7.4 (when unspecified in .env this version will be used; new project .env files differ by type)
+* Added `warden vnc` command to launch VNC tunnel via SSH or (when installed) launch Remmina ([#116](https://github.com/davidalger/warden/pull/116) by @lbajsarowicz)
+* Updated `warden env`, `warden svc` and `warden db` to print help text when called without any parameters specified
+
+## Version [0.7.0](https://github.com/davidalger/warden/tree/0.7.0) (2020-07-22)
+[All Commits](https://github.com/davidalger/warden/compare/0.6.0..0.7.0)
+
+**Upgrade Notes:**
+
+* With `mailhog` being changed from running on a per-project basis to running as a global service (see issue [#175](https://github.com/davidalger/warden/issues/175)) you will need to ensure `warden svc up` has been run after updating Warden. On pre-existing projects that already had their own Mailhog container running, `warden env up --remove-orphans` will clean it up.
+
+**Enhancements:**
+
+* Added `warden blackfire` command for easily running profiles via the CLI tool ([#188](https://github.com/davidalger/warden/pull/188) by @navarr)
+* Changed `mailhog` service to run as a single global service rather than as a per-project service (issue [#175](https://github.com/davidalger/warden/issues/175))
+* Updated `warden db import` to strip usages of `@@GLOBAL.GITD_PURGED` and `@@SESSION.SQL_LOG_BIN` from database dumps during import process to avoid failures importing databases originating from Amazon RDS (issue [#162](https://github.com/davidalger/warden/issues/162))
+* Added Mutagen sync configuration for `magento1` environment type (issue [#97](https://github.com/davidalger/warden/issues/97))
+
+## Version [0.6.0](https://github.com/davidalger/warden/tree/0.6.0) (2020-07-02)
+[All Commits](https://github.com/davidalger/warden/compare/0.5.3..0.6.0)
+
+**Upgrade Notes:**
+
+* Warden now requires `docker-compose` 1.25.0 or later; see [issue #165](https://github.com/davidalger/warden/issues/165)
+* Warden now requires `mutagen` 0.11.4 or later for environments leveraging sync sessions on Mac OS (currently Magento 2 and Shopware 6 use Mutagen).
+
+**Enhancements:**
+
+* Added `warden svc` command to control global services replacing `warden start`, `warden stop`, `warden up`, `warden down`, and `warden restart` and offering further flexibility as this works similar to `warden env` in that any verb known to `docker-compose` may be used in orchestrating global services such as `traefik`, `dnsmasq` and `portainer`; for example, `warden svc up` does what `warden up` did previously.
+* Updated `warden env` to report an error if Docker does not appear to be running.
+* Updated `warden env up` to imply `-d` (`--detach`) to work in like manner to `warden svc up` (formerly `warden up`)
+* The `warden sync` command now allows use of mutagen sub-commands `flush` and `reset`
+* The following version defaults were updated (these defaults apply when versions remain unspecified in a project's `.env` file; new project `.env` files may differ by environment type)
+  * PHP-FPM default updated from 7.3 to 7.4
+  * Elasticsearch default updated from 6.8 to 7.7
+  * RabbitMQ default updated from 3.7 to 3.8
+  * MariaDB default updated from 10.3 to 10.4
+* Updated `warden env-init` command to prompt user before overwriting an existing `.env` file in a project directory ([#166](https://github.com/davidalger/warden/pull/166) by @Lunaetic)
+* Updated `warden env-init` command to prompt user for required arguments when missing ([#170](https://github.com/davidalger/warden/pull/170) by @Lunaetic)
+* Added support for Magepack advanced JS bundling ([#138](https://github.com/davidalger/warden/pull/138) by @vbuck)
+* Added a new `shopware` environment type including Mutagen configuration for file sync on macOS (issue [#169](https://github.com/davidalger/warden/issues/169))
+* Added support for implementing custom commands in `~/.warden/commands` or `<project>/.warden/commands` ([#172](https://github.com/davidalger/warden/pull/172) by @davidalger)
+* Added new feature flag `WARDEN_NGINX` to enable/disable service on per-project basis. This will allow (for example) using a `local` env type for a static site by adding `WARDEN_NGINX=1` to the project's `.env` file.
+* Added ability to pass arguments to and override the database name `db connect` and `db import` operate on (issue [#22](https://github.com/davidalger/warden/issues/22))
+
+**Bug Fixes:**
+
+* Fixed issue where specifying `-v` flag would short circuit argument parsing (this flag was removed; previously was only used with `warden sync list` where `warden sync list -l` now accomplishes the same thing by passing the `-l` flag to mutagen to list in detail)
+* Fixed bug where quoted arguments like `"foo bar"` would be passed into sub-route as two arguments, `foo` and `bar` (technical detail of argument parsing; no known cases where this caused an issue)
+* Fixed incorrect var name in output of `warden env-init` for Laravel env type
+
+**Deprecated Functionality:**
+
+* The `warden start` command has been deprecated and will be removed in the 0.7.0 release; please use `warden svc start` instead.
+* The `warden stop` command has been deprecated and will be removed in the 0.7.0 release; please use `warden svc stop` instead.
+* The `warden up` command has been deprecated and will be removed in the 0.7.0 release; please use `warden svc up` instead.
+* The `warden down` command has been deprecated and will be removed in the 0.7.0 release; please use `warden svc down` instead.
+* The `warden restart` command has been deprecated and will be removed in the 0.7.0 release; please use `warden svc restart` instead.
+
+## Version [0.5.3](https://github.com/davidalger/warden/tree/0.5.3) (2020-06-23)
+[All Commits](https://github.com/davidalger/warden/compare/0.5.2..0.5.3)
+
+**Bug Fixes:**
+
+* Reverted filtering of GTID SET commands as added in 0.5.2 release to resolve db import errors (issue [#162](https://github.com/davidalger/warden/issues/162))
 
 ## Version [0.5.2](https://github.com/davidalger/warden/tree/0.5.2) (2020-06-11)
 [All Commits](https://github.com/davidalger/warden/compare/0.5.1..0.5.2)

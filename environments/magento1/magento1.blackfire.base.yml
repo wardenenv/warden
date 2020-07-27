@@ -1,5 +1,0 @@
-version: "3.5"
-services:
-  php-blackfire:
-    volumes:
-      - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated

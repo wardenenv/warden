@@ -54,15 +54,29 @@ The `symfony` environment type supports development of Symfony 4+ projects, laun
 * PHP-FPM
 * MariaDB
 * Redis
-* RabbitMQ
+* RabbitMQ (disabled by default)
 * Varnish (disabled by default)
 * Elasticsearch (disabled by default)
 
 Files are currently mounted using a delegated mount on macOS and natively on Linux.
 
+#### Shopware
+
+The `shopware` environment type supports development of Shopware 6 projects, launching containers including:
+
+* Nginx
+* PHP-FPM
+* MariaDB
+* Redis
+* RabbitMQ (disabled by default)
+* Varnish (disabled by default)
+* Elasticsearch (disabled by default)
+
+In order to achieve a well performing experience on macOS, files in the webroot are synced into the container using a Mutagen sync session with the exception of `public/media` which remains mounted using a delegated mount.
+
 #### Commonalities
 
-In addition to the above, each environment type (with the exception of the `local` type) come with a pre-configured Mailhog service, with PHP setup to use `mhsendmail` to ensure outbound email does not inadvertently leave your network and to support simpler testing of email functionality. You can use [Traefik](https://traefik.warden.test/) to find the Mailhog URL for each project.
+In addition to the above, each environment type (with the exception of the `local` type) come with PHP setup to use `mhsendmail` to ensure outbound email does not inadvertently leave your network and to support simpler testing of email functionality. Mailhog may be accessed by navigating to [https://mailhog.warden.test/](https://mailhog.warden.test/) in a browser.
 
 Where PHP is specified in the above list, there should be two `fpm` containers, `php-fpm` and `php-debug` in order to provide Xdebug support. Use of Xdebug is enabled by setting the `XDEBUG_SESSION` cookie in your browser to direct the request to the `php-debug` container. Shell sessions opened in the debug container via `warden debug` will also connect PHP process for commands on the CLI to Xdebug.
 

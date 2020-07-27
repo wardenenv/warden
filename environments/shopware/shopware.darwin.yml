@@ -1,0 +1,16 @@
+version: "3.5"
+
+x-volumes: &volumes
+  - .${WARDEN_WEB_ROOT:-}/public/media:/var/www/html/public/media:delegated
+  - appdata:/var/www/html
+
+x-environment: &environment
+  - CHOWN_DIR_LIST=public/media
+
+services:
+  nginx: { volumes: *volumes }
+  php-fpm: { volumes: *volumes, environment: *environment }
+  php-debug: { volumes: *volumes, environment: *environment }
+
+volumes:
+  appdata:

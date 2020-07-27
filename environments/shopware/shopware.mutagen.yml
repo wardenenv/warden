@@ -1,0 +1,27 @@
+---
+sync:
+  defaults:
+    mode: two-way-resolved
+    watch:
+      pollingInterval: 10
+    ignore:
+      vcs: true
+      paths:
+        # System files
+        - ".DS_Store"
+        - "._*"
+
+        # Vim files
+        - "*~"
+        - "*.sw[a-p]"
+
+        # IDE files
+        - ".idea"
+
+        # Application files
+        - "/public/media"
+        - "/var"
+
+    permissions:
+      defaultFileMode: "0644"
+      defaultDirectoryMode: "0755"
