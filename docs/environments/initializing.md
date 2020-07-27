@@ -163,10 +163,21 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
             --admin-lastname="Admin" \
             --admin-email="${ADMIN_USER}@example.com"
         printf "u: %s\np: %s\n" "${ADMIN_USER}" "${ADMIN_PASS}"
-       
-``` note::
-    Prior to Magento ``2.4.x`` it was not required to enter search-engine and elasticsearch configuration during installation.  These were configured via ``bin/magento config:set``
-```
+
+
+    ``` note::
+        Prior to Magento ``2.4.x`` it was not required to enter search-engine and elasticsearch configuration during installation and these params to ``setup:install`` are not supported by Magento ``2.3.x``. These should be omitted on older versions where not supported and Elasticsearch configured via ``config:set`` instead:
+
+        .. code::
+
+            bin/magento config:set --lock-env catalog/search/engine elasticsearch6
+            bin/magento config:set --lock-env catalog/search/enable_eav_indexer 1
+            bin/magento config:set --lock-env catalog/search/elasticsearch6_server_hostname elasticsearch
+            bin/magento config:set --lock-env catalog/search/elasticsearch6_server_port 9200
+            bin/magento config:set --lock-env catalog/search/elasticsearch6_index_prefix magento2
+            bin/magento config:set --lock-env catalog/search/elasticsearch6_enable_auth 0
+            bin/magento config:set --lock-env catalog/search/elasticsearch6_server_timeout 15
+    ```
 
  9. Launch the application in your browser:
 
