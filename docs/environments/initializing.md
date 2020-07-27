@@ -47,6 +47,7 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
        WARDEN_SPLIT_SALES=0
        WARDEN_SPLIT_CHECKOUT=0
        WARDEN_TEST_DB=0
+       WARDEN_MAGEPACK=0
        
        BLACKFIRE_CLIENT_ID=
        BLACKFIRE_CLIENT_TOKEN=
@@ -162,6 +163,10 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
             --admin-lastname="Admin" \
             --admin-email="${ADMIN_USER}@example.com"
         printf "u: %s\np: %s\n" "${ADMIN_USER}" "${ADMIN_PASS}"
+       
+``` note::
+    Prior to Magento ``2.4.x`` it was not required to enter search-engine and elasticsearch configuration during installation.  These were configured via ``bin/magento config:set``
+```
 
  9. Launch the application in your browser:
 

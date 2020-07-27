@@ -20,6 +20,7 @@ extensions = [
   'recommonmark',
   'sphinx_rtd_theme',
   'sphinx_copybutton',
+  'sphinx_markdown_tables',
 ]
 
 source_suffix = ['.rst', '.md']
