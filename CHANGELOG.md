@@ -8,6 +8,7 @@
 * Added `warden vnc` command to launch VNC tunnel via SSH or (when installed) launch Remmina ([#116](https://github.com/davidalger/warden/pull/116) by @lbajsarowicz)
 * Updated `warden env`, `warden svc` and `warden db` to print help text when called without any parameters specified
 * Updated volume declarations for RabbitMQ and Redis services to use named volumes (avoid use of anonymous volumes)
+* Updated version of Traefik from 2.1 to 2.2
 
 ## Version [0.7.0](https://github.com/davidalger/warden/tree/0.7.0) (2020-07-22)
 [All Commits](https://github.com/davidalger/warden/compare/0.6.0..0.7.0)
