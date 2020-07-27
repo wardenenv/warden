@@ -41,5 +41,5 @@ else
 	EOF
 
   echo -e "Launching VNC session via Remmina. Password is \"\033[1msecret\"\033[0m"
-  remmina -c "${WARDEN_ENV_PATH}/.remmina" &
+  remmina -c "${WARDEN_ENV_PATH}/.remmina"
 fi
