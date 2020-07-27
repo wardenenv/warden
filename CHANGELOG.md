@@ -7,6 +7,7 @@
 
 * To ensure Traefik 2.2 version update takes effect, run `warden svc up` after updating.
 * Pre-existing projects may need to be re-created to avoid warnings from docker-compose regarding unused named volumes.
+* The `BYPASS_VARNISH` flag (deprecated in 0.5.0) has been removed. Use toggle `WARDEN_VARNISH=0` to disable Varnish.
 
 **Enhancements:**
 
