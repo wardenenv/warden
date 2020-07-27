@@ -13,10 +13,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
       - traefik.enable=true
-      - traefik.http.routers.http-redirect.middlewares=http-redirect
-      - traefik.http.routers.http-redirect.rule=HostRegexp(`{domain:.+}`)
-      - traefik.http.routers.http-redirect.priority=1
-      - traefik.http.middlewares.http-redirect.redirectscheme.scheme=https
       - traefik.http.routers.traefik.tls=true
       - traefik.http.routers.traefik.rule=Host(`traefik.${WARDEN_SERVICE_DOMAIN:-warden.test}`)
       - traefik.http.routers.traefik.service=api@internal
