@@ -3,3 +3,8 @@ services:
   redis:
     hostname: "${WARDEN_ENV_NAME}-redis"
     image: docker.io/wardenenv/redis:${REDIS_VERSION:-5.0}
+    volumes:
+      - redis:/data
+
+volumes:
+  redis:
