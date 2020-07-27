@@ -1,9 +1,20 @@
 ## Database Connections
 
+### Common Settings
+
+| Name                         | Value/Description                                            |
+|------------------------------|--------------------------------------------------------------|
+| MySQL Host                   | Name of your Docker Container, can be found with `docker ps` |
+| MySQL Port                   | `3306`                                                       |
+| MySQL User                   | `magento`                                                    |
+| MySQL Password               | `magento`                                                    |
+| MySQL Database               | `magento`                                                    |
+| SSH Host, Proxy Host, Server | `tunnel.warden.test`                                         |
+
 ### TablePlus
 ![TablePlus Connection Info](screenshots/tableplus-connection.png)
 
-### Sequel Pro
+### Sequel Pro / Sequel Ace
 ![Sequel Pro Connection Info](screenshots/sequel-pro-connection.png)
 
 ### PhpStorm

@@ -47,6 +47,7 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
        WARDEN_SPLIT_SALES=0
        WARDEN_SPLIT_CHECKOUT=0
        WARDEN_TEST_DB=0
+       WARDEN_MAGEPACK=0
        
        BLACKFIRE_CLIENT_ID=
        BLACKFIRE_CLIENT_TOKEN=
@@ -83,87 +84,101 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
         If you have previously configured global credentials, you may skip this step, as ``~/.composer/`` is mounted into the container from the host machine in order to share composer cache between projects, and also shares the global ``auth.json`` from the host machine.
     ```
 
-7. Initialize project source files using composer create-project and then move them into place:
+ 7. Initialize project source files using composer create-project and then move them into place:
 
-       composer create-project --repository-url=https://repo.magento.com/ \
-           magento/project-community-edition /tmp/exampleproject 2.3.x
+        composer create-project --repository-url=https://repo.magento.com/ \
+            magento/project-community-edition /tmp/exampleproject 2.4.x
 
-       rsync -a /tmp/exampleproject/ /var/www/html/
-       rm -rf /tmp/exampleproject/
+        rsync -a /tmp/exampleproject/ /var/www/html/
+        rm -rf /tmp/exampleproject/
 
-8. Install the application and you should be all set:
+ 8. Install the application and you should be all set:
 
-       ## Install Application
-       bin/magento setup:install \
-           --backend-frontname=backend \
-           --amqp-host=rabbitmq \
-           --amqp-port=5672 \
-           --amqp-user=guest \
-           --amqp-password=guest \
-           --db-host=db \
-           --db-name=magento \
-           --db-user=magento \
-           --db-password=magento \
-           --http-cache-hosts=varnish:80 \
-           --session-save=redis \
-           --session-save-redis-host=redis \
-           --session-save-redis-port=6379 \
-           --session-save-redis-db=2 \
-           --session-save-redis-max-concurrency=20 \
-           --cache-backend=redis \
-           --cache-backend-redis-server=redis \
-           --cache-backend-redis-db=0 \
-           --cache-backend-redis-port=6379 \
-           --page-cache=redis \
-           --page-cache-redis-server=redis \
-           --page-cache-redis-db=1 \
-           --page-cache-redis-port=6379
+        ## Install Application
+        bin/magento setup:install \
+            --backend-frontname=backend \
+            --amqp-host=rabbitmq \
+            --amqp-port=5672 \
+            --amqp-user=guest \
+            --amqp-password=guest \
+            --db-host=db \
+            --db-name=magento \
+            --db-user=magento \
+            --db-password=magento \
+            --search-engine=elasticsearch7 \
+            --elasticsearch-host=elasticsearch \
+            --elasticsearch-port=9200 \
+            --elasticsearch-index-prefix=magento2 \
+            --elasticsearch-enable-auth=0 \
+            --elasticsearch-timeout=15 \
+            --http-cache-hosts=varnish:80 \
+            --session-save=redis \
+            --session-save-redis-host=redis \
+            --session-save-redis-port=6379 \
+            --session-save-redis-db=2 \
+            --session-save-redis-max-concurrency=20 \
+            --cache-backend=redis \
+            --cache-backend-redis-server=redis \
+            --cache-backend-redis-db=0 \
+            --cache-backend-redis-port=6379 \
+            --page-cache=redis \
+            --page-cache-redis-server=redis \
+            --page-cache-redis-db=1 \
+            --page-cache-redis-port=6379
 
-       ## Configure Application
-       bin/magento config:set --lock-env web/unsecure/base_url \
-           "https://${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}/"
+        ## Configure Application
+        bin/magento config:set --lock-env web/unsecure/base_url \
+            "https://${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}/"
 
-       bin/magento config:set --lock-env web/secure/base_url \
-           "https://${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}/"
+        bin/magento config:set --lock-env web/secure/base_url \
+            "https://${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}/"
 
-       bin/magento config:set --lock-env web/secure/offloader_header X-Forwarded-Proto
+        bin/magento config:set --lock-env web/secure/offloader_header X-Forwarded-Proto
 
-       bin/magento config:set --lock-env web/secure/use_in_frontend 1
-       bin/magento config:set --lock-env web/secure/use_in_adminhtml 1
-       bin/magento config:set --lock-env web/seo/use_rewrites 1
+        bin/magento config:set --lock-env web/secure/use_in_frontend 1
+        bin/magento config:set --lock-env web/secure/use_in_adminhtml 1
+        bin/magento config:set --lock-env web/seo/use_rewrites 1
 
-       bin/magento config:set --lock-env system/full_page_cache/caching_application 2
-       bin/magento config:set --lock-env system/full_page_cache/ttl 604800
+        bin/magento config:set --lock-env system/full_page_cache/caching_application 2
+        bin/magento config:set --lock-env system/full_page_cache/ttl 604800
 
-       bin/magento config:set --lock-env catalog/search/engine elasticsearch7
-       bin/magento config:set --lock-env catalog/search/enable_eav_indexer 1
-       bin/magento config:set --lock-env catalog/search/elasticsearch7_server_hostname elasticsearch
-       bin/magento config:set --lock-env catalog/search/elasticsearch7_server_port 9200
-       bin/magento config:set --lock-env catalog/search/elasticsearch7_index_prefix magento2
-       bin/magento config:set --lock-env catalog/search/elasticsearch7_enable_auth 0
-       bin/magento config:set --lock-env catalog/search/elasticsearch7_server_timeout 15
+        bin/magento config:set --lock-env catalog/search/enable_eav_indexer 1
 
-       bin/magento config:set --lock-env dev/static/sign 0
+        bin/magento config:set --lock-env dev/static/sign 0
 
-       bin/magento deploy:mode:set -s developer
-       bin/magento cache:disable block_html full_page
+        bin/magento deploy:mode:set -s developer
+        bin/magento cache:disable block_html full_page
 
-       bin/magento indexer:reindex
-       bin/magento cache:flush
+        bin/magento indexer:reindex
+        bin/magento cache:flush
 
-       ## Generate an admin user
-       ADMIN_PASS="$(pwgen -n1 16)"
-       ADMIN_USER=localadmin
+        ## Generate an admin user
+        ADMIN_PASS="$(pwgen -n1 16)"
+        ADMIN_USER=localadmin
 
-       bin/magento admin:user:create \
-           --admin-password="${ADMIN_PASS}" \
-           --admin-user="${ADMIN_USER}" \
-           --admin-firstname="Local" \
-           --admin-lastname="Admin" \
-           --admin-email="${ADMIN_USER}@example.com"
-       printf "u: %s\np: %s\n" "${ADMIN_USER}" "${ADMIN_PASS}"
+        bin/magento admin:user:create \
+            --admin-password="${ADMIN_PASS}" \
+            --admin-user="${ADMIN_USER}" \
+            --admin-firstname="Local" \
+            --admin-lastname="Admin" \
+            --admin-email="${ADMIN_USER}@example.com"
+        printf "u: %s\np: %s\n" "${ADMIN_USER}" "${ADMIN_PASS}"
 
-9. Launch the application in your browser:
+
+    ``` note::
+        Prior to Magento ``2.4.x`` it was not required to enter search-engine and elasticsearch configuration during installation and these params to ``setup:install`` are not supported by Magento ``2.3.x``. These should be omitted on older versions where not supported and Elasticsearch configured via ``config:set`` instead:
+
+        .. code::
+
+            bin/magento config:set --lock-env catalog/search/engine elasticsearch6
+            bin/magento config:set --lock-env catalog/search/elasticsearch6_server_hostname elasticsearch
+            bin/magento config:set --lock-env catalog/search/elasticsearch6_server_port 9200
+            bin/magento config:set --lock-env catalog/search/elasticsearch6_index_prefix magento2
+            bin/magento config:set --lock-env catalog/search/elasticsearch6_enable_auth 0
+            bin/magento config:set --lock-env catalog/search/elasticsearch6_server_timeout 15
+    ```
+
+ 9. Launch the application in your browser:
 
     * [https://app.exampleproject.test/](https://app.exampleproject.test/)
     * [https://app.exampleproject.test/backend/](https://app.exampleproject.test/backend/)
