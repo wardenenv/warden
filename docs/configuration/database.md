@@ -2,14 +2,14 @@
 
 ### Common Settings
 
-| Name                         | Value/Description                                            |
-|------------------------------|--------------------------------------------------------------|
-| MySQL Host                   | Name of your Docker Container, can be found with `docker ps` |
-| MySQL Port                   | `3306`                                                       |
-| MySQL User                   | `magento`                                                    |
-| MySQL Password               | `magento`                                                    |
-| MySQL Database               | `magento`                                                    |
-| SSH Host, Proxy Host, Server | `tunnel.warden.test`                                         |
+| Name                           | Value/Description                                                |
+| ------------------------------ |----------------------------------------------------------------- |
+| MySQL Host                     | Name of your Docker Container, can be found with `warden env ps` |
+| MySQL Port                     | `3306`                                                           |
+| MySQL User                     | `magento`                                                        |
+| MySQL Password                 | `magento`                                                        |
+| MySQL Database                 | `magento`                                                        |
+| SSH Host, Proxy Host, Server   | `tunnel.warden.test`                                             |
 
 ### TablePlus
 ![TablePlus Connection Info](screenshots/tableplus-connection.png)
