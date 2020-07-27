@@ -5,6 +5,7 @@
 
 **Enhancements:**
 
+* Added `warden vnc` command to launch VNC tunnel via SSH or (when installed) launch Remmina ([#116](https://github.com/davidalger/warden/pull/116) by @lbajsarowicz)
 * Updated `warden env`, `warden svc` and `warden db` to print help text when called without any parameters specified
 
 ## Version [0.7.0](https://github.com/davidalger/warden/tree/0.7.0) (2020-07-22)
