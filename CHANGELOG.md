@@ -3,6 +3,9 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.7.0..develop)
 
+## Version [0.8.0](https://github.com/davidalger/warden/tree/0.8.0) (2020-07-27)
+[All Commits](https://github.com/davidalger/warden/compare/0.7.0..0.8.0)
+
 **Upgrade Notes:**
 
 * To ensure Traefik 2.2 version update takes effect, run `warden svc up` after updating.
@@ -116,7 +119,7 @@ If `PHP_VERSION` is not defined in a project's `.env` type the default version i
 
 There is a **breaking change** where custom environment config specific to Linux has been used in the form of placing a `.warden/warden-env.linux-gnu.yml` file in the project directory. The value used for `WARDEN_ENV_SUBT` on Linux is now `linux` rather than `linux-gnu`. After upgrading, these files will need to be re-named from `.warden/warden-env.linux-gnu.yml` to `.warden/warden-env.linux.yml`. Where continued compatibility with prior versions of Warden is desired (for example, to not require the entire team to upgrade Warden at once), a symlink may be placed to point the old file name to the new one allowing Warden to load the definition correctly on both new and old implementations: `warden-env.linux-gnu.yml -> warden-env.linux.yml`
 
-The `BYPASS_VARNISH` flag will continue to work as before but has been **deprecated** to be removed in a future release. It will no longer be included in the `.env` file created for new `magento2` environments.Please use the new feature toggle `WARDEN_VARNISH=0` to disable Varnish instead.
+The `BYPASS_VARNISH` flag will continue to work as before but has been **deprecated** to be removed in a future release. It will no longer be included in the `.env` file created for new `magento2` environments. Please use the new feature toggle `WARDEN_VARNISH=0` to disable Varnish instead.
 
 **Enhancements:**
 
