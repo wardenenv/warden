@@ -3,6 +3,13 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.7.0..develop)
 
+**Enhancements:**
+
+* Updated default version of PHP for `magento2` environments to PHP 7.4
+* Updated default version of Elasticsearch for `magento2` environments to Elasticsearch 7.6
+* Updated default version of Elasticsearch where unspecified to Elasticsearch 7.8
+* Dropped Elasticsearch image builds for versions prior to 6.8 and versions 7.0 through 7.5
+
 ## Version [0.8.0](https://github.com/davidalger/warden/tree/0.8.0) (2020-07-27)
 [All Commits](https://github.com/davidalger/warden/compare/0.7.0..0.8.0)
 

@@ -32,7 +32,7 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
 
        WARDEN_SYNC_IGNORE=
 
-       ELASTICSEARCH_VERSION=7.7
+       ELASTICSEARCH_VERSION=7.6
        MARIADB_VERSION=10.3
        NODE_VERSION=10
        PHP_VERSION=7.3
@@ -159,12 +159,12 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
 
         .. code::
 
-            bin/magento config:set --lock-env catalog/search/engine elasticsearch6
-            bin/magento config:set --lock-env catalog/search/elasticsearch6_server_hostname elasticsearch
-            bin/magento config:set --lock-env catalog/search/elasticsearch6_server_port 9200
-            bin/magento config:set --lock-env catalog/search/elasticsearch6_index_prefix magento2
-            bin/magento config:set --lock-env catalog/search/elasticsearch6_enable_auth 0
-            bin/magento config:set --lock-env catalog/search/elasticsearch6_server_timeout 15
+            bin/magento config:set --lock-env catalog/search/engine elasticsearch7
+            bin/magento config:set --lock-env catalog/search/elasticsearch7_server_hostname elasticsearch
+            bin/magento config:set --lock-env catalog/search/elasticsearch7_server_port 9200
+            bin/magento config:set --lock-env catalog/search/elasticsearch7_index_prefix magento2
+            bin/magento config:set --lock-env catalog/search/elasticsearch7_enable_auth 0
+            bin/magento config:set --lock-env catalog/search/elasticsearch7_server_timeout 15
     ```
 
  9. Generate an admin user and configure 2FA for OTP
