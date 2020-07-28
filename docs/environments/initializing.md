@@ -86,8 +86,10 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
 
  7. Initialize project source files using composer create-project and then move them into place:
 
+        META_PACKAGE=magento/project-community-edition META_VERSION=2.4.x
+
         composer create-project --repository-url=https://repo.magento.com/ \
-            magento/project-community-edition /tmp/exampleproject 2.4.x
+            "${META_PACKAGE}" /tmp/exampleproject "${META_VERSION}"
 
         rsync -a /tmp/exampleproject/ /var/www/html/
         rm -rf /tmp/exampleproject/
@@ -152,19 +154,6 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
         bin/magento indexer:reindex
         bin/magento cache:flush
 
-        ## Generate an admin user
-        ADMIN_PASS="$(pwgen -n1 16)"
-        ADMIN_USER=localadmin
-
-        bin/magento admin:user:create \
-            --admin-password="${ADMIN_PASS}" \
-            --admin-user="${ADMIN_USER}" \
-            --admin-firstname="Local" \
-            --admin-lastname="Admin" \
-            --admin-email="${ADMIN_USER}@example.com"
-        printf "u: %s\np: %s\n" "${ADMIN_USER}" "${ADMIN_PASS}"
-
-
     ``` note::
         Prior to Magento ``2.4.x`` it was not required to enter search-engine and elasticsearch configuration during installation and these params to ``setup:install`` are not supported by Magento ``2.3.x``. These should be omitted on older versions where not supported and Elasticsearch configured via ``config:set`` instead:
 
@@ -178,7 +167,42 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
             bin/magento config:set --lock-env catalog/search/elasticsearch6_server_timeout 15
     ```
 
- 9. Launch the application in your browser:
+ 9. Generate an admin user and configure 2FA for OTP
+
+        ## Generate localadmin user
+        ADMIN_PASS="$(pwgen -n1 16)"
+        ADMIN_USER=localadmin
+
+        bin/magento admin:user:create \
+            --admin-password="${ADMIN_PASS}" \
+            --admin-user="${ADMIN_USER}" \
+            --admin-firstname="Local" \
+            --admin-lastname="Admin" \
+            --admin-email="${ADMIN_USER}@example.com"
+        printf "u: %s\np: %s\n" "${ADMIN_USER}" "${ADMIN_PASS}"
+
+        ## Configure 2FA provider
+        OTPAUTH_QRI=
+        TFA_SECRET=$(pwgen -A1 128)
+        TFA_SECRET=$(python -c "import base64; print base64.b32encode('${TFA_SECRET}')" | sed 's/=*$//')
+        OTPAUTH_URL=$(printf "otpauth://totp/%s%%3Alocaladmin%%40example.com?issuer=%s&secret=%s" \
+            "${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}" "${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}" "${TFA_SECRET}"
+        )
+
+        bin/magento config:set --lock-env twofactorauth/general/force_providers google
+        bin/magento security:tfa:google:set-secret "${ADMIN_USER}" "${TFA_SECRET}"
+
+        printf "%s\n\n" "${OTPAUTH_URL}"
+        printf "2FA Authenticator Codes:\n%s\n" "$(oathtool -s 30 -w 10 --totp --base32 "${TFA_SECRET}")"
+
+        segno "${OTPAUTH_URL}" -s 4 -o "pub/media/${ADMIN_USER}-totp-qr.png"
+        printf "%s\n\n" "https://${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}/media/${ADMIN_USER}-totp-qr.png?t=$(date +%s)"
+
+    ``` note::
+        Use of 2FA is mandatory on Magento ``2.4.x`` and setup of 2FA should be skipped when installing ``2.3.x`` or earlier. Where 2FA is setup manually via UI upon login rather than using the CLI commands above, the 2FA configuration email may be retrieved from [Mailhog](https://mailhog.warden.test/).
+    ```
+
+ 10. Launch the application in your browser:
 
     * [https://app.exampleproject.test/](https://app.exampleproject.test/)
     * [https://app.exampleproject.test/backend/](https://app.exampleproject.test/backend/)
