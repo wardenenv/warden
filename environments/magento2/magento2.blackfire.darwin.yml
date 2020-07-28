@@ -4,5 +4,8 @@ x-volumes: &volumes
   - .${WARDEN_WEB_ROOT:-}/pub/media:/var/www/html/pub/media:delegated
   - appdata:/var/www/html
 
+x-environment: &environment
+  - CHOWN_DIR_LIST=pub/media
+
 services:
-  php-blackfire: { volumes: *volumes }
+  php-blackfire: { volumes: *volumes, environment: *environment }
