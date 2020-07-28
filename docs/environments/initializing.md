@@ -204,10 +204,10 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
 
  10. Launch the application in your browser:
 
-    * [https://app.exampleproject.test/](https://app.exampleproject.test/)
-    * [https://app.exampleproject.test/backend/](https://app.exampleproject.test/backend/)
-    * [https://rabbitmq.exampleproject.test/](https://rabbitmq.exampleproject.test/)
-    * [https://elasticsearch.exampleproject.test/](https://elasticsearch.exampleproject.test/)
+     * [https://app.exampleproject.test/](https://app.exampleproject.test/)
+     * [https://app.exampleproject.test/backend/](https://app.exampleproject.test/backend/)
+     * [https://rabbitmq.exampleproject.test/](https://rabbitmq.exampleproject.test/)
+     * [https://elasticsearch.exampleproject.test/](https://elasticsearch.exampleproject.test/)
 
 ``` note::
     To completely destroy the ``exampleproject`` environment we just created, run ``warden env down -v`` to tear down the project's Docker containers, volumes, etc.
