@@ -183,8 +183,7 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
 
         ## Configure 2FA provider
         OTPAUTH_QRI=
-        TFA_SECRET=$(pwgen -A1 128)
-        TFA_SECRET=$(python -c "import base64; print base64.b32encode('${TFA_SECRET}')" | sed 's/=*$//')
+        TFA_SECRET=$(python -c "import base64; print base64.b32encode('$(pwgen -A1 128)')" | sed 's/=*$//')
         OTPAUTH_URL=$(printf "otpauth://totp/%s%%3Alocaladmin%%40example.com?issuer=%s&secret=%s" \
             "${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}" "${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}" "${TFA_SECRET}"
         )
