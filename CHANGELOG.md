@@ -27,6 +27,7 @@
 * Updated volume declarations for RabbitMQ and Redis services to use named volumes (avoid use of anonymous volumes)
 * Updated version of Traefik from 2.1 to 2.2
 * Updated `warden debug` to also pass `host.docker.internal` into the `php-debug` container for the `XDEBUG_REMOTE_HOST` value on WSL when Microsoft is present in `/proc/sys/kernel/osrelease` ([#196](https://github.com/davidalger/warden/pull/196) by @LeeSaferite)
+* Updated nginx configuration to pass `XDEBUG_CONNECT_BACK_HOST` as environment variable in base config allowing it to be overriden by exported env variable on all host OS envs ([#199](https://github.com/davidalger/warden/pull/199) by @LeeSaferite)
 
 ## Version [0.7.0](https://github.com/davidalger/warden/tree/0.7.0) (2020-07-22)
 [All Commits](https://github.com/davidalger/warden/compare/0.6.0..0.7.0)
