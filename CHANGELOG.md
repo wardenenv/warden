@@ -10,6 +10,10 @@
 * Updated default version of Elasticsearch where unspecified in project's `.env` file to Elasticsearch 7.8
 * Dropped Elasticsearch image builds for versions prior to 6.8 and versions 7.0 through 7.5
 
+**Bug Fixes:**
+
+* Fixed issue where nginx would unexpectedly exit on Linux due to incorrect default value for `XDEBUG_CONNECT_BACK_HOST` in base nginx configuration (issue [#200](https://github.com/davidalger/warden/issues/200))
+
 ## Version [0.8.0](https://github.com/davidalger/warden/tree/0.8.0) (2020-07-27)
 [All Commits](https://github.com/davidalger/warden/compare/0.7.0..0.8.0)
 

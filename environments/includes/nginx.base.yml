@@ -13,4 +13,4 @@ services:
     volumes:
       - .${WARDEN_WEB_ROOT:-}/:/var/www/html:delegated
     environment:
-      - XDEBUG_CONNECT_BACK_HOST=${XDEBUG_CONNECT_BACK_HOST:-}
+      - XDEBUG_CONNECT_BACK_HOST=${XDEBUG_CONNECT_BACK_HOST:-''}
