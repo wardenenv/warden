@@ -56,6 +56,9 @@ All the necessary files are located in `dev/tests/integration/`:
        'db-password' => 'magento',
        'db-name' => 'magento_integration_tests',
        'backend-frontname' => 'backend',
+       'search-engine' => 'elasticsearch7',
+       'elasticsearch-host' => 'elasticsearch',
+       'elasticsearch-port' => 9200,
        'admin-user' => \Magento\TestFramework\Bootstrap::ADMIN_NAME,
        'admin-password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD,
        'admin-email' => \Magento\TestFramework\Bootstrap::ADMIN_EMAIL,
@@ -87,9 +90,7 @@ All the necessary files are located in `dev/tests/integration/`:
     return [
         'customer/password/limit_password_reset_requests_method' => 0,
         'admin/security/admin_account_sharing' => 1,
-        'admin/security/limit_password_reset_requests_method' => 0,
-        'catalog/search/engine' => 'elasticsearch6',
-        'catalog/search/elasticsearch6_server_hostname' => 'elasticsearch',
+        'admin/security/limit_password_reset_requests_method' => 0
     ]; 
    ``` 
    
@@ -219,3 +220,5 @@ To run Acceptance tests you need to [configure the MFTF environment](mftf.md). O
 
 For more information about Debugging MFTF - please follow the [Magento Functional Testing Framework](mftf.md) section.
 The process of debugging is based on VNC connection to the Chrome instance.
+
+You can connect to Chrome session with `warden vnc` command.
