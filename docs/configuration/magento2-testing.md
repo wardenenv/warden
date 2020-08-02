@@ -192,9 +192,9 @@ All the MFTF-related operations are operated by `vendor/bin/mftf`, necessary fil
 To run Acceptance tests you need to [configure the MFTF environment](mftf.md). Once you've done that, follow these steps to run the tests.
 
 1. Make sure that you enabled following in your `.env` file:
-   	- `WARDEN_SELENIUM` - Responsible for running virtual browser for your tests
+    - `WARDEN_SELENIUM` - Responsible for running virtual browser for your tests
     - `WARDEN_ALLURE` - Responsible for test results reporting
-   	- `WARDEN_SELENIUM_DEBUG` - Enables you to preview the tests with VNC
+    - `WARDEN_SELENIUM_DEBUG` - Enables you to preview the tests with VNC
 1. Run `vendor/bin/mftf build:project`, the configuration files will be generated in `dev/tests/acceptance`.
 1. Adjust `dev/tests/acceptance/.env` file by setting:
     - `MAGENTO_BASE_URL`
