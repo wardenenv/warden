@@ -1,8 +1,14 @@
 # Change Log
 
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
-[All Commits](https://github.com/davidalger/warden/compare/0.8.1..develop)
+[All Commits](https://github.com/davidalger/warden/compare/0.8.2..develop)
 
+## Version [0.8.2](https://github.com/davidalger/warden/tree/0.8.2) (2020-08-03)
+[All Commits](https://github.com/davidalger/warden/compare/0.8.1..0.8.2)
+
+**Enhancements:**
+
+* Changed all `:delegated` mounts to `:cached` mounts to preserve existing behavior of mounts when new behavior in Docker Desktop Edge 2.3.2.0 is promoted to stable channel ([#204](https://github.com/davidalger/warden/pull/204) by @davidalger)
 
 ## Version [0.8.1](https://github.com/davidalger/warden/tree/0.8.1) (2020-07-30)
 [All Commits](https://github.com/davidalger/warden/compare/0.8.0..0.8.1)
