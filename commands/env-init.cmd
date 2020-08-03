@@ -163,6 +163,7 @@ if [[ "${WARDEN_ENV_TYPE}" == "wordpress" ]]; then
 		PHP_VERSION=7.4
 
 		WARDEN_DB=1
+		WARDEN_REDIS=0
 
 		APP_ENV=local
 		APP_DEBUG=true
