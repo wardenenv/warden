@@ -1,7 +1,18 @@
 # Change Log
 
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
-[All Commits](https://github.com/davidalger/warden/compare/0.8.2..develop)
+[All Commits](https://github.com/davidalger/warden/compare/0.9.0..develop)
+
+## Version [0.9.0](https://github.com/davidalger/warden/tree/0.9.0) (2020-08-06)
+[All Commits](https://github.com/davidalger/warden/compare/0.8.2..0.9.0)
+
+**Upgrade Notes:**
+
+* Removed deprecated first-class commands `warden start`, `warden stop`, `warden up`, `warden down`, and `warden restart`; please use `warden svc <verb>` to manage global services such as Traefik, Portainer, Mailhog, etc ([#205](https://github.com/davidalger/warden/pull/205) by @davidalger)
+
+**Enhancements:**
+
+* Added a new `wordpress` environment type pre-configured for running the Wordpress application ([#206](https://github.com/davidalger/warden/pull/206) by @jamescowie)
 
 ## Version [0.8.2](https://github.com/davidalger/warden/tree/0.8.2) (2020-08-03)
 [All Commits](https://github.com/davidalger/warden/compare/0.8.1..0.8.2)
