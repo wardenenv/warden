@@ -29,7 +29,8 @@ if [[ ${WARDEN_ENV_TYPE} == "magento2" ]]; then
     WARDEN_RABBITMQ=${WARDEN_RABBITMQ:-1}
 fi
 
-if [[ ${XDEBUG_CONNECT_BACK_HOST} == '' && "$(< /proc/sys/kernel/osrelease)" == *microsoft* ]]; then
+## WSL1/WSL2 are GNU/Linux env type but still run Docker Desktop
+if [[ ${XDEBUG_CONNECT_BACK_HOST} == '' ]] && grep -sqi microsoft /proc/sys/kernel/osrelease; then
     export XDEBUG_CONNECT_BACK_HOST=host.docker.internal
 fi
 
