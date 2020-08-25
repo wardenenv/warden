@@ -62,7 +62,7 @@ installing node packages, remove your `node_modules` directory with `rm -rf node
 You can fix this by using: 
 
 ```bash
-cp package.json.sample package.json && rm -rf node_modules/ package-lock.json && npm install.
+cp package.json.sample package.json && rm -rf node_modules/ package-lock.json && npm install
 ```
 
 ## Running Integration Tests
