@@ -37,6 +37,34 @@ That's it! Now you are ready to run Unit Tests.
 
 If you have [configured Xdebug](xdebug.md), run Unit tests inside **Debug** console (`warden debug` instead of `warden shell`). The code execution will stop at the breakpoints.
 
+## Running Javascript Unit Tests
+
+1. Configure your `.env` and set `NODE_VERSION=10`
+2. Launch a shell session within the project environment's `php-fpm` container with `warden shell`
+3. Install javascript unit test dependencies with `npm install`
+4. Deploy static content with
+    
+        bin/magento setup:static-content:deploy -f
+
+### Execution
+
+```bash
+$ grunt spec:<THEME>
+```
+
+For more specific jasmine unit test instructions, see the Magento DevDocs ([Magento 2.4](https://devdocs.magento.com/guides/v2.4/test/js/jasmine.html))
+
+### Troubleshooting
+
+- You must be within your project environment's `php-fpm` container before running `npm install`.  If you are having issues
+installing node packages, remove your `node_modules` directory with `rm -rf node_modules/ package-lock.json` and then retry `npm install`.
+- If you have an issue with `jasmine` tests being unable to execute it might be due to installing the wrong versions of node `grunt-contrib-jasmine`.
+You can fix this by using: 
+
+```bash
+cp package.json.sample package.json && rm -rf node_modules/ package-lock.json && npm install
+```
+
 ## Running Integration Tests
 
 All the necessary files are located in `dev/tests/integration/`:

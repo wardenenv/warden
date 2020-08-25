@@ -1,7 +1,14 @@
 # Change Log
 
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
-[All Commits](https://github.com/davidalger/warden/compare/0.9.0..develop)
+[All Commits](https://github.com/davidalger/warden/compare/0.9.1..develop)
+
+## Version [0.9.1](https://github.com/davidalger/warden/tree/0.9.1) (2020-08-25)
+[All Commits](https://github.com/davidalger/warden/compare/0.9.0..0.9.1)
+
+**Bug Fixes:**
+
+* Fixed bug on WSL2 where Xdebug connect back host was improperly set ([#213](https://github.com/davidalger/warden/pull/213) by @iihor-sviziev)
 
 ## Version [0.9.0](https://github.com/davidalger/warden/tree/0.9.0) (2020-08-06)
 [All Commits](https://github.com/davidalger/warden/compare/0.8.2..0.9.0)
