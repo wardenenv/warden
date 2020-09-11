@@ -18,14 +18,20 @@ Multiple top-level domains may also be setup by following the instructions below
         labels:
           - traefik.http.routers.${WARDEN_ENV_NAME}-varnish.rule=
               HostRegexp(`{subdomain:.+}.${TRAEFIK_DOMAIN}`)
+              || Host(`${TRAEFIK_DOMAIN}`)
               || HostRegexp(`{subdomain:.+}.alternate1.test`)
+              || Host(`alternate1.test`)
               || HostRegexp(`{subdomain:.+}.alternate2.test`)
+              || Host(`alternate2.test`)
       nginx:
         labels:
           - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.rule=
               HostRegexp(`{subdomain:.+}.${TRAEFIK_DOMAIN}`)
+              || Host(`${TRAEFIK_DOMAIN}`)
               || HostRegexp(`{subdomain:.+}.alternate1.test`)
+              || Host(`alternate1.test`)
               || HostRegexp(`{subdomain:.+}.alternate2.test`)
+              || Host(`alternate2.test`)
     ```
 
 3. Configure the application to handle traffic coming from each of these domains appropriately. An example on this for Magento 2 environments may be found below.
@@ -42,15 +48,19 @@ Multiple top-level domains may also be setup by following the instructions below
     services:
       php-fpm:
        extra_hosts:
+         - alternate1.test:${TRAEFIK_ADDRESS:-0.0.0.0}
          - sub1.alternate1.test:${TRAEFIK_ADDRESS:-0.0.0.0}
          - sub2.alternate1.test:${TRAEFIK_ADDRESS:-0.0.0.0}
+         - alternate2.test:${TRAEFIK_ADDRESS:-0.0.0.0}
          - sub1.alternate2.test:${TRAEFIK_ADDRESS:-0.0.0.0}
          - sub2.alternate2.test:${TRAEFIK_ADDRESS:-0.0.0.0}
 
       php-debug:
        extra_hosts:
+         - alternate1.test:${TRAEFIK_ADDRESS:-0.0.0.0}
          - sub1.alternate1.test:${TRAEFIK_ADDRESS:-0.0.0.0}
          - sub2.alternate1.test:${TRAEFIK_ADDRESS:-0.0.0.0}
+         - alternate2.test:${TRAEFIK_ADDRESS:-0.0.0.0}
          - sub1.alternate2.test:${TRAEFIK_ADDRESS:-0.0.0.0}
          - sub2.alternate2.test:${TRAEFIK_ADDRESS:-0.0.0.0}
     ```
