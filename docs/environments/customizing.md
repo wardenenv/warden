@@ -19,7 +19,6 @@ Start of some environments could be skipped by using variables in `.env` file:
 
   * `WARDEN_DB=0`
   * `WARDEN_REDIS=0`
-  * `WARDEN_MAILHOG=0`
 
 ### Magento 2 Specific Customizations
 
