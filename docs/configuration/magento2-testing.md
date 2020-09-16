@@ -75,7 +75,7 @@ All the necessary files are located in `dev/tests/integration/`:
     - Magento deployment mode `TESTS_MAGENTO_MODE` should be covered both for `developer` and `production`
     - Significantly increase the speed with `TESTS_PARALLEL_RUN` set to `1`
     
-2. Configure your Magento Installation using `etc/install-config-mysql.php.dist` as a template. The arguments are exactly the same to those you use for `bin/magento setup:install`:
+2. You need to create `etc/install-config-mysql.php` based on `etc/install-config-mysql.php.dist` as a template. The arguments are exactly the same to those you use for `bin/magento setup:install`:
 
     ```php
    return [
@@ -130,6 +130,63 @@ There's one thing you should be aware of: **always provide full path to `phpunit
 
 - To run all tests declared in `phpunit.xml` execute:<br> `vendor/bin/phpunit -c $(pwd)/dev/tests/integration/phpunit.xml`
 - If you need to run only specific directory, execute:<br> `vendor/bin/phpunit -c $(pwd)/dev/tests/integration/phpunit.xml {ABSOLUTE PATH TO TESTS}` 
+
+### Debugging
+
+If you have [configured Xdebug](xdebug.md), run Integration tests inside **Debug** console (`warden debug` instead of `warden shell`). The code execution will stop at the breakpoints.
+
+## Running Setup Integration Tests
+
+All the necessary files are located in `dev/tests/setup-integration/`:
+
+1. Create your `phpunit.xml` using contents of `phpunit.xml.dist`. We recommend customizing values of:
+
+    - Install config file `TESTS_INSTALL_CONFIG_FILE` should be `etc/install-config-mysql.php`
+    - Tests cleanup `TESTS_CLEANUP` should be set to `enabled`
+    - Magento deployment mode `TESTS_MAGENTO_MODE` should be covered both for `developer` and `production` (set to `developer` for start)
+    
+2. You need to create `etc/install-config-mysql.php` based on `etc/install-config-mysql.php.dist` as a template. Example:
+
+    ```php
+   return [
+       'default' => [
+           'db-host' => 'tmp-mysql',
+           'db-user' => 'root',
+           'db-password' => 'magento',
+           'db-name' => 'magento_integration_tests',
+           'db-prefix' => '',
+           'backend-frontname' => 'admin',
+           'admin-user' => 'admin',
+           'admin-password' => '123123q',
+           'admin-email' => \Magento\TestFramework\Bootstrap::ADMIN_EMAIL,
+           'admin-firstname' => \Magento\TestFramework\Bootstrap::ADMIN_FIRSTNAME,
+           'admin-lastname' => \Magento\TestFramework\Bootstrap::ADMIN_LASTNAME,
+           'enable-modules' => 'Magento_TestSetupModule2,Magento_TestSetupModule1,Magento_Backend',
+           'disable-modules' => 'all'
+       ],
+       'checkout' => [
+           'host' => 'tmp-mysql',
+           'username' => 'root',
+           'password' => 'magento',
+           'dbname' => 'magento_integration_tests'
+       ],
+       'sales' => [
+           'host' => 'tmp-mysql',
+           'username' => 'root',
+           'password' => 'magento',
+           'dbname' => 'magento_integration_tests'
+       ]
+   ];
+   ```
+   
+That's it! Now you are ready to run your first Setup Integration Tests.
+
+### Execution
+
+There's one thing you should be aware of: **always provide full path to `phpunit.xml`**.
+
+- To run all tests declared in `phpunit.xml` execute:<br> `vendor/bin/phpunit -c $(pwd)/dev/tests/setup-integration/phpunit.xml`
+- If you need to run only specific directory, execute:<br> `vendor/bin/phpunit -c $(pwd)/dev/tests/setup-integration/phpunit.xml {ABSOLUTE PATH TO TESTS}` 
 
 ### Debugging
 
