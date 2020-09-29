@@ -143,7 +143,7 @@ If you have [configured Xdebug](xdebug.md), run Integration tests inside **Debug
     php -dmemory_limit=-1 vendor/bin/phpunit -c $(pwd)/dev/tests/integration/phpunit.xml
     ```
 
-- If you're getting message like `The store that was requested wasn't found. Verify the store and try again.` - run the follwoing command 
+- If you're getting message like `The store that was requested wasn't found. Verify the store and try again.` - run the following command 
     ```bash
     rm -Rf app/etc/env.php app/etc/config.php dev/tests/integration/tmp/*
     ```
