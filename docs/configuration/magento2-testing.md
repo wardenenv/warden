@@ -138,12 +138,12 @@ If you have [configured Xdebug](xdebug.md), run Integration tests inside **Debug
 
 ### Troubleshooting
 
-- In case if you're getting message like `Fatal error: Allowed memory size of ...` try to add prefix `php -dmemory_limit=-1` to your command, like 
+- In case you're getting a message like `Fatal error: Allowed memory size of ...` try to add prefix `php -dmemory_limit=-1` to your command, like 
     ```bash
     php -dmemory_limit=-1 vendor/bin/phpunit -c $(pwd)/dev/tests/integration/phpunit.xml
     ```
 
-- If you're getting message like `The store that was requested wasn't found. Verify the store and try again.` - run the following command 
+- If you're getting a message like `The store that was requested wasn't found. Verify the store and try again.` - run the following command 
     ```bash
     rm -Rf app/etc/env.php app/etc/config.php dev/tests/integration/tmp/*
     ```
