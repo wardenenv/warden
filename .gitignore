@@ -1,3 +1,12 @@
 /.sync
 /Icon?
 /.idea
+/environments/*
+!/environments/includes
+!/environments/laravel
+!/environments/local
+!/environments/magento1
+!/environments/magento2
+!/environments/shopware
+!/environments/symfony
+!/environments/wordpress

@@ -8,7 +8,7 @@ if test -f "${WARDEN_ENV_PATH}/.env"; then
   while true; do
     read -p $'\033[32mA warden env file already exists at '"${WARDEN_ENV_PATH}/.env"$'; would you like to overwrite? y/n\033[0m ' resp
     case $resp in
-      [Yy]*) echo "Overwriting extant .env file"; break;;
+      [Yy]*) echo "Overwriting existing .env file"; break;;
       [Nn]*) exit;;
       *) echo "Please answer (y)es or (n)o";;
     esac
@@ -65,9 +65,7 @@ if [[ "${WARDEN_ENV_TYPE}" == "magento1" ]]; then
 		BLACKFIRE_SERVER_ID=
 		BLACKFIRE_SERVER_TOKEN=
 	EOT
-fi
-
-if [[ "${WARDEN_ENV_TYPE}" == "magento2" ]]; then
+elif [[ "${WARDEN_ENV_TYPE}" == "magento2" ]]; then
   cat >> "${WARDEN_ENV_PATH}/.env" <<-EOT
 
 		WARDEN_DB=1
@@ -100,9 +98,7 @@ if [[ "${WARDEN_ENV_TYPE}" == "magento2" ]]; then
 		BLACKFIRE_SERVER_ID=
 		BLACKFIRE_SERVER_TOKEN=
 	EOT
-fi
-
-if [[ "${WARDEN_ENV_TYPE}" == "laravel" ]]; then
+elif [[ "${WARDEN_ENV_TYPE}" == "laravel" ]]; then
   cat >> "${WARDEN_ENV_PATH}/.env" <<-EOT
 
 		MARIADB_VERSION=10.4
@@ -135,9 +131,7 @@ if [[ "${WARDEN_ENV_TYPE}" == "laravel" ]]; then
 
 		MAIL_DRIVER=sendmail
 	EOT
-fi
-
-if [[ "${WARDEN_ENV_TYPE}" =~ ^symfony|shopware$ ]]; then
+elif [[ "${WARDEN_ENV_TYPE}" =~ ^symfony|shopware$ ]]; then
   cat >> "${WARDEN_ENV_PATH}/.env" <<-EOT
 
 		WARDEN_DB=1
@@ -153,9 +147,7 @@ if [[ "${WARDEN_ENV_TYPE}" =~ ^symfony|shopware$ ]]; then
 		REDIS_VERSION=5.0
 		VARNISH_VERSION=6.0
 	EOT
-fi
-
-if [[ "${WARDEN_ENV_TYPE}" == "wordpress" ]]; then
+elif [[ "${WARDEN_ENV_TYPE}" == "wordpress" ]]; then
   cat >> "${WARDEN_ENV_PATH}/.env" <<-EOT
 
 		MARIADB_VERSION=10.4
@@ -174,5 +166,14 @@ if [[ "${WARDEN_ENV_TYPE}" == "wordpress" ]]; then
 		DB_DATABASE=wordpress
 		DB_USERNAME=wordpress
 		DB_PASSWORD=wordpress
+	EOT
+else
+  cat >> "${WARDEN_ENV_PATH}/.env" <<-EOT
+
+		WARDEN_DB=1
+
+		MARIADB_VERSION=10.3
+		PHP_VERSION=7.4
+		NGINX_VERSION=1.16
 	EOT
 fi
