@@ -2,7 +2,7 @@
 set -e
 trap '>&2 printf "\n\e[01;31mError: Command \`%s\` on line $LINENO failed with exit code $?\033[0m\n" "$BASH_COMMAND"' ERR
 
-## find directory where this script is located following symlinks if neccessary
+## find directory where this script is located following symlinks if necessary
 readonly BASE_DIR="$(
   cd "$(
     dirname "$(
@@ -46,8 +46,8 @@ for file in $(find ${SEARCH_PATH} -type f -name Dockerfile | sort -V); do
     IMAGE_TAG="docker.io/wardenenv/$(echo "${BUILD_DIR}" | cut -d/ -f1)"
     IMAGE_SUFFIX="$(echo "${BUILD_DIR}" | cut -d/ -f2- -s | tr / - | sed 's/^-//')"
 
-    ## due to build matrix requirements, magento1 and magento2 specific varients are built in separate invocation
-    if [[ ${SEARCH_PATH} == "php-fpm" ]] && [[ ${file} =~ php-fpm/magento[1-2] ]]; then
+    ## due to build matrix requirements, magento1 and magento2 specific variants are built in separate invocation
+    if [[ ${SEARCH_PATH} == "php-fpm" ]] && [[ ${file} =~ php-fpm/magento[1-2] ]] && [[ ${file} =~ php-fpm/shopware5 ]]; then
       continue;
     fi
 

@@ -17,6 +17,10 @@ if [[ ${WARDEN_ENV_TYPE} =~ ^magento ]]; then
     export WARDEN_SVC_PHP_VARIANT=-${WARDEN_ENV_TYPE}
 fi
 
+if [[ ${WARDEN_ENV_TYPE} =~ ^shopware5 ]]; then
+    export WARDEN_SVC_PHP_VARIANT=-${WARDEN_ENV_TYPE}
+fi
+
 if [[ ${WARDEN_ENV_TYPE} != local ]]; then
     WARDEN_NGINX=${WARDEN_NGINX:-1}
     WARDEN_DB=${WARDEN_DB:-1}

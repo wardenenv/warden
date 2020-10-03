@@ -155,6 +155,27 @@ if [[ "${WARDEN_ENV_TYPE}" =~ ^symfony|shopware$ ]]; then
 	EOT
 fi
 
+if [[ "${WARDEN_ENV_TYPE}" == "shopware5" ]]; then
+  cat >> "${WARDEN_ENV_PATH}/.env" <<-EOT
+
+		MARIADB_VERSION=10.4
+		NODE_VERSION=10
+		PHP_VERSION=7.4
+
+		WARDEN_DB=1
+		WARDEN_REDIS=0
+		WARDEN_ENV_TYPE=shopware5
+		APP_DEBUG=true
+
+		DB_CONNECTION=mysql
+		DB_HOST=db
+		DB_PORT=3306
+		DB_DATABASE=app
+		DB_USERNAME=app
+		DB_PASSWORD=app
+	EOT
+fi
+
 if [[ "${WARDEN_ENV_TYPE}" == "wordpress" ]]; then
   cat >> "${WARDEN_ENV_PATH}/.env" <<-EOT
 

@@ -1,0 +1,20 @@
+version: "3.5"
+
+x-volumes: &volumes
+  - .${WARDEN_WEB_ROOT:-}/media:/var/www/html/media:cached
+  - .${WARDEN_WEB_ROOT:-}/files:/var/www/html/files:cached
+  - appdata:/var/www/html
+
+x-environment: &environment
+  - CHOWN_DIR_LIST=var
+  - CHOWN_DIR_LIST=web
+  - CHOWN_DIR_LIST=files
+  - CHOWN_DIR_LIST=media
+
+services:
+  nginx: { volumes: *volumes }
+  php-fpm: { volumes: *volumes, environment: *environment }
+  php-debug: { volumes: *volumes, environment: *environment }
+
+volumes:
+  appdata:

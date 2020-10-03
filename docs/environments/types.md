@@ -60,7 +60,21 @@ The `symfony` environment type supports development of Symfony 4+ projects, laun
 
 Files are currently mounted using a delegated mount on macOS and natively on Linux.
 
-#### Shopware
+#### Shopware 5
+
+The `shopware` environment type supports development of Shopware 5 projects, launching containers including:
+
+* Nginx
+* PHP-FPM
+* MySQL
+* Redis
+* RabbitMQ (disabled by default)
+* Varnish (disabled by default)
+* Elasticsearch (disabled by default)
+
+In order to achieve a well performing experience on macOS, files in the webroot are synced into the container using a Mutagen sync session with the exception of `media and files` which remains mounted using a delegated mount.
+
+#### Shopware 6
 
 The `shopware` environment type supports development of Shopware 6 projects, launching containers including:
 

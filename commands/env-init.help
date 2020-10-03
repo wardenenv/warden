@@ -31,6 +31,11 @@ WARDEN_USAGE=$(cat <<EOF
                       Due to the fact that Symfony uses `.env` file too,
                       WEBROOT value of `/web/` is used by default
 
+  shopware5           Nginx, php-fpm, db (mariadb) services pre configured for shopware5; on macOS
+                      systems code files are synced into container using mutagen
+                      session with files, media, web and var dirs excluded.
+                      On Linux code is mounted natively.
+
   wordpress           Nginx, php-fpm, db
                       pre-configured for running Wordpress
 EOF

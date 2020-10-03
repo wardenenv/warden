@@ -1,0 +1,7 @@
+version: "3.5"
+services:
+  nginx:
+    environment:
+      - NGINX_PUBLIC=/
+      - NGINX_TEMPLATE=shopware5.conf
+      - NGINX_INDEX=shopware.php

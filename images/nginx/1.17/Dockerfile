@@ -19,7 +19,7 @@ COPY etc/nginx/available.d/*.conf /etc/nginx/available.d/
 CMD envsubst '${NGINX_UPSTREAM_HOST} ${NGINX_UPSTREAM_PORT} \
               ${NGINX_UPSTREAM_BLACKFIRE_HOST} ${NGINX_UPSTREAM_BLACKFIRE_PORT} \
               ${NGINX_UPSTREAM_DEBUG_HOST} ${NGINX_UPSTREAM_DEBUG_PORT} \
-              ${NGINX_ROOT} ${NGINX_PUBLIC} ${NGINX_TEMPLATE}' \
+              ${NGINX_ROOT} ${NGINX_PUBLIC} ${NGINX_INDEX} ${NGINX_TEMPLATE}' \
         < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf \
     && envsubst '${XDEBUG_CONNECT_BACK_HOST}' \
         < /etc/nginx/fastcgi_params.template > /etc/nginx/fastcgi_params \
