@@ -137,8 +137,8 @@ export TRAEFIK_ADDRESS="$(docker container inspect traefik \
 if [[ $OSTYPE =~ ^darwin ]]; then
     export MUTAGEN_SYNC_FILE="${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.mutagen.yml"
 
-    if [[ -f "${WARDEN_ENV_PATH}/.warden/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.mutagen.yml" ]]; then
-        export MUTAGEN_SYNC_FILE="${WARDEN_ENV_PATH}/.warden/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.mutagen.yml"
+    if [[ -f "${WARDEN_ENV_PATH}/.warden/mutagen.yml" ]]; then
+        export MUTAGEN_SYNC_FILE="${WARDEN_ENV_PATH}/.warden/mutagen.yml"
     fi
 fi
 
