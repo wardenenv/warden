@@ -1,0 +1,5 @@
+# Redirect default Netlify subdomain to primary domain
+http://warden-xohw5v.netlify.com/*       https://warden.dev/:splat 301!
+https://warden-xohw5v.netlify.com/*      https://warden.dev/:splat 301!
+http://master--warden-xohw5v.netlify.com/*     https://warden.dev/:splat 301!
+https://master--warden-xohw5v.netlify.com/*    https://warden.dev/:splat 301!

@@ -50,7 +50,7 @@ var onError = function(error) {
 };
 
 // Build task
-gulp.task("build", ["html", "images", "css"], function() {
+gulp.task("build", ["html", "images", "css", "js", "netlify"], function() {
   // Do nothing but run other tasks
 });
 
@@ -123,6 +123,15 @@ gulp.task("images", function() {
         .pipe(imagemin())
         // Where to store the finalized images
         .pipe(gulp.dest("dist/img"));
+});
+
+// Netlify task
+gulp.task("netlify", function() {
+    return gulp.src("src/_redirects")
+        // Prevent gulp.watch from crashing
+        .pipe(plumber(onError))
+        // Where to store the files
+        .pipe(gulp.dest("dist"));
 });
 
 // Use default task to launch BrowserSync and watch all files
