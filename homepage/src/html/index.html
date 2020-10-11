@@ -1,0 +1,104 @@
+@@include("partials/head.html")
+
+    <!-- Header -->
+    <header class="align--center pt3">
+        <div class="container--lg border--bottom pb3">
+            <pre class="warden-mark">
+ _       __               __         
+| |     / /___ __________/ /__  ____ 
+| | /| / / __ `/ ___/ __  / _ \/ __ \
+| |/ |/ / /_/ / /  / /_/ /  __/ / / /
+|__/|__/\__,_/_/   \__,_/\___/_/ /_/ 
+            </pre>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- Focus -->
+        <div class="container--lg pt1 pb1">
+
+            <div class="grid-row grid-row--center">
+                <div class="grid-column mt3 mb2 mr3 span-6">
+                    <div class="border--bottom pb2 mb1">
+                        <h2>Install via Homebrew</h2>
+                        <pre class="code">
+$ brew install davidalger/warden/warden
+$ warden up
+</pre>
+                    </div>
+                    <p class="italic text--gray mb1">Two-command install and setup process makes getting started lightning fast. Works on macOS and Linux.</p>
+                </div>
+                <div class="grid-column mt3 mb2">
+                    <img class="box-shadow" src="/img/warden-example.png" alt="Warden Example">
+                </div>
+            </div>
+
+            <div class="grid-row grid-row--center">
+                <div class="grid-column span-1"></div>
+                <div class="grid-column mb2 order-2">
+                    <div class="grid-row">
+                        <div class="grid-column mb2 span-half align--center-on-mobile">
+                            <img class="half-width-on-mobile" src="/img/docker.svg" alt="Docker">
+                        </div>
+                        <div class="grid-column mb2 span-half align--center-on-mobile">
+                            <img class="half-width-on-mobile" src="/img/homebrew.png" alt="Homebrew">
+                        </div>
+                    </div>
+                </div>
+                <div class="grid-column span-2"></div>
+                <div class="grid-column mt3 mb2 span-6 order-1">
+                    <div class="mb2">
+                        <h2>Minimal Dependencies</h2>
+                        <p>Requires only <a class="link" href="https://brew.sh" target="_blank">Homebrew</a>, <a href="https://docs.docker.com/install/" class="link" target="_blank">Docker</a>, and <a href="https://docs.docker.com/compose/install/" class="link" target="_blank">Docker Compose</a> to get started, and <a href="https://mutagen.io/" class="link" target="_blank">Mutagen</a> on macOS (for Magento 2 file sync).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-row">
+                <div class="grid-column mt2 mb2">
+                    <h2>Feature List</h2>
+                    <ul class="list--indented">
+                        <li>Traefik for SSL termination and routing/proxying requests into the correct containers.</li>
+                        <li>Portainer for quick visibility into what's running inside the local Docker host.</li>
+                        <li>Dnsmasq to serve DNS responses for <code>.test</code> domains eliminating manual editing of <code>/etc/hosts</code></li>
+                        <li>An SSH tunnel for connecting from Sequel Pro or TablePlus into any one of multiple running database containers.</li>
+                        <li>Warden issued wildcard SSL certificates for running https on all local development domains.</li>
+                        <li>Full support for Magento 1, Magento 2, Laravel, and custom project environment configurations on macOS and Linux.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="grid-row grid-row--center">
+                <div class="grid-column span-3"></div>
+                <div class="grid-column span-3 align--center">
+                    <a class="btn btn--outline link" href="https://github.com/davidalger/warden/">Learn More on Github</a>
+                </div>
+                <div class="grid-column span-3 align--center">
+                    <a class="btn btn--outline link" href="https://docs.warden.dev/">Warden Documentation</a>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="pt2 pb3 align--center-on-mobile">
+        <div class="container">
+            <div class="grid-row">
+                <div class="grid-column mt2 span-half order-2">
+                    <div>Copyright &copy; 2019 by <a class="link" href="https://davidalger.com/">David Alger</a></div>
+                    <div>Licensed under the MIT license.</div>
+                </div>
+                <div class="grid-column mt2 span-half align--right align--center-on-mobile">
+                    <ul class="no-bullets list--inline order-1">
+                        <li class="mr1"><a href="https://github.com/davidalger/warden" class="link"><img class="icon" src="/img/github.svg" alt="Github"></a></li>
+                        <li class="mr1"><a href="https://twitter.com/blackbooker" target="_blank" class="link"><img class="icon" src="/img/twitter.svg" alt="Twitter"></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+@@include("partials/foot.html")

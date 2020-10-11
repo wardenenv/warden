@@ -1,0 +1,17 @@
+// Base list styles
+// -------------------------------------------------------------------
+// Remove bullets
+.no-bullets { list-style: none; }
+
+// Indented list
+.list--indented { padding-left: $baseline*6; }
+
+// Inline list
+.list--inline {
+    font-size: 0; // Part of getting rid of the inline-block ghost space
+
+    li {
+        display: inline-block;
+        font-size: 1rem; // Part of getting rid of the inline-block ghost space
+    }
+}

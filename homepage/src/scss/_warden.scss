@@ -1,0 +1,29 @@
+// Warden styles
+// -------------------------------------------------------------------
+
+.warden-mark {
+    font-size: 18px;
+    line-height: 1em;
+    font-weight: 600;
+    text-shadow: 2px 2px 3px #aaaaaa;
+}
+
+@media screen and (max-width: $breakpoint--sm) {
+    .warden-mark {
+       font-size: 12px; 
+    }
+}
+
+@media screen and (max-width: $breakpoint--xs) {
+    .warden-mark {
+       font-size: 10px; 
+    }
+}
+
+.box-shadow {
+    box-shadow: 3px 3px 6px #aaaaaa;
+}
+
+pre.code {
+    overflow-x: auto;
+}
