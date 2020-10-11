@@ -5,6 +5,8 @@
 
 **Enhancements:**
 
+* Added ability to provide persistent additional configuration to `dnsmasq` service (issue [#214](https://github.com/davidalger/warden/issues/214))
+* Added ability to easily specify alternate nameservers for `dnsmasq` to use (issue [#214](https://github.com/davidalger/warden/issues/214))
 * Updated version of Portainer from 1.24.X to 2.0.X ([#245](https://github.com/davidalger/warden/pull/245) by @ragfire)
 
 ## Version [0.9.1](https://github.com/davidalger/warden/tree/0.9.1) (2020-08-25)
