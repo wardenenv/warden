@@ -134,9 +134,17 @@ export TRAEFIK_ADDRESS="$(docker container inspect traefik \
     ' 2>/dev/null || true
 )"
 
+if [[ $OSTYPE =~ ^darwin ]]; then
+    export MUTAGEN_SYNC_FILE="${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.mutagen.yml"
+
+    if [[ -f "${WARDEN_ENV_PATH}/.warden/mutagen.yml" ]]; then
+        export MUTAGEN_SYNC_FILE="${WARDEN_ENV_PATH}/.warden/mutagen.yml"
+    fi
+fi
+
 ## pause mutagen sync if needed
 if [[ "${WARDEN_PARAMS[0]}" == "stop" ]] \
-    && [[ $OSTYPE =~ ^darwin ]] && [[ -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.mutagen.yml" ]]
+    && [[ $OSTYPE =~ ^darwin ]] && [[ -f "${MUTAGEN_SYNC_FILE}" ]]
 then
     warden sync pause
 fi
@@ -148,7 +156,7 @@ docker-compose \
 
 ## resume mutagen sync if available and php-fpm container id hasn't changed
 if ([[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]]) \
-    && [[ $OSTYPE =~ ^darwin ]] && [[ -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.mutagen.yml" ]] \
+    && [[ $OSTYPE =~ ^darwin ]] && [[ -f "${MUTAGEN_SYNC_FILE}" ]] \
     && [[ $(warden sync list | grep -i 'Status: \[Paused\]' | wc -l | awk '{print $1}') == "1" ]] \
     && [[ $(warden env ps -q php-fpm) ]] \
     && [[ $(docker container inspect $(warden env ps -q php-fpm) --format '{{ .State.Status }}') = "running" ]] \
@@ -159,7 +167,7 @@ fi
 
 ## start mutagen sync if needed
 if ([[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]]) \
-    && [[ $OSTYPE =~ ^darwin ]] && [[ -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.mutagen.yml" ]] \
+    && [[ $OSTYPE =~ ^darwin ]] && [[ -f "${MUTAGEN_SYNC_FILE}" ]] \
     && [[ $(warden sync list | grep -i 'Connection state: Connected' | wc -l | awk '{print $1}') != "2" ]] \
     && [[ $(warden env ps -q php-fpm) ]] \
     && [[ $(docker container inspect $(warden env ps -q php-fpm) --format '{{ .State.Status }}') = "running" ]]
@@ -169,7 +177,7 @@ fi
 
 ## stop mutagen sync if needed
 if [[ "${WARDEN_PARAMS[0]}" == "down" ]] \
-    && [[ $OSTYPE =~ ^darwin ]] && [[ -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.mutagen.yml" ]]
+    && [[ $OSTYPE =~ ^darwin ]] && [[ -f "${MUTAGEN_SYNC_FILE}" ]]
 then
     warden sync stop
 fi
