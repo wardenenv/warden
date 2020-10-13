@@ -38,6 +38,10 @@ Flush redis completely:
 
     warden env exec -T redis redis-cli flushall
 
+Remove volumes completely:
+
+    warden env down -v
+
 ### Further Information
 
 Run `warden help` and `warden env -h` for more details and useful command information.
