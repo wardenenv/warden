@@ -21,7 +21,7 @@ fi
 
 ## verify mutagen version constraint
 MUTAGEN_VERSION=$(mutagen version 2>/dev/null) || true
-MUTAGEN_REQUIRE=0.11.4
+MUTAGEN_REQUIRE=0.11.8
 if [[ $OSTYPE =~ ^darwin ]] && ! test $(version ${MUTAGEN_VERSION}) -ge $(version ${MUTAGEN_REQUIRE}); then
   error "Mutagen version ${MUTAGEN_REQUIRE} or greater is required (version ${MUTAGEN_VERSION} is installed)."
   >&2 printf "\nPlease update Mutagen:\n\n  brew upgrade havoc-io/mutagen/mutagen\n\n"
