@@ -1,1 +1,4 @@
 # Configuration for probot-stale - https://github.com/probot/stale
+
+# Label to use when marking as stale
+staleLabel: stale
