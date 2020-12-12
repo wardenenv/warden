@@ -58,5 +58,6 @@ Restart network-manager
 sudo service network-manager restart
 ```
 
-> **_NOTE:_**  
-> In the above examples you can replace `1.1.1.1` and `1.0.0.1` (CloudFlare) with the IP of your own preferred DNS resolution service such as `8.8.8.8` (Google) or `9.9.9.9` (Quad9)*
+``` note::
+    In the above examples you can replace ``1.1.1.1`` and ``1.0.0.1`` (CloudFlare) with the IP of your own preferred DNS resolution service such as ``8.8.8.8`` and ``8.8.4.4`` (Google) or ``9.9.9.9`` and ``149.112.112.112`` (Quad9)
+```
