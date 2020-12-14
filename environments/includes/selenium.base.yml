@@ -24,4 +24,4 @@ services:
       - HUB_HOST=selenium-hub
       - HUB_PORT=4444
       - START_XVFB=false
-
+    shm_size: ${WARDEN_SELENIUM_SHM_SIZE}
