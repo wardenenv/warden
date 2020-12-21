@@ -68,6 +68,10 @@ for file in $(find ${SEARCH_PATH} -type f -name Dockerfile | sort -V); do
       fi
       BUILD_ARGS+=("--build-arg")
       BUILD_ARGS+=("PHP_VERSION")
+
+      export PHP_VARIANT
+      BUILD_ARGS+=("--build-arg")
+      BUILD_ARGS+=("PHP_VARIANT")
     else
       IMAGE_TAG+=":${IMAGE_SUFFIX}"
     fi

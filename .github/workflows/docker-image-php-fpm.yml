@@ -19,14 +19,14 @@ jobs:
         include:
           # IonCube and Source Guardian loaders do not yet exist for PHP 8.0
           - php_version: "8.0"
-            php_variants: "cli fpm"
+            php_variant: "fpm"
     steps:
     - uses: actions/checkout@v1
     - run: ./images/scripts/build.sh --push "${BUILD_GROUP}"
       env:
         BUILD_GROUP: php-fpm
         PHP_VERSION: ${{ matrix.php_version }}
-        VARIANT_LIST: ${{ matrix.php_variants }}
+        PHP_VARIANT: ${{ matrix.php_variant }}
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
