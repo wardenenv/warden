@@ -15,13 +15,18 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php_version: ["5.5", "5.6", "7.0", "7.1", "7.2", "7.3", "7.4"]
+        php_version: ["5.5", "5.6", "7.0", "7.1", "7.2", "7.3", "7.4", "8.0"]
+        include:
+          # IonCube and Source Guardian loaders do not yet exist for PHP 8.0
+          - php_version: "8.0"
+            php_variants: "cli fpm"
     steps:
     - uses: actions/checkout@v1
     - run: ./images/scripts/build.sh --push "${BUILD_GROUP}"
       env:
         BUILD_GROUP: php-fpm
         PHP_VERSION: ${{ matrix.php_version }}
+        VARIANT_LIST: ${{ matrix.php_variants }}
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
@@ -31,7 +36,7 @@ jobs:
     needs: php-fpm
     strategy:
       matrix:
-        php_version: ["5.5", "5.6", "7.0", "7.1", "7.2", "7.3", "7.4"]
+        php_version: ["5.5", "5.6", "7.0", "7.1", "7.2", "7.3", "7.4", "8.0"]
     steps:
     - uses: actions/checkout@v1
     - run: ./images/scripts/build.sh --push "${BUILD_GROUP}"
@@ -47,7 +52,7 @@ jobs:
     needs: php-fpm
     strategy:
       matrix:
-        php_version: ["7.0", "7.1", "7.2", "7.3", "7.4"]
+        php_version: ["7.0", "7.1", "7.2", "7.3", "7.4", "8.0"]
     steps:
     - uses: actions/checkout@v1
     - run: ./images/scripts/build.sh --push "${BUILD_GROUP}"

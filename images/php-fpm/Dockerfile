@@ -1,5 +1,6 @@
 ARG PHP_VERSION=
-FROM davidalger/php:${PHP_VERSION}-fpm-loaders
+ARG PHP_VARIANT="fpm-loaders"
+FROM davidalger/php:${PHP_VERSION}-${PHP_VARIANT}
 
 # Clear undesired settings from base fpm images
 ENV COMPOSER_ALLOW_SUPERUSER=
