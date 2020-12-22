@@ -1,6 +1,5 @@
 ARG PHP_VERSION=
-ARG PHP_VARIANT="fpm-loaders"
-FROM davidalger/php:${PHP_VERSION}-${PHP_VARIANT}
+FROM docker.io/magenius/php:${PHP_VERSION}-fpm
 
 # Clear undesired settings from base fpm images
 ENV COMPOSER_ALLOW_SUPERUSER=
