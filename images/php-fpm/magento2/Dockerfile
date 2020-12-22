@@ -1,5 +1,5 @@
 ARG PHP_VERSION
-FROM docker.io/magenius/php-fpm:${PHP_VERSION}
+FROM docker.io/wardenenv/php-fpm:${PHP_VERSION}
 USER root
 
 # Resolve permission issues stemming from directories auto-created by docker due to mounts in sub-directories
