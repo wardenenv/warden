@@ -27,7 +27,7 @@ source_suffix = ['.rst', '.md']
 master_doc = 'index'
 
 project = 'Warden'
-copyright = '2019 by David Alger.'
+copyright = '2019-2021 by David Alger.'
 author = 'David Alger'
 version = ''
 release = ''
