@@ -30,6 +30,10 @@ Tail the varnish activity log:
 
     warden env exec -T varnish varnishlog
 
+Flush varnish:
+
+     warden env exec -T varnish varnishadm 'ban req.url ~ .' 
+
 Connect to redis:
 
     warden env exec redis redis-cli
