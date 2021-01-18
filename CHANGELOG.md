@@ -9,6 +9,7 @@
 
 **Enhancements:**
 
+* Added opt-in support for Xdebug 3 (see docs for details) ([#279](https://github.com/davidalger/warden/pull/279) by @Den4ik)
 * Added ability to provide persistent additional configuration to `dnsmasq` service (issue [#214](https://github.com/davidalger/warden/issues/214))
 * Added ability to easily specify alternate nameservers for `dnsmasq` to use (issue [#214](https://github.com/davidalger/warden/issues/214))
 * Added ability to customize bundled environment compositions by overriding them in the Warden home dir ([#228](https://github.com/davidalger/warden/pull/228) by @k4emic)

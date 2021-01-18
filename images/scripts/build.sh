@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -e
-trap '>&2 printf "\n\e[01;31mError: Command \`%s\` on line $LINENO failed with exit code $?\033[0m\n" "$BASH_COMMAND"' ERR
+trap 'error "$(printf "Command \`%s\` at $BASH_SOURCE:$LINENO failed with exit code $?" "$BASH_COMMAND")"' ERR
 
 ## find directory where this script is located following symlinks if neccessary
 readonly BASE_DIR="$(
@@ -14,6 +14,10 @@ readonly BASE_DIR="$(
 )/.."
 pushd ${BASE_DIR} >/dev/null
 
+## import warden util functions
+readonly WARDEN_DIR="${BASE_DIR}/.."
+source "${WARDEN_DIR}/utils/core.sh"
+
 ## if --push is passed as first argument to script, this will login to docker hub and push images
 PUSH_FLAG=
 if [[ "${1:-}" = "--push" ]]; then
@@ -25,8 +29,7 @@ fi
 
 ## since fpm images no longer can be traversed, this script should require a search path vs defaulting to build all
 if [[ -z ${SEARCH_PATH} ]]; then
-  >&2 printf "\n\e[01;31mError: Missing search path. Please try again passing an image type as an argument!\033[0m\n"
-  exit 1
+  fatal "Missing search path. Please try again passing an image type as an argument."
 fi
 
 ## login to docker hub as needed
@@ -56,8 +59,7 @@ for file in $(find ${SEARCH_PATH} -type f -name Dockerfile | sort -V); do
     BUILD_ARGS=()
     if [[ ${SEARCH_PATH} = *fpm* ]]; then
       if [[ -z ${PHP_VERSION} ]]; then
-        >&2 printf "\n\e[01;31mError: Building ${SEARCH_PATH} images requires PHP_VERSION env variable be set!\033[0m\n"
-        exit 1
+        fatal "Building ${SEARCH_PATH} images requires PHP_VERSION env variable be set."
       fi
 
       export PHP_VERSION
@@ -77,6 +79,12 @@ for file in $(find ${SEARCH_PATH} -type f -name Dockerfile | sort -V); do
       fi
     else
       IMAGE_TAG+=":${IMAGE_SUFFIX}"
+    fi
+
+    # Skip build of xdebug3 fpm images on older versions of PHP (it requires PHP 7.2 or greater)
+    if [[ ${IMAGE_SUFFIX} == "xdebug3" ]] && test $(version ${PHP_VERSION}) -lt $(version "7.2"); then
+      warning "Skipping build for ${IMAGE_TAG} (xdebug3 is unavailable for PHP ${PHP_VERSION})"
+      continue
     fi
 
     if [[ -d "$(echo ${BUILD_DIR} | cut -d/ -f1)/context" ]]; then

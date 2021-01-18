@@ -17,6 +17,12 @@ if [[ ${WARDEN_ENV_TYPE} =~ ^magento ]]; then
     export WARDEN_SVC_PHP_VARIANT=-${WARDEN_ENV_TYPE}
 fi
 
+## configure xdebug version
+export XDEBUG_VERSION="debug" # xdebug2 image
+if [[ ${PHP_XDEBUG_3} -eq 1 ]]; then
+    export XDEBUG_VERSION="xdebug3"
+fi
+
 if [[ ${WARDEN_ENV_TYPE} != local ]]; then
     WARDEN_NGINX=${WARDEN_NGINX:-1}
     WARDEN_DB=${WARDEN_DB:-1}

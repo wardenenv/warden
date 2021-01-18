@@ -28,7 +28,7 @@ services:
 
   php-debug:
     hostname: "${WARDEN_ENV_NAME}-php-debug"
-    image: docker.io/wardenenv/php-fpm:${PHP_VERSION:-7.4}${WARDEN_SVC_PHP_VARIANT:-}-debug
+    image: docker.io/wardenenv/php-fpm:${PHP_VERSION:-7.4}${WARDEN_SVC_PHP_VARIANT:-}-${XDEBUG_VERSION:-debug}
     environment:
       - TRAEFIK_DOMAIN
       - TRAEFIK_SUBDOMAIN
