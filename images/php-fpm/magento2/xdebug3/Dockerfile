@@ -1,5 +1,5 @@
 ARG PHP_VERSION=
-FROM docker.io/wardenenv/php-fpm:${PHP_VERSION}
+FROM docker.io/wardenenv/php-fpm:${PHP_VERSION}-magento2
 USER root
 
 RUN set -eux \
