@@ -82,7 +82,7 @@ for file in $(find ${SEARCH_PATH} -type f -name Dockerfile | sort -V); do
     fi
 
     # Skip build of xdebug3 fpm images on older versions of PHP (it requires PHP 7.2 or greater)
-    if [[ ${IMAGE_SUFFIX} == "xdebug3" ]] && test $(version ${PHP_VERSION}) -lt $(version "7.2"); then
+    if [[ ${IMAGE_SUFFIX} =~ xdebug3 ]] && test $(version ${PHP_VERSION}) -lt $(version "7.2"); then
       warning "Skipping build for ${IMAGE_TAG} (xdebug3 is unavailable for PHP ${PHP_VERSION})"
       continue
     fi
