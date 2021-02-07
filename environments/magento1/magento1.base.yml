@@ -2,4 +2,5 @@ version: "3.5"
 services:
   nginx:
     environment:
+      - NGINX_PUBLIC=${WARDEN_MODMAN_ROOT}
       - NGINX_TEMPLATE=magento1.conf

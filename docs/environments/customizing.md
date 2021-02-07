@@ -20,6 +20,12 @@ Start of some environments could be skipped by using variables in `.env` file:
   * `WARDEN_DB=0`
   * `WARDEN_REDIS=0`
 
+### Magento 1 Specific Customizations
+
+If you use a modman structure, initialize the environment in your project path to synchronize all your files in the .modman folder
+and define the shop root with
+  * `WARDEN_MODMAN_ROOT={MODMAN_SHOP_ROOT}`
+
 ### Magento 2 Specific Customizations
 
 The following variables can be added to the project's `.env` file to enable additional database containers for use with the Magento 2 (Commerce Only) [split-database solution](https://devdocs.magento.com/guides/v2.3/config-guide/multi-master/multi-master.html).
