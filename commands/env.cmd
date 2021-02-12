@@ -30,9 +30,9 @@ if [[ ${WARDEN_ENV_TYPE} != local ]]; then
 fi
 
 if [[ ${WARDEN_ENV_TYPE} == "magento1" && -f "${WARDEN_ENV_PATH}/.modman/.basedir" ]]; then
-  export WARDEN_MODMAN_ROOT='/'`cat "${WARDEN_ENV_PATH}/.modman/.basedir"`
+  export NGINX_PUB_DIR='/'$(cat "${WARDEN_ENV_PATH}/.modman/.basedir")
 else
-  export WARDEN_MODMAN_ROOT='/'
+  export NGINX_PUB_DIR='/'
 fi
 
 if [[ ${WARDEN_ENV_TYPE} == "magento2" ]]; then
