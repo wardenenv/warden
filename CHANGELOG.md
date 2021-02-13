@@ -7,6 +7,10 @@
 
 * Warden now requires `mutagen` 0.11.8 or later for environments leveraging sync sessions on Mac OS. Reference issue [#235](https://github.com/davidalger/warden/issues/235) for details. This is to resolve an incompatibility between earlier versions of Mutagen and Docker Desktop 2.3.0.5 and later.
 
+**Bug Fixes:**
+
+* The `.idea` directory is no longer ignored from Mutagen sync allowing `bin/magento dev:urn-catalog:generate` to be generate metadata the IDE uses (issue [#291](https://github.com/davidalger/warden/issues/291))
+
 **Enhancements:**
 
 * Added opt-in support for Xdebug 3 (see docs for details) ([#279](https://github.com/davidalger/warden/pull/279) by @Den4ik)
