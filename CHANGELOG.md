@@ -9,7 +9,7 @@
 * Warden now requires `mutagen` 0.11.8 or later for environments leveraging sync sessions on Mac OS. Reference issue [#235](https://github.com/davidalger/warden/issues/235) for details. This is to resolve an incompatibility between earlier versions of Mutagen and Docker Desktop 2.3.0.5 and later.
 * There is a new docs page on [DNS resolver configuration](https://docs.warden.dev/configuration/dns-resolver.html) thanks to @Skullsneeze
 * The docs page on Installing Warden includes a new section titled [Trusted CA Root Certificate](https://docs.warden.dev/installing.html#trusted-ca-root-certificate) with additional post-install information largely relevant to Linux users.
-* Images for Varnish 6.4 and 6.5 are now available in addition to 6.0 LTS to support users who desired to remain closer to the bleeding edge.
+* Images for Varnish 6.4 and 6.5 are now available in addition to 6.0 LTS and 4.1 to support users who desire to remain closer to the bleeding edge.
 * Redis 6 and Elasticsearch 7.11 images have recently been made available.
 
 **Bug Fixes:**
