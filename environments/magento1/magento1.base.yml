@@ -2,5 +2,5 @@ version: "3.5"
 services:
   nginx:
     environment:
-      - NGINX_PUBLIC=${NGINX_PUB_DIR}
+      - NGINX_PUBLIC=${NGINX_PUBLIC:-}
       - NGINX_TEMPLATE=magento1.conf
