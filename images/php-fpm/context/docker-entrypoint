@@ -33,6 +33,11 @@ then
   sudo n "${NODE_VERSION}"
 fi
 
+# Configure composer2 as default when specified
+if [[ "${COMPOSER_VERSION:-}" == "2" ]]; then
+  sudo cp /usr/bin/composer2 /usr/bin/composer
+fi
+
 # Resolve permission issues with directories auto-created by volume mounts; to use set CHOWN_DIR_LIST to
 # a list of directories (relative to working directory) to chown, walking up the paths to also chown each
 # specified parent directory. Example: "dir1/dir2 dir3" will chown dir1/dir2, then dir1 followed by dir3

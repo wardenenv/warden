@@ -5,16 +5,27 @@
 
 **Upgrade Notes:**
 
+* Various updates to PHP images have occurred since the last major release including a transition to using Remi vs IUS for RPMs. It's highly recommended you re-pull to get the latest images and update your projects: `warden env pull && warden env up`
 * Warden now requires `mutagen` 0.11.8 or later for environments leveraging sync sessions on Mac OS. Reference issue [#235](https://github.com/davidalger/warden/issues/235) for details. This is to resolve an incompatibility between earlier versions of Mutagen and Docker Desktop 2.3.0.5 and later.
+* There is a new docs page on [DNS resolver configuration](https://docs.warden.dev/configuration/dns-resolver.html) thanks to @Skullsneeze
+* The docs page on Installing Warden includes a new section titled [Trusted CA Root Certificate](https://docs.warden.dev/installing.html#trusted-ca-root-certificate) with additional post-install information largely relevant to Linux users.
+* Images for Varnish 6.4 and 6.5 are now available in addition to 6.0 LTS and 4.1 to support users who desire to remain closer to the bleeding edge.
+* Redis 6 and Elasticsearch 7.11 images have recently been made available.
+* When updating to Composer v2 using the new `COMPOSER_VERSION=2` setting, make sure you remove `hirak/prestissimo` from global (if present) `composer global remove hirak/prestissimo`
+
+**Bug Fixes:**
+
+* The `.idea` directory is no longer ignored from Mutagen sync allowing `bin/magento dev:urn-catalog:generate` to be generate metadata the IDE uses (issue [#291](https://github.com/davidalger/warden/issues/291))
 
 **Enhancements:**
 
-* Added opt-in support for Xdebug 3 (see docs for details) ([#279](https://github.com/davidalger/warden/pull/279) by @Den4ik)
+* Added opt-in support for Xdebug 3 (see docs for details; new environments will set `PHP_XDEBUG_3=1`) ([#279](https://github.com/davidalger/warden/pull/279) by @Den4ik)
 * Added ability to provide persistent additional configuration to `dnsmasq` service (issue [#214](https://github.com/davidalger/warden/issues/214))
 * Added ability to easily specify alternate nameservers for `dnsmasq` to use (issue [#214](https://github.com/davidalger/warden/issues/214))
 * Added ability to customize bundled environment compositions by overriding them in the Warden home dir ([#228](https://github.com/davidalger/warden/pull/228) by @k4emic)
 * Added ability to override sync configuration on a per-project basis or provide one on env types such as `local` where default one does not exist ([#246](https://github.com/davidalger/warden/pull/246) by @Den4ik)
 * Updated version of Portainer from 1.24.X to 2.0.X ([#245](https://github.com/davidalger/warden/pull/245) by @ragfire)
+* Added support for `COMPOSER_VERSION` in `.env` to configure `composer` to run the newer Composer v2. At this time the default remains Composer v1 for compatibility reasons (issue [#296](https://github.com/davidalger/warden/issues/296))
 
 ## Version [0.9.1](https://github.com/davidalger/warden/tree/0.9.1) (2020-08-25)
 [All Commits](https://github.com/davidalger/warden/compare/0.9.0..0.9.1)
