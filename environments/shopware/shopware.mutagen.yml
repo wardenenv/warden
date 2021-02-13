@@ -15,9 +15,6 @@ sync:
         - "*~"
         - "*.sw[a-p]"
 
-        # IDE files
-        - ".idea"
-
         # Application files
         - "/public/media"
         - "/var"
