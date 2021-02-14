@@ -26,6 +26,7 @@
 * Added ability to override sync configuration on a per-project basis or provide one on env types such as `local` where default one does not exist ([#246](https://github.com/davidalger/warden/pull/246) by @Den4ik)
 * Updated version of Portainer from 1.24.X to 2.0.X ([#245](https://github.com/davidalger/warden/pull/245) by @ragfire)
 * Added support for `COMPOSER_VERSION` in `.env` to configure `composer` to run the newer Composer v2. At this time the default remains Composer v1 for compatibility reasons (issue [#296](https://github.com/davidalger/warden/issues/296))
+* Added modman support for `magento1` environment type ([#290](https://github.com/davidalger/warden/pull/290) by @norgeindian)
 
 ## Version [0.9.1](https://github.com/davidalger/warden/tree/0.9.1) (2020-08-25)
 [All Commits](https://github.com/davidalger/warden/compare/0.9.0..0.9.1)
