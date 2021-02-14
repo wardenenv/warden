@@ -29,6 +29,10 @@ if [[ ${WARDEN_ENV_TYPE} != local ]]; then
     WARDEN_REDIS=${WARDEN_REDIS:-1}
 fi
 
+if [[ ${WARDEN_ENV_TYPE} == "magento1" && -f "${WARDEN_ENV_PATH}/.modman/.basedir" ]]; then
+  export NGINX_PUBLIC='/'$(cat "${WARDEN_ENV_PATH}/.modman/.basedir")
+fi
+
 if [[ ${WARDEN_ENV_TYPE} == "magento2" ]]; then
     WARDEN_VARNISH=${WARDEN_VARNISH:-1}
     WARDEN_ELASTICSEARCH=${WARDEN_ELASTICSEARCH:-1}
