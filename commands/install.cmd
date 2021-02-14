@@ -51,39 +51,9 @@ then
     -k /Library/Keychains/System.keychain "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem"
 fi
 
-## configure resolver for .test domains; allow linux machines to prevent warden
-## from touching dns configuration if need be since unlike macOS there is not
-## support for resolving only *.test domains via /etc/resolver/test settings
-if [[ "$OSTYPE" =~ ^linux ]] && [[ ! -f "${WARDEN_HOME_DIR}/nodnsconfig" ]]; then
-  if systemctl status NetworkManager | grep 'active (running)' >/dev/null \
-    && ! grep '^nameserver 127.0.0.1$' /etc/resolv.conf >/dev/null
-  then
-    echo "==> Configuring resolver for .test domains (requires sudo privileges)"
-    if ! sudo grep '^prepend domain-name-servers 127.0.0.1;$' /etc/dhcp/dhclient.conf >/dev/null 2>&1; then
-      echo "  + Configuring dhclient to prepend dns with 127.0.0.1 resolver (requires sudo privileges)"
-
-      ## Ensure /etc/dhcp exists before writing dhclient.conf (on ArchLinux this may not pre-exist)
-      if [[ ! -d /etc/dhcp ]]; then
-        sudo mkdir /etc/dhcp
-      fi
-
-      DHCLIENT_CONF=$'\n'"$(sudo cat /etc/dhcp/dhclient.conf 2>/dev/null)" || DHCLIENT_CONF=
-      DHCLIENT_CONF="prepend domain-name-servers 127.0.0.1;${DHCLIENT_CONF}"
-      echo "${DHCLIENT_CONF}" | sudo tee /etc/dhcp/dhclient.conf
-      sudo systemctl restart NetworkManager
-    fi
-
-    ## When systemd-resolvd is used (as it is on Ubuntu by default) check the resolv config mode
-    if systemctl status systemd-resolved | grep 'active (running)' >/dev/null \
-      && [[ -L /etc/resolv.conf ]] \
-      && [[ "$(readlink /etc/resolv.conf)" != "../run/systemd/resolve/resolv.conf" ]]
-    then
-      echo "  + Configuring systemd-resolved to use dhcp settings (requires sudo privileges)"
-      echo "    by pointing /etc/resolv.conf at resolv.conf vs stub-resolv.conf"
-      sudo ln -fsn ../run/systemd/resolve/resolv.conf /etc/resolv.conf
-    fi
-  fi
-elif [[ "$OSTYPE" == "darwin"* ]]; then
+## configure resolver for .test domains on Mac OS only as Linux lacks support
+## for BSD like per-TLD configuration as is done at /etc/resolver/test on Mac
+if [[ "$OSTYPE" == "darwin"* ]]; then
   if [[ ! -f /etc/resolver/test ]]; then
     echo "==> Configuring resolver for .test domains (requires sudo privileges)"
     if [[ ! -d /etc/resolver ]]; then
@@ -91,10 +61,8 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     fi
     echo "nameserver 127.0.0.1" | sudo tee /etc/resolver/test >/dev/null
   fi
-elif [[ -f "${WARDEN_HOME_DIR}/nodnsconfig" ]]; then
-  echo -e "\033[33m==> WARNING: The flag '${WARDEN_HOME_DIR}/nodnsconfig' is present; skipping DNS configuration\033[0m"
 else
-  echo -e "\033[33m==> WARNING: Use of dnsmasq is not supported on this system; entries in /etc/hosts will be required\033[0m"
+  warning "Manual configuration required for Automatic DNS resolution: https://docs.warden.dev/configuration/dns-resolver.html"
 fi
 
 ## generate rsa keypair for authenticating to warden sshd service

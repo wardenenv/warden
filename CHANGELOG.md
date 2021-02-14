@@ -12,10 +12,12 @@
 * Images for Varnish 6.4 and 6.5 are now available in addition to 6.0 LTS and 4.1 to support users who desire to remain closer to the bleeding edge.
 * Redis 6 and Elasticsearch 7.11 images have recently been made available.
 * When updating to Composer v2 using the new `COMPOSER_VERSION=2` setting, make sure you remove `hirak/prestissimo` from global (if present) `composer global remove hirak/prestissimo`
+* Warden will no longer attempt to auto-configure DNS resolution for `*.test` on non-Darwin systems due to a combination of security reasons, lack of per-TLD resolver configuration (as is used on Darwin/Mac OS) and the myriad permutations of resolver configuration across various Linux based distros. The dnsmasq container will still be started, but a warning will now be emitted on Linux directing users to the new docs page on [DNS resolver configuration](https://docs.warden.dev/configuration/dns-resolver.html).
 
 **Bug Fixes:**
 
 * The `.idea` directory is no longer ignored from Mutagen sync allowing `bin/magento dev:urn-catalog:generate` to be generate metadata the IDE uses (issue [#291](https://github.com/davidalger/warden/issues/291))
+* Installing on WSL will no longer report innocuous errors related to lack of systemd support on WSL as the install routine no longer makes calls to `systemctl` on Linux systems (issue [#220](https://github.com/davidalger/warden/issues/220))
 
 **Enhancements:**
 
