@@ -1,0 +1,194 @@
+// Settings
+// -------------------------------------------------------------------
+// Number of columns you want in your grid.
+$total-number-columns: 12;
+
+// Padding you want on both sides of a column. This number * 2 = your gutter.
+// Sink uses fixed–width gutters, so no %.
+$column-padding: $baseline*2;
+
+// Set the breakpoint at which columns will go to full width.
+$grid-breakpoint: $breakpoint--sm;
+
+
+// Base Classes
+// -------------------------------------------------------------------
+// Use this class on a div wrapping a row of columns
+// This is to offset the padding on the first/last column via negative margin
+.grid-row {
+    display: flex;
+    flex: 0 1 auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    // For gutters
+    margin: 0 (-$column-padding);
+
+    @media screen and (max-width: $grid-breakpoint) {
+        margin: 0 auto;
+    }
+}
+
+// // Apply this class to all grid units
+.grid-column {
+    flex: 1 0 0%;
+
+    // Gutters
+    padding: 0 $column-padding;
+
+    // Breakpoint
+    @media screen and (max-width: $grid-breakpoint) {
+        flex-grow: 1;
+        flex-basis: 100%;
+        max-width: 100%;
+        padding: 0;
+        margin-left: 0;
+    }
+}
+
+
+// Utilities
+// -------------------------------------------------------------------
+.grid-row--flex-cells > .grid-column { display: flex; }
+
+// Vertical alignment
+.grid-row--top                { align-items: flex-start; }
+.grid-row--center             { align-items: center; }
+.grid-row--bottom             { align-items: flex-end; }
+
+.column--top                  { align-self: flex-start; }
+.column--center               { align-self: center; }
+.column--bottom               { align-self: flex-end; }
+
+
+// Widths
+// -------------------------------------------------------------------
+// Set up width the placeholders
+%whole                        { flex-basis: percentage(1/1); max-width: percentage(1/1); }
+%half                         { flex-basis: percentage(1/2); max-width: percentage(1/2); }
+
+%one-third                    { flex-basis: percentage(1/3); max-width: percentage(1/3); }
+%two-thirds                   { flex-basis: percentage(2/3); max-width: percentage(2/3); }
+
+%one-fourth                   { flex-basis: percentage(1/4); max-width: percentage(1/4); }
+%two-fourths                  { flex-basis: percentage(2/4); max-width: percentage(2/4); }
+%three-fourths                { flex-basis: percentage(3/4); max-width: percentage(3/4); }
+
+%one-fifth                    { flex-basis: percentage(1/5); max-width: percentage(1/5); }
+%two-fifths                   { flex-basis: percentage(2/5); max-width: percentage(2/5); }
+%three-fifths                 { flex-basis: percentage(3/5); max-width: percentage(3/5); }
+%four-fifths                  { flex-basis: percentage(4/5); max-width: percentage(4/5); }
+
+// Configure classes based on chosen number of columns
+// This will pump out classes like `span-3` which will make the unit
+// span 3 columns.
+@for $n from 1 through $total-number-columns {
+    .span-#{$n} {
+        @if percentage($n/$total-number-columns) == percentage(1/1) {
+          @extend %whole;
+        } @else if percentage($n/$total-number-columns) == percentage(1/2) {
+          @extend %half;
+        } @else if percentage($n/$total-number-columns) == percentage(1/3) {
+          @extend %one-third;
+        } @else if percentage($n/$total-number-columns) == percentage(2/3) {
+          @extend %two-thirds;
+        } @else if percentage($n/$total-number-columns) == percentage(1/4) {
+          @extend %one-fourth;
+        } @else if percentage($n/$total-number-columns) == percentage(2/4) {
+          @extend %two-fourths;
+        } @else if percentage($n/$total-number-columns) == percentage(3/4) {
+          @extend %three-fourths;
+        } @else if percentage($n/$total-number-columns) == percentage(1/5) {
+          @extend %one-fifth;
+        } @else if percentage($n/$total-number-columns) == percentage(2/5) {
+          @extend %two-fifths;
+        } @else if percentage($n/$total-number-columns) == percentage(3/5) {
+          @extend %three-fifths;
+        } @else if percentage($n/$total-number-columns) == percentage(4/5) {
+          @extend %four-fifths;
+        } @else {
+          flex-basis: percentage($n/$total-number-columns);
+          max-width: percentage($n/$total-number-columns);
+        }
+    }
+}
+
+// Fractional width classes
+.span-whole                   { @extend %whole; }
+.span-half                    { @extend %half; }
+
+.span-one-third               { @extend %one-third; }
+.span-two-thirds              { @extend %two-thirds; }
+
+.span-one-fourth              { @extend %one-fourth; }
+.span-two-fourths             { @extend %two-fourths; }
+.span-three-fourths           { @extend %three-fourths; }
+
+.span-one-fifth               { @extend %one-fifth; }
+.span-two-fifths              { @extend %two-fifths; }
+.span-three-fifths            { @extend %three-fifths; }
+.span-four-fifths             { @extend %four-fifths; }
+
+
+// Offsets
+// -------------------------------------------------------------------
+// Set up offset placeholders
+%m-whole                      { margin-left: percentage(1/1); }
+%m-half                       { margin-left: percentage(1/2); }
+
+%m-one-third                  { margin-left: percentage(1/3); }
+%m-two-thirds                 { margin-left: percentage(2/3); }
+
+%m-one-fourth                 { margin-left: percentage(1/4); }
+%m-two-fourths                { margin-left: percentage(2/4); }
+%m-three-fourths              { margin-left: percentage(3/4); }
+
+%m-one-fifth                  { margin-left: percentage(1/5); }
+%m-two-fifths                 { margin-left: percentage(2/5); }
+%m-three-fifths               { margin-left: percentage(3/5); }
+%m-four-fifths                { margin-left: percentage(4/5); }
+
+// Offset spans
+@for $n from 1 through $total-number-columns {
+    .offset-#{$n} {
+        @if percentage($n/$total-number-columns) == percentage(1/1) {
+          @extend %m-whole;
+        } @else if percentage($n/$total-number-columns) == percentage(1/2) {
+          @extend %m-half;
+        } @else if percentage($n/$total-number-columns) == percentage(1/3) {
+          @extend %m-one-third;
+        } @else if percentage($n/$total-number-columns) == percentage(2/3) {
+          @extend %m-two-thirds;
+        } @else if percentage($n/$total-number-columns) == percentage(1/4) {
+          @extend %m-one-fourth;
+        } @else if percentage($n/$total-number-columns) == percentage(2/4) {
+          @extend %m-two-fourths;
+        } @else if percentage($n/$total-number-columns) == percentage(3/4) {
+          @extend %m-three-fourths;
+        } @else if percentage($n/$total-number-columns) == percentage(1/5) {
+          @extend %m-one-fifth;
+        } @else if percentage($n/$total-number-columns) == percentage(2/5) {
+          @extend %m-two-fifths;
+        } @else if percentage($n/$total-number-columns) == percentage(3/5) {
+          @extend %m-three-fifths;
+        } @else if percentage($n/$total-number-columns) == percentage(4/5) {
+          @extend %m-four-fifths;
+        } @else {
+          margin-left: percentage($n/$total-number-columns);
+        }
+    }
+}
+
+// Fractional offset classes
+.offset-half                  { @extend %m-half; }
+
+.offset-one-third             { @extend %m-one-third; }
+.offset-two-thirds            { @extend %m-two-thirds; }
+
+.offset-one-fourth            { @extend %m-one-fourth; }
+.offset-two-fourths           { @extend %m-two-fourths; }
+.offset-three-fourths         { @extend %m-three-fourths; }
+
+.offset-one-fifth             { @extend %m-one-fifth; }
+.offset-two-fifths            { @extend %m-two-fifths; }
+.offset-three-fifths          { @extend %m-three-fifths; }
+.offset-four-fifths           { @extend %m-four-fifths; }

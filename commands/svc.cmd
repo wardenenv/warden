@@ -34,7 +34,6 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
     ## copy configuration files into location where they'll be mounted into containers from
     mkdir -p "${WARDEN_HOME_DIR}/etc/traefik"
     cp "${WARDEN_DIR}/config/traefik/traefik.yml" "${WARDEN_HOME_DIR}/etc/traefik/traefik.yml"
-    cp "${WARDEN_DIR}/config/dnsmasq.conf" "${WARDEN_HOME_DIR}/etc/dnsmasq.conf"
 
     ## generate dynamic traefik ssl termination configuration
     cat > "${WARDEN_HOME_DIR}/etc/traefik/dynamic.yml" <<-EOT

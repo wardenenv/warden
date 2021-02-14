@@ -1,0 +1,53 @@
+// Base global styles
+// -------------------------------------------------------------------
+// 2. Set the default font stylings for the entire project.
+// 3. https://github.com/twbs/bootstrap/issues/3772#issuecomment-7566868
+// 4. paulirish.com/2012/box-sizing-border-box-ftw/
+// css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice
+html {
+    box-sizing: border-box; // [4]
+    font-family: $font-family--base; // [2]
+    font-size: $font-size--mobile; // [2]
+    font-style: normal; // [2]
+    font-weight: $font-weight--base; // [2]
+    min-height: 100%; // Ensure the page always fills at least the entire height of the viewport
+    -webkit-tap-highlight-color: rgba(0,0,0,0); // [3]
+
+    @media screen and (min-width: $breakpoint--sm) {
+        font-size: $font-size--desktop;
+    }
+}
+
+*, *:before, *:after { box-sizing: inherit; } // [4]
+
+// 1. Fix for webkit rendering. Fonts on OSX will look more consistent with
+//    other systems that do not render text using sub-pixel anti-aliasing.
+// 2. For now, this is `!important` because the `::selection` (below) affects
+//    the background color in IE.
+body {
+    background-color: #f2f2f2 !important; // [2]
+    color: $text-color;
+    line-height: $line-height--base;
+    margin: 0;
+    padding: 0;
+    -moz-osx-font-smoothing: grayscale; // [1]
+}
+
+// Remove text-shadow in selection highlight: h5bp.com/i
+// These selection rule sets have to be separate.
+::-moz-selection {
+    background-color: $primary-color;
+    color: #fff;
+    text-shadow: none;
+}
+::selection {
+    background-color: $primary-color;
+    color: #fff;
+    text-shadow: none;
+}
+img::selection {
+    background: transparent;
+}
+img::-moz-selection {
+    background: transparent;
+}

@@ -1,6 +1,6 @@
 ## Initializing An Environment
 
-The below example demonstrates the from-scratch setup of the Magento 2 application for local development. A similar process can easily be used to configure an environment of any other type. This assumes that Warden has been previously started via `warden up` as part of the installation procedure.
+The below example demonstrates the from-scratch setup of the Magento 2 application for local development. A similar process can easily be used to configure an environment of any other type. This assumes that Warden has been previously started via `warden svc up` as part of the installation procedure.
 
 ``` note::
     In addition to the below manual process, there is a `Github Template available for Magento 2 <https://github.com/davidalger/warden-env-magento2>`_ allowing for quick setup of new Magento projects. To use this, click the green "Use this template" button to create your own repository based on the template repository, run the init script and update the README with any project specific information.
@@ -35,7 +35,9 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
        ELASTICSEARCH_VERSION=7.6
        MARIADB_VERSION=10.3
        NODE_VERSION=10
+       COMPOSER_VERSION=1
        PHP_VERSION=7.3
+       PHP_XDEBUG_3=1
        RABBITMQ_VERSION=3.8
        REDIS_VERSION=5.0
        VARNISH_VERSION=6.0

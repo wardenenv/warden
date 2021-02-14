@@ -21,7 +21,7 @@ Magento 2 bundles an example grunt based server-side compilation workflow which 
            'default' => [
                'design' => [
                    'footer' => [
-                       'absolute_footer' => '<script src="/livereload.js?port=443"></script>'
+                       'absolute_footer' => '<script defer src="/livereload.js?port=443"></script>'
                    ]
                ]
            ]

@@ -35,6 +35,7 @@ function loadEnvConfig () {
     local WARDEN_ENV_PATH="${1}"
     eval "$(grep "^WARDEN_" "${WARDEN_ENV_PATH}/.env")"
     eval "$(grep "^TRAEFIK_" "${WARDEN_ENV_PATH}/.env")"
+    eval "$(grep "^PHP_" "${WARDEN_ENV_PATH}/.env")"
 
     WARDEN_ENV_NAME="${WARDEN_ENV_NAME:-}"
     WARDEN_ENV_TYPE="${WARDEN_ENV_TYPE:-}"
@@ -82,7 +83,11 @@ function appendEnvPartialIfExists () {
         "${WARDEN_DIR}/environments/includes/${PARTIAL_NAME}.base.yml" \
         "${WARDEN_DIR}/environments/includes/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml" \
         "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.base.yml" \
-        "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml"
+        "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml" \
+        "${WARDEN_HOME_DIR}/environments/includes/${PARTIAL_NAME}.base.yml" \
+        "${WARDEN_HOME_DIR}/environments/includes/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml" \
+        "${WARDEN_HOME_DIR}/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.base.yml" \
+        "${WARDEN_HOME_DIR}/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml"
     do
         if [[ -f "${PARTIAL_PATH}" ]]; then
             DOCKER_COMPOSE_ARGS+=("-f" "${PARTIAL_PATH}")

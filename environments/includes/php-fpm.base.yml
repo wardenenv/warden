@@ -22,18 +22,20 @@ services:
       - TRAEFIK_SUBDOMAIN
       - SSH_AUTH_SOCK=/tmp/ssh-auth.sock
       - NODE_VERSION=${NODE_VERSION:-10}
+      - COMPOSER_VERSION=${COMPOSER_VERSION:-1}
       - COMPOSER_MEMORY_LIMIT=-1
     volumes: *volumes
     extra_hosts: *extra_hosts
 
   php-debug:
     hostname: "${WARDEN_ENV_NAME}-php-debug"
-    image: docker.io/wardenenv/php-fpm:${PHP_VERSION:-7.4}${WARDEN_SVC_PHP_VARIANT:-}-debug
+    image: docker.io/wardenenv/php-fpm:${PHP_VERSION:-7.4}${WARDEN_SVC_PHP_VARIANT:-}-${XDEBUG_VERSION:-debug}
     environment:
       - TRAEFIK_DOMAIN
       - TRAEFIK_SUBDOMAIN
       - SSH_AUTH_SOCK=/tmp/ssh-auth.sock
       - NODE_VERSION=${NODE_VERSION:-10}
+      - COMPOSER_VERSION=${COMPOSER_VERSION:-1}
       - COMPOSER_MEMORY_LIMIT=-1
       - PHP_IDE_CONFIG=serverName=${WARDEN_ENV_NAME}-docker
     volumes: *volumes

@@ -15,7 +15,7 @@ WARDEN_USAGE=$(cat <<EOF
                   and optionally (with -l) the full configuration
 
   monitor         Continously lists mutagen session status for current project
-  flush           Force a synchronization cycle on sycn session for current project
+  flush           Force a synchronization cycle on sync session for current project
   pause           Pauses the mutagen sync for the current project environment
   resume          Resumes the mutagen sync for the current project environment
   reset           Reset synchronization session history for current project environment

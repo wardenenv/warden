@@ -1,8 +1,8 @@
 ## Xdebug Support
 
-There are two docker containers running FPM, `php-fpm` and `php-debug`. The `php-debug` container has the Xdebug extension pre-installed. Nginx will automatically route requests to the `php-debug` container when the `XDEBUG_SESSION` cookie has been set to `PHPSTORM` via the Xdebug Helper browser extension.
+There are two docker containers running FPM, `php-fpm`, `php-debug`. The `php-debug` container has the **Xdebug** extension pre-installed. Nginx will automatically route requests to the `php-debug` container when the `XDEBUG_SESSION` cookie has been set to `PHPSTORM` via the Xdebug Helper browser extension.
 
-Xdebug will automatically connect back to the host machine on port 9000 for each request routed to the `php-debug` container (i.e. when the `XDEBUG_SESSION` cookie is set). When configuring Xdebug Helper in your browser, make sure it is setting this cookie with the value `PHPSTORM`.
+Xdebug will automatically connect back to the host machine on port `9000` for `xdebug2` and `9003` for `xdebug3` for each request routed to the `php-debug` container (i.e. when the `XDEBUG_SESSION` cookie is set). When configuring Xdebug Helper in your browser, make sure it is setting this cookie with the value `PHPSTORM`.
 
 In similar fashion to the `warden shell` command there is also a debug command to launch into an xdebug enabled container shell for debugging CLI workflows:
 
@@ -22,7 +22,7 @@ To configure a project in VSCode for debugging, add the following to `.vscode/la
       "name": "Listen for XDebug",
       "type": "php",
       "request": "launch",
-      "port": 9000,
+      "port": 9003,
       "pathMappings": {
         "/var/www/html": "${workspaceRoot}"
       }

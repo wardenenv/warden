@@ -1,0 +1,8 @@
+// Order
+// -------------------------------------------------------------------
+// This decides what order elements will be on mobile
+@media screen and (max-width: $breakpoint--sm) {
+    .order-1 { order: 1; }
+    .order-2 { order: 2; }
+    .order-3 { order: 3; }
+}
