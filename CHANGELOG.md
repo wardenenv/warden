@@ -3,6 +3,10 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.10.0..develop)
 
+**Enhancements:**
+
+* Bash history will now be persisted via an additional `bashhistory:/var/bash_history` volume on php-fpm containers ([#304](https://github.com/davidalger/warden/pull/304) by @Den4ik)
+
 ## Version [0.10.0](https://github.com/davidalger/warden/tree/0.10.0) (2021-02-13)
 [All Commits](https://github.com/davidalger/warden/compare/0.9.1..0.10.0)
 
