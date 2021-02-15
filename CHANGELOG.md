@@ -33,7 +33,7 @@
 * Added ability to easily specify alternate nameservers for `dnsmasq` to use (issue [#214](https://github.com/davidalger/warden/issues/214))
 * Added ability to customize bundled environment compositions by overriding them in the Warden home dir ([#228](https://github.com/davidalger/warden/pull/228) by @k4emic)
 * Added ability to override sync configuration on a per-project basis or provide one on env types such as `local` where default one does not exist ([#246](https://github.com/davidalger/warden/pull/246) by @Den4ik)
-* Updated version of Portainer from 1.24.X to 2.0.X ([#245](https://github.com/davidalger/warden/pull/245) by @ragfire)
+* Updated version of Portainer from 1.24.X to 2.0.X ([#245](https://github.com/davidalger/warden/pull/245) by @MarcoFaul)
 * Added support for `COMPOSER_VERSION` in `.env` to configure `composer` to run the newer Composer v2. At this time the default remains Composer v1 for compatibility reasons (issue [#296](https://github.com/davidalger/warden/issues/296))
 * Added modman support for `magento1` environment type ([#290](https://github.com/davidalger/warden/pull/290) by @norgeindian)
 
