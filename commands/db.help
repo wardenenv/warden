@@ -9,7 +9,8 @@ WARDEN_USAGE=$(cat <<EOF
   -h, --help        Display this help menu
 
 \033[33mCommands:\033[0m
-  connect           Launches an interactive mysql session within the current project environment
-  import            Reads data from stdin and loads it into the current project\047s mysql database
+  connect                  Launches an interactive mysql session within the current project environment
+  import                   Reads data from stdin and loads it into the current project\047s mysql database
+  dump <dump_file.sql.gz>  Create database dump and put it into specified file
 EOF
 )
