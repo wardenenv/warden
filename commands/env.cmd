@@ -51,6 +51,8 @@ appendEnvPartialIfExists "networks"
 
 if [[ ${WARDEN_ENV_TYPE} != local ]]; then
     appendEnvPartialIfExists "php-fpm"
+    # define bash history folder for changing permissions
+    export CHOWN_DIR_LIST=/var/bash_history
 fi
 
 [[ ${WARDEN_NGINX} -eq 1 ]] \
