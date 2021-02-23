@@ -2,9 +2,6 @@ ARG PHP_VERSION
 FROM docker.io/wardenenv/php-fpm:${PHP_VERSION}
 USER root
 
-# Resolve permission issues stemming from directories auto-created by docker due to mounts in sub-directories
-ENV CHOWN_DIR_LIST "pub/media"
-
 RUN npm install -g grunt-cli gulp yarn
 
 RUN set -eux \
