@@ -5,7 +5,7 @@ x-volumes: &volumes
   - appdata:/var/www/html
 
 x-environment: &environment
-  - CHOWN_DIR_LIST=pub/media
+  - CHOWN_DIR_LIST=pub/media ${CHOWN_DIR_LIST:-}
 
 services:
   nginx: { volumes: *volumes }
