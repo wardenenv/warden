@@ -3,9 +3,17 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.10.0..develop)
 
+**Bug Fixes:**
+
+* Fixed a bug where SSH Agent forwarding would break following container restart ([#307](https://github.com/davidalger/warden/pull/307) by @ihor-sviziev)
+* Fixed a issue where Xdebug 3 images would generate excessive profile data when running CLI commands in debug container ([#309](https://github.com/davidalger/warden/pull/309) by @Den4ik)
+
+Please note that you must pull the latest `php-fpm` images via `warden env pull` to get these bug fixes relating to configuration in the pre-built images.
+
 **Enhancements:**
 
-* Bash history will now be persisted via an additional `bashhistory:/var/bash_history` volume on php-fpm containers ([#304](https://github.com/davidalger/warden/pull/304) by @Den4ik)
+* There is now a `warden db dump` command available to run `mysqldump` on the `db` container ([#310](https://github.com/davidalger/warden/pull/310) by @Den4ik)
+* Bash history will now be persisted via an additional `bashhistory:/bash_history` volume on php-fpm containers ([#304](https://github.com/davidalger/warden/pull/304) by @Den4ik)
 
 ## Version [0.10.0](https://github.com/davidalger/warden/tree/0.10.0) (2021-02-13)
 [All Commits](https://github.com/davidalger/warden/compare/0.9.1..0.10.0)
