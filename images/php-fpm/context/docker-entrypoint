@@ -18,7 +18,7 @@ sudo update-ca-trust
 if [[ -S /run/host-services/ssh-auth.sock ]] \
   && [[ "${SSH_AUTH_SOCK}" != "/run/host-services/ssh-auth.sock" ]]
 then
-  sudo rm -f ${SSH_AUTH_SOCK}
+  sudo rm -f "${SSH_AUTH_SOCK}"
   sudo bash -c "nohup socat UNIX-CLIENT:/run/host-services/ssh-auth.sock \
     UNIX-LISTEN:${SSH_AUTH_SOCK},fork,user=www-data,group=www-data 1>/var/log/socat-ssh-auth.log 2>&1 &"
 fi
