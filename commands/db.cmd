@@ -39,6 +39,10 @@ case "${WARDEN_PARAMS[0]}" in
             | "${WARDEN_DIR}/bin/warden" env exec -T db \
             mysql -u"${MYSQL_USER}" -p"${MYSQL_PASSWORD}" --database="${MYSQL_DATABASE}" "${WARDEN_PARAMS[@]:1}" "$@"
         ;;
+    dump)
+            "${WARDEN_DIR}/bin/warden" env exec -T db \
+            mysqldump -u"${MYSQL_USER}" -p"${MYSQL_PASSWORD}" "${MYSQL_DATABASE}" "${WARDEN_PARAMS[@]:1}" "$@"
+        ;;
     *)
         fatal "The command \"${WARDEN_PARAMS[0]}\" does not exist. Please use --help for usage."
         ;;

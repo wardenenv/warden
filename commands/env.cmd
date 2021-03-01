@@ -27,7 +27,11 @@ if [[ ${WARDEN_ENV_TYPE} != local ]]; then
     WARDEN_NGINX=${WARDEN_NGINX:-1}
     WARDEN_DB=${WARDEN_DB:-1}
     WARDEN_REDIS=${WARDEN_REDIS:-1}
+
+    # define bash history folder for changing permissions
+    WARDEN_CHOWN_DIR_LIST="/bash_history ${WARDEN_CHOWN_DIR_LIST:-}"
 fi
+export CHOWN_DIR_LIST=${WARDEN_CHOWN_DIR_LIST:-}
 
 if [[ ${WARDEN_ENV_TYPE} == "magento1" && -f "${WARDEN_ENV_PATH}/.modman/.basedir" ]]; then
   export NGINX_PUBLIC='/'$(cat "${WARDEN_ENV_PATH}/.modman/.basedir")

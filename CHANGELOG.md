@@ -1,7 +1,26 @@
 # Change Log
 
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
-[All Commits](https://github.com/davidalger/warden/compare/0.10.0..develop)
+[All Commits](https://github.com/davidalger/warden/compare/0.10.1..develop)
+
+**Big Fixes:**
+
+**Enhancements:**
+
+## Version [0.10.1](https://github.com/davidalger/warden/tree/0.10.1) (2021-03-01)
+[All Commits](https://github.com/davidalger/warden/compare/0.10.0..0.10.1)
+
+**Bug Fixes:**
+
+* Fixed a bug where SSH Agent forwarding would break following container restart ([#307](https://github.com/davidalger/warden/pull/307) by @ihor-sviziev)
+* Fixed a issue where Xdebug 3 images would generate excessive profile data when running CLI commands in debug container ([#309](https://github.com/davidalger/warden/pull/309) by @Den4ik)
+
+Please note that you must pull the latest `php-fpm` images via `warden env pull` to get these bug fixes relating to configuration in the pre-built images.
+
+**Enhancements:**
+
+* There is now a `warden db dump` command available to run `mysqldump` on the `db` container ([#310](https://github.com/davidalger/warden/pull/310) by @Den4ik)
+* Bash history will now be persisted via an additional `bashhistory:/bash_history` volume on php-fpm containers ([#304](https://github.com/davidalger/warden/pull/304) by @Den4ik)
 
 ## Version [0.10.0](https://github.com/davidalger/warden/tree/0.10.0) (2021-02-13)
 [All Commits](https://github.com/davidalger/warden/compare/0.9.1..0.10.0)
@@ -29,7 +48,7 @@
 * Added ability to easily specify alternate nameservers for `dnsmasq` to use (issue [#214](https://github.com/davidalger/warden/issues/214))
 * Added ability to customize bundled environment compositions by overriding them in the Warden home dir ([#228](https://github.com/davidalger/warden/pull/228) by @k4emic)
 * Added ability to override sync configuration on a per-project basis or provide one on env types such as `local` where default one does not exist ([#246](https://github.com/davidalger/warden/pull/246) by @Den4ik)
-* Updated version of Portainer from 1.24.X to 2.0.X ([#245](https://github.com/davidalger/warden/pull/245) by @ragfire)
+* Updated version of Portainer from 1.24.X to 2.0.X ([#245](https://github.com/davidalger/warden/pull/245) by @MarcoFaul)
 * Added support for `COMPOSER_VERSION` in `.env` to configure `composer` to run the newer Composer v2. At this time the default remains Composer v1 for compatibility reasons (issue [#296](https://github.com/davidalger/warden/issues/296))
 * Added modman support for `magento1` environment type ([#290](https://github.com/davidalger/warden/pull/290) by @norgeindian)
 
