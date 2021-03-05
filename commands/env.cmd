@@ -29,7 +29,7 @@ if [[ ${WARDEN_ENV_TYPE} != local ]]; then
     WARDEN_REDIS=${WARDEN_REDIS:-1}
 
     # define bash history folder for changing permissions
-    WARDEN_CHOWN_DIR_LIST="/bash_history ${WARDEN_CHOWN_DIR_LIST:-}"
+    WARDEN_CHOWN_DIR_LIST="/bash_history /home/www-data/.ssh ${WARDEN_CHOWN_DIR_LIST:-}"
 fi
 export CHOWN_DIR_LIST=${WARDEN_CHOWN_DIR_LIST:-}
 
