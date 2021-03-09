@@ -94,6 +94,12 @@ for file in $(find ${SEARCH_PATH} -type f -name Dockerfile | sort -V); do
     fi
 
     printf "\e[01;31m==> building ${IMAGE_TAG} from ${BUILD_DIR}/Dockerfile with context ${BUILD_CONTEXT}\033[0m\n"
-    docker build -t "${IMAGE_TAG}" -f ${BUILD_DIR}/Dockerfile ${BUILD_ARGS[@]} ${BUILD_CONTEXT}
-    [[ $PUSH_FLAG ]] && docker push "${IMAGE_TAG}" || true
+
+    PUSH_ARG=
+    if [[ ${PUSH_FLAG} ]]; then
+      PUSH_ARG="--push"
+    fi
+
+    BUILD_PLATFORM="${BUILD_PLATFORM:-linux/amd64,linux/arm64}"
+    docker buildx build --platform "${BUILD_PLATFORM}" -t "${IMAGE_TAG}" -f ${BUILD_DIR}/Dockerfile ${BUILD_ARGS[@]} ${PUSH_ARG} ${BUILD_CONTEXT}
 done
