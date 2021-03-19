@@ -21,19 +21,22 @@ If you desire to have more than this route through the `dnsmasq` container, you 
 1.0.0.1
 ```
 
-#### Ubuntu
+#### Ubuntu systemd-resolved
 
-Open up your connection (WiFi/LAN) settings, and go to the IPv4 tab. Turn off the automatic DNS setting, and enter the following IP addresses
+`systemd-resolved` can we configured to forward the requests of `.test` TLD to another DNS server. The configuration file is typically located at `/etc/systemd/resolved.conf`. Change the file to contain the following lines.
 
 ```text
-127.0.0.1, 1.1.1.1 1.0.0.1
+DNS=127.0.0.1
+Domains=~test
 ```
 
-### Persistent global configuration
+Restart the `systemd-resolved`
 
-To avoid having to set the DNS servers for each network you connect you, you can also choose update the global DNS configuration.
+```bash
+sudo service systemd-resolved restart
+```
 
-#### Ubuntu
+#### Ubuntu resolvconf
 
 Use the `resolvconf` service to add a permanent entry in your `/etc/resolv.conf` file.
 
