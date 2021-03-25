@@ -4,5 +4,11 @@ x-volumes: &volumes
   - ${SSH_AUTH_SOCK:-/dev/null}:/run/host-services/ssh-auth.sock
 
 services:
-  php-fpm: { volumes: *volumes }
-  php-debug: { volumes: *volumes }
+  php-fpm:
+    environment:
+      - SSH_AUTH_SOCK=/run/host-services/ssh-auth.sock
+    volumes: *volumes
+  php-debug: 
+    environment:
+      - SSH_AUTH_SOCK=/run/host-services/ssh-auth.sock
+    volumes: *volumes
