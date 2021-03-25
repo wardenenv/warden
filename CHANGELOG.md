@@ -7,6 +7,8 @@
 
 **Enhancements:**
 
+* Magento 1 and Magento 2 environments now set developer environment variables by default ([#332](https://github.com/davidalger/warden/pull/332) by @norgeindian)
+
 ## Version [0.10.1](https://github.com/davidalger/warden/tree/0.10.1) (2021-03-01)
 [All Commits](https://github.com/davidalger/warden/compare/0.10.0..0.10.1)
 
