@@ -1,7 +1,5 @@
 version: "3.5"
 services:
   php-blackfire:
-    environment:
-      - SSH_AUTH_SOCK=/run/host-services/ssh-auth.sock
     volumes:
       - ${SSH_AUTH_SOCK:-/dev/null}:/run/host-services/ssh-auth.sock
