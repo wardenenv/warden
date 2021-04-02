@@ -48,6 +48,11 @@ if [[ ${XDEBUG_CONNECT_BACK_HOST} == '' ]] && grep -sqi microsoft /proc/sys/kern
     export XDEBUG_CONNECT_BACK_HOST=host.docker.internal
 fi
 
+## For linux, if UID is 1000, there is no need to use the socat proxy.
+if [[ ${WARDEN_ENV_SUBT} == "linux" && $UID == 1000 ]]; then
+    export SSH_AUTH_SOCK_PATH_ENV=/run/host-services/ssh-auth.sock
+fi
+
 ## configure docker-compose files
 DOCKER_COMPOSE_ARGS=()
 
