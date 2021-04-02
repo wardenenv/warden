@@ -5,6 +5,8 @@
 
 **Big Fixes:**
 
+* Fixed bug where Live Reload might not work when Varnish was disabled due to routing priorities ([#337](https://github.com/davidalger/warden/pull/337) by @alinalexandru)
+
 **Enhancements:**
 
 * Magento 1 and Magento 2 environments now set developer environment variables by default ([#332](https://github.com/davidalger/warden/pull/332) by @norgeindian)
