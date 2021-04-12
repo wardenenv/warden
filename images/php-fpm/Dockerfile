@@ -10,8 +10,7 @@ ENV MAILHOG_HOST    mailhog
 ENV MAILHOG_PORT    1025
 
 RUN dnf install -y which pv sudo bind-utils python3-pip bash-completion rsync socat oathtool \
-        wget ack make gcc gcc-c++ automake autoconf crontabs \
-    && dnf install -y mariadb \
+        wget ack make gcc gcc-c++ automake autoconf crontabs mariadb \
     && dnf clean all \
     && rm -rf /var/cache/dnf
 
