@@ -15,6 +15,11 @@ RUN dnf install -y which pv sudo bind-utils python3-pip bash-completion rsync so
     && dnf clean all \
     && rm -rf /var/cache/dnf
 
+RUN dnf install -y python2 \
+    && ln -s /bin/python2 /bin/python \
+    && dnf clean all \
+    && rm -rf /var/cache/dnf
+
 ENV NODE_VERSION    10
 RUN npm install -g n \
     && n install ${NODE_VERSION} \
