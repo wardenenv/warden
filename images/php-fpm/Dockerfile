@@ -11,7 +11,7 @@ ENV MAILHOG_PORT    1025
 
 RUN yum install -y which pv sudo bind-utils python3-pip bash-completion rsync socat oathtool \
         wget ack make gcc gcc-c++ automake autoconf crontabs \
-    && yum install -y --enablerepo=ius mariadb102 \
+    && yum install -y mariadb \
     && yum clean all \
     && rm -rf /var/cache/yum
 
