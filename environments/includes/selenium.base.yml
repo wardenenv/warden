@@ -1,27 +1,8 @@
 version: "3.5"
 services:
-  selenium-hub:
-    container_name: ${WARDEN_ENV_NAME}_selenium-hub
-    hostname: selenium-hub
-    image: selenium/hub:latest
-    healthcheck:
-      test: /opt/bin/check-grid.sh --host 0.0.0.0 --port 4444
-      interval: 20s
-      retries: 3
-    environment:
-      GRID_TIMEOUT: 0
-      GRID_BROWSER_TIMEOUT: 0
-
   selenium-chrome:
     hostname: ${WARDEN_ENV_NAME}_selenium-chrome
-    image: selenium/node-chrome${WARDEN_SELENIUM_DEBUG:-}:3.8.1
+    image: selenium/standalone-chrome${WARDEN_SELENIUM_DEBUG:-}:latest
     extra_hosts:
       - ${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
       - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
-    depends_on:
-      - selenium-hub
-    environment:
-      - HUB_HOST=selenium-hub
-      - HUB_PORT=4444
-      - START_XVFB=false
-
