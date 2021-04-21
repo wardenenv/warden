@@ -49,7 +49,7 @@ WARDEN_SOURCE_REPOSITORY="${WARDEN_SOURCE_REPOSITORY:-"wardenenv"}"
 ## iterate over and build each Dockerfile
 for file in $(find ${SEARCH_PATH} -type f -name Dockerfile | sort -V); do
     BUILD_DIR="$(dirname "${file}")"
-    IMAGE_TAG=WARDEN_SOURCE_REPOSITORY
+    IMAGE_TAG=${WARDEN_SOURCE_REPOSITORY}
     IMAGE_TAG+="/$(echo "${BUILD_DIR}" | cut -d/ -f1)"
     IMAGE_SUFFIX="$(echo "${BUILD_DIR}" | cut -d/ -f2- -s | tr / - | sed 's/^-//')"
 
@@ -68,7 +68,12 @@ for file in $(find ${SEARCH_PATH} -type f -name Dockerfile | sort -V); do
 
         ## define default sources for main php and environment images
         export PHP_SOURCE_IMAGE="${PHP_SOURCE_IMAGE:-"davidalger/php"}"
+        BUILD_ARGS+=("--build-arg")
+        BUILD_ARGS+=("PHP_SOURCE_IMAGE")
+
         export ENV_SOURCE_IMAGE="${ENV_SOURCE_IMAGE:-"wardenenv/php-fpm"}"
+        BUILD_ARGS+=("--build-arg")
+        BUILD_ARGS+=("ENV_SOURCE_IMAGE")
 
         export PHP_VERSION
 
