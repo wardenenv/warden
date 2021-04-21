@@ -23,7 +23,7 @@ Warden may be installed via [Homebrew](https://brew.sh/) on both macOS and Linux
 
 Warden may be installed via the [Copr repository](https://copr.fedorainfracloud.org/coprs/tdgroot/warden/):
 
-    sudo dnf copr enable
+    sudo dnf copr enable tdgroot/warden
     sudo dnf install warden
     warden svc up
 
