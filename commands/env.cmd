@@ -12,6 +12,12 @@ fi
 ## allow return codes from sub-process to bubble up normally
 trap '' ERR
 
+## define source repository
+if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
+    eval "$(grep "^WARDEN_SOURCE_REPOSITORY" "${WARDEN_HOME_DIR}/.env")"
+fi
+export WARDEN_SOURCE_REPOSITORY="${WARDEN_SOURCE_REPOSITORY:-"wardenenv"}"
+
 ## configure environment type defaults
 if [[ ${WARDEN_ENV_TYPE} =~ ^magento ]]; then
     export WARDEN_SVC_PHP_VARIANT=-${WARDEN_ENV_TYPE}

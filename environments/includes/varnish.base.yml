@@ -7,7 +7,7 @@ services:
 
   varnish:
     hostname: "${WARDEN_ENV_NAME}-varnish"
-    image: docker.io/wardenenv/varnish:${VARNISH_VERSION:-6.0}
+    image: ${WARDEN_SOURCE_REPOSITORY:-wardenenv}/varnish:${VARNISH_VERSION:-6.0}
     depends_on:
       - nginx
     labels:
