@@ -1,5 +1,6 @@
+ARG ENV_SOURCE_IMAGE="wardenenv/php-fpm"
 ARG PHP_VERSION
-FROM docker.io/wardenenv/php-fpm:${PHP_VERSION}
+FROM ${ENV_SOURCE_IMAGE}:${PHP_VERSION}
 USER root
 
 RUN npm install -g grunt-cli gulp yarn

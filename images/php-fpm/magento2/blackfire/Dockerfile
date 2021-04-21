@@ -1,5 +1,6 @@
+ARG ENV_SOURCE_IMAGE="wardenenv/php-fpm"
 ARG PHP_VERSION
-FROM docker.io/wardenenv/php-fpm:${PHP_VERSION}-magento2
+FROM ${ENV_SOURCE_IMAGE}:${PHP_VERSION}-magento2
 USER root
 
 RUN curl -o - "http://packages.blackfire.io/fedora/blackfire.repo" \

@@ -1,6 +1,7 @@
-ARG PHP_VERSION=
+ARG PHP_SOURCE_IMAGE="davidalger/php"
+ARG PHP_VERSION
 ARG PHP_VARIANT="fpm-loaders"
-FROM davidalger/php:${PHP_VERSION}-${PHP_VARIANT}
+FROM ${PHP_SOURCE_IMAGE}:${PHP_VERSION}-${PHP_VARIANT}
 
 # Clear undesired settings from base fpm images
 ENV COMPOSER_ALLOW_SUPERUSER=
