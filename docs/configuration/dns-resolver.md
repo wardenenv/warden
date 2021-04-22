@@ -21,20 +21,16 @@ If you desire to have more than this route through the `dnsmasq` container, you 
 1.0.0.1
 ```
 
-#### Ubuntu systemd-resolved
+#### systemd-resolved
 
-`systemd-resolved` can we configured to forward the requests of `.test` TLD to another DNS server. The configuration file is typically located at `/etc/systemd/resolved.conf`. Change the file to contain the following lines.
+This approach works on most modern (systemd based) operating systems.
 
-```text
-DNS=127.0.0.1
-Domains=~test
-```
+`systemd-resolved` can be configured to forward the requests of `.test` TLD to another DNS server. The configuration file is typically located at `/etc/systemd/resolved.conf` and `/etc/systemd/resolved.conf.d/*.conf`. Run the following commands to configure systemd-resolved:
 
-Restart the `systemd-resolved`
-
-```bash
-sudo service systemd-resolved restart
-```
+    sudo mkdir -p /etc/systemd/resolved.conf.d
+    echo -e "[Resolve]\nDNS=127.0.0.1\nDomains=~test\n" \
+      | sudo tee /etc/systemd/resolved.conf.d/warden.conf > /dev/null
+    sudo systemctl restart systemd-resolved
 
 #### Ubuntu resolvconf
 

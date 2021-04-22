@@ -1,15 +1,15 @@
-FROM centos:7
+FROM centos:8
 
-RUN yum upgrade -y \
-    && yum clean all \
-    && rm -rf /var/cache/yum
+RUN dnf upgrade -y \
+    && dnf clean all \
+    && rm -rf /var/cache/dnf
 
 ARG RPM_SCRIPT=https://packagecloud.io/install/repositories/varnishcache/varnish64/script.rpm.sh
 RUN curl -s "${RPM_SCRIPT}" | bash \
-    && yum install -y epel-release \
-    && yum install -y varnish gettext \
-    && yum clean all \
-    && rm -rf /var/cache/yum
+    && dnf install -y epel-release \
+    && dnf install -y varnish gettext \
+    && dnf clean all \
+    && rm -rf /var/cache/dnf
 
 ENV VCL_CONFIG      /etc/varnish/default.vcl
 ENV CACHE_SIZE      256m

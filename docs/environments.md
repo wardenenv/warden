@@ -6,6 +6,7 @@
     :glob:
 
     environments/types
-    environments/initializing
+    environments/magento2
+    environments/shopware
     environments/*
 ```
