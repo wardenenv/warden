@@ -3,6 +3,10 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.10.2..develop)
 
+**Enhancements:**
+
+* Shopware and Symfony environments will now use Composer v2 by default (issue [#359](https://github.com/davidalger/warden/issues/359))
+
 ## Version [0.10.2](https://github.com/davidalger/warden/tree/0.10.2) (2021-04-03)
 [All Commits](https://github.com/davidalger/warden/compare/0.10.1..0.10.2)
 
