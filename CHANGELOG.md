@@ -10,6 +10,8 @@
 
 PHP and Varnish images have been rebuilt on a CentOS 8 base image (previously used a CentOS 7 base image). This eliminates the need for IUS for installing Git and MariaDB clients as these can now be installed from the default EL RPMs. This also allows for constants supported by more recent versions of Curl to be used in PHP code, latest calendar / locale features available in newer versions of ICU libraries to be used, etc.
 
+Please note that builds for PHP versions 5.5, 5.6, 7.0 and 7.1 have been dropped. Images will remain on Docker Hub so they'll continue to be available for existing projects actively using them, they simply will see no further enhancements or maintenance.
+
 To ensure you have the latest re-builds of Warden images and update your projects: `warden env pull && warden env up`
 
 For full details on what went into these rebuilds, please see [#345](https://github.com/davidalger/warden/pull/345).
