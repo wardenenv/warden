@@ -21,7 +21,9 @@ If you desire to have more than this route through the `dnsmasq` container, you 
 1.0.0.1
 ```
 
-#### Ubuntu systemd-resolved
+#### systemd-resolved
+
+This approach works on most modern (systemd based) operating systems.
 
 `systemd-resolved` can we configured to forward the requests of `.test` TLD to another DNS server. The configuration file is typically located at `/etc/systemd/resolved.conf`. Change the file to contain the following lines.
 
@@ -33,7 +35,7 @@ Domains=~test
 Restart the `systemd-resolved`
 
 ```bash
-sudo service systemd-resolved restart
+sudo systemctl restart systemd-resolved
 ```
 
 #### Ubuntu resolvconf
