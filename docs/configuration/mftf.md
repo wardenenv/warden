@@ -21,7 +21,7 @@ We provide complex instruction on [How to run MFTF Tests](magento2-testing.html#
 
 ### Debugging MFTF Tests
 
-By default Warden uses headless Chrome browser. If you want to preview the tests - you need to extend `.env` file and update environment containers (`warden env up -d`)
+By default Warden uses headless Chrome browser. If you want to preview the tests - you need to extend `.env` file and update environment containers (`warden env up`)
 
 ```
 WARDEN_SELENIUM_DEBUG=1
