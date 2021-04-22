@@ -30,7 +30,7 @@ This approach works on most modern (systemd based) operating systems.
     sudo mkdir -p /etc/systemd/resolved.conf.d
     echo -e "[Resolve]\nDNS=127.0.0.1\nDomains=~test\n" \
       | sudo tee /etc/systemd/resolved.conf.d/warden.conf > /dev/null
-    sudo systemctl restart systemctl-resolved
+    sudo systemctl restart systemd-resolved
 
 #### Ubuntu resolvconf
 
