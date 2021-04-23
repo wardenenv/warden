@@ -31,7 +31,7 @@ NODE_INSTALLED="$(node -v | perl -pe 's/^v([0-9]+)\..*$/$1/')";
 if [ "${NODE_INSTALLED}" != "${NODE_VERSION}" ] \
   || [ "${NODE_VERSION}" = "latest" ] || [ "${NODE_VERSION}" = "lts" ]
 then
-  sudo n "${NODE_VERSION}"
+  sudo /usr/local/bin/n "${NODE_VERSION}"
 fi
 
 # Configure composer2 as default when specified
