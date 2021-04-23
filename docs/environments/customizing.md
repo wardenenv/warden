@@ -58,6 +58,17 @@ post_max_size = 25M
 session.auto_start = Off
 upload_max_filesize = 25M
 ```
+### Nginx Specific Customizations
+To override the default nginx configuration of your project, add a new file 
+`.warden/warden-env.yml` to your project root with the following content:
+```
+version: "3.5"
+services:
+  nginx:
+    volumes:
+      - ./.warden/nginx/custom.conf:/etc/nginx/default.d/custom.conf
+```
+There you can specify your nginx customizations, which will be merged with the default ones.
 
 ### Magento 1 Specific Customizations
 
