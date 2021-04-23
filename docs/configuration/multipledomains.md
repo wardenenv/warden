@@ -64,6 +64,92 @@ Multiple top-level domains may also be setup by following the instructions below
          - sub1.alternate2.test:${TRAEFIK_ADDRESS:-0.0.0.0}
          - sub2.alternate2.test:${TRAEFIK_ADDRESS:-0.0.0.0}
     ```
+### Magento 1 Subfolder setup
+If you have a M1 subfolder setup to run your multiple stores, you will have to extend the `nginx` configuration. To do that, add `.warden/warden-env.yml`
+file with the following content to your project root:
+```
+version: "3.5"
+services:
+  nginx:
+    volumes:
+      - ./.warden/nginx/custom.conf:/etc/nginx/default.d/custom.conf
+``` 
+Now you add a file `.warden/nginx/custom.conf` in your project root with the following content:
+```
+location /subdomain1 {
+    alias /var/www/html/;
+    try_files $uri $uri/ @subdomain1;
+
+   location ~ \.php$ {
+       try_files $uri =404;
+       expires off;
+
+       fastcgi_pass $fastcgi_backend;
+
+       fastcgi_buffers 1024 4k;
+       fastcgi_buffer_size 128k;
+       fastcgi_busy_buffers_size 256k;
+       fastcgi_read_timeout 3600s;
+
+       include fastcgi_params;
+
+       fastcgi_param HTTPS on;
+
+       # Prevents these headers being used to exploit Zend_Controller_Request_Http
+       fastcgi_param HTTP_X_REWRITE_URL "";
+       fastcgi_param HTTP_X_ORIGINAL_URL "";
+
+       fastcgi_param MAGE_RUN_CODE {{STORE_CODE_OF_YOUR_SUBDOMAIN1_STORE}};
+
+       fastcgi_param SCRIPT_FILENAME  $realpath_root$fastcgi_script_name;
+       fastcgi_param DOCUMENT_ROOT    $realpath_root;
+       fastcgi_param SERVER_PORT      $http_x_forwarded_port;
+   }
+
+}
+
+location @subdomain1 {
+        rewrite /subdomain1/(.*)$ /subdomain1/index.php?/$1 last;
+}
+
+location /subdomain2 {
+    alias /var/www/html/;
+    try_files $uri $uri/ @subdomain2;
+
+   location ~ \.php$ {
+       try_files $uri =404;
+       expires off;
+
+       fastcgi_pass $fastcgi_backend;
+
+       fastcgi_buffers 1024 4k;
+       fastcgi_buffer_size 128k;
+       fastcgi_busy_buffers_size 256k;
+       fastcgi_read_timeout 3600s;
+
+       include fastcgi_params;
+
+       fastcgi_param HTTPS on;
+
+       # Prevents these headers being used to exploit Zend_Controller_Request_Http
+       fastcgi_param HTTP_X_REWRITE_URL "";
+       fastcgi_param HTTP_X_ORIGINAL_URL "";
+
+       fastcgi_param MAGE_RUN_CODE {{STORE_CODE_OF_YOUR_SUBDOMAIN2_STORE}};
+
+       fastcgi_param SCRIPT_FILENAME  $realpath_root$fastcgi_script_name;
+       fastcgi_param DOCUMENT_ROOT    $realpath_root;
+       fastcgi_param SERVER_PORT      $http_x_forwarded_port;
+   }
+
+}
+
+location @subdomain2 {
+        rewrite /subdomain2/(.*)$ /subdomain2/index.php?/$1 last;
+}
+``` 
+Insert the correct store codes instead of the placeholders to set the proper `MAGE_RUN_CODE`.
+This way the correct store code is set depending on your subdomain and your shop works similar to your live setup.
 
 ### Magento 2 Run Params
 
