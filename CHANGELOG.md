@@ -3,6 +3,10 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.11.0..develop)
 
+**Enhancements:**
+
+* Update selenium to standalone latest version resolving issues with old hub/chrome image combinations ([#349](https://github.com/davidalger/warden/pull/349) by @Den4ik)
+
 ## Version [0.11.0](https://github.com/davidalger/warden/tree/0.11.0) (2021-04-22)
 [All Commits](https://github.com/davidalger/warden/compare/0.10.2..0.11.0)
 
@@ -25,7 +29,7 @@ Huge shout out to @tdgroot who helped with updating the builds, testing, etc.
 ## Version [0.10.2](https://github.com/davidalger/warden/tree/0.10.2) (2021-04-03)
 [All Commits](https://github.com/davidalger/warden/compare/0.10.1..0.10.2)
 
-**Big Fixes:**
+**Bug Fixes:**
 
 * Fixed bug where Live Reload might not work when Varnish was disabled due to routing priorities ([#337](https://github.com/davidalger/warden/pull/337) by @alinalexandru)
 
