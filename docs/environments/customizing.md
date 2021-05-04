@@ -68,7 +68,7 @@ services:
     volumes:
       - ./.warden/nginx/custom.conf:/etc/nginx/default.d/custom.conf
 ```
-There you can specify your nginx customizations, which will be merged with the default ones.
+There you can specify a custom Nginx configuration which will be included following the `.conf` files within the `/etc/nginx/available.d` directory: `include /etc/nginx/default.d/*.conf`
 
 ### Magento 1 Specific Customizations
 
