@@ -1,1 +1,5 @@
 version: "3.5"
+services:
+  nginx:
+    environment:
+      - NGINX_TEMPLATE=wordpress.conf
