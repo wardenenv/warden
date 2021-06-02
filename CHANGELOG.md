@@ -8,6 +8,10 @@
 * Added Elastic HQ support available at elastichq.mydomain.test for viewing Elasticsearch data ([#350](https://github.com/davidalger/warden/pull/350) by @Den4ik)
 * Update selenium to standalone latest version resolving issues with old hub/chrome image combinations ([#349](https://github.com/davidalger/warden/pull/349) by @Den4ik)
 
+**Bug Fixes:**
+
+* Fixed loadEnvConfig inability to parse .env with CRLF line endings (issue [#380](https://github.com/davidalger/warden/issues/380))
+
 ## Version [0.11.0](https://github.com/davidalger/warden/tree/0.11.0) (2021-04-22)
 [All Commits](https://github.com/davidalger/warden/compare/0.10.2..0.11.0)
 
