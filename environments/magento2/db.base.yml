@@ -10,3 +10,4 @@ services:
       - mysqld
       - --max_allowed_packet=1024M
       - --explicit_defaults_for_timestamp=on
+      - --log_bin_trust_function_creators=on
