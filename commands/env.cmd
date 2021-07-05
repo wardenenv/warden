@@ -14,7 +14,7 @@ trap '' ERR
 
 ## define source repository
 if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
-    eval "$(grep "^WARDEN_SOURCE_REPOSITORY" "${WARDEN_HOME_DIR}/.env")"
+  eval "$(cat "${WARDEN_HOME_DIR}/.env" | sed 's/\r$//g' | grep "^WARDEN_")"
 fi
 export WARDEN_SOURCE_REPOSITORY="${WARDEN_SOURCE_REPOSITORY:-"wardenenv"}"
 
