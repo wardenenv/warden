@@ -16,7 +16,6 @@
         "gulp-util": "*",
         "gulp-watch": "*",
         "browser-sync": "*",
-        "glob": "*",
-        "lodash.template": ">=4.5.0"
+        "glob": "*"
     }
 }
