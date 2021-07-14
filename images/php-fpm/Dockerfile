@@ -25,7 +25,6 @@ RUN npm install -g n \
     && rm -rf /usr/local/n/versions/node
 
 COPY docker-entrypoint /usr/local/bin/
-COPY etc/DIR_COLOR* /etc/
 COPY etc/profile.d/*.sh /etc/profile.d/
 COPY etc/php.d/*.ini /etc/php.d/
 COPY etc/php.d/05-additions.ini.template /etc/php.d/
