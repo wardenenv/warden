@@ -22,7 +22,7 @@ fi
 
 ## verify docker-compose meets version constraint
 DOCKER_COMPOSE_REQUIRE="1.25.0"
-DOCKER_COMPOSE_VERSION="$(docker-compose -v | grep -oE '[0-9\.]+' | head -n1)"
+DOCKER_COMPOSE_VERSION="$(docker-compose --version | grep -oE '[0-9\.]+' | head -n1)"
 if ! test $(version ${DOCKER_COMPOSE_VERSION}) -ge $(version ${DOCKER_COMPOSE_REQUIRE}); then
   fatal "docker-compose version should be ${DOCKER_COMPOSE_REQUIRE} or higher (${DOCKER_COMPOSE_VERSION} installed)"
 fi
