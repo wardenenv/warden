@@ -7,6 +7,7 @@
 
 * Added Elastic HQ support available at elastichq.mydomain.test for viewing Elasticsearch data ([#350](https://github.com/davidalger/warden/pull/350) by @Den4ik)
 * Update selenium to standalone latest version resolving issues with old hub/chrome image combinations ([#349](https://github.com/davidalger/warden/pull/349) by @Den4ik)
+* Environment and image build improvements ([#363](https://github.com/davidalger/warden/pull/363) by @Den4ik)
 
 **Bug Fixes:**
 
