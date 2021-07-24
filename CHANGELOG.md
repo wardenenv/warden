@@ -1,12 +1,40 @@
 # Change Log
 
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
-[All Commits](https://github.com/davidalger/warden/compare/0.10.2..develop)
+[All Commits](https://github.com/davidalger/warden/compare/0.11.0..develop)
+
+**Enhancements:**
+
+* Added Elastic HQ support available at elastichq.mydomain.test for viewing Elasticsearch data ([#350](https://github.com/davidalger/warden/pull/350) by @Den4ik)
+* Update selenium to standalone latest version resolving issues with old hub/chrome image combinations ([#349](https://github.com/davidalger/warden/pull/349) by @Den4ik)
+
+**Bug Fixes:**
+
+* Fixed loadEnvConfig inability to parse .env with CRLF line endings (issue [#380](https://github.com/davidalger/warden/issues/380))
+
+## Version [0.11.0](https://github.com/davidalger/warden/tree/0.11.0) (2021-04-22)
+[All Commits](https://github.com/davidalger/warden/compare/0.10.2..0.11.0)
+
+**Upgrade Notes:**
+
+PHP and Varnish images have been rebuilt on a CentOS 8 base image (previously used a CentOS 7 base image). This eliminates the need for IUS for installing Git and MariaDB clients as these can now be installed from the default EL RPMs. This also allows for constants supported by more recent versions of Curl to be used in PHP code, latest calendar / locale features available in newer versions of ICU libraries to be used, etc.
+
+Please note that builds for PHP versions 5.5, 5.6, 7.0 and 7.1 have been dropped. Images will remain on Docker Hub so they'll continue to be available for existing projects actively using them, they simply will see no further enhancements or maintenance.
+
+To ensure you have the latest re-builds of Warden images and update your projects: `warden env pull && warden env up`
+
+For full details on what went into these rebuilds, please see [#345](https://github.com/davidalger/warden/pull/345).
+
+Huge shout out to @tdgroot who helped with updating the builds, testing, etc.
+
+**Enhancements:**
+
+* Shopware and Symfony environments will now use Composer v2 by default (issue [#359](https://github.com/davidalger/warden/issues/359))
 
 ## Version [0.10.2](https://github.com/davidalger/warden/tree/0.10.2) (2021-04-03)
 [All Commits](https://github.com/davidalger/warden/compare/0.10.1..0.10.2)
 
-**Big Fixes:**
+**Bug Fixes:**
 
 * Fixed bug where Live Reload might not work when Varnish was disabled due to routing priorities ([#337](https://github.com/davidalger/warden/pull/337) by @alinalexandru)
 

@@ -36,7 +36,7 @@ Multiple top-level domains may also be setup by following the instructions below
 
 3. Configure the application to handle traffic coming from each of these domains appropriately. An example on this for Magento 2 environments may be found below.
 
-4. Run `warden env up -d` to update the containers, after which each of the URLs should work as expected.
+4. Run `warden env up` to update the containers, after which each of the URLs should work as expected.
 
     ``` note::
         If these alternate domains must be resolvable from within the FPM containers, you must also leverage ``extra_hosts`` to add each specific sub-domain to the ``/etc/hosts`` file of the container as dnsmasq is used only on the host machine, not inside the containers. This should look something like the following excerpt.

@@ -11,7 +11,7 @@ ENV MAILHOG_HOST    mailhog
 ENV MAILHOG_PORT    1025
 
 RUN dnf install -y which pv sudo bind-utils python3-pip bash-completion rsync socat oathtool \
-        wget ack make gcc gcc-c++ automake autoconf crontabs mariadb \
+        wget ack make gcc gcc-c++ automake autoconf crontabs mariadb nano vim coreutils-common \
     && dnf clean all \
     && rm -rf /var/cache/dnf
 
@@ -27,6 +27,7 @@ RUN npm install -g n \
 
 COPY docker-entrypoint /usr/local/bin/
 COPY etc/profile.d/*.sh /etc/profile.d/
+COPY etc/*.ini /etc/
 COPY etc/php.d/*.ini /etc/php.d/
 COPY etc/php.d/05-additions.ini.template /etc/php.d/
 

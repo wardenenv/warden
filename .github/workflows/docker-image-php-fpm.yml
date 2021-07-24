@@ -16,10 +16,6 @@ jobs:
     strategy:
       matrix:
         php_version: ["7.2", "7.3", "7.4", "8.0"]
-        include:
-          # IonCube and Source Guardian loaders do not yet exist for PHP 8.0
-          - php_version: "8.0"
-            php_variant: "fpm"
     steps:
     - uses: actions/checkout@v1
     - run: ./images/scripts/build.sh --push "${BUILD_GROUP}"
