@@ -2,7 +2,7 @@ version: "3.5"
 services:
   nginx:
     hostname: "${WARDEN_ENV_NAME}-nginx"
-    image: ${WARDEN_SOURCE_REPOSITORY:-wardenenv}/nginx:${NGINX_VERSION:-1.16}
+    image: ${WARDEN_IMAGE_REPOSITORY}/nginx:${NGINX_VERSION:-1.16}
     labels:
       - traefik.enable=true
       - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.tls=true

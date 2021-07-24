@@ -2,7 +2,7 @@ version: "3.5"
 services:
   redis:
     hostname: "${WARDEN_ENV_NAME}-redis"
-    image: ${WARDEN_SOURCE_REPOSITORY:-wardenenv}/redis:${REDIS_VERSION:-5.0}
+    image: ${WARDEN_IMAGE_REPOSITORY}/redis:${REDIS_VERSION:-5.0}
     volumes:
       - redis:/data
 
