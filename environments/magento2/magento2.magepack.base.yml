@@ -2,7 +2,7 @@ version: "3.5"
 services:
   magepack:
     hostname: "${WARDEN_ENV_NAME}-magepack"
-    image: docker.io/wardenenv/magepack:${MAGEPACK_VERSION:-2.3}
+    image: ${WARDEN_IMAGE_REPOSITORY}/magepack:${MAGEPACK_VERSION:-2.3}
     environment:
       - TRAEFIK_DOMAIN
       - TRAEFIK_SUBDOMAIN

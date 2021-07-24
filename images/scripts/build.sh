@@ -43,10 +43,13 @@ if [[ ${PUSH_FLAG} ]]; then
   fi
 fi
 
+## define image repository to push
+WARDEN_IMAGE_REPOSITORY="${WARDEN_IMAGE_REPOSITORY:-"docker.io/wardenenv"}"
+
 ## iterate over and build each Dockerfile
 for file in $(find ${SEARCH_PATH} -type f -name Dockerfile | sort -V); do
     BUILD_DIR="$(dirname "${file}")"
-    IMAGE_TAG="docker.io/wardenenv/$(echo "${BUILD_DIR}" | cut -d/ -f1)"
+    IMAGE_TAG="${WARDEN_IMAGE_REPOSITORY}/$(echo "${BUILD_DIR}" | cut -d/ -f1)"
     IMAGE_SUFFIX="$(echo "${BUILD_DIR}" | cut -d/ -f2- -s | tr / - | sed 's/^-//')"
 
     ## due to build matrix requirements, magento1 and magento2 specific varients are built in separate invocation
@@ -61,6 +64,15 @@ for file in $(find ${SEARCH_PATH} -type f -name Dockerfile | sort -V); do
       if [[ -z ${PHP_VERSION} ]]; then
         fatal "Building ${SEARCH_PATH} images requires PHP_VERSION env variable be set."
       fi
+
+      ## define default sources for main php and environment images
+      export PHP_SOURCE_IMAGE="${PHP_SOURCE_IMAGE:-"docker.io/davidalger/php"}"
+      BUILD_ARGS+=("--build-arg")
+      BUILD_ARGS+=("PHP_SOURCE_IMAGE")
+
+      export ENV_SOURCE_IMAGE="${ENV_SOURCE_IMAGE:-"${WARDEN_IMAGE_REPOSITORY}/php-fpm"}"
+      BUILD_ARGS+=("--build-arg")
+      BUILD_ARGS+=("ENV_SOURCE_IMAGE")
 
       export PHP_VERSION
 
