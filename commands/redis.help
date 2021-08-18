@@ -3,6 +3,7 @@
 
 WARDEN_USAGE=$(cat <<EOF
 \033[33mUsage:\033[0m
+  redis stat                Run continuous stat mode
   redis COMMAND             Execute the Redis command within the current project environment
   redis                     Launches an interactive redis session within the current project environment
 

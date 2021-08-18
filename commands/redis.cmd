@@ -16,7 +16,11 @@ fi
 ## load connection information for the mysql service
 REDIS_CONTAINER=$(warden env ps -q redis)
 if [[ ! ${REDIS_CONTAINER} ]]; then
-    fatal "No container found for db service."
+    fatal "No container found for redis service."
+fi
+
+if [[ "${WARDEN_PARAMS[0]}" == "stat" ]]; then
+  "${WARDEN_DIR}/bin/warden" env exec redis sh -c "redis-cli --stat"
 fi
 
 if (( ${#WARDEN_PARAMS[@]} == 0 )); then
