@@ -36,11 +36,11 @@ Flush varnish:
 
 Connect to redis:
 
-    warden env exec redis redis-cli
+    warden redis
 
 Flush redis completely:
 
-    warden env exec -T redis redis-cli flushall
+    warden redis flushall
 
 Remove volumes completely:
 
