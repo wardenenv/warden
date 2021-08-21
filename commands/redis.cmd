@@ -13,7 +13,7 @@ if [[ "${WARDEN_PARAMS[0]}" == "help" ]]; then
   warden redis --help || exit $? && exit $?
 fi
 
-## load connection information for the mysql service
+## load connection information for the redis service
 REDIS_CONTAINER=$(warden env ps -q redis)
 if [[ ! ${REDIS_CONTAINER} ]]; then
     fatal "No container found for redis service."
