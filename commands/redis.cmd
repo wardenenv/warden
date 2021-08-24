@@ -5,8 +5,8 @@ WARDEN_ENV_PATH="$(locateEnvPath)" || exit $?
 loadEnvConfig "${WARDEN_ENV_PATH}" || exit $?
 assertDockerRunning
 
-if [[ ${WARDEN_REIDS:-1} -eq 0 ]]; then
-  fatal "Redis environment is not used (WARDEN_REDIS=1)."
+if [[ ${WARDEN_REDIS:-1} -eq 0 ]]; then
+  fatal "Redis environment is not used (WARDEN_REDIS=0)."
 fi
 
 if [[ "${WARDEN_PARAMS[0]}" == "help" ]]; then
