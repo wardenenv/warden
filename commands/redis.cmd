@@ -23,8 +23,4 @@ if [[ "${WARDEN_PARAMS[0]}" == "stat" ]]; then
   "${WARDEN_DIR}/bin/warden" env exec redis sh -c "redis-cli --stat"
 fi
 
-if (( ${#WARDEN_PARAMS[@]} == 0 )); then
-    "${WARDEN_DIR}/bin/warden" env exec redis sh -c "redis-cli"
-else
-    "${WARDEN_DIR}/bin/warden" env exec -T redis sh -c "redis-cli ${WARDEN_PARAMS}"
-fi
+"${WARDEN_DIR}/bin/warden" env exec redis redis-cli "${WARDEN_PARAMS[@]}" "$@"
