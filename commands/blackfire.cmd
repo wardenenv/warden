@@ -4,7 +4,7 @@
 WARDEN_ENV_PATH="$(locateEnvPath)" || exit $?
 loadEnvConfig "${WARDEN_ENV_PATH}" || exit $?
 
-## set defaults for this command which can be overriden either using exports in the user
+## set defaults for this command which can be overridden either using exports in the user
 ## profile or setting them in the .env configuration on a per-project basis
 WARDEN_ENV_BLACKFIRE_COMMAND=${WARDEN_ENV_BLACKFIRE_COMMAND:-blackfire}
 WARDEN_ENV_BLACKFIRE_CONTAINER=${WARDEN_ENV_BLACKFIRE_CONTAINER:-php-blackfire}

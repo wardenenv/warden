@@ -12,6 +12,12 @@ fi
 ## allow return codes from sub-process to bubble up normally
 trap '' ERR
 
+## define source repository
+if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
+  eval "$(cat "${WARDEN_HOME_DIR}/.env" | sed 's/\r$//g' | grep "^WARDEN_")"
+fi
+export WARDEN_IMAGE_REPOSITORY="${WARDEN_IMAGE_REPOSITORY:-"docker.io/wardenenv"}"
+
 ## configure environment type defaults
 if [[ ${WARDEN_ENV_TYPE} =~ ^magento ]]; then
     export WARDEN_SVC_PHP_VARIANT=-${WARDEN_ENV_TYPE}
@@ -29,7 +35,7 @@ if [[ ${WARDEN_ENV_TYPE} != local ]]; then
     WARDEN_REDIS=${WARDEN_REDIS:-1}
 
     # define bash history folder for changing permissions
-    WARDEN_CHOWN_DIR_LIST="/bash_history ${WARDEN_CHOWN_DIR_LIST:-}"
+    WARDEN_CHOWN_DIR_LIST="/bash_history /home/www-data/.ssh ${WARDEN_CHOWN_DIR_LIST:-}"
 fi
 export CHOWN_DIR_LIST=${WARDEN_CHOWN_DIR_LIST:-}
 

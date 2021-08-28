@@ -298,7 +298,7 @@ To run Acceptance tests you need to [configure the MFTF environment](mftf.md). O
     - `MAGENTO_BASE_URL`
     - `MAGENTO_BACKEND_NAME` to your Backend path (Check with `bin/magento info:adminuri`)
     - `MAGENTO_ADMIN_USERNAME` and `MAGENTO_ADMIN_PASSWORD`
-    - `SELENIUM_HOST` (by default it is `selenium-hub`)
+    - `SELENIUM_HOST` (by default it is `selenium`)
 
    Sample configuration
    ```
@@ -309,7 +309,7 @@ To run Acceptance tests you need to [configure the MFTF environment](mftf.md). O
    BROWSER=chrome
    MODULE_WHITELIST=Magento_Framework,ConfigurableProductWishlist,ConfigurableProductCatalogSearch
    ELASTICSEARCH_VERSION=7
-   SELENIUM_HOST=selenium-hub
+   SELENIUM_HOST=selenium
    ```
    More details can be found [in Magento DevDocs](https://devdocs.magento.com/mftf/docs/configuration.html).
 
