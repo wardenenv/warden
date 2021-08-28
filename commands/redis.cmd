@@ -19,8 +19,4 @@ if [[ ! ${REDIS_CONTAINER} ]]; then
     fatal "No container found for redis service."
 fi
 
-if [[ "${WARDEN_PARAMS[0]}" == "stat" ]]; then
-  "${WARDEN_DIR}/bin/warden" env exec redis sh -c "redis-cli --stat"
-fi
-
 "${WARDEN_DIR}/bin/warden" env exec redis redis-cli "${WARDEN_PARAMS[@]}" "$@"
