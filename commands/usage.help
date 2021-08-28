@@ -24,6 +24,7 @@ Warden version $(cat ${WARDEN_DIR}/version)
   env-init          Configure environment by adding '.env' file to the current working directory
   env               Controls an environment from any point within the root project directory
   db                Interacts with the db service on an environment (see 'warden db -h' for details)
+  redis             Interacts with the redis service on an environment (see 'warden redis -h' for details)
   install           Initializes or updates warden configuration on host machine
   shell             Launches into a shell within the current project environment
   debug             Launches debug enabled shell within current project environment
