@@ -146,7 +146,7 @@ Please note that you must pull the latest `php-fpm` images via `warden env pull`
 * Updated volume declarations for RabbitMQ and Redis services to use named volumes (avoid use of anonymous volumes)
 * Updated version of Traefik from 2.1 to 2.2
 * Updated `warden debug` to also pass `host.docker.internal` into the `php-debug` container for the `XDEBUG_REMOTE_HOST` value on WSL when Microsoft is present in `/proc/sys/kernel/osrelease` ([#196](https://github.com/davidalger/warden/pull/196) by @LeeSaferite)
-* Updated nginx configuration to pass `XDEBUG_CONNECT_BACK_HOST` as environment variable in base config allowing it to be overriden by exported env variable on all host OS envs ([#199](https://github.com/davidalger/warden/pull/199) by @LeeSaferite)
+* Updated nginx configuration to pass `XDEBUG_CONNECT_BACK_HOST` as environment variable in base config allowing it to be overridden by exported env variable on all host OS envs ([#199](https://github.com/davidalger/warden/pull/199) by @LeeSaferite)
 
 ## Version [0.7.0](https://github.com/davidalger/warden/tree/0.7.0) (2020-07-22)
 [All Commits](https://github.com/davidalger/warden/compare/0.6.0..0.7.0)
@@ -286,7 +286,7 @@ The `BYPASS_VARNISH` flag will continue to work as before but has been **depreca
 
 **Enhancements:**
 
-* Updated init routine allowing `WARDEN_HOME_DIR` and `WARDEN_COMPOSER_DIR` to be overriden via environment variables
+* Updated init routine allowing `WARDEN_HOME_DIR` and `WARDEN_COMPOSER_DIR` to be overridden via environment variables
 * Updated environment configuration to reference `WARDEN_SSL_DIR` eliminating hard-coded `~/.warden/ssl` references
 * Updated warden global docker config to reference `WARDEN_HOME_DIR` eliminating hard-coded `~/.warden` references
 * Updated `warden up` to return an error when docker is not running rather than blindly attempt to start global services
