@@ -5,6 +5,7 @@ x-volumes: &volumes
   - ${WARDEN_COMPOSER_DIR}:/home/www-data/.composer:cached
   - .${WARDEN_WEB_ROOT:-}/:/var/www/html:cached
   - bashhistory:/bash_history
+  - sshdirectory:/home/www-data/.ssh
 
 x-extra_hosts: &extra_hosts
     - ${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
@@ -49,3 +50,4 @@ services:
       - php-fpm
 volumes:
   bashhistory:
+  sshdirectory:
