@@ -38,7 +38,7 @@ declare WARDEN_PARAMS=()
 declare WARDEN_CMD_VERB=
 declare WARDEN_CMD_EXEC=
 declare WARDEN_CMD_HELP=
-declare WARDEN_CMD_ANYARGS=(svc env db sync shell debug)
+declare WARDEN_CMD_ANYARGS=(svc env db redis sync shell debug)
 
 ## parse first argument as command and determine validity
 if (( "$#" )); then
