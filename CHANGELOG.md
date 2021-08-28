@@ -9,6 +9,7 @@
 * Update selenium to standalone latest version resolving issues with old hub/chrome image combinations ([#349](https://github.com/davidalger/warden/pull/349) by @Den4ik)
 * Environment and image build improvements ([#363](https://github.com/davidalger/warden/pull/363) by @Den4ik)
 * Introduces new redis sub-command for easy access to the running redis container ([#413](https://github.com/davidalger/warden/pull/413) by @werfu)
+* SSH known hosts will now be persisted via an additional `sshdirectory:/home/www-data/.ssh` volume on php-fpm containers ([#315](https://github.com/davidalger/warden/pull/315) by @ihor-sviziev)
 
 **Bug Fixes:**
 
