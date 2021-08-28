@@ -43,7 +43,8 @@ Flush redis completely:
     warden redis flushall
 
 Run redis continous stat mode
-    warden redis stat
+
+    warden redis --stat
 
 Remove volumes completely:
 
