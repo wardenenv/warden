@@ -1,14 +1,5 @@
 name: Docker Image MySQL
-on:
-  schedule:
-  - cron: "0 6 1 * *"   # 6 AM UTC on 1st day of month
-  push:
-    paths:
-    - version
-    - images/.trigger
-    - images/mysql/**
-    branches:
-    - develop
+on: workflow_dispatch
 jobs:
   mysql:
     name: MySQL
