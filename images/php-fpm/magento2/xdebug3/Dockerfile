@@ -1,6 +1,5 @@
-ARG ENV_SOURCE_IMAGE
-ARG PHP_VERSION
-FROM ${ENV_SOURCE_IMAGE}:${PHP_VERSION}-magento2
+FROM ghcr.io/drpayyne/warden-php-m2:7.4
+
 USER root
 
 RUN set -eux \
