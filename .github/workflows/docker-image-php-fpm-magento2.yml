@@ -1,4 +1,4 @@
-name: PHP FPM
+name: PHP FPM M2
 
 on: workflow_dispatch
 
@@ -32,10 +32,9 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v2
         with:
-          file: images/php-fpm/Dockerfile
-          context: images/php-fpm/context
+          context: images/php-fpm/magento2
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            drpayyne/warden-php:7.4
-            ghcr.io/drpayyne/warden-php:7.4
+            drpayyne/warden-php-m2:7.4
+            ghcr.io/drpayyne/warden-php-m2:7.4
