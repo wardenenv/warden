@@ -1,7 +1,4 @@
-ARG PHP_SOURCE_IMAGE="docker.io/davidalger/php"
-ARG PHP_VERSION
-ARG PHP_VARIANT="fpm-loaders"
-FROM ${PHP_SOURCE_IMAGE}:${PHP_VERSION}-${PHP_VARIANT}
+FROM ghcr.io/drpayyne/php-fpm-loaders:7.4
 
 # Clear undesired settings from base fpm images
 ENV COMPOSER_ALLOW_SUPERUSER=
