@@ -2,10 +2,10 @@
 
 ![Docker Image Architures](https://img.shields.io/badge/architecture-arm64%20%7C%20amd64-success)
 ![PHP Version](https://img.shields.io/badge/php-7.4-blue)
-![Magento Version](https://img.shields.io/badge/magento2-2.4-orange)
+![Magento Version](https://img.shields.io/badge/magento-2.4-orange)
 ![License](https://img.shields.io/github/license/drpayyne/docker-php)
 
-> This repository is forked from https://github.com/davidalger/warden to make the Warden multi-arch. Please refer to the source repository for the original README.
+> This repository is forked from https://github.com/davidalger/warden to make Warden multi-arch. Please refer to the source repository for the original README.
 
 ## Available Packages
 
