@@ -9,15 +9,15 @@
 
 ## Available Packages
 
-Add the registry & user prefix of `ghcr.io/drpayyne/` to all the below tags for usage.
+Add the registry & user prefix of `ghcr.io/drpayyne/` to all the below packages for usage. All the below packages are available for both `linux/arm64` and `linux/amd64` architectures.
 
-| Package | Tag |
+| Service | Package & Tag |
 |---|---|
-| PHP 7.4 | `warden-php` (latest),`warden-php:7.4` |
-| PHP 7.4 for M2 | `warden-php-m2` (latest),`warden-php-m2:7.4` |
-| PHP 7.4 for M2 with xDebug3 | `warden-php-m2-xdebug3` (latest),`warden-php-m2-xdebug3:7.4` |
-| Magepack | `warden-magepack` (latest),`warden-magepack:2.3` |
-| MailHog | `warden-mailhog` (latest),`warden-mailhog:1.0` |
-| Nginx | `warden-nginx` (latest),`warden-nginx:1.16` |
-| Elasticsearch | `warden-elasticsearch` (latest),`warden-elasticsearch:7.9` |
-| Varnish | `warden-varnish` (latest),`warden-varnish:6.5` |
+| PHP 7.4 | <ul><li>`warden-php` (latest)</li><li>`warden-php:7.4`</li></ul> |
+| PHP 7.4 for M2 | <ul><li>`warden-php-m2` (latest)</li><li>`warden-php-m2:7.4`</li></ul> |
+| PHP 7.4 for M2 with xDebug3 | <ul><li>`warden-php-m2-xdebug3` (latest)</li><li>`warden-php-m2-xdebug3:7.4`</li></ul> |
+| Magepack | <ul><li>`warden-magepack` (latest)</li><li>`warden-magepack:2.3`</li></ul> |
+| MailHog | <ul><li>`warden-mailhog` (latest)</li><li>`warden-mailhog:1.0`</li></ul> |
+| Nginx | <ul><li>`warden-nginx` (latest)</li><li>`warden-nginx:1.16`</li></ul> |
+| Elasticsearch | <ul><li>`warden-elasticsearch` (latest)</li><li>`warden-elasticsearch:7.9`</li></ul> |
+| Varnish | <ul><li>`warden-varnish` (latest)</li><li>`warden-varnish:6.5`</li></ul> |
