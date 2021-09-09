@@ -69,7 +69,7 @@ services:
 
   mailhog:
     container_name: mailhog
-    image: drpayyne/mailhog-multi-arch
+    image: ghcr.io/drpayyne/warden-mailhog
     labels:
       - traefik.enable=true
       - traefik.http.routers.mailhog.tls=true
