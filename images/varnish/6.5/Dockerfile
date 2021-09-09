@@ -1,4 +1,4 @@
-FROM centos:8
+FROM fedora:34
 
 RUN dnf upgrade -y \
     && dnf clean all \
