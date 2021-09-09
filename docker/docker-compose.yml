@@ -33,7 +33,7 @@ services:
 
   dnsmasq:
     container_name: dnsmasq
-    image: drpayyne/docker-dnsmasq-multi-arch
+    image: ghcr.io/drpayyne/dnsmasq
     ports:
       - "127.0.0.1:53:53/udp"
     environment:
@@ -79,7 +79,7 @@ services:
 
   tunnel:
     container_name: tunnel
-    image: drpayyne/docker-sshd-multi-arch
+    image: ghcr.io/drpayyne/sshd
     ports:
       - "127.0.0.1:2222:22"
     volumes:
