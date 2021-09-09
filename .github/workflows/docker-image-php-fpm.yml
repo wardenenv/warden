@@ -1,9 +1,9 @@
-name: PHP FPM
+name: PHP
 
 on: workflow_dispatch
 
 jobs:
-  php-fpm:
+  docker:
     runs-on: ubuntu-latest
     steps:
       -
@@ -39,3 +39,4 @@ jobs:
           tags: |
             drpayyne/warden-php:7.4
             ghcr.io/drpayyne/warden-php:7.4
+            ghcr.io/drpayyne/warden-php:latest

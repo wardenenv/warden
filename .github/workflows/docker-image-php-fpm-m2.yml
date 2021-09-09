@@ -1,9 +1,9 @@
-name: PHP FPM M2
+name: PHP for M2
 
 on: workflow_dispatch
 
 jobs:
-  php-fpm:
+  docker:
     runs-on: ubuntu-latest
     steps:
       -
@@ -38,3 +38,4 @@ jobs:
           tags: |
             drpayyne/warden-php-m2:7.4
             ghcr.io/drpayyne/warden-php-m2:7.4
+            ghcr.io/drpayyne/warden-php-m2:latest
