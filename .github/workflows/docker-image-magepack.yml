@@ -39,3 +39,4 @@ jobs:
           tags: |
             drpayyne/warden-magepack:2.3
             ghcr.io/drpayyne/warden-magepack:2.3
+            ghcr.io/drpayyne/warden-magepack:latest
