@@ -6,7 +6,6 @@ RUN dnf upgrade -y \
 
 ARG RPM_SCRIPT=https://packagecloud.io/install/repositories/varnishcache/varnish65/script.rpm.sh
 RUN curl -s "${RPM_SCRIPT}" | bash \
-    && dnf install -y epel-release \
     && dnf install -y varnish gettext \
     && dnf clean all \
     && rm -rf /var/cache/dnf
