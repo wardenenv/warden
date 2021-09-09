@@ -9,6 +9,15 @@
 
 ## Available Packages
 
-- [Warden PHP](https://github.com/drpayyne/warden-multi-arch/pkgs/container/warden-php): `warden-php:7.4`
-- [Warden PHP for Magento 2](https://github.com/drpayyne/warden-multi-arch/pkgs/container/warden-php-m2): `warden-php-m2:7.4`
-- [Warden PHP for Magento 2 with xDebug 3](https://github.com/drpayyne/warden-multi-arch/pkgs/container/warden-php-m2-xdebug3): `warden-php-m2-xdebug3:7.4`
+Add the registry & user prefix of `ghcr.io/drpayyne/` to all the below tags for usage.
+
+| Package | Tag |
+|---|---|
+| PHP 7.4 | `warden-php` (latest),`warden-php:7.4` |
+| PHP 7.4 for M2 | `warden-php-m2` (latest),`warden-php-m2:7.4` |
+| PHP 7.4 for M2 with xDebug3 | `warden-php-m2-xdebug3` (latest),`warden-php-m2-xdebug3:7.4` |
+| Magepack | `warden-magepack` (latest),`warden-magepack:2.3` |
+| MailHog | `warden-mailhog` (latest),`warden-mailhog:1.0` |
+| Nginx | `warden-nginx` (latest),`warden-nginx:1.16` |
+| Elasticsearch | `warden-elasticsearch` (latest),`warden-elasticsearch:7.9` |
+| Varnish | `warden-varnish` (latest),`warden-varnish:6.5` |
