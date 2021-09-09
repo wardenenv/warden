@@ -38,3 +38,4 @@ jobs:
           tags: |
             drpayyne/warden-mailhog:1.0
             ghcr.io/drpayyne/warden-mailhog:1.0
+            ghcr.io/drpayyne/warden-mailhog:latest
