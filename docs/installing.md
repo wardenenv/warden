@@ -34,7 +34,7 @@ Warden may be installed by cloning the repository to the directory of your choic
 Install and enable [WSL2 in Windows 10](https://docs.microsoft.com/en-us/windows/wsl/install-win10).  
 Install Ubuntu 20.04 or other compatible Linux version from the Windows store or [manually download distibutions](https://docs.microsoft.com/en-us/windows/wsl/install-manual).   
 Launch Docker for Windows, make sure that the option for WSL2 integration is set.  
-Launch wsl from your terminal of choice (the following commands are run from WSL Ubuntu environment).  
+Launch wsl from your terminal of choice.  
 
         wsl
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
