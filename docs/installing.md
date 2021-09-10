@@ -3,8 +3,7 @@ Installing Warden
 
 ### Prerequisites
 
-* [Docker Desktop for Mac
-](https://hub.docker.com/editions/community/docker-ce-desktop-mac) 2.2.0.0 or later or [Docker for Linux](https://docs.docker.com/install/) (Warden has been tested on Fedora 29 and Ubuntu 18.10)
+* [Docker Desktop for Mac](https://hub.docker.com/editions/community/docker-ce-desktop-mac) 2.2.0.0 or later or [Docker for Linux](https://docs.docker.com/install/) (Warden has been tested on Fedora 29 and Ubuntu 18.10) or [Docker for Windows](https://docs.docker.com/desktop/windows/install/)
 * `docker-compose` version 1.25.0 or later is required (this can be installed via `brew`, `apt`, `dnf`, or `pip3` as needed)
 * [Mutagen](https://mutagen.io/) 0.11.4 or later is required for environments leveraging sync sessions on Mac OS. Warden will attempt to install this via `brew` if not present.
 
@@ -30,11 +29,32 @@ Warden may be installed by cloning the repository to the directory of your choic
     PATH="/opt/warden/bin:$PATH"
     warden svc up
 
+### Windows Installation (via WSL2)
+
+Install and enable [WSL2 in Windows 10](https://docs.microsoft.com/en-us/windows/wsl/install-win10).  
+Install Ubuntu 20.04 or other compatible Linux version from the Windows store or [manually download distibutions](https://docs.microsoft.com/en-us/windows/wsl/install-manual).   
+Launch Docker for Windows, make sure that the option for WSL2 integration is set.  
+Launch wsl from your terminal of choice (the following commands are run from WSL Ubuntu environment).  
+
+        wsl
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+        brew install davidalger/warden/warden
+        warden svc up
+
+In order for DNS entries to be resolved either add them to your Windows hosts file or add 127.0.0.1 as the first DNS server in your current network adapter in Windows.
+
+``` warning::
+    **For performance reasons code should be located in the WSL Linux home path or other WSL local path ~/code/projectname NOT the default /mnt/c path mapping.**
+```
+
+GUI tools for Windows should use the network paths provided by WSL2: \\wsl$\Ubuntu-20.04\home\<USER>\<PROJECTPATH>.
+
 ### Next Steps
 
 #### Automatic DNS Resolution
 
-On Linux environments, you will need to configure your DNS to resolve `*.test` to `127.0.0.1` or use `/etc/hosts` entries. On Mac OS this configuration is automatic via the BSD per-TLD resolver configuration found at `/etc/resolver/test`.
+On Linux environments, you will need to configure your DNS to resolve `*.test` to `127.0.0.1` or use `/etc/hosts` entries. On Mac OS this configuration is automatic via the BSD per-TLD resolver configuration found at `/etc/resolver/test`. On Windows manual configuration of the network adapter DNS server is required.
+
 
 For more information see the configuration page for [Automatic DNS Resolution](configuration/dns-resolver.html)
 

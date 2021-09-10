@@ -60,3 +60,9 @@ sudo service network-manager restart
 ``` note::
     In the above examples you can replace ``1.1.1.1`` and ``1.0.0.1`` (CloudFlare) with the IP of your own preferred DNS resolution service such as ``8.8.8.8`` and ``8.8.4.4`` (Google) or ``9.9.9.9`` and ``149.112.112.112`` (Quad9)
 ```
+
+#### Windows
+
+Add the local dnsmasq resolver as the first DNS server:
+
+![Windows DNS Configuration](screenshots/123906280-8a09c400-d97c-11eb-9558-cb513f89e4c3.png)
