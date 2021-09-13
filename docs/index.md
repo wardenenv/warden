@@ -6,7 +6,7 @@ Welcome to Warden's documentation!
     :end-before: <!-- include_open_stop -->
 ```
 
-Under the hood `docker-compose` is used to to control everything which Warden runs (shared services as well as per-project containers) via the Docker Engine.
+Under the hood `docker-compose` is used to control everything which Warden runs (shared services as well as per-project containers) via the Docker Engine.
 
 ## Features
 
