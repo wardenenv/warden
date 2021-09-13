@@ -7,7 +7,7 @@
 
 > This repository is forked from https://github.com/davidalger/warden to make Warden multi-arch. Please refer to the source repository for the original README.
 
-## Installation
+## Installing Warden
 
 ```bash
 # Make the installation directory
