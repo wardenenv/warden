@@ -27,6 +27,9 @@ PATH="/opt/warden/bin:$PATH"
 
 # Create and start Warden services
 warden svc up
+
+# Install Warden configuration
+warden install
 ```
 
 ## Available Packages
