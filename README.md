@@ -7,6 +7,28 @@
 
 > This repository is forked from https://github.com/davidalger/warden to make Warden multi-arch. Please refer to the source repository for the original README.
 
+## Installation
+
+```bash
+# Make the installation directory
+sudo mkdir /opt/warden
+
+# Set ownership for the installation directory
+sudo chown $(whoami) /opt/warden
+
+# Clone multi-arch fork of Warden (this repository) into the installation directory
+git clone -b master https://github.com/drpayyne/warden-multi-arch.git /opt/warden
+
+# Export Warden to PATH
+echo 'export PATH="/opt/warden/bin:$PATH"' >> ~/.bashrc
+
+# Export Warden to current shell's PATH
+PATH="/opt/warden/bin:$PATH"
+
+# Create and start Warden services
+warden svc up
+```
+
 ## Available Packages
 
 Add the registry & user prefix of `ghcr.io/drpayyne/` to all the below packages for usage. All the below packages are available for both `linux/arm64` and `linux/amd64` architectures.
