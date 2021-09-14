@@ -47,7 +47,7 @@ In order for DNS entries to be resolved either add them to your Windows hosts fi
     **For performance reasons code should be located in the WSL Linux home path or other WSL local path ~/code/projectname NOT the default /mnt/c path mapping.**
 ```
 
-GUI tools for Windows should use the network paths provided by WSL2: \\wsl$\Ubuntu-20.04\home\<USER>\<PROJECTPATH>.
+GUI tools for Windows should use the network paths provided by WSL2: `\\wsl$\Ubuntu-20.04\home\<USER>\<PROJECTPATH>`.
 
 ### Next Steps
 
