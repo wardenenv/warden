@@ -44,6 +44,6 @@ Add the registry & user prefix of `ghcr.io/drpayyne/` to all the below packages 
 | PHP 7.4 for M2 with xDebug3 | <ul><li>`warden-php-m2-xdebug3` (latest)</li><li>`warden-php-m2-xdebug3:7.4`</li></ul> |
 | Magepack | <ul><li>`warden-magepack` (latest)</li><li>`warden-magepack:2.3`</li></ul> |
 | MailHog | <ul><li>`warden-mailhog` (latest)</li><li>`warden-mailhog:1.0`</li></ul> |
-| Nginx | <ul><li>`warden-nginx` (latest)</li><li>`warden-nginx:1.16`</li></ul> |
+| Nginx | <ul><li>`warden-nginx` (latest)</li><li>`warden-nginx:1.18`</li><li>`warden-nginx:1.17`</li><li>`warden-nginx:1.16`</li></ul> |
 | Elasticsearch | <ul><li>`warden-elasticsearch` (latest)</li><li>`warden-elasticsearch:7.9`</li></ul> |
 | Varnish | <ul><li>`warden-varnish` (latest)</li><li>`warden-varnish:6.5`</li><li>`warden-varnish:6.4`</li><li>`warden-varnish:6.0`</li></ul> |
