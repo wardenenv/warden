@@ -7,7 +7,7 @@ services:
 
   varnish:
     hostname: "${WARDEN_ENV_NAME}-varnish"
-    image: ghcr.io/drpayyne/warden-varnish
+    image: ghcr.io/drpayyne/warden-varnish:${VARNISH_VERSION:-}
     depends_on:
       - nginx
     labels:
