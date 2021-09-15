@@ -45,4 +45,4 @@ Add the registry & user prefix of `ghcr.io/drpayyne/` to all the below packages 
 | MailHog | <ul><li>`warden-mailhog` (latest)</li><li>`warden-mailhog:1.0`</li></ul> |
 | Nginx | <ul><li>`warden-nginx` (latest)</li><li>`warden-nginx:1.16`</li></ul> |
 | Elasticsearch | <ul><li>`warden-elasticsearch` (latest)</li><li>`warden-elasticsearch:7.9`</li></ul> |
-| Varnish | <ul><li>`warden-varnish` (latest)</li><li>`warden-varnish:6.5`</li></ul> |
+| Varnish | <ul><li>`warden-varnish` (latest)</li><li>`warden-varnish:6.5`</li><li>`warden-varnish:6.4`</li><li>`warden-varnish:6.0`</li></ul> |
