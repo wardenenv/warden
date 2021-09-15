@@ -39,7 +39,7 @@ If you have [configured Xdebug](xdebug.md), run Unit tests inside **Debug** cons
 
 ## Running Javascript Unit Tests
 
-1. Configure your `.env` and set `NODE_VERSION=10`
+1. Configure your `.env` and set `NODE_VERSION=12`
 2. Launch a shell session within the project environment's `php-fpm` container with `warden shell`
 3. Install javascript unit test dependencies with `npm install`
 4. Deploy static content with
