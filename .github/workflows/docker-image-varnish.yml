@@ -1,9 +1,24 @@
 name: Varnish
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      varnish65:
+        description: "Varnish 6.5 (latest)"
+        default: '0'
+        required: false
+      varnish64:
+        description: "Varnish 6.4"
+        default: '0'
+        required: false
+      varnish60:
+        description: "Varnish 6.0"
+        default: '0'
+        required: false
 
 jobs:
-  docker:
+  varnish65:
+    if: ${{ github.event.inputs.varnish65 == '1' }}
     runs-on: ubuntu-latest
     steps:
       -
@@ -40,4 +55,77 @@ jobs:
             drpayyne/varnish-multi-arch:6.5
             ghcr.io/drpayyne/warden-varnish:6.5
             ghcr.io/drpayyne/warden-varnish:latest
-
+  varnish64:
+    if: ${{ github.event.inputs.varnish64 == '1' }}
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Login to GitHub Container Registry
+        uses: docker/login-action@v1 
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: images/varnish/context
+          file: images/varnish/6.4/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            drpayyne/varnish-multi-arch:6.4
+            ghcr.io/drpayyne/warden-varnish:6.4
+  varnish60:
+    if: ${{ github.event.inputs.varnish60 == '1' }}
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Login to GitHub Container Registry
+        uses: docker/login-action@v1 
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: images/varnish/context
+          file: images/varnish/6.0/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            drpayyne/varnish-multi-arch:6.0
+            ghcr.io/drpayyne/warden-varnish:6.0
