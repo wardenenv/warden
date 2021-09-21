@@ -28,6 +28,10 @@ services:
       - COMPOSER_MEMORY_LIMIT=-1
       - HISTFILE=/bash_history/.bash_history
       - CHOWN_DIR_LIST=${CHOWN_DIR_LIST:-}
+      - WARDEN_VARNISH=${WARDEN_VARNISH:-}
+      - WARDEN_RABBITMQ=${WARDEN_RABBITMQ:-}
+      - WARDEN_REDIS=${WARDEN_REDIS:-}
+      - WARDEN_ENV_NAME=${WARDEN_ENV_NAME:-}
     volumes: *volumes
     extra_hosts: *extra_hosts
 
