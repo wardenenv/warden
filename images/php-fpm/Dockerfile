@@ -8,15 +8,12 @@ ENV COMPOSER_HOME=
 ENV MAILHOG_HOST    mailhog
 ENV MAILHOG_PORT    1025
 
-RUN dnf install -y which pv sudo bind-utils python3-pip bash-completion rsync socat oathtool \
-        wget ack make gcc gcc-c++ automake autoconf crontabs mariadb nano vim coreutils-common \
-    && dnf clean all \
-    && rm -rf /var/cache/dnf
+RUN apt update
 
-RUN dnf install -y python2 \
-    && ln -s /bin/python2 /bin/python \
-    && dnf clean all \
-    && rm -rf /var/cache/dnf
+RUN apt install -y pv sudo bind9-utils python3-pip bash-completion rsync socat oathtool \
+        wget ack automake autoconf nano vim cron mariadb-server
+
+RUN apt install -y python2 && ln -s /usr/bin/python2 /usr/bin/python
 
 ENV NODE_VERSION    10
 RUN npm install -g n \
@@ -26,8 +23,8 @@ RUN npm install -g n \
 COPY docker-entrypoint /usr/local/bin/
 COPY etc/profile.d/*.sh /etc/profile.d/
 COPY etc/*.ini /etc/
-COPY etc/php.d/*.ini /etc/php.d/
-COPY etc/php.d/05-additions.ini.template /etc/php.d/
+COPY etc/php.d/*.ini /usr/local/etc/php/conf.d
+COPY etc/php.d/05-additions.ini.template /usr/local/etc/php/conf.d
 
 ARG TARGETARCH
 
