@@ -1,6 +1,16 @@
 name: PHP
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      from:
+        description: "Tag to pull"
+        default: '7.4-deb'
+        required: true
+      to:
+        description: "Tag to push"
+        default: '7.4-deb'
+        required: true
 
 jobs:
   docker:
@@ -36,7 +46,8 @@ jobs:
           context: images/php-fpm/context
           platforms: linux/amd64,linux/arm64
           push: true
+          build-args: |
+            PHP_TAG=${{ github.event.inputs.from }}
           tags: |
-            drpayyne/warden-php:7.4
-            ghcr.io/drpayyne/warden-php:7.4
+            ghcr.io/drpayyne/warden-php:${{ github.event.inputs.to }}
             ghcr.io/drpayyne/warden-php:latest
