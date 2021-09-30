@@ -1,4 +1,5 @@
-FROM ghcr.io/drpayyne/warden-php
+ARG PHP_TAG
+FROM ghcr.io/drpayyne/warden-php:${PHP_TAG}
 
 USER root
 
