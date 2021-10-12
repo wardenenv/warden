@@ -10,6 +10,9 @@
 | MySQL Password                 | `magento`                                                        |
 | MySQL Database                 | `magento`                                                        |
 | SSH Host, Proxy Host, Server   | `tunnel.warden.test`                                             |
+| SSH Host Port                  | `2222`                                                           |
+| SSH User                       | `user`                                                           |
+| SSH private key file           | `~/.warden/tunnel/ssh_key`                                       |
 
 ### TablePlus
 ![TablePlus Connection Info](screenshots/tableplus-connection.png)
@@ -25,3 +28,6 @@
 ### Navicat for MySQL
 ![Navicat Connection Config](screenshots/navicat-connection-config.png)
 ![Navicat Tunnel Config](screenshots/navicat-ssh-tunnel-config.png)
+
+### MySQL Workbench
+![MySQL Workbench](screenshots/mysql-workbench-connection.png)
