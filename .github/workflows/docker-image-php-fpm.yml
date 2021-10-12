@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php_version: ["7.2", "7.3", "7.4", "8.0"]
+        php_version: ["7.2", "7.3", "7.4", "8.0", "8.1"]
     steps:
     - uses: actions/checkout@v1
     - run: ./images/scripts/build.sh --push "${BUILD_GROUP}"
@@ -32,7 +32,7 @@ jobs:
     needs: php-fpm
     strategy:
       matrix:
-        php_version: ["7.2", "7.3", "7.4", "8.0"]
+        php_version: ["7.2", "7.3", "7.4", "8.0", "8.1"]
     steps:
     - uses: actions/checkout@v1
     - run: ./images/scripts/build.sh --push "${BUILD_GROUP}"
@@ -48,7 +48,7 @@ jobs:
     needs: php-fpm
     strategy:
       matrix:
-        php_version: ["7.2", "7.3", "7.4", "8.0"]
+        php_version: ["7.2", "7.3", "7.4", "8.0", "8.1"]
     steps:
     - uses: actions/checkout@v1
     - run: ./images/scripts/build.sh --push "${BUILD_GROUP}"
