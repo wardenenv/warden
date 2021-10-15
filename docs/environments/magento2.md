@@ -50,6 +50,7 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
         WARDEN_SPLIT_CHECKOUT=0
         WARDEN_TEST_DB=0
         WARDEN_MAGEPACK=0
+		WARDEN_ELASTICHQ=1
 
         BLACKFIRE_CLIENT_ID=
         BLACKFIRE_CLIENT_TOKEN=
