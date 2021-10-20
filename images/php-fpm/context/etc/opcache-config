@@ -1,6 +1,3 @@
-; Enable opcache extension module
-zend_extension=opcache.so
-
 opcache.enable = On
 opcache.enable_cli = Off
 opcache.memory_consumption = 512
