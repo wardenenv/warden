@@ -1,6 +1,3 @@
-; Enable xdebug extension module
-zend_extension=xdebug.so
-
 xdebug.discover_client_host="on"
 xdebug.client_discovery_header="HTTP_X_DEBUG_HOST"
 xdebug.idekey="PHPSTORM"
