@@ -2,9 +2,9 @@
 set -e
 
 # configure php additions.ini
-cat /etc/php.d/05-additions.ini.template \
+cat /usr/local/etc/php/conf.d/05-additions.ini.template \
   | envsubst '${MAILHOG_HOST} ${MAILHOG_PORT}' \
-  | sudo tee /etc/php.d/05-additions.ini
+  | sudo tee /usr/local/etc/php/conf.d/05-additions.ini
 
 # append warden issued root ca cert to ca-bundle trusted by curl/openssl
 if [ -f /etc/ssl/warden-rootca-cert/ca.cert.pem ]; then
@@ -12,11 +12,11 @@ if [ -f /etc/ssl/warden-rootca-cert/ca.cert.pem ]; then
 fi
 
 # update trust outside if condition above to allow mounting PEM files into /etc/pki/ca-trust/source/anchors
-sudo update-ca-trust
+sudo update-ca-certificates
 
 # start socat process in background to connect sockets used for agent access within container environment
-if [[ -S /run/host-services/ssh-auth.sock ]] \
-  && [[ "${SSH_AUTH_SOCK}" != "/run/host-services/ssh-auth.sock" ]]
+if [ -s /run/host-services/ssh-auth.sock ] \
+  && [ "${SSH_AUTH_SOCK}" != "/run/host-services/ssh-auth.sock" ]
 then
   sudo rm -f "${SSH_AUTH_SOCK}"
   sudo bash -c "nohup socat UNIX-CLIENT:/run/host-services/ssh-auth.sock \
@@ -24,7 +24,7 @@ then
 fi
 
 # start crond as a background process
-sudo crond
+sudo service cron start
 
 # install requested node version if not already installed
 NODE_INSTALLED="$(node -v | perl -pe 's/^v([0-9]+)\..*$/$1/')";
@@ -35,7 +35,7 @@ then
 fi
 
 # Configure composer2 as default when specified
-if [[ "${COMPOSER_VERSION:-}" == "2" ]]; then
+if [ "${COMPOSER_VERSION:-}" = "2" ]; then
   sudo cp /usr/bin/composer2 /usr/bin/composer
 fi
 
@@ -43,11 +43,11 @@ fi
 # a list of directories (relative to working directory) to chown, walking up the paths to also chown each
 # specified parent directory. Example: "dir1/dir2 dir3" will chown dir1/dir2, then dir1 followed by dir3
 for DIR in ${CHOWN_DIR_LIST:-}; do
-  if [[ -d "${DIR}" ]]; then
+  if [ -d "${DIR}" ]; then
     while :; do
       sudo chown www-data:www-data "${DIR}"
       DIR=$(dirname "${DIR}")
-      if [[ ${DIR} == "." ]] || [[ ${DIR} == "/" ]] || [[ ${DIR} == "/home" ]]; then
+      if [ ${DIR} = "." ] || [ ${DIR} = "/" ] || [ ${DIR} = "/home" ]; then
         break;
       fi
     done
