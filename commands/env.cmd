@@ -19,6 +19,10 @@ fi
 export WARDEN_IMAGE_REPOSITORY="${WARDEN_IMAGE_REPOSITORY:-"docker.io/wardenenv"}"
 
 ## configure environment type defaults
+export WARDEN_ENV_TYPE=${WARDEN_ENV_TYPE}
+export WARDEN_ENV_NAME=${WARDEN_ENV_NAME}
+export TRAEFIK_DOMAIN=${TRAEFIK_DOMAIN}
+
 if [[ ${WARDEN_ENV_TYPE} =~ ^magento ]]; then
     export WARDEN_SVC_PHP_VARIANT=-${WARDEN_ENV_TYPE}
 fi
@@ -52,6 +56,13 @@ fi
 ## WSL1/WSL2 are GNU/Linux env type but still run Docker Desktop
 if [[ ${XDEBUG_CONNECT_BACK_HOST} == '' ]] && grep -sqi microsoft /proc/sys/kernel/osrelease; then
     export XDEBUG_CONNECT_BACK_HOST=host.docker.internal
+fi
+
+if [[ ${WARDEN_BLACKFIRE} -eq 1 ]]; then
+    export BLACKFIRE_CLIENT_ID=${BLACKFIRE_CLIENT_ID}
+    export BLACKFIRE_CLIENT_TOKEN=${BLACKFIRE_CLIENT_TOKEN}
+    export BLACKFIRE_SERVER_ID=${BLACKFIRE_SERVER_ID}
+    export BLACKFIRE_SERVER_TOKEN=${BLACKFIRE_SERVER_TOKEN}
 fi
 
 ## For linux, if UID is 1000, there is no need to use the socat proxy.
