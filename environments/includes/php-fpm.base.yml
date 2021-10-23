@@ -18,7 +18,7 @@ services:
 
   php-fpm:
     hostname: "${WARDEN_ENV_NAME}-php-fpm"
-    image: ghcr.io/drpayyne/warden-php-m2
+    image: ghcr.io/drpayyne/warden-php-m2:${PHP_VERSION}-deb
     environment:
       - TRAEFIK_DOMAIN
       - TRAEFIK_SUBDOMAIN
@@ -28,12 +28,16 @@ services:
       - COMPOSER_MEMORY_LIMIT=-1
       - HISTFILE=/bash_history/.bash_history
       - CHOWN_DIR_LIST=${CHOWN_DIR_LIST:-}
+      - WARDEN_VARNISH=${WARDEN_VARNISH:-}
+      - WARDEN_RABBITMQ=${WARDEN_RABBITMQ:-}
+      - WARDEN_REDIS=${WARDEN_REDIS:-}
+      - WARDEN_ENV_NAME=${WARDEN_ENV_NAME:-}
     volumes: *volumes
     extra_hosts: *extra_hosts
 
   php-debug:
     hostname: "${WARDEN_ENV_NAME}-php-debug"
-    image: ghcr.io/drpayyne/warden-php-m2-${XDEBUG_VERSION:-debug}
+    image: ghcr.io/drpayyne/warden-php-m2-xdebug3:${PHP_VERSION}-deb
     environment:
       - TRAEFIK_DOMAIN
       - TRAEFIK_SUBDOMAIN

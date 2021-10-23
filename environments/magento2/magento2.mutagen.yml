@@ -19,7 +19,13 @@ sync:
         - "/pub/media"
         - "/pub/static/**"
         - "!/pub/static/.htaccess"
-        - "/var/**"
+        # TODO: Improve this. Ignore all var/ but var/log/
+        - "/var/cache"
+        - "/var/page_cache"
+        - "/var/composer_home"
+        - "/var/session"
+        - "/var/vendor"
+        - "/var/view_preprocessed"
         - "!/var/.htaccess"
 
     permissions:
