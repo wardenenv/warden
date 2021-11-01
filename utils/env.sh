@@ -60,19 +60,58 @@ function renderEnvNetworkName() {
     echo "${WARDEN_ENV_NAME}_default" | tr '[:upper:]' '[:lower:]'
 }
 
+function fetchEnvInitFile () {
+    local envInitPath=""
+
+    for ENV_INIT_PATH in \
+        "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/init.env" \
+        "${WARDEN_HOME_DIR}/environments/${WARDEN_ENV_TYPE}/init.env" \
+        "${WARDEN_ENV_PATH}/.warden/environments/${WARDEN_ENV_TYPE}/init.env"
+    do
+        if [[ -f "${ENV_INIT_PATH}" ]]; then
+            envInitPath="${ENV_INIT_PATH}"
+        fi
+    done
+
+    echo $envInitPath
+}
+
 function fetchValidEnvTypes () {
+    local lsPaths="${WARDEN_DIR}/environments/"*/*".base.yml"
+
+    if [[ -d "${WARDEN_HOME_DIR}/environments" ]]; then
+       lsPaths="${lsPaths} ${WARDEN_HOME_DIR}/environments/"*/*".base.yml"
+    fi
+
+    if [[ -d "${WARDEN_ENV_PATH}/.warden/environments" ]]; then
+       lsPaths="${lsPaths} ${WARDEN_ENV_PATH}/.warden/environments/"*/*".base.yml"
+    fi
+
     echo $(
-        ls -1 "${WARDEN_DIR}/environments/"*/*".base.yml" \
+        ls -1 $lsPaths \
             | sed -E "s#^${WARDEN_DIR}/environments/##" \
-            | cut -d/ -f1 | uniq | sort | grep -v includes
+            | sed -E "s#^${WARDEN_HOME_DIR}/environments/##" \
+            | sed -E "s#^${WARDEN_ENV_PATH}/.warden/environments/##" \
+            | cut -d/ -f1 | sort | uniq | grep -v includes
     )
 }
 
 function assertValidEnvType () {
-    if [[ ! -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.base.yml" ]]; then
-        >&2 echo -e "\033[31mInvalid environment type \"${WARDEN_ENV_TYPE}\" specified.\033[0m"
-        return 1
+    if [[ -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.base.yml" ]]; then
+        return 0
     fi
+
+    if [[ -f "${WARDEN_HOME_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.base.yml" ]]; then
+        return 0
+    fi
+
+    if [[ -f "${WARDEN_ENV_PATH}/.warden/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.base.yml" ]]; then
+        return 0
+    fi
+
+    >&2 echo -e "\033[31mInvalid environment type \"${WARDEN_ENV_TYPE}\" specified.\033[0m"
+
+    return 1
 }
 
 function appendEnvPartialIfExists () {
@@ -87,7 +126,11 @@ function appendEnvPartialIfExists () {
         "${WARDEN_HOME_DIR}/environments/includes/${PARTIAL_NAME}.base.yml" \
         "${WARDEN_HOME_DIR}/environments/includes/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml" \
         "${WARDEN_HOME_DIR}/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.base.yml" \
-        "${WARDEN_HOME_DIR}/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml"
+        "${WARDEN_HOME_DIR}/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml" \
+        "${WARDEN_ENV_PATH}/.warden/environments/includes/${PARTIAL_NAME}.base.yml" \
+        "${WARDEN_ENV_PATH}/.warden/environments/includes/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml" \
+        "${WARDEN_ENV_PATH}/.warden/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.base.yml" \
+        "${WARDEN_ENV_PATH}/.warden/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml"
     do
         if [[ -f "${PARTIAL_PATH}" ]]; then
             DOCKER_COMPOSE_ARGS+=("-f" "${PARTIAL_PATH}")
