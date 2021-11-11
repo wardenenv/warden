@@ -5,6 +5,7 @@ xdebug.show_local_vars="on"
 xdebug.var_display_max_depth=3
 xdebug.max_nesting_level=250
 xdebug.file_link_format = '"phpstorm://open?file=%f&line=%l"'
+xdebug.mode="debug"
 
 xdebug.output_dir="/tmp"
 xdebug.profiler_output_name="cachegrind.out.%t.%s_%R"
