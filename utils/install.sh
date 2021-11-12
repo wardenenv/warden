@@ -17,6 +17,15 @@ function installSshConfig () {
 			## WARDEN END ##
 			EOT
   fi
+
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+       if ! grep '## WARDEN START ##' ~/.ssh/config >/dev/null; then
+           echo "==> Configuring sshd tunnel for mac os in user ssh config (used for tableplus command)"
+           echo "    Note: This addition to the ssh_config file can sometimes be erased by a system"
+           echo "    upgrade requiring reconfiguring the SSH config for tunnel.warden.test."
+           sed -i.old '1s;^;## WARDEN START ##\nHost tunnel.warden.test\nHostName 127.0.0.1\nUser user\nPort 2222\nIdentityFile ~/.warden/tunnel/ssh_key\n## WARDEN END ##\n;' ~/.ssh/config
+         fi
+    fi
 }
 
 function assertWardenInstall {
