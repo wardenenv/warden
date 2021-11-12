@@ -15,6 +15,7 @@ ENV XDEBUG_CONNECT_BACK_HOST      '""'
 COPY etc/nginx/fastcgi_params /etc/nginx/fastcgi_params.template
 COPY etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.template
 COPY etc/nginx/available.d/*.conf /etc/nginx/available.d/
+RUN mkdir -p /etc/nginx/default.d/
 
 CMD envsubst '${NGINX_UPSTREAM_HOST} ${NGINX_UPSTREAM_PORT} \
               ${NGINX_UPSTREAM_BLACKFIRE_HOST} ${NGINX_UPSTREAM_BLACKFIRE_PORT} \
