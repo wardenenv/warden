@@ -82,6 +82,10 @@ Where PHP is specified in the above list, there should be two `fpm` containers, 
 
 The configuration of each environment leverages a `base` configuration YAML file, and optionally a `darwin` and `linux` file to add to `base` configuration anything which may be specific to a given host architecture (this is, for example, how the `magento2` environment type works seamlessly on macOS with Mutagen sync sessions while using native filesystem mounts on Linux hosts).
 
+#### Rolling your own environment type
+
+If an environment type is missing above, you might want to create your own. This is completely supported. Just like Warden's environments are defined in `/opt/warden/environments`, it is possible to define your own in your user home, namely `~/.warden/environments` and in your project directory as well, namely `<project_dir>/.warden/environments`.
+
 ### Environment Templates
 
 There is a [Github Template available for Magento 2](https://github.com/davidalger/warden-env-magento2) allowing for quick setup of new Magento projects. To use this, click the green "Use this template" button to create your own repository based on the template repository, run the init script and update the README with any project specific information.

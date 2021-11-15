@@ -27,6 +27,20 @@ folder: `/.warden/warden-env.yml`
 This file will be merged with the default environment configuration.
 One example for a use case is [the setup of multiple domains](https://docs.warden.dev/configuration/multipledomains.html?highlight=warden%20env%20yml#multiple-domains).
 
+If that's not enough, it's possible to extend the environment config by leveraging, like for example (`.warden/environments/magento2/magento2.base.yml`):
+```
+version: "3.5"
+services:
+  nginx:
+    image: my_custom_nginx_image:latest
+    environment:
+      - NGINX_PUBLIC=/
+    volumes:
+      - ./.warden/nginx/custom.conf:/etc/nginx/default.d/custom.conf
+```
+
+It is a silly example (set pub root to `/` instead of `/pub` and include some custom NGINX config), but it shows how you can add configuration to a certain Warden environment type for a specific project. It is very useful when you want to keep using `.warden/warden-env.yml` for your very own environment, but want to share environment config with your teammates.
+
 ### PHP Specific Customizations
 To override default php settings, follow the docker customization above and include your custom `php.ini` file.
 In this case the `warden-env.yml` should look like this:
@@ -59,7 +73,7 @@ session.auto_start = Off
 upload_max_filesize = 25M
 ```
 ### Nginx Specific Customizations
-To override the default nginx configuration of your project, add a new file 
+To override the default nginx configuration of your project, add a new file
 `.warden/warden-env.yml` to your project root with the following content:
 ```
 version: "3.5"
@@ -72,8 +86,8 @@ There you can specify a custom Nginx configuration which will be included follow
 
 ### Magento 1 Specific Customizations
 
-If you use a `modman` structure, initialize the environment in your project path. 
-The `.modman` folder and the corresponding `.basedir` file will be recognized and set up automatically. 
+If you use a `modman` structure, initialize the environment in your project path.
+The `.modman` folder and the corresponding `.basedir` file will be recognized and set up automatically.
 
 ### Magento 2 Specific Customizations
 
