@@ -33,6 +33,13 @@ if [[ "$WARDEN_DNSMASQ_ENABLE" == "1" ]]; then
 fi
 
 
+## allow an additional docker-compose file to be loaded for global services
+if [[ -f "${WARDEN_HOME_DIR}/docker-compose.yml" ]]; then
+    DOCKER_COMPOSE_ARGS+=("-f")
+    DOCKER_COMPOSE_ARGS+=("${WARDEN_HOME_DIR}/docker-compose.yml")
+fi
+
+
 ## special handling when 'svc up' is run
 if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
 
