@@ -24,5 +24,10 @@ fi
 ## allow return codes from sub-process to bubble up normally
 trap '' ERR
 
-"${WARDEN_DIR}/bin/warden" env exec -e "XDEBUG_REMOTE_HOST=${WARDEN_ENV_DEBUG_HOST}" \
-    "${WARDEN_ENV_DEBUG_CONTAINER}" "${WARDEN_ENV_DEBUG_COMMAND}" "${WARDEN_PARAMS[@]}" "$@"
+if [[ ${PHP_XDEBUG_3} ]]; then
+    "${WARDEN_DIR}/bin/warden" env exec -e "XDEBUG_CONFIG=client_host=${WARDEN_ENV_DEBUG_HOST}" -e "XDEBUG_SESSION=" \
+        "${WARDEN_ENV_DEBUG_CONTAINER}" "${WARDEN_ENV_DEBUG_COMMAND}" "${WARDEN_PARAMS[@]}" "$@"
+else
+    "${WARDEN_DIR}/bin/warden" env exec -e "XDEBUG_REMOTE_HOST=${WARDEN_ENV_DEBUG_HOST}" \
+        "${WARDEN_ENV_DEBUG_CONTAINER}" "${WARDEN_ENV_DEBUG_COMMAND}" "${WARDEN_PARAMS[@]}" "$@"
+fi
