@@ -3,7 +3,7 @@ FROM ghcr.io/drpayyne/warden-php-m2:${PHP_TAG}
 
 USER root
 
-RUN install-php-extensions xdebug
+RUN install-php-extensions xdebug xsl sockets
 
 COPY xdebug3/etc/*.ini /etc/
 COPY xdebug3/etc/xdebug-config /usr/local/etc/php/conf.d/xdebug-config
