@@ -7,6 +7,9 @@ on:
         description: "Tag to pull"
         default: '7.4-deb'
         required: true
+      with-loaders:
+        description: "Enter '-loaders' to build with PHP loaders"
+        required: false
       to:
         description: "Tag to push"
         default: '7.4-deb'
@@ -48,6 +51,7 @@ jobs:
           push: true
           build-args: |
             PHP_TAG=${{ github.event.inputs.from }}
+            WITH_LOADERS=${{ github.event.inputs.with-loaders }}
           tags: |
             ghcr.io/drpayyne/warden-php:${{ github.event.inputs.to }}
             ghcr.io/drpayyne/warden-php:latest
