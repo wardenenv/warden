@@ -1,7 +1,7 @@
 # Warden
 
 ![Docker Image Architures](https://img.shields.io/badge/architecture-arm64%20%7C%20amd64-success)
-![PHP Version](https://img.shields.io/badge/php-7.4-blue)
+![PHP Version](https://img.shields.io/badge/php-7.3%20|%207.4%20|%208.1-blue)
 ![Magento Version](https://img.shields.io/badge/magento-2.4-orange)
 ![License](https://img.shields.io/github/license/drpayyne/docker-php)
 
@@ -38,10 +38,10 @@ Add the registry & user prefix of `ghcr.io/drpayyne/` to all the below packages 
 
 | Service | Package & Tag |
 |---|---|
-| PHP 7.4 | <ul><li>`warden-php` (latest)</li><li>`warden-php:7.4-deb`</li><li>`warden-php:7.3-deb`</li></ul> |
-| PHP 7.4 for M2 | <ul><li>`warden-php-m2` (latest)</li><li>`warden-php-m2:7.4-deb`</li><li>`warden-php-m2:7.3-deb`</li></ul> |
-| PHP 7.4 for M2 with xDebug2 | <ul><li>`warden-php-m2-xdebug2` (latest)</li><li>`warden-php-m2-xdebug2:7.4`</li></ul> |
-| PHP 7.4 for M2 with xDebug3 | <ul><li>`warden-php-m2-xdebug3` (latest)</li><li>`warden-php-m2-xdebug3:7.4-deb`</li><li>`warden-php-m2-xdebug3:7.3-deb`</li></ul> |
+| PHP | <ul><li>`warden-php` (latest)</li><li>`warden-php:8.1-deb`</li><li>`warden-php:7.4-deb`</li><li>`warden-php:7.3-deb`</li></ul> |
+| PHP for M2 | <ul><li>`warden-php-m2` (latest)</li><li>`warden-php-m2:8.1-deb`</li><li>`warden-php-m2:7.4-deb`</li><li>`warden-php-m2:7.3-deb`</li></ul> |
+| PHP for M2 with xDebug2 | <ul><li>`warden-php-m2-xdebug2` (latest)</li><li>`warden-php-m2-xdebug2:7.4`</li></ul> |
+| PHP for M2 with xDebug3 | <ul><li>`warden-php-m2-xdebug3` (latest)</li><li>`warden-php-m2-xdebug3:8.1-deb`</li><li>`warden-php-m2-xdebug3:7.4-deb`</li><li>`warden-php-m2-xdebug3:7.3-deb`</li></ul> |
 | Magepack | <ul><li>`warden-magepack` (latest)</li><li>`warden-magepack:2.3`</li></ul> |
 | MailHog | <ul><li>`warden-mailhog` (latest)</li><li>`warden-mailhog:1.0`</li></ul> |
 | Nginx | <ul><li>`warden-nginx` (latest)</li><li>`warden-nginx:1.18`</li><li>`warden-nginx:1.17`</li><li>`warden-nginx:1.16`</li></ul> |
