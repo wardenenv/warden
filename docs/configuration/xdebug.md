@@ -4,6 +4,8 @@ There are two docker containers running FPM, `php-fpm`, `php-debug`. The `php-de
 
 Xdebug will automatically connect back to the host machine on port `9000` for `xdebug2` and `9003` for `xdebug3` for each request routed to the `php-debug` container (i.e. when the `XDEBUG_SESSION` cookie is set). When configuring Xdebug Helper in your browser, make sure it is setting this cookie with the value `PHPSTORM`.
 
+If you use a firewall, allow connection to port `9000` for `xdebug2` and `9003` for `xdebug3`.
+
 In similar fashion to the `warden shell` command there is also a debug command to launch into an xdebug enabled container shell for debugging CLI workflows:
 
 ```
