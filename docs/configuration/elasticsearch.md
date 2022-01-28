@@ -1,6 +1,8 @@
 # Elasticsearch
 
-[Elasticsearch](https://www.elastic.co/) is the native search engine and it must be configured since Magento 2.4 onwards.
+Warden supports use of Elasticsearch. It is enabled by default on some environments such as `magento2` where it is a baseline requirement for the application, but it can be enabled and used on other environments types such as `shopwere` and `symfony` as an optional service. Please refer to specific installation guides for configuration specific to a given application.
+
+[Elasticsearch](https://www.elastic.co/) is a leading free and open search and analytics solution built on Apache Lucene.
 [Elastic HQ](https://www.elastichq.org/) gives you complete control over your ElasticSearch clusters, nodes, indexes, and mappings.
 
 ## Configuration
@@ -19,4 +21,4 @@ ELASTICSEARCH_VERSION=...
 
 ## Web Interface
 
-Elasticsearch and also ElasticHQ web interfaces associated with the project can be found at `elasticsearch` and `elastichq` subdomains (eg. `https://elasticsearch.magento2.test/` and `https://elastichq.magento2.test/`).
+Elasticsearch and also ElasticHQ web interfaces associated with the project can be found at `elasticsearch` and `elastichq` subdomains (eg. `https://elasticsearch.exampleproject.test/` and `https://elastichq.exampleproject.test/`).
