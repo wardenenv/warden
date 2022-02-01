@@ -1,4 +1,4 @@
-FROM centos:8
+FROM quay.io/centos/centos:stream8
 
 RUN dnf upgrade -y \
     && dnf clean all \
