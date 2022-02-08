@@ -27,7 +27,6 @@ fi
 ## add dnsmasq docker-compose
 WARDEN_DNSMASQ_ENABLE="${WARDEN_DNSMASQ_ENABLE:-1}"
 if [[ "$WARDEN_DNSMASQ_ENABLE" == "1" ]]; then
-    echo "adding docker-compose.dnsmasq.yml"
     DOCKER_COMPOSE_ARGS+=("-f")
     DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.dnsmasq.yml")
 fi
