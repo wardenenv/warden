@@ -1,16 +1,15 @@
-FROM quay.io/centos/centos:stream8
+FROM quay.io/centos/centos:7
 
-RUN dnf upgrade -y \
-    && dnf clean all \
-    && rm -rf /var/cache/dnf
+RUN yum upgrade -y \
+    && yum clean all \
+    && rm -rf /var/cache/yum
 
 ARG RPM_SCRIPT=https://packagecloud.io/install/repositories/varnishcache/varnish41/script.rpm.sh
 RUN curl -s "${RPM_SCRIPT}" | bash \
-    && dnf install -y epel-release \
-    && dnf module disable -y varnish \
-    && dnf install -y varnish gettext \
-    && dnf clean all \
-    && rm -rf /var/cache/dnf
+    && yum install -y epel-release \
+    && yum install -y varnish gettext \
+    && yum clean all \
+    && rm -rf /var/cache/yum
 
 ENV VCL_CONFIG      /etc/varnish/default.vcl
 ENV CACHE_SIZE      256m
