@@ -45,7 +45,8 @@ RUN mkdir -p /tmp/mhsendmail \
 RUN pip3 install awscli segno --no-cache-dir
 
 # Configure www-data user as primary php-fpm user for better local dev experience
-RUN chmod 0755 ~www-data \
+RUN usermod -d /home/www-data www-data \
+    && chmod 0755 ~www-data \
     && mkdir -p /var/www/html \
     && chown www-data:www-data /var/www/html \
     && echo "www-data ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd \
