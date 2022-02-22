@@ -4,6 +4,7 @@ services:
     labels:
       - traefik.enable=false
       - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.priority=2
+      - traefik.docker.network=${WARDEN_ENV_NAME}_default
 
   varnish:
     hostname: "${WARDEN_ENV_NAME}-varnish"
@@ -17,3 +18,4 @@ services:
       - traefik.http.routers.${WARDEN_ENV_NAME}-varnish.rule=
           HostRegexp(`{subdomain:.+}.${TRAEFIK_DOMAIN}`) || Host(`${TRAEFIK_DOMAIN}`)
       - traefik.http.services.${WARDEN_ENV_NAME}-varnish.loadbalancer.server.port=80
+      - traefik.docker.network=${WARDEN_ENV_NAME}_default
