@@ -8,7 +8,7 @@ var gulp                    = require("gulp"),
     htmlmin                 = require("gulp-htmlmin"),
 
     // CSS plugins
-    sass                    = require("gulp-sass"),
+    sass                    = require('gulp-sass')(require('sass')),
     combineMediaQueries     = require("gulp-combine-mq"),
     autoprefixer            = require("gulp-autoprefixer"),
     cssmin                  = require("gulp-clean-css"),
