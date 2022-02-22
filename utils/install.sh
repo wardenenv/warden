@@ -7,6 +7,7 @@ function installSshConfig () {
     echo "    Note: This addition to the ssh_config file can sometimes be erased by a system"
     echo "    upgrade requiring reconfiguring the SSH config for tunnel.warden.test."
     cat <<-EOT | sudo tee -a /etc/ssh/ssh_config >/dev/null
+
 			## WARDEN START ##
 			Host tunnel.warden.test
 			HostName 127.0.0.1
