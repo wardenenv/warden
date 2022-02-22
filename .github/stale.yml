@@ -16,6 +16,7 @@ exemptLabels:
   - documentation
   - up-for-grabs
   - docker-images
+  - arm64
 
 # Label to use when marking as stale
 staleLabel: stale
