@@ -16,6 +16,7 @@
         "gulp-util": "*",
         "gulp-watch": "*",
         "browser-sync": "*",
+        "sass": "*",
         "glob": "*"
     }
 }
