@@ -34,7 +34,7 @@ warden install
 
 ## Available Packages
 
-Add the registry & user prefix of `ghcr.io/drpayyne/` to all the below packages for usage. All the below packages are available for both `linux/arm64` and `linux/amd64` architectures.
+Add the registry & user prefix of `ghcr.io/drpayyne/` to all the below packages for usage. All the below packages are available for both `linux/arm64` and `linux/amd64` architectures. (Note: only the `*-deb` variants of the PHP images are actively maintained and supported)
 
 | Service | Package & Tag |
 |---|---|
