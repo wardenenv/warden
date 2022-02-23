@@ -45,7 +45,9 @@ RUN mkdir -p /tmp/mhsendmail \
 RUN pip3 install awscli segno --no-cache-dir
 
 # Configure www-data user as primary php-fpm user for better local dev experience
-RUN usermod -d /home/www-data www-data \
+RUN mkdir -p /home/www-data \
+    && chown www-data:www-data /home/www-data \
+    && usermod -d /home/www-data www-data \
     && chmod 0755 ~www-data \
     && mkdir -p /var/www/html \
     && chown www-data:www-data /var/www/html \
