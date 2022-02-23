@@ -15,7 +15,7 @@ fi
 sudo update-ca-certificates
 
 # start socat process in background to connect sockets used for agent access within container environment
-if [ -s /run/host-services/ssh-auth.sock ] \
+if [ -S /run/host-services/ssh-auth.sock ] \
   && [ "${SSH_AUTH_SOCK}" != "/run/host-services/ssh-auth.sock" ]
 then
   sudo rm -f "${SSH_AUTH_SOCK}"
