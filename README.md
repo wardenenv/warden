@@ -47,3 +47,8 @@ Add the registry & user prefix of `ghcr.io/drpayyne/` to all the below packages 
 | Nginx | <ul><li>`warden-nginx` (latest)</li><li>`warden-nginx:1.18`</li><li>`warden-nginx:1.17`</li><li>`warden-nginx:1.16`</li></ul> |
 | Elasticsearch | <ul><li>`warden-elasticsearch` (latest)</li><li>`warden-elasticsearch:7.9`</li></ul> |
 | Varnish | <ul><li>`warden-varnish` (latest)</li><li>`warden-varnish:6.5`</li><li>`warden-varnish:6.4`</li><li>`warden-varnish:6.0`</li></ul> |
+
+## Steps to rebuild PHP images
+
+1. Run "PHP FPM Full" workflow with the appropriate version tag (`major.minor-deb`) from [PHP FPM](https://github.com/users/drpayyne/packages/container/package/php-fpm) or [PHP FPM Loaders](https://github.com/users/drpayyne/packages/container/package/php-fpm-loaders) and push to the same version `major.minor-deb`.
+2. Added `-loaders` tag when building a PHP FPM image which has the loaders available. As of today (3 March, 2022), loaders aren't built into PHP 8.1 due to an [external package dependency](https://github.com/mlocati/docker-php-extension-installer#supported-php-extensions).
