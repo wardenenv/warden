@@ -5,8 +5,11 @@ sync:
     watch:
       pollingInterval: 10
     ignore:
-      vcs: true
+      vcs: false
       paths:
+        # Root .git folder 
+        - "/.git/"
+      
         # System files
         - ".DS_Store"
         - "._*"
