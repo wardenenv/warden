@@ -1,7 +1,7 @@
 name: Docker Image Varnish
 on:
   schedule:
-    - cron: "0 6 1 * *"   # 6 AM UTC on 1st day of month
+    - cron: "0 6 1 * *" # 6 AM UTC on 1st day of month
   push:
     paths:
       - version
@@ -16,17 +16,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ['6.0', '6.5', '6.6', '7.0']
-        multiarch: ['true']
+        version: ["6.0", "6.5", "6.6", "7.0"]
+        multiarch: ["true"]
         include:
-          - version: '4.1'
-            multiarch: 'false'
-          - version: '6.4'
-            multiarch: 'false'
-    
+          - version: "4.1"
+            multiarch: "false"
+          - version: "6.4"
+            multiarch: "false"
+
     runs-on: ubuntu-latest
     steps:
-
       - uses: actions/checkout@v2
 
       - name: Set up QEMU
