@@ -17,12 +17,6 @@ jobs:
       fail-fast: false
       matrix:
         version: ["6.0", "6.5", "6.6", "7.0"]
-        multiarch: ["true"]
-        include:
-          - version: "4.1"
-            multiarch: "false"
-          - version: "6.4"
-            multiarch: "false"
 
     runs-on: ubuntu-latest
     steps:
@@ -42,20 +36,9 @@ jobs:
 
       - name: Build and push (amd64, arm64)
         uses: docker/build-push-action@v2
-        if: ${{ matrix.multiarch == 'true' }}
         with:
           context: images/varnish/context
           file: images/varnish/${{ matrix.version }}/Dockerfile
           platforms: linux/amd64,linux/arm64
-          push: true
-          tags: docker.io/wardenenv/varnish:${{ matrix.version }}
-
-      - name: Build and push (amd64 only)
-        uses: docker/build-push-action@v2
-        if: ${{ matrix.multiarch == 'false' }}
-        with:
-          context: images/varnish/context
-          file: images/varnish/${{ matrix.version }}/Dockerfile
-          platforms: linux/amd64
           push: true
           tags: docker.io/wardenenv/varnish:${{ matrix.version }}
