@@ -7,6 +7,7 @@ on:
       - version
       - images/.trigger
       - images/elasticsearch/**
+      - .github/workflows/*elasticsearch*
 
 jobs:
   elasticsearch:
@@ -30,9 +31,19 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
         if: ${{ !env.ACT }}
 
+      - name: Set build-args
+        run: |-
+          ESCAPED_VERSION="$(echo ${{ matrix.version }} | sed 's/\./\\\./g')"
+          ES_VERSION=$(
+            docker run --rm gcr.io/go-containerregistry/crane:v0.8.0 ls docker.elastic.co/elasticsearch/elasticsearch \
+            | egrep "^${ESCAPED_VERSION}\.[0-9]+\$" | sort -Vr | head -n1
+          )
+          echo "ES_VERSION=${ES_VERSION}" | tee /dev/stderr >> $GITHUB_ENV
+
       - uses: docker/build-push-action@v2
         with:
           context: images/elasticsearch
           platforms: linux/amd64,linux/arm64
+          build-args: ES_VERSION=${{ env.ES_VERSION }}
           push: ${{ github.ref == 'refs/heads/develop' && !env.ACT }}
           tags: docker.io/wardenenv/elasticsearch:${{ matrix.version }}
