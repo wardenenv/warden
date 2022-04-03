@@ -4,7 +4,8 @@ RUN dnf upgrade -y \
     && dnf clean all \
     && rm -rf /var/cache/dnf
 
-ARG RPM_SCRIPT=https://packagecloud.io/install/repositories/varnishcache/varnish60lts/script.rpm.sh
+ARG VARNISH_VERSION=60lts
+ARG RPM_SCRIPT=https://packagecloud.io/install/repositories/varnishcache/varnish${VARNISH_VERSION}/script.rpm.sh
 RUN curl -s "${RPM_SCRIPT}" | bash \
     && dnf install -y epel-release \
     && dnf module disable -y varnish \

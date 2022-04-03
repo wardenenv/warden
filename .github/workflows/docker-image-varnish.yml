@@ -16,10 +16,24 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["6.0", "6.5", "6.6", "7.0"]
+        version:
+          - "6.5"
+          - "6.6"
+          - "7.0"
+        include:
+          - version: "6.0"
+            lts: true
 
     runs-on: ubuntu-latest
     steps:
+      - name: Configure RPM repository
+        if: ${{ matrix.lts == true }}
+        run: echo "VARNISH_REPO=$(echo ${{ matrix.version }} | tr -d .)lts" >> $GITHUB_ENV
+
+      - name: Configure RPM repository
+        if: ${{ matrix.lts == true }}
+        run: echo "VARNISH_REPO=$(echo ${{ matrix.version }} | tr -d .)" >> $GITHUB_ENV
+
       - uses: actions/checkout@v2
 
       - name: Set up QEMU
@@ -38,7 +52,8 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: images/varnish/context
-          file: images/varnish/${{ matrix.version }}/Dockerfile
+          file: images/varnish/Dockerfile
           platforms: linux/amd64,linux/arm64
+          build-args: VARNISH_REPO=${VARNISH_REPO}
           push: true
           tags: docker.io/wardenenv/varnish:${{ matrix.version }}
