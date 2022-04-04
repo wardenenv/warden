@@ -13,6 +13,13 @@ jobs:
   mailhog:
     name: MailHog
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        version:
+          - "1.0"
+
     steps:
       - uses: actions/checkout@v2
       - uses: docker/setup-qemu-action@v1
@@ -28,5 +35,6 @@ jobs:
         with:
           context: images/mailhog
           platforms: linux/amd64,linux/arm64
+          build-args: MAILHOG_VERSION=${{ matrix.version }}
           push: ${{ github.ref == 'refs/heads/develop' && !env.ACT }}
           tags: docker.io/wardenenv/mailhog:${{ matrix.version }}

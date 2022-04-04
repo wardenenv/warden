@@ -1,7 +1,7 @@
 FROM golang:alpine as builder
 
 # Install MailHog:
-ARG MAILHOG_VERSION=1.0.1
+ARG MAILHOG_VERSION=1.0
 RUN apk --no-cache add --virtual build-dependencies \
     git \
   && mkdir -p /root/gocode \
