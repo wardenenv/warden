@@ -7,11 +7,13 @@ on:
       - version
       - images/.trigger
       - images/redis/**
+      - .github/workflows/*redis*
 
 jobs:
   redis:
     name: Redis
     runs-on: ubuntu-latest
+
     strategy:
       fail-fast: false
       matrix:
@@ -21,6 +23,7 @@ jobs:
           - "5.0"
           - "6.0"
           - "6.2"
+
     steps:
       - uses: actions/checkout@v2
       - uses: docker/setup-qemu-action@v1
@@ -36,7 +39,6 @@ jobs:
         with:
           context: images/redis
           platforms: linux/amd64,linux/arm64
-          build-args: |-
-            REDIS_VERSION=${{ matrix.version }}
+          build-args: REDIS_VERSION=${{ matrix.version }}
           push: ${{ github.ref == 'refs/heads/develop' && !env.ACT }}
           tags: docker.io/wardenenv/redis:${{ matrix.version }}
