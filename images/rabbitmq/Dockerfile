@@ -1,0 +1,2 @@
+ARG RABBITMQ_VERSION
+FROM rabbitmq:${RABBITMQ_VERSION}-management

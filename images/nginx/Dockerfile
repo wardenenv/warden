@@ -1,4 +1,5 @@
-FROM nginx:1.17-alpine
+ARG NGINX_VERSION
+FROM nginx:${NGINX_VERSION}-alpine
 RUN apk add --no-cache bash shadow
 
 ENV NGINX_UPSTREAM_HOST           php-fpm
