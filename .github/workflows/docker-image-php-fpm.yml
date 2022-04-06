@@ -7,6 +7,7 @@ on:
     - version
     - images/.trigger
     - images/php-fpm/**
+    - .github/workflows/*php-fpm*
     branches:
     - develop
 jobs:
@@ -14,6 +15,7 @@ jobs:
     name: FPM ${{ matrix.php_version }}
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         php_version: ["7.2", "7.3", "7.4", "8.0", "8.1"]
     steps:
@@ -31,6 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: php-fpm
     strategy:
+      fail-fast: false
       matrix:
         php_version: ["7.2", "7.3", "7.4", "8.0", "8.1"]
     steps:
@@ -47,6 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: php-fpm
     strategy:
+      fail-fast: false
       matrix:
         php_version: ["7.2", "7.3", "7.4", "8.0", "8.1"]
     steps:
