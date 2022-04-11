@@ -74,7 +74,7 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
 
 6.  Configure global Magento Marketplace credentials
 
-    composer global config http-basic.repo.magento.com <username> <password>
+    	composer global config http-basic.repo.magento.com [Public Key] [Private Key] 
 
     ```note::
         To locate your authentication keys for Magento 2 repository, `reference DevDocs <https://devdocs.magento.com/guides/v2.3/install-gde/prereq/connect-auth.html>`_.
