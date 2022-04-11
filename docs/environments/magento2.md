@@ -74,12 +74,14 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
 
 6.  Configure global Magento Marketplace credentials
 
-    composer global config http-basic.repo.magento.com <username> <password>
+    	composer global config http-basic.repo.magento.com <username> <password>
 
     ```note::
         To locate your authentication keys for Magento 2 repository, `reference DevDocs <https://devdocs.magento.com/guides/v2.3/install-gde/prereq/connect-auth.html>`_.
 
         If you have previously configured global credentials, you may skip this step, as ``~/.composer/`` is mounted into the container from the host machine in order to share composer cache between projects, and also shares the global ``auth.json`` from the host machine.
+
+        Use the **Public key** as your username and the **Private key** as your password.
     ```
 
 7.  Initialize project source files using composer create-project and then move them into place:
