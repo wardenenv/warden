@@ -20,3 +20,5 @@ exemptLabels:
 
 # Label to use when marking as stale
 staleLabel: stale
+
+only: issues
