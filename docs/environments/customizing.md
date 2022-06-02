@@ -6,9 +6,9 @@ To configure your project with a non-default PHP version, add the following to t
 
     PHP_VERSION=7.2
 
-The versions of MariaDB, Elasticsearch, Varnish, Redis, NodeJS and Composer may also be similarly configured using variables in the `.env` file:
+The versions of MariaDB/Mysql, Elasticsearch, Varnish, Redis, NodeJS and Composer may also be similarly configured using variables in the `.env` file:
 
-  * `MARIADB_VERSION`
+  * `MYSQL_DISTRIBUTION_VERSION` (Available distributions: `MYSQL_DISTRIBUTION=mysql` or `MYSQL_DISTRIBUTION=mariadb`)
   * `ELASTICSEARCH_VERSION`
   * `REDIS_VERSION`
   * `VARNISH_VERSION`

@@ -33,7 +33,8 @@ The below example demonstrates the from-scratch setup of the Magento 2 applicati
         WARDEN_SYNC_IGNORE=
 
         ELASTICSEARCH_VERSION=7.6
-        MARIADB_VERSION=10.3
+        MYSQL_DISTRIBUTION=mariadb
+        MYSQL_DISTRIBUTION_VERSION=10.3
         NODE_VERSION=12
         COMPOSER_VERSION=1
         PHP_VERSION=7.3
