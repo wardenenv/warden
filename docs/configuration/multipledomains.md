@@ -65,6 +65,27 @@ Multiple top-level domains may also be setup by following the instructions below
          - sub2.alternate2.test:${TRAEFIK_ADDRESS:-0.0.0.0}
     ```
 
+### Multiple websites with multiple top level domains
+In order to have support for this, for example `app.base.test` and `app.alternative.test` you must do the following:
+1. Create a `.warden/warden-env-yml` file with the following content:
+  ```yaml
+    version: '3.5'
+    services:
+       varnish:
+          labels:
+             -  traefik.http.routers.${WARDEN_ENV_NAME}-varnish.rule=
+                HostRegexp(`{subdomain:.+}.{{YOUR_ALTERNATIVE_URL}}.test`) ||
+                Host(`${TRAEFIK_DOMAIN}`) || Host(`{{YOUR_ALTERNATIVE_URL}}.test`) ||
+                HostRegexp(`{subdomain:.+}.${TRAEFIK_DOMAIN}`)
+       nginx:
+          labels:
+             -  traefik.http.routers.${WARDEN_ENV_NAME}-nginx.rule=
+                HostRegexp(`{subdomain:.+}.{{YOUR_ALTERNATIVE_URL}}.test`) ||
+                Host(`${TRAEFIK_DOMAIN}`) || Host(`{{YOUR_ALTERNATIVE_URL}}.test`) ||
+                HostRegexp(`{subdomain:.+}.${TRAEFIK_DOMAIN}`)
+```
+2. Run `warden sign certificate {{YOUR_ALTERNATIVE_URL}}.test`
+
 ### Magento 2 Run Params
 
 When multiple domains are being used to load different stores or websites on Magento 2, the following configuration should be defined in order to set run codes and types as needed.
