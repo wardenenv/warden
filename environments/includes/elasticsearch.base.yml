@@ -16,17 +16,5 @@ services:
     volumes:
       - esdata:/usr/share/elasticsearch/data
 
-  elasticsearch-hq:
-    hostname: "${WARDEN_ENV_NAME}-elasticsearch-hq"
-    image: elastichq/elasticsearch-hq:latest
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.${WARDEN_ENV_NAME}-elasticsearch-hq.tls=true
-      - traefik.http.routers.${WARDEN_ENV_NAME}-elasticsearch-hq.rule=Host(`elastichq.${TRAEFIK_DOMAIN}`)
-      - traefik.http.services.${WARDEN_ENV_NAME}-elasticsearch-hq.loadbalancer.server.port=5000
-      - traefik.docker.network=${WARDEN_ENV_NAME}_default
-    environment:
-      - HQ_DEFAULT_URL=http://elasticsearch:9200
-
 volumes:
   esdata:
