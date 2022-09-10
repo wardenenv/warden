@@ -85,3 +85,13 @@ fi
 
 ## append settings for tunnel.warden.test in /etc/ssh/ssh_config
 installSshConfig
+
+## Add optional Warden configuration file
+if [[ ! -f "${WARDEN_HOME_DIR}/.env" ]]; then
+	cat >> "${WARDEN_HOME_DIR}/.env" <<-EOT
+		# Set to "1" to enable global Portainer service
+		WARDEN_PORTAINER_ENABLE=0
+		# SEt to "0" to disable DNSMasq
+		WARDEN_DNSMASQ_ENABLE=1
+	EOT
+fi
