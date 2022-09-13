@@ -31,3 +31,7 @@
 
 ### MySQL Workbench
 ![MySQL Workbench](screenshots/mysql-workbench-connection.png)
+
+### DBeaver
+![DBeaver Connection Config](screenshots/dbeaver-connection.png)
+![DBeaver SSH Config](screenshots/dbeaver-ssh.png)
