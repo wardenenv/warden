@@ -1,6 +1,6 @@
 {
     "devDependencies": {
-        "gulp": "^3.0",
+        "gulp": "^3.9",
         "gulp-autoprefixer": "*",
         "gulp-clean-css": "*",
         "gulp-combine-mq": "*",
