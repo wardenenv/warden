@@ -1,4 +1,0 @@
-## As docs reference files outside build root; disable Netlify attempting to determine need for build.
-## https://docs.netlify.com/configure-builds/file-based-configuration/#ignore-builds
-[build]
-  ignore = "false"

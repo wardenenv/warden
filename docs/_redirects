@@ -1,7 +1,0 @@
-# Redirect default Netlify subdomain to primary domain
-http://warden-docs.netlify.com/*       https://docs.warden.dev/:splat 301!
-https://warden-docs.netlify.com/*      https://docs.warden.dev/:splat 301!
-http://master--warden-docs.netlify.com/*     https://docs.warden.dev/:splat 301!
-https://master--warden-docs.netlify.com/*    https://docs.warden.dev/:splat 301!
-http://develop--warden-docs.netlify.com/*     https://docs.warden.dev/:splat 301!
-https://develop--warden-docs.netlify.com/*    https://docs.warden.dev/:splat 301!
