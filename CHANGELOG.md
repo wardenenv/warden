@@ -5,6 +5,7 @@
 
 **Enhancements:**
 
+* Ability to switch between MariaDB and MySQL using `DB_DISTRIBUTION=(mariadb|mysql)` and `DB_DISTRIBUTION_VERSION` directives
 * Updated environment default Node version from 10 to 12 (issue [#250](https://github.com/davidalger/warden/issues/250))
 * Default URL for ElasticsearchHQ is now configured in the docker-compose config ([#428](https://github.com/davidalger/warden/pull/428) by @ihor-sviziev)
 
