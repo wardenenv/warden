@@ -28,8 +28,8 @@ WARDEN_USAGE=$(cat <<EOF
 
   symfony             Nginx, php-fpm, db (mariadb), and redis services
                       pre-configured for running Symfony 4+
-                      Due to the fact that Symfony uses `.env` file too,
-                      WEBROOT value of `/web/` is used by default
+                      Due to the fact that Symfony uses '.env' file too,
+                      WEBROOT value of '/web/' is used by default
 
   wordpress           Nginx, php-fpm, db
                       pre-configured for running Wordpress

@@ -15,6 +15,7 @@ services:
             && (Path(`/livereload.js`) || Path(`/livereload`))
       - traefik.http.routers.${WARDEN_ENV_NAME}-livereload.service=${WARDEN_ENV_NAME}-livereload
       - traefik.http.services.${WARDEN_ENV_NAME}-livereload.loadbalancer.server.port=35729
+      - traefik.docker.network=${WARDEN_ENV_NAME}_default
     environment:
       - MAGE_DEBUG_SHOW_ARGS=1
 

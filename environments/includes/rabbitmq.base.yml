@@ -8,6 +8,7 @@ services:
       - traefik.http.routers.${WARDEN_ENV_NAME}-rabbitmq.tls=true
       - traefik.http.routers.${WARDEN_ENV_NAME}-rabbitmq.rule=Host(`rabbitmq.${TRAEFIK_DOMAIN}`)
       - traefik.http.services.${WARDEN_ENV_NAME}-rabbitmq.loadbalancer.server.port=15672
+      - traefik.docker.network=${WARDEN_ENV_NAME}_default
     volumes:
       - rabbitmq:/var/lib/rabbitmq
 

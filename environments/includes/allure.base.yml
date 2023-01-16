@@ -8,6 +8,7 @@ services:
       - traefik.http.routers.${WARDEN_ENV_NAME}-allure.tls=true
       - traefik.http.routers.${WARDEN_ENV_NAME}-allure.rule=Host(`allure.${TRAEFIK_DOMAIN}`)
       - traefik.http.services.${WARDEN_ENV_NAME}-allure.loadbalancer.server.port=4040
+      - traefik.docker.network=${WARDEN_ENV_NAME}_default
       # TODO; configure the Allure API; these rules result in allure sub-domain no longer routing
       # - traefik.http.routers.${WARDEN_ENV_NAME}-allure-api.tls=true
       # - traefik.http.routers.${WARDEN_ENV_NAME}-allure-api.rule=Host(`allure-api.${TRAEFIK_DOMAIN}`)

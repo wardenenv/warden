@@ -8,6 +8,7 @@ services:
       - traefik.http.routers.${WARDEN_ENV_NAME}-elasticsearch.tls=true
       - traefik.http.routers.${WARDEN_ENV_NAME}-elasticsearch.rule=Host(`elasticsearch.${TRAEFIK_DOMAIN}`)
       - traefik.http.services.${WARDEN_ENV_NAME}-elasticsearch.loadbalancer.server.port=9200
+      - traefik.docker.network=${WARDEN_ENV_NAME}_default
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
@@ -23,6 +24,7 @@ services:
       - traefik.http.routers.${WARDEN_ENV_NAME}-elasticsearch-hq.tls=true
       - traefik.http.routers.${WARDEN_ENV_NAME}-elasticsearch-hq.rule=Host(`elastichq.${TRAEFIK_DOMAIN}`)
       - traefik.http.services.${WARDEN_ENV_NAME}-elasticsearch-hq.loadbalancer.server.port=5000
+      - traefik.docker.network=${WARDEN_ENV_NAME}_default
     environment:
       - HQ_DEFAULT_URL=http://elasticsearch:9200
 
