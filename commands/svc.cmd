@@ -18,6 +18,27 @@ DOCKER_COMPOSE_ARGS=()
 DOCKER_COMPOSE_ARGS+=("-f")
 DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.yml")
 
+
+## check if dnsmasq is enabled
+if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
+    eval "$(grep "^WARDEN_DNSMASQ_ENABLE" "${WARDEN_HOME_DIR}/.env")"
+fi
+
+## add dnsmasq docker-compose
+WARDEN_DNSMASQ_ENABLE="${WARDEN_DNSMASQ_ENABLE:-1}"
+if [[ "$WARDEN_DNSMASQ_ENABLE" == "1" ]]; then
+    DOCKER_COMPOSE_ARGS+=("-f")
+    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.dnsmasq.yml")
+fi
+
+
+## allow an additional docker-compose file to be loaded for global services
+if [[ -f "${WARDEN_HOME_DIR}/docker-compose.yml" ]]; then
+    DOCKER_COMPOSE_ARGS+=("-f")
+    DOCKER_COMPOSE_ARGS+=("${WARDEN_HOME_DIR}/docker-compose.yml")
+fi
+
+
 ## special handling when 'svc up' is run
 if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
 
