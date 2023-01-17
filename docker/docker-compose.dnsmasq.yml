@@ -3,7 +3,7 @@ services:
 
   dnsmasq:
     container_name: dnsmasq
-    image: jpillora/dnsmasq
+    image: wardenenv/dnsmasq
     ports:
       - "127.0.0.1:53:53/udp"
     environment:
