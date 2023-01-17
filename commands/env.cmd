@@ -77,6 +77,9 @@ fi
 [[ ${WARDEN_ELASTICSEARCH} -eq 1 ]] \
     && appendEnvPartialIfExists "elasticsearch"
 
+[[ ${WARDEN_OPENSEARCH} -eq 1 ]] \
+    && appendEnvPartialIfExists "opensearch"
+
 [[ ${WARDEN_VARNISH} -eq 1 ]] \
     && appendEnvPartialIfExists "varnish"
 
