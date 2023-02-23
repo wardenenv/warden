@@ -1,0 +1,6 @@
+name: Feature Requests
+description: Post Feature Requests and Ideas in the Discussion area
+body:
+  - type: markdown
+    attributes:
+      value: These should be posted in the [Ideas Discussion forum](https://github.com/orgs/wardenenv/discussions/categories/ideas)
