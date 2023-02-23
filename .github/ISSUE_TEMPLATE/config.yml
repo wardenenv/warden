@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Feature Requests
+    about: Post Feature Requests and Ideas in the Discussion area
+    url: https://github.com/orgs/wardenenv/discussions/categories/ideas
+  - name: Help
+    about: If you're unsure if its a bug or need some help, post in the Discussions area
+    url: https://github.com/orgs/wardenenv/discussions/categories/help-support
