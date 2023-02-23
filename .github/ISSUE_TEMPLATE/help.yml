@@ -1,6 +1,0 @@
-name: Help
-description: If you're unsure if its a bug or need some help, post in the Discussions area
-body:
-  - type: markdown
-    attributes:
-      value: These should be posted in the [Help & Support Discussion forum](https://github.com/orgs/wardenenv/discussions/categories/help-support)

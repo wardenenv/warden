@@ -1,6 +1,6 @@
 name: Image Issue
 description: Report an issue with an Image or Service not working as expected
-title: ''
+title: '[Image] '
 labels: bug, docker-images
 body:
   - type: input

@@ -1,6 +1,6 @@
 name: Warden Command Issue
 description: Report an issue with the Warden software (e.g. `warden` commands, docker compose files, or mutagen sync)
-title: ''
+title: '[Command] '
 labels: bug
 body:
   - type: input

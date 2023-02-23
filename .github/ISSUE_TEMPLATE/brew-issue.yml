@@ -1,6 +1,6 @@
 name: Installing or Upgrading through Homebrew
 description: Report an issue with the Warden software when installing or upgrading through Homebrew
-title: ''
+title: '[Brew] '
 labels: bug, brew update
 body:
   - type: input
