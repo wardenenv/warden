@@ -12,7 +12,7 @@ x-extra_hosts: &extra_hosts
 services:
   php-blackfire:
     hostname: "${WARDEN_ENV_NAME}-php-blackfire"
-    image: ${WARDEN_IMAGE_REPOSITORY}/php-fpm:${PHP_VERSION:-7.4}${WARDEN_SVC_PHP_VARIANT:-}-blackfire
+    image: ${WARDEN_IMAGE_REPOSITORY}/php-fpm${WARDEN_SVC_PHP_IMAGE_SUFFIX:-}:${PHP_VERSION:-7.4}${WARDEN_SVC_PHP_VARIANT:-}-blackfire
     environment:
       - TRAEFIK_DOMAIN
       - TRAEFIK_SUBDOMAIN

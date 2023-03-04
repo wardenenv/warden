@@ -22,6 +22,9 @@ export WARDEN_IMAGE_REPOSITORY="${WARDEN_IMAGE_REPOSITORY:-"docker.io/wardenenv"
 if [[ ${WARDEN_ENV_TYPE} =~ ^magento ]]; then
     export WARDEN_SVC_PHP_VARIANT=-${WARDEN_ENV_TYPE}
 fi
+if [[ ${WARDEN_NIGHTLY} -eq 1 ]]; then
+    export WARDEN_SVC_PHP_IMAGE_SUFFIX="-indev"
+fi
 
 ## configure xdebug version
 export XDEBUG_VERSION="debug" # xdebug2 image
