@@ -12,5 +12,5 @@ WARDEN_ENV_BLACKFIRE_CONTAINER=${WARDEN_ENV_BLACKFIRE_CONTAINER:-php-blackfire}
 ## allow return codes from sub-process to bubble up normally
 trap '' ERR
 
-"${WARDEN_DIR}/bin/warden" env exec "${WARDEN_ENV_BLACKFIRE_CONTAINER}" \
+"$WARDEN_BIN" env exec "${WARDEN_ENV_BLACKFIRE_CONTAINER}" \
     "${WARDEN_ENV_BLACKFIRE_COMMAND}" "${WARDEN_PARAMS[@]}" "$@"

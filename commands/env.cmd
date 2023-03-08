@@ -6,7 +6,7 @@ loadEnvConfig "${WARDEN_ENV_PATH}" || exit $?
 assertDockerRunning
 
 if (( ${#WARDEN_PARAMS[@]} == 0 )) || [[ "${WARDEN_PARAMS[0]}" == "help" ]]; then
-  warden env --help || exit $? && exit $?
+  $WARDEN_BIN env --help || exit $? && exit $?
 fi
 
 ## allow return codes from sub-process to bubble up normally
@@ -188,7 +188,7 @@ fi
 if [[ "${WARDEN_PARAMS[0]}" == "stop" ]] \
     && [[ $OSTYPE =~ ^darwin ]] && [[ -f "${MUTAGEN_SYNC_FILE}" ]]
 then
-    warden sync pause
+    $WARDEN_BIN sync pause
 fi
 
 ## pass ochestration through to docker-compose
@@ -199,27 +199,27 @@ docker-compose \
 ## resume mutagen sync if available and php-fpm container id hasn't changed
 if ([[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]]) \
     && [[ $OSTYPE =~ ^darwin ]] && [[ -f "${MUTAGEN_SYNC_FILE}" ]] \
-    && [[ $(warden sync list | grep -i 'Status: \[Paused\]' | wc -l | awk '{print $1}') == "1" ]] \
-    && [[ $(warden env ps -q php-fpm) ]] \
-    && [[ $(docker container inspect $(warden env ps -q php-fpm) --format '{{ .State.Status }}') = "running" ]] \
-    && [[ $(warden env ps -q php-fpm) = $(warden sync list | grep -i 'URL: docker' | awk -F'/' '{print $3}') ]]
+    && [[ $($WARDEN_BIN sync list | grep -i 'Status: \[Paused\]' | wc -l | awk '{print $1}') == "1" ]] \
+    && [[ $($WARDEN_BIN env ps -q php-fpm) ]] \
+    && [[ $(docker container inspect $($WARDEN_BIN env ps -q php-fpm) --format '{{ .State.Status }}') = "running" ]] \
+    && [[ $($WARDEN_BIN env ps -q php-fpm) = $($WARDEN_BIN sync list | grep -i 'URL: docker' | awk -F'/' '{print $3}') ]]
 then
-    warden sync resume
+    $WARDEN_BIN sync resume
 fi
 
 ## start mutagen sync if needed
 if ([[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]]) \
     && [[ $OSTYPE =~ ^darwin ]] && [[ -f "${MUTAGEN_SYNC_FILE}" ]] \
-    && [[ $(warden sync list | grep -i 'Connection state: Connected' | wc -l | awk '{print $1}') != "2" ]] \
-    && [[ $(warden env ps -q php-fpm) ]] \
-    && [[ $(docker container inspect $(warden env ps -q php-fpm) --format '{{ .State.Status }}') = "running" ]]
+    && [[ $($WARDEN_BIN sync list | grep -i 'Connection state: Connected' | wc -l | awk '{print $1}') != "2" ]] \
+    && [[ $($WARDEN_BIN env ps -q php-fpm) ]] \
+    && [[ $(docker container inspect $($WARDEN_BIN env ps -q php-fpm) --format '{{ .State.Status }}') = "running" ]]
 then
-    warden sync start
+    $WARDEN_BIN sync start
 fi
 
 ## stop mutagen sync if needed
 if [[ "${WARDEN_PARAMS[0]}" == "down" ]] \
     && [[ $OSTYPE =~ ^darwin ]] && [[ -f "${MUTAGEN_SYNC_FILE}" ]]
 then
-    warden sync stop
+    $WARDEN_BIN sync stop
 fi

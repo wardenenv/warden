@@ -10,13 +10,13 @@ if [[ ${WARDEN_REDIS:-1} -eq 0 ]]; then
 fi
 
 if [[ "${WARDEN_PARAMS[0]}" == "help" ]]; then
-  warden redis --help || exit $? && exit $?
+  $WARDEN_BIN redis --help || exit $? && exit $?
 fi
 
 ## load connection information for the redis service
-REDIS_CONTAINER=$(warden env ps -q redis)
+REDIS_CONTAINER=$($WARDEN_BIN env ps -q redis)
 if [[ ! ${REDIS_CONTAINER} ]]; then
     fatal "No container found for redis service."
 fi
 
-"${WARDEN_DIR}/bin/warden" env exec redis redis-cli "${WARDEN_PARAMS[@]}" "$@"
+"$WARDEN_BIN" env exec redis redis-cli "${WARDEN_PARAMS[@]}" "$@"

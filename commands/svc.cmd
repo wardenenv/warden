@@ -6,7 +6,7 @@ assertWardenInstall
 assertDockerRunning
 
 if (( ${#WARDEN_PARAMS[@]} == 0 )) || [[ "${WARDEN_PARAMS[0]}" == "help" ]]; then
-  warden svc --help || exit $? && exit $?
+  $WARDEN_BIN svc --help || exit $? && exit $?
 fi
 
 ## allow return codes from sub-process to bubble up normally
@@ -54,7 +54,7 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
 
     WARDEN_SERVICE_DOMAIN="${WARDEN_SERVICE_DOMAIN:-warden.test}"
     if [[ ! -f "${WARDEN_SSL_DIR}/certs/${WARDEN_SERVICE_DOMAIN}.crt.pem" ]]; then
-        "${WARDEN_DIR}/bin/warden" sign-certificate "${WARDEN_SERVICE_DOMAIN}"
+        "$WARDEN_BIN" sign-certificate "${WARDEN_SERVICE_DOMAIN}"
     fi
 
     ## copy configuration files into location where they'll be mounted into containers from
