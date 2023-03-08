@@ -28,7 +28,7 @@ services:
 
     entrypoint: ["/bin/sh", "-c", "
         echo \"$$WARDEN_DNSMASQ_CONF\" > /etc/dnsmasq.conf;
-        webproc --config /etc/dnsmasq.conf -- dnsmasq --no-daemon;
+        webproc --configuration-file /etc/dnsmasq.conf -- dnsmasq --no-daemon;
       "]
     labels:
       - traefik.enable=true
