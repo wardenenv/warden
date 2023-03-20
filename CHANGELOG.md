@@ -1,13 +1,32 @@
 # Change Log
 
+<!--
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.12.0..develop)
+-->
+
+## Version [0.13.0](https://github.com/davidalger/warden/tree/0.13.0) (2023-03-20)
+[All Commits](https://github.com/wardenenv/warden/compare/0.12.0..0.13.0)
 
 **Enhancements:**
 
-* Ability to switch between MariaDB and MySQL using `DB_DISTRIBUTION=(mariadb|mysql)` and `DB_DISTRIBUTION_VERSION` directives
-* Updated environment default Node version from 10 to 12 (issue [#250](https://github.com/davidalger/warden/issues/250))
-* Default URL for ElasticsearchHQ is now configured in the docker-compose config ([#428](https://github.com/davidalger/warden/pull/428) by @ihor-sviziev)
+* Updated environment default Node version from 10 to 12 ([#425](https://github.com/wardenenv/warden/pull/425) by @davidalger)
+* Ignore the only root .git directory ([#496](https://github.com/wardenenv/warden/pull/496) by @ihor-sviziev)
+* Allow dnsmasq service to be disabled ([#462](https://github.com/wardenenv/warden/pull/462) by by @davidhiendl)
+* added backup and restore command for easy project share ([#581](https://github.com/wardenenv/warden/pull/581) by @rbouma)
+* Update Magento2 defaults to 2.4.6 ([#618](https://github.com/wardenenv/warden/pull/618) by by @lalittmohan)
+* The ability to specify `DB_DISTRIBUTION=(mysql|mariadb)` and `DB_DISTRIBUTION_VERSION` ([dd5ff](https://github.com/wardenenv/warden/commit/dd5ffddf4764d43c70387435c7c75035615661f0) by @rootindex)
+* Add `WARDEN_OPENSEARCH=1` and `OPENSEARCH_VERSION` ([2bd95](https://github.com/wardenenv/warden/commit/2bd95457748c1d639dc6109018d963ff624137ac) by @navarr)
+* Migration from Selenium to Seleniarm ([471dc](https://github.com/wardenenv/warden/commit/471dc0411771e21448dd4aa9eba8e8fdc7abdfdb) by @navarr)
+* Scoped environment config loading ([#451](https://github.com/wardenenv/warden/pull/451) by @tdgroot)
+* Portainer made optional and off by default ([03783](https://github.com/wardenenv/warden/commit/03783b65cfdd644133e75468808a93e751922077) by @bap14)
+* Persist MySQL command history ([45a16](https://github.com/wardenenv/warden/commit/45a16f064680dec0e7cb3fe4906090359bd3dfd5) by @navarr)
+
+**Bug Fixes:**
+* Update default URL for ElasticsearchHQ by @ihor-sviziev in [wardenenv/warden#428](https://github.com/wardenenv/warden/pull/428)
+* Corrected syntax of env-init.help command by @davidalger in [wardenenv/warden#490](https://github.com/wardenenv/warden/pull/490)
+* Add `traefik.docker.network` label to specify docker network exclusively by @tdgroot in [wardenenv/warden#458](https://github.com/wardenenv/warden/pull/458)
+* Require docker compose 2.2.3 when compose v2 is active by @davidalger in [wardenenv/warden#489](https://github.com/wardenenv/warden/pull/489)
 
 ## Version [0.12.0](https://github.com/davidalger/warden/tree/0.12.0) (2021-08-28)
 [All Commits](https://github.com/davidalger/warden/compare/0.11.0..0.12.0)
