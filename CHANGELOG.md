@@ -3,6 +3,12 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.12.0..develop)
 
+**Enhancements:**
+
+* Ability to switch between MariaDB and MySQL using `DB_DISTRIBUTION=(mariadb|mysql)` and `DB_DISTRIBUTION_VERSION` directives
+* Updated environment default Node version from 10 to 12 (issue [#250](https://github.com/davidalger/warden/issues/250))
+* Default URL for ElasticsearchHQ is now configured in the docker-compose config ([#428](https://github.com/davidalger/warden/pull/428) by @ihor-sviziev)
+
 ## Version [0.12.0](https://github.com/davidalger/warden/tree/0.12.0) (2021-08-28)
 [All Commits](https://github.com/davidalger/warden/compare/0.11.0..0.12.0)
 

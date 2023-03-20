@@ -15,7 +15,7 @@ if [[ ${WARDEN_ENV_DEBUG_HOST} == "" ]]; then
         WARDEN_ENV_DEBUG_HOST=host.docker.internal
     else
         WARDEN_ENV_DEBUG_HOST=$(
-            docker container inspect $(warden env ps -q php-debug) \
+            docker container inspect $($WARDEN_BIN env ps -q php-debug) \
                 --format '{{range .NetworkSettings.Networks}}{{println .Gateway}}{{end}}' | head -n1
         )
     fi
@@ -24,5 +24,5 @@ fi
 ## allow return codes from sub-process to bubble up normally
 trap '' ERR
 
-"${WARDEN_DIR}/bin/warden" env exec -e "XDEBUG_REMOTE_HOST=${WARDEN_ENV_DEBUG_HOST}" \
+"$WARDEN_BIN" env exec -e "XDEBUG_REMOTE_HOST=${WARDEN_ENV_DEBUG_HOST}" \
     "${WARDEN_ENV_DEBUG_CONTAINER}" "${WARDEN_ENV_DEBUG_COMMAND}" "${WARDEN_PARAMS[@]}" "$@"

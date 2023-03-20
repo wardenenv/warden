@@ -2,7 +2,7 @@ version: "3.5"
 services:
   selenium:
     hostname: ${WARDEN_ENV_NAME}_selenium
-    image: selenium/standalone-chrome${WARDEN_SELENIUM_DEBUG:-}:${WARDEN_SELENIUM_VERSION:-3.141.59}
+    image: seleniarm/standalone-chromium:${WARDEN_SELENIUM_VERSION:-latest}
     extra_hosts:
       - ${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
       - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}

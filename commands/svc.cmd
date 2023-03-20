@@ -6,7 +6,7 @@ assertWardenInstall
 assertDockerRunning
 
 if (( ${#WARDEN_PARAMS[@]} == 0 )) || [[ "${WARDEN_PARAMS[0]}" == "help" ]]; then
-  warden svc --help || exit $? && exit $?
+  $WARDEN_BIN svc --help || exit $? && exit $?
 fi
 
 ## allow return codes from sub-process to bubble up normally
@@ -18,6 +18,32 @@ DOCKER_COMPOSE_ARGS=()
 DOCKER_COMPOSE_ARGS+=("-f")
 DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.yml")
 
+if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
+    # Check DNSMasq
+    eval "$(grep "^WARDEN_DNSMASQ_ENABLE" "${WARDEN_HOME_DIR}/.env")"
+    # Check Portainer
+    eval "$(grep "^WARDEN_PORTAINER_ENABLE" "${WARDEN_HOME_DIR}/.env")"
+fi
+
+## add dnsmasq docker-compose
+WARDEN_DNSMASQ_ENABLE="${WARDEN_DNSMASQ_ENABLE:-1}"
+if [[ "$WARDEN_DNSMASQ_ENABLE" == "1" ]]; then
+    DOCKER_COMPOSE_ARGS+=("-f")
+    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.dnsmasq.yml")
+fi
+
+WARDEN_PORTAINER_ENABLE="${WARDEN_PORTAINER_ENABLE:-0}"
+if [[ "${WARDEN_PORTAINER_ENABLE}" == 1 ]]; then
+    DOCKER_COMPOSE_ARGS+=("-f")
+    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.portainer.yml")
+fi
+
+## allow an additional docker-compose file to be loaded for global services
+if [[ -f "${WARDEN_HOME_DIR}/docker-compose.yml" ]]; then
+    DOCKER_COMPOSE_ARGS+=("-f")
+    DOCKER_COMPOSE_ARGS+=("${WARDEN_HOME_DIR}/docker-compose.yml")
+fi
+
 ## special handling when 'svc up' is run
 if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
 
@@ -28,7 +54,7 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
 
     WARDEN_SERVICE_DOMAIN="${WARDEN_SERVICE_DOMAIN:-warden.test}"
     if [[ ! -f "${WARDEN_SSL_DIR}/certs/${WARDEN_SERVICE_DOMAIN}.crt.pem" ]]; then
-        "${WARDEN_DIR}/bin/warden" sign-certificate "${WARDEN_SERVICE_DOMAIN}"
+        "$WARDEN_BIN" sign-certificate "${WARDEN_SERVICE_DOMAIN}"
     fi
 
     ## copy configuration files into location where they'll be mounted into containers from
@@ -61,7 +87,7 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
 fi
 
 ## pass ochestration through to docker-compose
-docker-compose \
+WARDEN_SERVICE_DIR=${WARDEN_DIR} docker-compose \
     --project-directory "${WARDEN_HOME_DIR}" -p warden \
     "${DOCKER_COMPOSE_ARGS[@]}" "${WARDEN_PARAMS[@]}" "$@"
 

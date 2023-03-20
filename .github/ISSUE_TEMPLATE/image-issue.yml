@@ -1,0 +1,56 @@
+name: Image Issue
+description: Report an issue with an Image or Service not working as expected
+title: '[Image] '
+labels: bug, docker-images
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Version of Warden
+      description: Run `warden version` and provide the output
+      placeholder: warden version
+    validations:
+      required: true
+  - type: input
+    id: install
+    attributes:
+      label: Operating System and Installation Method
+      description: Please tell us how you installed Warden and on what operating system.  (E.g. "Mac OS 12.6 via Brew")
+      placeholder: Mac OS 12.6 via Brew
+    validations:
+      required: true
+  - type: textarea
+    id: image
+    attributes:
+      label: Image
+      description: Please tell us which image and version you're experiencing the issue with.  For example, `php-fpm:8.1-magento2`.  If you're unsure, you can run `warden env config` and check the `image` key underneath the service you're having the issue with.  If this isn't working, please provide your `.env` file.
+      placeholder: php-fpm:8.1-magento2
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Describe the Bug
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: To Reproduce
+      description: Steps to reproduce the behavior
+      value: |
+        1. Go to '...'  
+        2. Click on '....'  
+        3. Scroll down to '....'  
+        4. See error
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: A clear and concise description of what you expected to happen and when
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Add any other context about the problem here.

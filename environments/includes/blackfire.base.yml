@@ -12,12 +12,12 @@ x-extra_hosts: &extra_hosts
 services:
   php-blackfire:
     hostname: "${WARDEN_ENV_NAME}-php-blackfire"
-    image: ${WARDEN_IMAGE_REPOSITORY}/php-fpm:${PHP_VERSION:-7.4}${WARDEN_SVC_PHP_VARIANT:-}-blackfire
+    image: ${WARDEN_IMAGE_REPOSITORY}/php-fpm${WARDEN_SVC_PHP_IMAGE_SUFFIX:-}:${PHP_VERSION:-7.4}${WARDEN_SVC_PHP_VARIANT:-}-blackfire
     environment:
       - TRAEFIK_DOMAIN
       - TRAEFIK_SUBDOMAIN
       - SSH_AUTH_SOCK=${SSH_AUTH_SOCK_PATH_ENV:-/tmp/ssh-auth.sock}
-      - NODE_VERSION=${NODE_VERSION:-10}
+      - NODE_VERSION=${NODE_VERSION:-12}
       - COMPOSER_VERSION=${COMPOSER_VERSION:-1}
       - COMPOSER_MEMORY_LIMIT=-1
       - BLACKFIRE_CLIENT_ID=${BLACKFIRE_CLIENT_ID}

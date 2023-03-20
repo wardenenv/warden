@@ -18,12 +18,12 @@ services:
 
   php-fpm:
     hostname: "${WARDEN_ENV_NAME}-php-fpm"
-    image: ${WARDEN_IMAGE_REPOSITORY}/php-fpm:${PHP_VERSION:-7.4}${WARDEN_SVC_PHP_VARIANT:-}
+    image: ${WARDEN_IMAGE_REPOSITORY}/php-fpm${WARDEN_SVC_PHP_IMAGE_SUFFIX:-}:${PHP_VERSION:-7.4}${WARDEN_SVC_PHP_VARIANT:-}
     environment:
       - TRAEFIK_DOMAIN
       - TRAEFIK_SUBDOMAIN
       - SSH_AUTH_SOCK=${SSH_AUTH_SOCK_PATH_ENV:-/tmp/ssh-auth.sock}
-      - NODE_VERSION=${NODE_VERSION:-10}
+      - NODE_VERSION=${NODE_VERSION:-12}
       - COMPOSER_VERSION=${COMPOSER_VERSION:-1}
       - COMPOSER_MEMORY_LIMIT=-1
       - HISTFILE=/bash_history/.bash_history
@@ -33,12 +33,12 @@ services:
 
   php-debug:
     hostname: "${WARDEN_ENV_NAME}-php-debug"
-    image: ${WARDEN_IMAGE_REPOSITORY}/php-fpm:${PHP_VERSION:-7.4}${WARDEN_SVC_PHP_VARIANT:-}-${XDEBUG_VERSION:-debug}
+    image: ${WARDEN_IMAGE_REPOSITORY}/php-fpm${WARDEN_SVC_PHP_IMAGE_SUFFIX:-}:${PHP_VERSION:-7.4}${WARDEN_SVC_PHP_VARIANT:-}-${XDEBUG_VERSION:-debug}
     environment:
       - TRAEFIK_DOMAIN
       - TRAEFIK_SUBDOMAIN
       - SSH_AUTH_SOCK=${SSH_AUTH_SOCK_PATH_ENV:-/tmp/ssh-auth.sock}
-      - NODE_VERSION=${NODE_VERSION:-10}
+      - NODE_VERSION=${NODE_VERSION:-12}
       - COMPOSER_VERSION=${COMPOSER_VERSION:-1}
       - COMPOSER_MEMORY_LIMIT=-1
       - PHP_IDE_CONFIG=serverName=${WARDEN_ENV_NAME}-docker

@@ -1,0 +1,38 @@
+version: "3.5"
+services:
+
+  dnsmasq:
+    container_name: dnsmasq
+    image: wardenenv/dnsmasq
+    ports:
+      - "127.0.0.1:53:53/udp"
+    environment:
+      WARDEN_DNSMASQ_CONF: |-
+        #dnsmasq config, for a complete example, see:
+        #  http://oss.segetech.com/intra/srv/dnsmasq.conf
+
+        #log all dns queries (enable as-needed for debugging purposes)
+        # log-queries
+
+        #dont use hosts nameservers
+        no-resolv
+
+        #use cloudflare as default nameservers, prefer 1^4
+        server=${WARDEN_DNSMASQ_NS1:-1.0.0.1}
+        server=${WARDEN_DNSMASQ_NS2:-1.1.1.1}
+        strict-order
+
+        #explicitly define host-ip mappings
+        address=/.test/127.0.0.1
+        ${WARDEN_DNSMASQ_CONF_ADDITIONAL:-}
+
+    entrypoint: ["/bin/sh", "-c", "
+        echo \"$$WARDEN_DNSMASQ_CONF\" > /etc/dnsmasq.conf;
+        webproc --configuration-file /etc/dnsmasq.conf -- dnsmasq --no-daemon;
+      "]
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.dnsmasq.tls=true
+      - traefik.http.routers.dnsmasq.rule=Host(`dnsmasq.${WARDEN_SERVICE_DOMAIN:-warden.test}`)
+      - traefik.http.services.dnsmasq.loadbalancer.server.port=8080
+    restart: ${WARDEN_RESTART_POLICY:-always}

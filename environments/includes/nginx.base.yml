@@ -10,6 +10,7 @@ services:
       - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.rule=
           HostRegexp(`{subdomain:.+}.${TRAEFIK_DOMAIN}`) || Host(`${TRAEFIK_DOMAIN}`)
       - traefik.http.services.${WARDEN_ENV_NAME}-nginx.loadbalancer.server.port=80
+      - traefik.docker.network=${WARDEN_ENV_NAME}_default
     volumes:
       - .${WARDEN_WEB_ROOT:-}/:/var/www/html:cached
     environment:
