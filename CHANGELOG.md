@@ -5,7 +5,14 @@
 [All Commits](https://github.com/davidalger/warden/compare/0.12.0..develop)
 -->
 
-## Version [0.13.0](https://github.com/davidalger/warden/tree/0.13.0) (2023-03-20)
+## Version [0.13.1](https://github.com/wardenenv/warden/tree/0.13.1) (2023-03-21)
+[All Commits](https://github.com/wardenenv/warden/compare/0.13.0..0.13.1)
+
+**Bug Fixes:**
+* Removed changelog item about Backup and Restore commands that were reverted
+* Incremented version from 0.12.0 to 0.13.1
+
+## Version [0.13.0](https://github.com/wardenenv/warden/tree/0.13.0) (2023-03-20)
 [All Commits](https://github.com/wardenenv/warden/compare/0.12.0..0.13.0)
 
 **Enhancements:**
@@ -13,7 +20,6 @@
 * Updated environment default Node version from 10 to 12 ([#425](https://github.com/wardenenv/warden/pull/425) by @davidalger)
 * Ignore the only root .git directory ([#496](https://github.com/wardenenv/warden/pull/496) by @ihor-sviziev)
 * Allow dnsmasq service to be disabled ([#462](https://github.com/wardenenv/warden/pull/462) by by @davidhiendl)
-* added backup and restore command for easy project share ([#581](https://github.com/wardenenv/warden/pull/581) by @rbouma)
 * Update Magento2 defaults to 2.4.6 ([#618](https://github.com/wardenenv/warden/pull/618) by by @lalittmohan)
 * The ability to specify `DB_DISTRIBUTION=(mysql|mariadb)` and `DB_DISTRIBUTION_VERSION` ([dd5ff](https://github.com/wardenenv/warden/commit/dd5ffddf4764d43c70387435c7c75035615661f0) by @rootindex)
 * Add `WARDEN_OPENSEARCH=1` and `OPENSEARCH_VERSION` ([2bd95](https://github.com/wardenenv/warden/commit/2bd95457748c1d639dc6109018d963ff624137ac) by @navarr)
