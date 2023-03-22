@@ -18,6 +18,8 @@ if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
 fi
 export WARDEN_IMAGE_REPOSITORY="${WARDEN_IMAGE_REPOSITORY:-"docker.io/wardenenv"}"
 
+export WARDEN_DOCKER_USERNS_MODE="${WARDEN_DOCKER_USERNS_MODE:-host}"
+
 ## configure environment type defaults
 if [[ ${WARDEN_ENV_TYPE} =~ ^magento ]]; then
     export WARDEN_SVC_PHP_VARIANT=-${WARDEN_ENV_TYPE}
