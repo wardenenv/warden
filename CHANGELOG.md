@@ -1,9 +1,10 @@
 # Change Log
 
-<!--
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
-[All Commits](https://github.com/davidalger/warden/compare/0.12.0..develop)
--->
+[All Commits](https://github.com/davidalger/warden/compare/0.13.1..develop)
+
+**Dependency Changes:**
+* All commands now use the Docker Compose plugin (`docker compose`) instead of the standalone command (`docker-compose`)
 
 ## Version [0.13.1](https://github.com/wardenenv/warden/tree/0.13.1) (2023-03-21)
 [All Commits](https://github.com/wardenenv/warden/compare/0.13.0..0.13.1)

@@ -12,7 +12,7 @@ fi
 ## allow return codes from sub-process to bubble up normally
 trap '' ERR
 
-## configure docker-compose files
+## configure docker compose files
 DOCKER_COMPOSE_ARGS=()
 
 DOCKER_COMPOSE_ARGS+=("-f")
@@ -86,8 +86,8 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
     fi
 fi
 
-## pass ochestration through to docker-compose
-WARDEN_SERVICE_DIR=${WARDEN_DIR} docker-compose \
+## pass ochestration through to docker compose
+WARDEN_SERVICE_DIR=${WARDEN_DIR} docker compose \
     --project-directory "${WARDEN_HOME_DIR}" -p warden \
     "${DOCKER_COMPOSE_ARGS[@]}" "${WARDEN_PARAMS[@]}" "$@"
 
