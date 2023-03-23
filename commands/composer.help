@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+[[ ! ${WARDEN_DIR} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
+
+COMPOSER_HELP=$("${WARDEN_DIR}/bin/warden" cli "composer")
+
+WARDEN_USAGE=$(cat <<EOF
+
+\033[33mExtra Roll Options:\033[0m
+  --notty        Run command without tty
+  -h, --help        Display this help menu
+
+${COMPOSER_HELP}
+EOF
+)
