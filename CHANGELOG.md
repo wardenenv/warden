@@ -4,7 +4,11 @@
 [All Commits](https://github.com/davidalger/warden/compare/0.13.1..develop)
 
 **Dependency Changes:**
-* All commands now use the Docker Compose plugin (`docker compose`) instead of the standalone command (`docker-compose`)
+* All commands now use the Docker Compose plugin (`docker compose`) instead of the standalone command (`docker-compose`)  
+  Please be aware that this will change your container names from using underscores to using dashes (e.g. vanilla_db_1 becomes vanilla-db-1).
+
+**Enhancements**
+* ElasticSearch 8.7 images are available
 
 ## Version [0.13.1](https://github.com/wardenenv/warden/tree/0.13.1) (2023-03-21)
 [All Commits](https://github.com/wardenenv/warden/compare/0.13.0..0.13.1)
