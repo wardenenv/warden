@@ -3,6 +3,10 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.13.1..develop)
 
+**Dependency Changes:**
+* All commands now use the Docker Compose plugin (`docker compose`) instead of the standalone command (`docker-compose`)  
+  Please be aware that this will change your container names from using underscores to using dashes (e.g. vanilla_db_1 becomes vanilla-db-1).
+
 **Enhancements**
 * ElasticSearch 8.7 images are available
 

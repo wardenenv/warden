@@ -20,7 +20,7 @@ Warden version $(cat ${WARDEN_DIR}/version)
   -h, --help        Display this help menu
 
 \033[33mCommands:\033[0m
-  svc               Orchestrates global services such as traefik, portainer and dnsmasq via docker-compose
+  svc               Orchestrates global services such as traefik, portainer and dnsmasq via docker compose
   env-init          Configure environment by adding '.env' file to the current working directory
   env               Controls an environment from any point within the root project directory
   db                Interacts with the db service on an environment (see 'warden db -h' for details)

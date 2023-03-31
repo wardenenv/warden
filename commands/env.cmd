@@ -62,7 +62,7 @@ if [[ ${WARDEN_ENV_SUBT} == "linux" && $UID == 1000 ]]; then
     export SSH_AUTH_SOCK_PATH_ENV=/run/host-services/ssh-auth.sock
 fi
 
-## configure docker-compose files
+## configure docker compose files
 DOCKER_COMPOSE_ARGS=()
 
 appendEnvPartialIfExists "networks"
@@ -145,7 +145,7 @@ fi
 if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
     ## create environment network for attachments if it does not already exist
     if [[ $(docker network ls -f "name=$(renderEnvNetworkName)" -q) == "" ]]; then
-        docker-compose \
+        docker compose \
             --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
             "${DOCKER_COMPOSE_ARGS[@]}" up --no-start
     fi
@@ -191,8 +191,8 @@ then
     $WARDEN_BIN sync pause
 fi
 
-## pass ochestration through to docker-compose
-docker-compose \
+## pass ochestration through to docker compose
+docker compose \
     --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
     "${DOCKER_COMPOSE_ARGS[@]}" "${WARDEN_PARAMS[@]}" "$@"
 

@@ -9,7 +9,7 @@ WARDEN_USAGE=$(cat <<EOF
   -h, --help        Display this help menu
 
 \033[33mEnvironment Types:\033[0m
-  local               Declares the docker-compose version and labels the project
+  local               Declares the docker compose version and labels the project
                       network allowing Warden to recognize it. Must be coupled with
                       per-project configuration. See documentation for details:
                       https://docs.warden.dev/environments/types.html#local
