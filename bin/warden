@@ -14,6 +14,7 @@ readonly WARDEN_DIR="$(
 )"
 
 export readonly WARDEN_BIN="${WARDEN_DIR}/bin/warden"
+export readonly DOCKER_COMPOSE_COMMAND="${DOCKER_COMPOSE_COMMAND:-"docker compose"}"
 
 source "${WARDEN_DIR}/utils/core.sh"
 source "${WARDEN_DIR}/utils/env.sh"
@@ -24,10 +25,13 @@ if ! which docker >/dev/null; then
 fi
 
 ## verify docker compose meets version constraint
-DOCKER_COMPOSE_REQUIRE="2.2.3"
-DOCKER_COMPOSE_VERSION="$(docker compose version | grep -oE '[0-9\.]+' | head -n1)"
-if ! test $(version ${DOCKER_COMPOSE_VERSION}) -ge $(version ${DOCKER_COMPOSE_REQUIRE}); then
-  fatal "docker compose version should be ${DOCKER_COMPOSE_REQUIRE} or higher (${DOCKER_COMPOSE_VERSION} installed)"
+if [[ "${DOCKER_COMPOSE_COMMAND}" eq "docker compose" ]]; then
+  # Disable version check for experimental stuff
+  DOCKER_COMPOSE_REQUIRE="2.2.3"
+  DOCKER_COMPOSE_VERSION="$(${DOCKER_COMPOSE_COMMAND} version | grep -oE '[0-9\.]+' | head -n1)"
+  if ! test $(version ${DOCKER_COMPOSE_VERSION}) -ge $(version ${DOCKER_COMPOSE_REQUIRE}); then
+    fatal "docker compose version should be ${DOCKER_COMPOSE_REQUIRE} or higher (${DOCKER_COMPOSE_VERSION} installed)"
+  fi
 fi
 
 ## define and export global shared directory paths
