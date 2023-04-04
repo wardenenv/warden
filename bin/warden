@@ -25,7 +25,7 @@ if ! which docker >/dev/null; then
 fi
 
 ## verify docker compose meets version constraint
-if [[ "${DOCKER_COMPOSE_COMMAND}" eq "docker compose" ]]; then
+if [[ "${DOCKER_COMPOSE_COMMAND}" == "docker compose" ]]; then
   # Disable version check for experimental stuff
   DOCKER_COMPOSE_REQUIRE="2.2.3"
   DOCKER_COMPOSE_VERSION="$(${DOCKER_COMPOSE_COMMAND} version | grep -oE '[0-9\.]+' | head -n1)"
