@@ -21,7 +21,7 @@
 * Ignore the only root .git directory ([#496](https://github.com/wardenenv/warden/pull/496) by @ihor-sviziev)
 * Allow dnsmasq service to be disabled ([#462](https://github.com/wardenenv/warden/pull/462) by by @davidhiendl)
 * Update Magento2 defaults to 2.4.6 ([#618](https://github.com/wardenenv/warden/pull/618) by by @lalittmohan)
-* The ability to specify `DB_DISTRIBUTION=(mysql|mariadb)` and `DB_DISTRIBUTION_VERSION` ([dd5ff](https://github.com/wardenenv/warden/commit/dd5ffddf4764d43c70387435c7c75035615661f0) by @rootindex)
+* The ability to specify `MYSQL_DISTRIBUTION=(mysql|mariadb)` and `MYSQL_DISTRIBUTION_VERSION` ([dd5ff](https://github.com/wardenenv/warden/commit/dd5ffddf4764d43c70387435c7c75035615661f0) by @rootindex)
 * Add `WARDEN_OPENSEARCH=1` and `OPENSEARCH_VERSION` ([2bd95](https://github.com/wardenenv/warden/commit/2bd95457748c1d639dc6109018d963ff624137ac) by @navarr)
 * Migration from Selenium to Seleniarm ([471dc](https://github.com/wardenenv/warden/commit/471dc0411771e21448dd4aa9eba8e8fdc7abdfdb) by @navarr)
 * Scoped environment config loading ([#451](https://github.com/wardenenv/warden/pull/451) by @tdgroot)
