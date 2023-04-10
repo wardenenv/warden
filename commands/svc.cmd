@@ -87,7 +87,7 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
 fi
 
 ## pass ochestration through to docker compose
-WARDEN_SERVICE_DIR=${WARDEN_DIR} docker compose \
+WARDEN_SERVICE_DIR=${WARDEN_DIR} ${DOCKER_COMPOSE_COMMAND} \
     --project-directory "${WARDEN_HOME_DIR}" -p warden \
     "${DOCKER_COMPOSE_ARGS[@]}" "${WARDEN_PARAMS[@]}" "$@"
 

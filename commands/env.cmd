@@ -145,7 +145,7 @@ fi
 if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
     ## create environment network for attachments if it does not already exist
     if [[ $(docker network ls -f "name=$(renderEnvNetworkName)" -q) == "" ]]; then
-        docker compose \
+        ${DOCKER_COMPOSE_COMMAND} \
             --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
             "${DOCKER_COMPOSE_ARGS[@]}" up --no-start
     fi
@@ -192,7 +192,7 @@ then
 fi
 
 ## pass ochestration through to docker compose
-docker compose \
+${DOCKER_COMPOSE_COMMAND} \
     --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
     "${DOCKER_COMPOSE_ARGS[@]}" "${WARDEN_PARAMS[@]}" "$@"
 
