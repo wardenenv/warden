@@ -1,0 +1,8 @@
+version: "3.5"
+
+x-volumes: &settings
+  - .${WARDEN_WEB_ROOT:-}/web/sites/default/settings.php:/var/www/html/web/sites/default/settings.php
+
+services:
+  php-fpm: { volumes: *settings }
+  php-debug: { volumes: *settings }

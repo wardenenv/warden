@@ -1,0 +1,13 @@
+version: "3.5"
+services:
+  db:
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-drupal}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-drupal}
+      - MYSQL_USER=${MYSQL_USER:-drupal}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-drupal}
+    command:
+      - mysqld
+      - --max_allowed_packet=1024M
+      - --explicit_defaults_for_timestamp=on
+      - --transaction-isolation=READ-COMMITTED
