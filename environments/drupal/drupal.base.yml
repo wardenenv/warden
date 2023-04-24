@@ -1,0 +1,6 @@
+version: "3.5"
+services:
+  nginx:
+    environment:
+      - NGINX_PUBLIC=/web
+      - NGINX_TEMPLATE=/drupal.conf

@@ -1,0 +1,17 @@
+version: "3.5"
+
+x-volumes: &volumes
+  - .${WARDEN_WEB_ROOT:-}/web/sites/default/files:/var/www/html/web/sites/default/files:cached
+  - .${WARDEN_WEB_ROOT:-}/web/sites/default/private:/var/www/html/web/sites/default/private:cached
+  - appdata:/var/www/html
+
+x-environment: &environment
+  - CHOWN_DIR_LIST=web/sites/default/files web/sites/default/private ${CHOWN_DIR_LIST:-}
+
+services:
+  nginx: { volumes: *volumes }
+  php-fpm: { volumes: *volumes, environment: *environment }
+  php-debug: { volumes: *volumes, environment: *environment }
+
+volumes:
+  appdata:
