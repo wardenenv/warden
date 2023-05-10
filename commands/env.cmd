@@ -201,18 +201,24 @@ if ([[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]
     && [[ $OSTYPE =~ ^darwin ]] && [[ -f "${MUTAGEN_SYNC_FILE}" ]] \
     && [[ $($WARDEN_BIN sync list | grep -i 'Status: \[Paused\]' | wc -l | awk '{print $1}') == "1" ]] \
     && [[ $($WARDEN_BIN env ps -q php-fpm) ]] \
-    && [[ $(docker container inspect $($WARDEN_BIN env ps -q php-fpm) --format '{{ .State.Status }}') = "running" ]] \
+    && [[ $(docker container inspect "$($WARDEN_BIN env ps -q php-fpm)" --format '{{ .State.Status }}') = "running" ]] \
     && [[ $($WARDEN_BIN env ps -q php-fpm) = $($WARDEN_BIN sync list | grep -i 'URL: docker' | awk -F'/' '{print $3}') ]]
 then
     $WARDEN_BIN sync resume
 fi
 
+MUTAGEN_VERSION=$(mutagen version)
+CONNECTION_STATE_STRING='Connected state: Connected'
+if [[ $(version "${MUTAGEN_VERSION}") -ge $(version '0.15.0') ]]; then
+  CONNECTION_STATE_STRING='Connected: Yes'
+fi
+
 ## start mutagen sync if needed
 if ([[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]]) \
     && [[ $OSTYPE =~ ^darwin ]] && [[ -f "${MUTAGEN_SYNC_FILE}" ]] \
-    && [[ $($WARDEN_BIN sync list | grep -i 'Connection state: Connected' | wc -l | awk '{print $1}') != "2" ]] \
+    && [[ $($WARDEN_BIN sync list | grep -c "${CONNECTION_STATE_STRING}" | awk '{print $1}') != "2" ]] \
     && [[ $($WARDEN_BIN env ps -q php-fpm) ]] \
-    && [[ $(docker container inspect $($WARDEN_BIN env ps -q php-fpm) --format '{{ .State.Status }}') = "running" ]]
+    && [[ $(docker container inspect "$($WARDEN_BIN env ps -q php-fpm)" --format '{{ .State.Status }}') = "running" ]]
 then
     $WARDEN_BIN sync start
 fi
