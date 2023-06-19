@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+[[ ! ${WARDEN_DIR} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
+
+WARDEN_USAGE="Provides listing of projects that are currently running and Den's Traefik is connected to"
