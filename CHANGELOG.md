@@ -1,9 +1,12 @@
 # Change Log
 
-<!--
+
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
-[All Commits](https://github.com/davidalger/warden/compare/0.13.1..develop)
--->
+[All Commits](https://github.com/davidalger/warden/compare/0.14.0..main)
+
+**Enhancements**
+* Changed `MYSQL_DISTRIBUTION_` variables to `DB_DISTRIBUTION_` with backwards-compatible support for the old format
+
 ## Version [0.14.0](https://github.com/wardenenv/warden/tree/0.14.0) (2023-06-19)
 [All Commits](https://github.com/wardenenv/warden/compare/0.13.1..0.14.0)
 

@@ -9,6 +9,9 @@ if (( ${#WARDEN_PARAMS[@]} == 0 )) || [[ "${WARDEN_PARAMS[0]}" == "help" ]]; the
   $WARDEN_BIN env --help || exit $? && exit $?
 fi
 
+DB_DISTRIBUTION=${DB_DISTRIBUTION:-${MYSQL_DISTRIBUTION:-"mariadb"}}
+DB_DISTRIBUTION_VERSION=${DB_DISTRIBUTION_VERSION:-${MYSQL_DISTRIBUTION_VERSION:-${MARIADB_VERSION:-"10.4"}}}
+
 ## allow return codes from sub-process to bubble up normally
 trap '' ERR
 
