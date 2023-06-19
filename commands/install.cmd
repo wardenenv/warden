@@ -51,6 +51,17 @@ then
     -k /Library/Keychains/System.keychain "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem"
 fi
 
+if [[ -d ~/.den/ssl/certs/ ]]; then
+  domains_to_generate="$(diff -B <(ls ~/.warden/ssl/certs/ | grep .key.pem | sed 's/.key.pem//' | grep -v den.test) <(ls ~/.den/ssl/certs/ | grep .key.pem | sed 's/.key.pem//' | grep -v den.test) | grep '^>' | sed 's/^>\ //')"
+  if [[ -n "$domains_to_generate" ]]; then
+    echo "Generating certificates present in Den..."
+
+    echo "$domains_to_generate" | while read i; do
+      warden sign-certificate "$i"
+    done
+  fi
+fi
+
 ## configure resolver for .test domains on Mac OS only as Linux lacks support
 ## for BSD like per-TLD configuration as is done at /etc/resolver/test on Mac
 if [[ "$OSTYPE" == "darwin"* ]]; then
