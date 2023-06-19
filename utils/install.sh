@@ -17,6 +17,10 @@ function installSshConfig () {
 			## WARDEN END ##
 			EOT
   fi
+
+  if grep "${HOME}/.den/tunnel/ssh_key" /etc/ssh/ssh_config >/dev/null; then
+    sudo sed -i.bak 's/~\/.den/~\/.warden/' /etc/ssh/ssh_config
+  fi
 }
 
 function assertWardenInstall {
