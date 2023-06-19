@@ -1,14 +1,19 @@
 # Change Log
 
+<!--
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.13.1..develop)
+-->
+## Version [0.14.0](https://github.com/wardenenv/warden/tree/0.14.0) (2023-06-19)
+[All Commits](https://github.com/wardenenv/warden/compare/0.13.1..0.14.0)
 
 **Dependency Changes:**
 * All commands now use the Docker Compose plugin (`docker compose`) instead of the standalone command (`docker-compose`)  
-  Please be aware that this will change your container names from using underscores to using dashes (e.g. vanilla_db_1 becomes vanilla-db-1).
+  Please be aware that this will change your container names from using underscores to using dashes (e.g. vanilla_db_1 becomes vanilla-db-1).  This is configured through the environment variable `DOCKER_COMPOSE_COMMAND` which defaults to `docker compose`.
 
 **Enhancements**
-* ElasticSearch 8.7 images are available
+* ElasticSearch 8.7 and 8.8 images are available
+* Drupal environment type added ([#646](https://github.com/wardenenv/warden/pull/646) by @bap14)
 
 ## Version [0.13.1](https://github.com/wardenenv/warden/tree/0.13.1) (2023-03-21)
 [All Commits](https://github.com/wardenenv/warden/compare/0.13.0..0.13.1)
