@@ -26,6 +26,13 @@ All contributions to the Warden project are welcome: use-cases, documentation, c
 
 Please note that by submitting a pull request or otherwise contributing to the Warden project, you warrant that each of your contributions is an original work and that you have full authority to grant rights to said contribution and by so doing you grant the owners of the Warden project, and those who receive the contribution directly or indirectly, a perpetual, worldwide, non-exclusive, royalty-free, irrevocable license to make, have made, use, offer to sell, sell and import or otherwise dispose of the contributions alone or with the Warden project in it's entirety.
 
+## Where to Contribute
+
+* [warden](https://github.com/wardenenv/warden) - `warden` commands and docker-compose files
+* [images](https://github.com/wardenenv/images) - Docker images to be used by the docker-compose files
+* [docs](https://github.com/wardenenv/docs) - Documentation (docs.warden.dev)
+* [homebrew-warden](https://github.com/wardenenv/homebrew-warden) - Mac's Homebrew installation instructions and requirements
+
 ## License
 
 This work is licensed under the MIT license. See [LICENSE](https://github.com/davidalger/warden/blob/develop/LICENSE) file for details.
@@ -33,3 +40,10 @@ This work is licensed under the MIT license. See [LICENSE](https://github.com/da
 ## Author Information
 
 This project was started in 2019 by [David Alger](https://davidalger.com/).
+
+# Gold Sponsors
+[![SwiftOtter](https://warden.dev/img/sponsors/swiftotter.svg)](https://www.swiftotter.com/)  
+[![Sansec.io](https://warden.dev/img/sponsors/sansec.svg)](https://www.sansec.io/)  
+[![Hyvä](https://user-images.githubusercontent.com/145128/226427529-53483968-c9ab-484a-9ae3-c6abb58f81c9.png)](https://www.hyva.io/)
+
+Support Warden Development on <a href="https://opencollective.com/warden" rel="me" class="link">OpenCollective</a> or <a href="https://github.com/sponsors/wardenenv" rel="me" class="link">Github Sponsors</a>
