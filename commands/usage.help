@@ -27,6 +27,7 @@ Warden version $(cat ${WARDEN_DIR}/version)
   redis             Interacts with the redis service on an environment (see 'warden redis -h' for details)
   install           Initializes or updates warden configuration on host machine
   shell             Launches into a shell within the current project environment
+  status            Display list of all running Warden project environments
   debug             Launches debug enabled shell within current project environment
   sign-certificate  Signs a wildcard certificate including all passed hostnames on the SAN list
   version           Show version information
