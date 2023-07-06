@@ -7,15 +7,12 @@ wardenNetworkName=$(cat ${WARDEN_DIR}/docker/docker-compose.yml | grep -A3 'netw
 wardenNetworkId=$(docker network ls -q --filter name="${wardenNetworkName}")
 
 if [[ -z "${wardenNetworkId}" ]]; then
-    echo -e "🛑 \033[31mDen is not currently running.\033[0m Run \033[36mwarden svc up\033[0m to start Den core services."
-    exit 0
+    echo -e "[\033[33;1m!!\033[0m] \033[31mWarden is not currently running.\033[0m Run \033[36mwarden svc up\033[0m to start Warden core services."
 fi
 
-wardenTraefikId=$(docker container ls --filter network="${wardenNetworkId}" --filter status=running --filter name=traefik -q)
-projectNetworks=$(docker container inspect --format '{{ range $k,$v := .NetworkSettings.Networks }}{{ if ne $k "${wardenNetworkName}" }}{{println $k }}{{ end }}{{end}}' "${wardenTraefikId}")
 OLDIFS="$IFS";
 IFS=$'\n'
-projectNetworkList=($projectNetworks)
+projectNetworkList=( $(docker network ls --format '{{.Name}}' -q --filter "label=dev.warden.environment.name") )
 IFS="$OLDIFS"
 
 messageList=()
@@ -43,7 +40,11 @@ for projectNetwork in "${projectNetworkList[@]}"; do
 done
 
 if [[ "${#messageList[@]}" > 0 ]]; then
-    echo -e "Found the following \033[32mrunning\033[0m environments:"
+    if [[ -z "${wardenNetworkId}" ]]; then
+        echo -e "Found the following \033[32mrunning\033[0m projects; however, \033[31mWarden core services are currently not running\033[0m:"
+    else
+        echo -e "Found the following \033[32mrunning\033[0m environments:"
+    fi
     for line in "${messageList[@]}"; do
         echo -e "$line"
     done
