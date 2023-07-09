@@ -207,7 +207,7 @@ then
     $WARDEN_BIN sync resume
 fi
 
-MUTAGEN_VERSION=$(command -v mutagen && mutagen version)
+MUTAGEN_VERSION=$(command -v mutagen > /dev/null && mutagen version)
 CONNECTION_STATE_STRING='Connected state: Connected'
 if [[ $(version "${MUTAGEN_VERSION}") -ge $(version '0.15.0') ]]; then
   CONNECTION_STATE_STRING='Connected: Yes'
