@@ -1,9 +1,18 @@
 # Change Log
 
-<!--
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.13.1..develop)
--->
+
+
+**Enhancements**
+* `warden status` command ported from Den.  Originally created by @bap14 ([swiftotter/den#94](https://github.com/swiftotter/den/pull/94))
+* Simplified Traefik check.  Originally created by @bap14 ([swiftotter/den#88](https://github.com/swiftotter/den/pull/88))
+
+**Migration-related**
+* Den signed certificates will automatically be signed for Warden when running `warden install`
+* `warden install` will now change the tunnel from using the Den certificate to the Warden certificate automatically
+* Both features based heavily on the work of @ihor-sviziev ([swiftotter/den#33](https://github.com/swiftotter/den/pull/33) & [swiftotter/den#44](https://github.com/swiftotter/den/pull/44)) 
+
 ## Version [0.14.0](https://github.com/wardenenv/warden/tree/0.14.0) (2023-06-19)
 [All Commits](https://github.com/wardenenv/warden/compare/0.13.1..0.14.0)
 
