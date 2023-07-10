@@ -6,6 +6,7 @@ loadEnvConfig "${WARDEN_ENV_PATH}" || exit $?
 assertDockerRunning
 
 if (( ${#WARDEN_PARAMS[@]} == 0 )) || [[ "${WARDEN_PARAMS[0]}" == "help" ]]; then
+  # shellcheck disable=SC2153
   $WARDEN_BIN env --help || exit $? && exit $?
 fi
 
@@ -14,7 +15,7 @@ trap '' ERR
 
 ## define source repository
 if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
-  eval "$(cat "${WARDEN_HOME_DIR}/.env" | sed 's/\r$//g' | grep "^WARDEN_")"
+  eval "$(sed 's/\r$//g' < "${WARDEN_HOME_DIR}/.env" | grep "^WARDEN_")"
 fi
 export WARDEN_IMAGE_REPOSITORY="${WARDEN_IMAGE_REPOSITORY:-"docker.io/wardenenv"}"
 
@@ -43,7 +44,8 @@ fi
 export CHOWN_DIR_LIST=${WARDEN_CHOWN_DIR_LIST:-}
 
 if [[ ${WARDEN_ENV_TYPE} == "magento1" && -f "${WARDEN_ENV_PATH}/.modman/.basedir" ]]; then
-  export NGINX_PUBLIC='/'$(cat "${WARDEN_ENV_PATH}/.modman/.basedir")
+  NGINX_PUBLIC='/'$(cat "${WARDEN_ENV_PATH}/.modman/.basedir")
+  export NGINX_PUBLIC
 fi
 
 if [[ ${WARDEN_ENV_TYPE} == "magento2" ]]; then
@@ -161,12 +163,13 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
 fi
 
 ## lookup address of traefik container on environment network
-export TRAEFIK_ADDRESS="$(docker container inspect traefik \
+TRAEFIK_ADDRESS="$(docker container inspect traefik \
     --format '
         {{- $network := index .NetworkSettings.Networks "'"$(renderEnvNetworkName)"'" -}}
         {{- if $network }}{{ $network.IPAddress }}{{ end -}}
     ' 2>/dev/null || true
 )"
+export TRAEFIK_ADDRESS;
 
 if [[ $OSTYPE =~ ^darwin ]]; then
     export MUTAGEN_SYNC_FILE="${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.mutagen.yml"
@@ -191,15 +194,15 @@ then
     $WARDEN_BIN sync pause
 fi
 
-## pass ochestration through to docker compose
+## pass orchestration through to docker compose
 ${DOCKER_COMPOSE_COMMAND} \
     --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
     "${DOCKER_COMPOSE_ARGS[@]}" "${WARDEN_PARAMS[@]}" "$@"
 
 ## resume mutagen sync if available and php-fpm container id hasn't changed
-if ([[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]]) \
+if { [[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]]; } \
     && [[ $OSTYPE =~ ^darwin ]] && [[ -f "${MUTAGEN_SYNC_FILE}" ]] \
-    && [[ $($WARDEN_BIN sync list | grep -i 'Status: \[Paused\]' | wc -l | awk '{print $1}') == "1" ]] \
+    && [[ $($WARDEN_BIN sync list | grep -ci 'Status: \[Paused\]' | awk '{print $1}') == "1" ]] \
     && [[ $($WARDEN_BIN env ps -q php-fpm) ]] \
     && [[ $(docker container inspect "$($WARDEN_BIN env ps -q php-fpm)" --format '{{ .State.Status }}') = "running" ]] \
     && [[ $($WARDEN_BIN env ps -q php-fpm) = $($WARDEN_BIN sync list | grep -i 'URL: docker' | awk -F'/' '{print $3}') ]]
@@ -207,20 +210,22 @@ then
     $WARDEN_BIN sync resume
 fi
 
-MUTAGEN_VERSION=$(mutagen version)
-CONNECTION_STATE_STRING='Connected state: Connected'
-if [[ $(version "${MUTAGEN_VERSION}") -ge $(version '0.15.0') ]]; then
-  CONNECTION_STATE_STRING='Connected: Yes'
-fi
-
-## start mutagen sync if needed
-if ([[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]]) \
-    && [[ $OSTYPE =~ ^darwin ]] && [[ -f "${MUTAGEN_SYNC_FILE}" ]] \
-    && [[ $($WARDEN_BIN sync list | grep -c "${CONNECTION_STATE_STRING}" | awk '{print $1}') != "2" ]] \
-    && [[ $($WARDEN_BIN env ps -q php-fpm) ]] \
-    && [[ $(docker container inspect "$($WARDEN_BIN env ps -q php-fpm)" --format '{{ .State.Status }}') = "running" ]]
+if [[ $OSTYPE =~ ^darwin ]] && [[ -f "${MUTAGEN_SYNC_FILE}" ]] # If we're using Mutagen
 then
-    $WARDEN_BIN sync start
+  MUTAGEN_VERSION=$(mutagen version)
+  CONNECTION_STATE_STRING='Connected state: Connected'
+  if [[ $(version "${MUTAGEN_VERSION}") -ge $(version '0.15.0') ]]; then
+    CONNECTION_STATE_STRING='Connected: Yes'
+  fi
+
+  ## start mutagen sync if needed
+  if { [[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]]; } \
+      && [[ $($WARDEN_BIN sync list | grep -c "${CONNECTION_STATE_STRING}" | awk '{print $1}') != "2" ]] \
+      && [[ $($WARDEN_BIN env ps -q php-fpm) ]] \
+      && [[ $(docker container inspect "$($WARDEN_BIN env ps -q php-fpm)" --format '{{ .State.Status }}') = "running" ]]
+  then
+      $WARDEN_BIN sync start
+  fi
 fi
 
 ## stop mutagen sync if needed
