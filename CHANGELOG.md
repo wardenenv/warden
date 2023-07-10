@@ -4,6 +4,15 @@
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/davidalger/warden/compare/0.13.1..develop)
 -->
+## Version [0.14.1](https://github.com/wardenenv/warden/tree/0.14.1) (2023-07-10)
+[All Commits](https://github.com/wardenenv/warden/compoare/0.14.0..0.14.1)
+
+**Enhancements:**
+* `warden status` command added that shows running Warden environments ([#669](https://github.com/wardenenv/warden/pull/669) by @bap14)
+
+**Bug Fixes:**
+* Updated Mutagen connection detection so that Mutagen doesn't resync every time in versions >= 0.15.0
+
 ## Version [0.14.0](https://github.com/wardenenv/warden/tree/0.14.0) (2023-06-19)
 [All Commits](https://github.com/wardenenv/warden/compare/0.13.1..0.14.0)
 
