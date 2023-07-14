@@ -52,12 +52,7 @@ if (( "$#" )); then
   ## local project directory if running within one; don't fail if it can't be found
   WARDEN_ENV_PATH="$(locateEnvPath 2>/dev/null)" || true
 
-  if [[ -f "${WARDEN_DIR}/commands/${1}.cmd" ]]; then
-    WARDEN_CMD_VERB="$1"
-    WARDEN_CMD_EXEC="${WARDEN_DIR}/commands/${1}.cmd"
-    WARDEN_CMD_HELP="${WARDEN_DIR}/commands/${1}.help"
-    shift
-  elif [[ -f "${WARDEN_ENV_PATH}/.warden/commands/${1}.cmd" ]]; then
+  if [[ -f "${WARDEN_ENV_PATH}/.warden/commands/${1}.cmd" ]]; then
     WARDEN_CMD_VERB="$1"
     WARDEN_CMD_ANYARGS+=("$1")
     WARDEN_CMD_EXEC="${WARDEN_ENV_PATH}/.warden/commands/${1}.cmd"
@@ -68,6 +63,11 @@ if (( "$#" )); then
     WARDEN_CMD_ANYARGS+=("$1")
     WARDEN_CMD_EXEC="${WARDEN_HOME_DIR}/commands/${1}.cmd"
     WARDEN_CMD_HELP="${WARDEN_HOME_DIR}/commands/${1}.help"
+    shift
+  elif [[ -f "${WARDEN_DIR}/commands/${1}.cmd" ]]; then
+    WARDEN_CMD_VERB="$1"
+    WARDEN_CMD_EXEC="${WARDEN_DIR}/commands/${1}.cmd"
+    WARDEN_CMD_HELP="${WARDEN_DIR}/commands/${1}.help"
     shift
   else
     WARDEN_HELP=1
