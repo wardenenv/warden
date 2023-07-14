@@ -1,9 +1,11 @@
 # Change Log
 
-<!--
 ## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
-[All Commits](https://github.com/davidalger/warden/compare/0.13.1..develop)
--->
+[All Commits](https://github.com/davidalger/warden/compare/0.14.1..main)
+
+**Enhancements:**
+* Project and Local Warden commands will now take precedence over built-in warden commands ([#676](https://github.com/wardenenv/warden/pull/676) by @flpandre)
+
 ## Version [0.14.1](https://github.com/wardenenv/warden/tree/0.14.1) (2023-07-10)
 [All Commits](https://github.com/wardenenv/warden/compoare/0.14.0..0.14.1)
 
