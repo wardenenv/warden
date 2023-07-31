@@ -17,7 +17,8 @@ IFS="$OLDIFS"
 
 messageList=()
 for projectNetwork in "${projectNetworkList[@]}"; do
-    [[ -z "${projectNetwork}" || "${projectNetwork}" == "${wardenNetworkName}" ]] && continue # Skip empty project network names (if any)
+    # Skip empty names and the Warden core services network
+    test -z "${projectNetwork}" -o "${projectNetwork}" = "${wardenNetworkName}" && continue
 
     prefix="${projectNetwork%_default}"
     prefixLen="${#prefix}"
@@ -28,13 +29,19 @@ for projectNetwork in "${projectNetworkList[@]}"; do
     [[ -z "${container}" ]] && continue # Project is not running, skip it
 
     projectDir=$(docker container inspect --format '{{ index .Config.Labels "com.docker.compose.project.working_dir"}}' "$container")
-    projectName=$(cat "${projectDir}/.env" | grep '^WARDEN_ENV_NAME=' | sed -e 's/WARDEN_ENV_NAME=[[:space:]]*//g' | tr -d -)
-    projectType=$(cat "${projectDir}/.env" | grep '^WARDEN_ENV_TYPE=' | sed -e 's/WARDEN_ENV_TYPE=[[:space:]]*//g' | tr -d -)
-    traefikDomain=$(cat "${projectDir}/.env" | grep '^TRAEFIK_DOMAIN=' | sed -e 's/TRAEFIK_DOMAIN=[[:space:]]*//g' | tr -d -)
+    projectName=$(cat "${projectDir}/.env" | grep '^WARDEN_ENV_NAME=' | sed -e 's/WARDEN_ENV_NAME=[[:space:]]*//g')
+    projectType=$(cat "${projectDir}/.env" | grep '^WARDEN_ENV_TYPE=' | sed -e 's/WARDEN_ENV_TYPE=[[:space:]]*//g')
+    traefikDomain=$(cat "${projectDir}/.env" | grep '^TRAEFIK_DOMAIN=' | sed -e 's/TRAEFIK_DOMAIN=[[:space:]]*//g')
+    traefikSubdomain=$(cat "${projectDir}/.env" | grep '^TRAEFIK_SUBDOMAIN=' | sed -e 's/TRAEFIK_SUBDOMAIN=[[:space:]]*//g')
+
+    fullDomain="${traefikDomain}"
+    if test -n "${traefikSubdomain}"; then
+        fullDomain="${traefikSubdomain}.${traefikDomain}"
+    fi
 
     messageList+=("    \033[1;35m${projectName}\033[0m a \033[36m${projectType}\033[0m project")
     messageList+=("       Project Directory: \033[33m${projectDir}\033[0m")
-    messageList+=("       Project URL: \033[94mhttps://${traefikDomain}\033[0m")
+    messageList+=("       Project URL: \033[94mhttps://${fullDomain}\033[0m")
 
     [[ "$projectNetwork" != "${projectNetworkList[@]: -1:1}" ]] && messageList+=()
 done
