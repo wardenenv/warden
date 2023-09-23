@@ -4,6 +4,8 @@
 WARDEN_ENV_PATH="$(locateEnvPath)" || exit $?
 loadEnvConfig "${WARDEN_ENV_PATH}" || exit $?
 assertDockerRunning
+HOSTUID=$(id -u)
+HOSTGID=$(id -g)
 
 if (( ${#WARDEN_PARAMS[@]} == 0 )) || [[ "${WARDEN_PARAMS[0]}" == "help" ]]; then
   # shellcheck disable=SC2153
@@ -226,6 +228,19 @@ then
   then
       $WARDEN_BIN sync start
   fi
+fi
+
+if [[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]]; then
+    if [[ $($WARDEN_BIN env ps -q php-fpm) ]] && [ $($WARDEN_BIN env exec php-fpm "id" "-u" "www-data") != ${HOSTUID} ]; then
+        $WARDEN_BIN env exec -u 0 php-fpm "usermod" "-u" "${HOSTUID}" "www-data"
+        $WARDEN_BIN env exec -u 0 php-fpm "usermod" "-g" "${HOSTGID}" "www-data"
+        $WARDEN_BIN env restart php-fpm
+    fi
+    if [[ $($WARDEN_BIN env ps -q php-debug) ]] && [ $($WARDEN_BIN env exec php-debug "id" "-u" "www-data") != ${HOSTUID} ]; then
+        $WARDEN_BIN env exec -u 0 php-debug "usermod" "-u" "${HOSTUID}" "www-data"
+        $WARDEN_BIN env exec -u 0 php-debug "usermod" "-g" "${HOSTGID}" "www-data"
+        $WARDEN_BIN env restart php-debug
+    fi
 fi
 
 ## stop mutagen sync if needed
