@@ -5,6 +5,12 @@
 
 **Enhancements:**
 * Project and Local Warden commands will now take precedence over built-in warden commands ([#676](https://github.com/wardenenv/warden/pull/676) by @flpandre)
+* New Magento 2 projects will default to the latest version of Magepack ([#712](https://github.com/wardenenv/warden/pull/712) by @sprankhub)
+
+**Bug Fixes:**
+* Traefik will now properly fallback to the default Warden certificate ([#725](https://github.com/wardenenv/warden/pull/725) by @SamJUK)
+* `warden vnc` now properly connects to the container ([#721](https://github.com/wardenenv/warden/pull/721) by @sprankhub)
+* `warden status` will now properly work with dashes in project names and urls ([#685](https://github.com/wardenenv/warden/pull/685) by @bap14)
 
 ## Version [0.14.1](https://github.com/wardenenv/warden/tree/0.14.1) (2023-07-10)
 [All Commits](https://github.com/wardenenv/warden/compoare/0.14.0..0.14.1)
