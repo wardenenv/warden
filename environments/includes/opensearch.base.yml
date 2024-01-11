@@ -12,7 +12,7 @@ services:
     environment:
       - DISABLE_SECURITY_PLUGIN=true
       - discovery.type=single-node
-      - "ES_JAVA_OPTS=-Xms64m -Xmx512m"
+      - "OPENSEARCH_JAVA_OPTS=-Xms64m -Xmx512m"
     volumes:
       - osdata:/usr/share/opensearch/data
 
