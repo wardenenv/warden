@@ -3,9 +3,8 @@ services:
   nginx:
     labels:
       - traefik.enable=false
-      - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.priority=2
-      - traefik.docker.network=${WARDEN_ENV_NAME}_default
-
+      - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.priority="2"
+      - traefik.docker.network="${WARDEN_ENV_NAME}_default"
   varnish:
     hostname: "${WARDEN_ENV_NAME}-varnish"
     image: ${WARDEN_IMAGE_REPOSITORY}/varnish:${VARNISH_VERSION:-6.0}
