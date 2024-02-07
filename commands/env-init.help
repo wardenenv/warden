@@ -21,10 +21,7 @@ WARDEN_USAGE=$(cat <<EOF
                       pre-configured for running Laravel
 
   magento2            Nginx, varnish, php-fpm, db (mariadb), elasticsearch, redis,
-                      and rabbitmq services pre configured for Magento 2; on macOS
-                      systems code files are synced into container using mutagen
-                      session with pub/media, pub/static and var dirs excluded.
-                      On Linux code is mounted natively.
+                      and rabbitmq services pre configured for Magento 2; Code is mounted natively.
 
   magento1            Nginx, php-fpm, db (mariadb), and redis services
                       pre-configured for running Magento 1
