@@ -20,10 +20,8 @@ trap '' ERR
 if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
   eval "$(sed 's/\r$//g' < "${WARDEN_HOME_DIR}/.env" | grep "^WARDEN_")"
 
-  ## Temporary fix to force mutagen activation
-  if [[ ${WARDEN_MUTAGEN_ENABLE} == '' ]]; then
-    export WARDEN_MUTAGEN_ENABLE=1
-  fi
+  ## configure mutagen enable by default
+  WARDEN_MUTAGEN_ENABLE=${WARDEN_MUTAGEN_ENABLE:-1}
 fi
 export WARDEN_IMAGE_REPOSITORY="${WARDEN_IMAGE_REPOSITORY:-"docker.io/wardenenv"}"
 
