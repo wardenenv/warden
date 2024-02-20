@@ -13,4 +13,4 @@ services:
       - traefik.http.middlewares.sablier-${WARDEN_ENV_NAME}.plugin.sablier.group=${WARDEN_ENV_NAME}
       - traefik.http.middlewares.sablier-${WARDEN_ENV_NAME}.plugin.sablier.dynamic.name=${WARDEN_ENV_NAME}
       - traefik.http.middlewares.sablier-${WARDEN_ENV_NAME}.plugin.sablier.dynamic.displayName=${WARDEN_ENV_NAME}
-      - traefik.http.middlewares.sablier-${WARDEN_ENV_NAME}.plugin.sablier.dynamic.theme=${TRAEFIK_SABLIER_THEME:-warden}
+      - traefik.http.middlewares.sablier-${WARDEN_ENV_NAME}.plugin.sablier.dynamic.theme=${TRAEFIK_SABLIER_THEME}

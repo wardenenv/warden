@@ -67,6 +67,12 @@ if [[ ${WARDEN_ENV_SUBT} == "linux" && $UID == 1000 ]]; then
     export SSH_AUTH_SOCK_PATH_ENV=/run/host-services/ssh-auth.sock
 fi
 
+# Default Sablier Theme
+if [[ -z $TRAEFIK_SABLIER_THEME ]]; then
+    TRAEFIK_SABLIER_THEME=${WARDEN_SABLIER_DEFAULT_THEME:-warden}
+fi
+export TRAEFIK_SABLIER_THEME
+
 ## configure docker compose files
 DOCKER_COMPOSE_ARGS=()
 
