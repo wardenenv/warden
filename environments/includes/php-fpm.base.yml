@@ -30,6 +30,9 @@ services:
       - CHOWN_DIR_LIST=${CHOWN_DIR_LIST:-}
     volumes: *volumes
     extra_hosts: *extra_hosts
+    labels:
+      - sablier.enable=true
+      - sablier.group=${WARDEN_ENV_NAME}
 
   php-debug:
     hostname: "${WARDEN_ENV_NAME}-php-debug"
@@ -48,6 +51,9 @@ services:
     extra_hosts: *extra_hosts
     depends_on:
       - php-fpm
+    labels:
+      - sablier.enable=true
+      - sablier.group=${WARDEN_ENV_NAME}
 volumes:
   bashhistory:
   sshdirectory:
