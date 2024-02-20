@@ -1,0 +1,65 @@
+<html lang="en"><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Warden</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="refresh" content="{{ .RefreshFrequency }}">
+    <link rel="preconnect" href="https://fonts.bunny.net" crossorigin="">
+    <link rel="dns-prefetch" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css2?family=Open+Sans:wght@400;700&amp;display=swap" rel="stylesheet">
+    <style>
+        html,body {background-color:black;color:#fff;font-family:'Open Sans',sans-serif;height:100vh;margin:0;font-size:0}
+        .container {height:100vh;align-items:center;display:flex;justify-content:center;position:relative}
+        .wrap {text-align:center}
+        .ghost {animation:float 3s ease-out infinite}
+        @keyframes float { 50% {transform:translate(0,20px)}}
+        .shadowFrame {width:130px;margin: 10px auto 0 auto}
+        .shadow {animation:shrink 3s ease-out infinite;transform-origin:center center}
+        @keyframes shrink {0%{width:90%;margin:0 5%} 50% {width:60%;margin:0 18%} 100% {width:90%;margin:0 5%}}
+        h3 {font-size:17px;text-transform: uppercase;margin:0.3em auto}
+        .description {font-size:13px;color:#feb8c5}
+        .details {color:#999;width:100%}
+        .details table {width:100%}
+        .details td {white-space:nowrap;font-size:11px}
+        .details .name {text-align:right;padding-right:.6em;width:50%}
+        .details .value {text-align:left;padding-left:.6em;font-family:'Lucida Console','Courier New',monospace}
+        .details .value.error {color: rgb(231, 89, 82)}
+        .details .value.success {color: rgb(82, 231, 142)}
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="wrap">
+        
+        <pre class="warden-mark" style="
+    color: green;
+    font-size: 22px;
+    line-height: 1em;
+    font-weight: 600;
+    text-shadow: 2px 2px 3px #005003;
+"> _       __               __         
+| |     / /___ __________/ /__  ____ 
+| | /| / / __ `/ ___/ __  / _ \/ __ \
+| |/ |/ / /_/ / /  / /_/ /  __/ / / /
+|__/|__/\__,_/_/   \__,_/\___/_/ /_/ 
+            </pre>
+            <h3><span>Starting</span> {{ .DisplayName }}</h3>
+            <p class="description">Your instance(s) will stop after {{ .SessionDuration }} of inactivity</p>
+            <div class="details">
+                <table>
+                    {{- range $i, $instance := .InstanceStates }}
+                    <tr>
+                        <td class="name">{{ $instance.Name }}</td>
+                        {{- if $instance.Error }}
+                        <td class="value error">{{ $instance.Error }}</td>
+                        {{- else }}
+                        <td class="value success">{{ $instance.Status }} ({{ $instance.CurrentReplicas }}/{{ $instance.DesiredReplicas }})</td>
+                        {{- end}}
+                    </tr>
+                    {{ end -}}
+                </table>
+            </div>
+    </div>
+</div>
+
+</body></html>
