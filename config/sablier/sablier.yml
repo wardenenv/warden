@@ -1,0 +1,20 @@
+provider:
+  name: docker
+server:
+  port: 10000
+  base-path: /
+storage:
+  file:
+sessions:
+  default-duration: 5m
+  expiration-interval: 20s
+logging:
+  level: info
+strategy:
+  dynamic:
+    custom-themes-path:
+    show-details-by-default: true
+    default-theme: warden
+    default-refresh-frequency: 5s
+  blocking:
+    default-timeout: 1m
