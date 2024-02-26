@@ -1,0 +1,7 @@
+version: "3.5"
+services:
+  db:
+    environment:
+      - POSTGRES_PASSWORD=${DB_ROOT_PASSWORD:-drupal}
+      - POSTGRES_DB=${DB_DATABASE:-drupal}
+      - POSTGRES_USER=${DB_USER:-drupal}

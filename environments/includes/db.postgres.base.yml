@@ -1,0 +1,18 @@
+version: "3.5"
+services:
+  php-fpm:
+    depends_on:
+      - db
+
+  db:
+    hostname: "${WARDEN_ENV_NAME}-postgres"
+    image: ${WARDEN_IMAGE_REPOSITORY}/${DB_DISTRIBUTION:-postgres}:${DB_DISTRIBUTION_VERSION:-${DB_VERSION:-16.2}}
+    environment:
+      - POSTGRES_PASSWORD=${DB_ROOT_PASSWORD:-app}
+      - POSTGRES_DB=${DB_DATABASE:-app}
+      - POSTGRES_USER=${DB_USER:-app}
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+
+volumes:
+  dbdata:
