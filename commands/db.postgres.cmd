@@ -1,12 +1,6 @@
 #!/usr/bin/env bash
 [[ ! ${WARDEN_DIR} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
 
-## load connection information for the postgres service
-# DB_CONTAINER=$($WARDEN_BIN env ps -q db)
-# if [[ ! ${DB_CONTAINER} ]]; then
-#     fatal "No container found for db service."
-# fi
-
 eval "$(
     docker container inspect ${DB_CONTAINER} --format '
         {{- range .Config.Env }}{{with split . "=" -}}
