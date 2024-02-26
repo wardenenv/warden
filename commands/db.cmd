@@ -5,9 +5,9 @@ WARDEN_ENV_PATH="$(locateEnvPath)" || exit $?
 loadEnvConfig "${WARDEN_ENV_PATH}" || exit $?
 assertDockerRunning
 
-#if [[ ${WARDEN_DB:-1} -eq 0 ]]; then
-#  fatal "Database environment is not used (WARDEN_DB=0)."
-#fi
+if [[ ${WARDEN_DB:-1} -eq 0 ]]; then
+  fatal "Database environment is not used (WARDEN_DB=0)."
+fi
 
 if (( ${#WARDEN_PARAMS[@]} == 0 )) || [[ "${WARDEN_PARAMS[0]}" == "help" ]]; then
   $WARDEN_BIN db --help || exit $? && exit $?
