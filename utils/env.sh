@@ -134,6 +134,11 @@ function appendEnvPartialIfExists () {
     do
         if [[ -f "${PARTIAL_PATH}" ]]; then
             DOCKER_COMPOSE_ARGS+=("-f" "${PARTIAL_PATH}")
+
+            if [[ "${PARTIAL_NAME}" = "db" ]]; then
+                echo -e "\033[33mWARNING\033[0m The 'db.base.yml' and 'db.${WARDEN_ENV_SUBT}.yml' files are deprecated."
+                echo -e "\033[33mWARNING\033[0m To resolve this rename them to 'db.mysql.base.yml' or 'db.mysql.${WARDEN_ENV_SBUT}.yml'."
+            fi
         fi
     done
 }

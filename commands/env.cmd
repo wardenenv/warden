@@ -79,8 +79,23 @@ fi
 [[ ${WARDEN_NGINX} -eq 1 ]] \
     && appendEnvPartialIfExists "nginx"
 
-[[ ${WARDEN_DB} -eq 1 ]] \
-    && appendEnvPartialIfExists "db"
+if [[ ${WARDEN_DB} -eq 1 ]]; then
+    DB_PARTIAL=("db")
+    case "${WARDEN_DB_SYSTEM:-mysql}" in
+        pgsql|postgres|postgresql)
+            # Reset DB_PARTIAL array to only include PostgreSQL partial
+            DB_PARTIAL=("db.postgres")
+            ;;
+        mysql|mariadb)
+            DB_PARTIAL+=("db")
+            DB_PARTIAL+=("db.mysql")
+            ;;
+    esac
+
+    for partial in "${DB_PARTIAL[@]}"; do
+        appendEnvPartialIfExists "${partial}"
+    done
+fi
 
 [[ ${WARDEN_ELASTICSEARCH} -eq 1 ]] \
     && appendEnvPartialIfExists "elasticsearch"

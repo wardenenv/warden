@@ -1,0 +1,7 @@
+version: "3.5"
+services:
+  db:
+    environment:
+      - POSTGRES_PASSWORD=${DB_ROOT_PASSWORD:-laravel}
+      - POSTGRES_DB=${DB_DATABASE:-laravel}
+      - POSTGRES_USER=${DB_USER:-laravel}
