@@ -3,7 +3,8 @@
 
 WARDEN_USAGE=$(cat <<EOF
 \033[33mUsage:\033[0m
-  ngrok                     Securely expose local server to the Internet for testing and development
+  ngrok                     Securely expose local server to the Internet for testing and development (use AUTH-TOKEN from global '.env' or environmental '.env')
+  ngrok AUTH-TOKEN          Run Ngrok with AUTH-TOKEN
 
 \033[33mOptions:\033[0m
   -h, --help        Display this help menu
