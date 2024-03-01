@@ -19,6 +19,9 @@ trap '' ERR
 ## define source repository
 if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
   eval "$(sed 's/\r$//g' < "${WARDEN_HOME_DIR}/.env" | grep "^WARDEN_")"
+
+  ## configure mutagen enable by default
+  WARDEN_MUTAGEN_ENABLE=${WARDEN_MUTAGEN_ENABLE:-1}
 fi
 export WARDEN_IMAGE_REPOSITORY="${WARDEN_IMAGE_REPOSITORY:-"docker.io/wardenenv"}"
 
@@ -174,7 +177,10 @@ TRAEFIK_ADDRESS="$(docker container inspect traefik \
 )"
 export TRAEFIK_ADDRESS;
 
-if [[ $OSTYPE =~ ^darwin ]]; then
+if [[ $OSTYPE =~ ^darwin ]] && [[ ${WARDEN_MUTAGEN_ENABLE} -eq 1 ]]; then
+    echo -e "\033[31mWe noticed that you're on MacOS and using Mutagen sync.\033[0m"
+    echo -e "\033[31mWe recommend configuring Docker Desktop to use VirtioFS and disable Mutagen sync by adding WARDEN_MUTAGEN_ENABLE=0 in ~/.warden/.env file.\033[0m"
+
     export MUTAGEN_SYNC_FILE="${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.mutagen.yml"
 
     if [[ -f "${WARDEN_HOME_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.mutagen.yml" ]]; then

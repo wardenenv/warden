@@ -53,6 +53,10 @@ function loadEnvConfig () {
         ;;
     esac
 
+    if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
+      eval "$(sed 's/\r$//g' < "${WARDEN_HOME_DIR}/.env" | grep "^WARDEN_")"
+    fi
+
     assertValidEnvType
 }
 
@@ -119,21 +123,27 @@ function appendEnvPartialIfExists () {
     local PARTIAL_PATH=""
 
     for PARTIAL_PATH in \
-        "${WARDEN_DIR}/environments/includes/${PARTIAL_NAME}.base.yml" \
-        "${WARDEN_DIR}/environments/includes/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml" \
-        "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.base.yml" \
-        "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml" \
-        "${WARDEN_HOME_DIR}/environments/includes/${PARTIAL_NAME}.base.yml" \
-        "${WARDEN_HOME_DIR}/environments/includes/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml" \
-        "${WARDEN_HOME_DIR}/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.base.yml" \
-        "${WARDEN_HOME_DIR}/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml" \
-        "${WARDEN_ENV_PATH}/.warden/environments/includes/${PARTIAL_NAME}.base.yml" \
-        "${WARDEN_ENV_PATH}/.warden/environments/includes/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml" \
-        "${WARDEN_ENV_PATH}/.warden/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.base.yml" \
-        "${WARDEN_ENV_PATH}/.warden/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml"
+        "${WARDEN_DIR}/environments" \
+        "${WARDEN_HOME_DIR}/environments" \
+        "${WARDEN_ENV_PATH}/.warden/environments";
     do
-        if [[ -f "${PARTIAL_PATH}" ]]; then
-            DOCKER_COMPOSE_ARGS+=("-f" "${PARTIAL_PATH}")
-        fi
+        for PARTIAL_PATH in \
+            "${PARTIAL_PATH}/includes/${PARTIAL_NAME}" \
+            "${PARTIAL_PATH}/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}";
+        do
+            for PARTIAL_PATH in \
+                "${PARTIAL_PATH}.base" \
+                "${PARTIAL_PATH}.${WARDEN_ENV_SUBT}";
+            do
+                if [[ -f "${PARTIAL_PATH}.yml" ]]; then
+                    DOCKER_COMPOSE_ARGS+=("-f" "${PARTIAL_PATH}.yml")
+                fi
+                if [[ "${WARDEN_ENV_SUBT}" == "darwin" ]] &&
+                    [[ "${WARDEN_MUTAGEN_ENABLE}" == "1" ]] &&
+                    [[ -f "${PARTIAL_PATH}.mutagen.yml" ]]; then
+                    DOCKER_COMPOSE_ARGS+=("-f" "${PARTIAL_PATH}.mutagen.yml")
+                fi
+            done
+        done
     done
 }
