@@ -1,4 +1,3 @@
-version: "3.5"
 
 x-volumes: &volumes
   - .${WARDEN_WEB_ROOT:-}/web/sites/default/files:/var/www/html/web/sites/default/files:cached

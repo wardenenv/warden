@@ -1,4 +1,3 @@
-version: "3.5"
 
 x-volumes: &volumes
   - ${SSH_AUTH_SOCK:-/dev/null}:/run/host-services/ssh-auth.sock
