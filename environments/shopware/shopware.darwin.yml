@@ -1,4 +1,3 @@
-version: "3.5"
 
 x-volumes: &volumes
   - .${WARDEN_WEB_ROOT:-}/public/media:/var/www/html/public/media:cached

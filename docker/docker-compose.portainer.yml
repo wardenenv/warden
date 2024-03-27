@@ -1,4 +1,3 @@
-version: "3.5"
 services:
   portainer:
     container_name: portainer

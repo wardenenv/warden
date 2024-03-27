@@ -1,4 +1,3 @@
-version: "3.5"
 services:
   rabbitmq:
     hostname: "${WARDEN_ENV_NAME}-rabbitmq"
