@@ -1,4 +1,3 @@
-version: "3.5"
 services:
   elasticsearch-hq:
     hostname: "${WARDEN_ENV_NAME}-elasticsearch-hq"

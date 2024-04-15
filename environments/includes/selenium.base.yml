@@ -1,4 +1,3 @@
-version: "3.5"
 services:
   selenium:
     hostname: ${WARDEN_ENV_NAME}_selenium
