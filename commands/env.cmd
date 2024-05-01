@@ -4,6 +4,7 @@
 WARDEN_ENV_PATH="$(locateEnvPath)" || exit $?
 loadEnvConfig "${WARDEN_ENV_PATH}" || exit $?
 assertDockerRunning
+assertSvcRunning
 
 HOST_UID=$(id -u)
 HOST_GID=$(id -g)

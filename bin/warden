@@ -17,6 +17,7 @@ export readonly WARDEN_BIN="${WARDEN_DIR}/bin/warden"
 export readonly DOCKER_COMPOSE_COMMAND="${DOCKER_COMPOSE_COMMAND:-"docker compose"}"
 
 source "${WARDEN_DIR}/utils/core.sh"
+source "${WARDEN_BIN}/utils/svc.sh"
 source "${WARDEN_DIR}/utils/env.sh"
 
 ## verify docker is installed
