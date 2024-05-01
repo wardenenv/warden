@@ -7,6 +7,6 @@ function assertSvcRunning() {
     wardenNetworkId=$(docker network ls -q --filter name="${wardenNetworkName}")
 
     if [[ -z "${wardenNetworkId}" ]]; then
-        warning "Warden is not currently running.\033[0m Run \033[36mwarden svc up\033[0m to start Warden core services."
+        warning "Warden core services are not currently running.\033[0m Run \033[36mwarden svc up\033[0m to start Warden core services."
     fi
 }
