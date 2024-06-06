@@ -32,6 +32,8 @@ if [ -z "${WARDEN_ENV_TYPE}" ]; then
   done
 fi
 
+WARDEN_ENV_VERSION="${WARDEN_PARAMS[2]:-default}"
+
 # Verify the auto-select and/or type path resolves correctly before setting it
 assertValidEnvType || exit $?
 
@@ -39,6 +41,7 @@ assertValidEnvType || exit $?
 cat > "${WARDEN_ENV_PATH}/.env" <<EOF
 WARDEN_ENV_NAME=${WARDEN_ENV_NAME}
 WARDEN_ENV_TYPE=${WARDEN_ENV_TYPE}
+WARDEN_ENV_VERSION=${WARDEN_ENV_VERSION}
 WARDEN_WEB_ROOT=/
 
 TRAEFIK_DOMAIN=${WARDEN_ENV_NAME}.test

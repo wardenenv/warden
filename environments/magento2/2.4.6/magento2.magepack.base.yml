@@ -1,0 +1,12 @@
+services:
+  magepack:
+    hostname: "${WARDEN_ENV_NAME}-magepack"
+    image: ${WARDEN_IMAGE_REPOSITORY}/magepack:${MAGEPACK_VERSION:-2.3}
+    environment:
+      - TRAEFIK_DOMAIN
+      - TRAEFIK_SUBDOMAIN
+    extra_hosts:
+      - ${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
+      - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
+    depends_on:
+      - php-fpm

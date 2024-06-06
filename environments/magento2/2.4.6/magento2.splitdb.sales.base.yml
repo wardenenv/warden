@@ -1,0 +1,25 @@
+services:
+  php-fpm:
+    depends_on:
+      - salesdb
+
+  php-debug:
+    depends_on:
+      - salesdb
+
+  salesdb:
+    hostname: "${WARDEN_ENV_NAME}-salesdb"
+    image: ${WARDEN_IMAGE_REPOSITORY}/${MYSQL_DISTRIBUTION:-mariadb}:${MYSQL_DISTRIBUTION_VERSION:-${MARIADB_VERSION:-10.4}}
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-magento}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-magento}
+      - MYSQL_USER=${MYSQL_USER:-magento}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-magento}
+    command:
+      - mysqld
+      - --max_allowed_packet=1024M
+    volumes:
+      - salesdbdata:/var/lib/mysql
+
+volumes:
+  salesdbdata:
