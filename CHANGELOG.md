@@ -3,7 +3,12 @@
 ## UNRELEASED [x.y.z](https://github.com/wardenenv/warden/tree/x.y.z) (yyyy-mm-dd)
 [All Commits](https://github.com/wardenenv/warden/compare/0.14.2..main)
 
-_No Changes yet_
+**Enhancements:**
+* Linux UID/GID added to env command for future image enhancements ([#736](https://github.com/wardenenv/warden/pull/736) by @toonvd)
+
+**Bug Fixes:**
+* Remove obsolete version element ([#760](https://github.com/wardenenv/warden/pull/760) by @mattijv)
+* Correct Java options are now passed to OpenSearch ([#735](https://github.com/wardenenv/warden/pull/735) by @ihor-sviziev)
 
 ## Version [0.14.2](https://github.com/wardenenv/warden/tree/0.14.2) (2024-01-03)
 [All Commits](https://github.com/wardenenv/warden/compare/0.14.1..0.14.2)
