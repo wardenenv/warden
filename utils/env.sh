@@ -6,7 +6,8 @@ function locateEnvPath () {
     while [[ "${WARDEN_ENV_PATH}" != "/" ]]; do
         if [[ -f "${WARDEN_ENV_PATH}/.env" ]] \
             && grep "^WARDEN_ENV_NAME" "${WARDEN_ENV_PATH}/.env" >/dev/null \
-            && grep "^WARDEN_ENV_TYPE" "${WARDEN_ENV_PATH}/.env" >/dev/null
+            && grep "^WARDEN_ENV_TYPE" "${WARDEN_ENV_PATH}/.env" >/dev/null \
+            && grep "^WARDEN_ENV_VERSION" "${WARDEN_ENV_PATH}/.env" >/dev/null
         then
             break
         fi
@@ -39,6 +40,7 @@ function loadEnvConfig () {
 
     WARDEN_ENV_NAME="${WARDEN_ENV_NAME:-}"
     WARDEN_ENV_TYPE="${WARDEN_ENV_TYPE:-}"
+    WARDEN_ENV_VERSION="${WARDEN_ENV_VERSION:-default}"
     WARDEN_ENV_SUBT=""
 
     case "${OSTYPE:-undefined}" in
@@ -62,11 +64,12 @@ function renderEnvNetworkName() {
 
 function fetchEnvInitFile () {
     local envInitPath=""
+    local envTypeVersion="${WARDEN_ENV_TYPE}/${WARDEN_ENV_VERSION}"
 
     for ENV_INIT_PATH in \
-        "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/init.env" \
-        "${WARDEN_HOME_DIR}/environments/${WARDEN_ENV_TYPE}/init.env" \
-        "${WARDEN_ENV_PATH}/.warden/environments/${WARDEN_ENV_TYPE}/init.env"
+        "${WARDEN_DIR}/environments/${envTypeVersion}/init.env" \
+        "${WARDEN_HOME_DIR}/environments/${envTypeVersion}/init.env" \
+        "${WARDEN_ENV_PATH}/.warden/environments/${envTypeVersion}/init.env"
     do
         if [[ -f "${ENV_INIT_PATH}" ]]; then
             envInitPath="${ENV_INIT_PATH}"
@@ -77,14 +80,14 @@ function fetchEnvInitFile () {
 }
 
 function fetchValidEnvTypes () {
-    local lsPaths="${WARDEN_DIR}/environments/"*/*".base.yml"
+    local lsPaths="${WARDEN_DIR}/environments/"*/*/*".base.yml"
 
     if [[ -d "${WARDEN_HOME_DIR}/environments" ]]; then
-       lsPaths="${lsPaths} ${WARDEN_HOME_DIR}/environments/"*/*".base.yml"
+       lsPaths="${lsPaths} ${WARDEN_HOME_DIR}/environments/"*/*/*".base.yml"
     fi
 
     if [[ -d "${WARDEN_ENV_PATH}/.warden/environments" ]]; then
-       lsPaths="${lsPaths} ${WARDEN_ENV_PATH}/.warden/environments/"*/*".base.yml"
+       lsPaths="${lsPaths} ${WARDEN_ENV_PATH}/.warden/environments/"*/*/*".base.yml"
     fi
 
     echo $(
@@ -97,19 +100,21 @@ function fetchValidEnvTypes () {
 }
 
 function assertValidEnvType () {
-    if [[ -f "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.base.yml" ]]; then
+    local envTypeVersion="${WARDEN_ENV_TYPE}/${WARDEN_ENV_VERSION}/${WARDEN_ENV_TYPE}"
+
+    if [[ -f "${WARDEN_DIR}/environments/${envTypeVersion}.base.yml" ]]; then
         return 0
     fi
 
-    if [[ -f "${WARDEN_HOME_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.base.yml" ]]; then
+    if [[ -f "${WARDEN_HOME_DIR}/environments/${envTypeVersion}.base.yml" ]]; then
         return 0
     fi
 
-    if [[ -f "${WARDEN_ENV_PATH}/.warden/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.base.yml" ]]; then
+    if [[ -f "${WARDEN_ENV_PATH}/.warden/environments/${envTypeVersion}.base.yml" ]]; then
         return 0
     fi
 
-    >&2 echo -e "\033[31mInvalid environment type \"${WARDEN_ENV_TYPE}\" specified.\033[0m"
+    >&2 echo -e "\033[31mInvalid environment type \"${WARDEN_ENV_TYPE}\" and version \"${WARDEN_ENV_VERSION}\" combination specified, base.yml definitions not found.\033[0m"
 
     return 1
 }
@@ -117,20 +122,21 @@ function assertValidEnvType () {
 function appendEnvPartialIfExists () {
     local PARTIAL_NAME="${1}"
     local PARTIAL_PATH=""
+    local envTypeVersion="${WARDEN_ENV_TYPE}/${WARDEN_ENV_VERSION}"
 
     for PARTIAL_PATH in \
         "${WARDEN_DIR}/environments/includes/${PARTIAL_NAME}.base.yml" \
         "${WARDEN_DIR}/environments/includes/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml" \
-        "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.base.yml" \
-        "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml" \
+        "${WARDEN_DIR}/environments/${envTypeVersion}/${PARTIAL_NAME}.base.yml" \
+        "${WARDEN_DIR}/environments/${envTypeVersion}/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml" \
         "${WARDEN_HOME_DIR}/environments/includes/${PARTIAL_NAME}.base.yml" \
         "${WARDEN_HOME_DIR}/environments/includes/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml" \
-        "${WARDEN_HOME_DIR}/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.base.yml" \
-        "${WARDEN_HOME_DIR}/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml" \
+        "${WARDEN_HOME_DIR}/environments/${envTypeVersion}/${PARTIAL_NAME}.base.yml" \
+        "${WARDEN_HOME_DIR}/environments/${envTypeVersion}/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml" \
         "${WARDEN_ENV_PATH}/.warden/environments/includes/${PARTIAL_NAME}.base.yml" \
         "${WARDEN_ENV_PATH}/.warden/environments/includes/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml" \
-        "${WARDEN_ENV_PATH}/.warden/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.base.yml" \
-        "${WARDEN_ENV_PATH}/.warden/environments/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml"
+        "${WARDEN_ENV_PATH}/.warden/environments/${envTypeVersion}/${PARTIAL_NAME}.base.yml" \
+        "${WARDEN_ENV_PATH}/.warden/environments/${envTypeVersion}/${PARTIAL_NAME}.${WARDEN_ENV_SUBT}.yml"
     do
         if [[ -f "${PARTIAL_PATH}" ]]; then
             DOCKER_COMPOSE_ARGS+=("-f" "${PARTIAL_PATH}")

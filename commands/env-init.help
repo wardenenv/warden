@@ -3,7 +3,7 @@
 
 WARDEN_USAGE=$(cat <<EOF
 \033[33mUsage:\033[0m
-  env-init <project_name> <environment_type>
+  env-init <project_name> <environment_type> <environment_version>
 
 \033[33mOptions:\033[0m
   -h, --help        Display this help menu
