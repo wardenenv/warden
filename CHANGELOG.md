@@ -1,7 +1,12 @@
 # Change Log
 
-## UNRELEASED [x.y.z](https://github.com/wardenenv/warden/tree/x.y.z) (yyyy-mm-dd)
-[All Commits](https://github.com/wardenenv/warden/compare/0.14.2..main)
+## UNRELEASED
+[All Commits](https://github.com/wardenenv/warden/compare/0.14.3..main)
+
+_No Changes yet_
+
+## Version [0.14.3](https://github.com/wardenenv/warden/tree/0.14.3) (2024-06-11)
+[All Commits](https://github.com/wardenenv/warden/compare/0.14.2..0.14.3)
 
 **Enhancements:**
 * Linux UID/GID added to env command for future image enhancements ([#736](https://github.com/wardenenv/warden/pull/736) by @toonvd)
