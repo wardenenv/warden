@@ -4,6 +4,9 @@ services:
     image: ${WARDEN_IMAGE_REPOSITORY}/redis:${REDIS_VERSION:-5.0}
     volumes:
       - redis:/data
+    labels:
+      - sablier.enable=true
+      - sablier.group=${WARDEN_ENV_NAME}
 
 volumes:
   redis:
