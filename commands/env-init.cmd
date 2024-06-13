@@ -53,6 +53,6 @@ if [[ ! -z $ENV_INIT_FILE ]]; then
 fi
 
 if [ -s "${WARDEN_ENV_PATH}/.env" ]; then
-  printf "\nA warden env file was created at ${WARDEN_ENV_PATH}/.env\nYou may now use \'warden env up\' to start your environment.\n"
+  printf "A warden env file was created at ${WARDEN_ENV_PATH}/.env\nYou may now use \'warden env up\' to start your environment.\n"
   exit 0
 fi
