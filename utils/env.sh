@@ -2,7 +2,8 @@
 [[ ! ${WARDEN_DIR} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
 
 function locateEnvPath () {
-    local WARDEN_ENV_PATH="$(pwd -P)"
+    local WARDEN_ENV_PATH
+    WARDEN_ENV_PATH="$(pwd -P)"
     while [[ "${WARDEN_ENV_PATH}" != "/" ]]; do
         if [[ -f "${WARDEN_ENV_PATH}/.env" ]] \
             && grep "^WARDEN_ENV_NAME" "${WARDEN_ENV_PATH}/.env" >/dev/null \
@@ -31,12 +32,18 @@ function locateEnvPath () {
     echo "${WARDEN_ENV_PATH}"
 }
 
+function loadBaseEnv () {
+   eval "$(sed 's/\r$//g' < "${WARDEN_HOME_DIR}/.env" | grep "^WARDEN_")"
+   eval "$(sed 's/\r$//g' < "${WARDEN_HOME_DIR}/.env" | grep "^NGROK_")"
+}
+
 function loadEnvConfig () {
     local WARDEN_ENV_PATH="${1}"
-    eval "$(cat "${WARDEN_ENV_PATH}/.env" | sed 's/\r$//g' | grep "^WARDEN_")"
-    eval "$(cat "${WARDEN_ENV_PATH}/.env" | sed 's/\r$//g' | grep "^TRAEFIK_")"
-    eval "$(cat "${WARDEN_ENV_PATH}/.env" | sed 's/\r$//g' | grep "^PHP_")"
-    eval "$(cat "${WARDEN_ENV_PATH}/.env" | sed 's/\r$//g' | grep "^NGROK_")"
+    loadBaseEnv
+    eval "$(sed 's/\r$//g' < "${WARDEN_ENV_PATH}/.env" | grep "^WARDEN_")"
+    eval "$(sed 's/\r$//g' < "${WARDEN_ENV_PATH}/.env" | grep "^TRAEFIK_")"
+    eval "$(sed 's/\r$//g' < "${WARDEN_ENV_PATH}/.env" | grep "^PHP_")"
+    eval "$(sed 's/\r$//g' < "${WARDEN_ENV_PATH}/.env" | grep "^NGROK_")"
 
     WARDEN_ENV_NAME="${WARDEN_ENV_NAME:-}"
     WARDEN_ENV_TYPE="${WARDEN_ENV_TYPE:-}"
