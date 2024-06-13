@@ -92,6 +92,10 @@ fi
     && appendEnvPartialIfExists "varnish"
 
 if [[ ${WARDEN_NGROK} -eq 1 ]]; then
+  if [[ "$NGROK_AUTHTOKEN" == "" ]]; then
+    fatal "NGROK_AUTHTOKEN is not defined in the .env, please create an account at https://ngrok.com and set the authtoken in your .env file."
+  fi
+
   if [[ ! -f "${WARDEN_ENV_PATH}/.warden/ngrok.yml" ]]; then
     fatal "Ngrok is not initialized, please run \"warden ngrok init\" or set WARDEN_NGROK=0 in .env file. File ${WARDEN_ENV_PATH}/.warden/ngrok.yml is missing."
   fi
@@ -100,9 +104,6 @@ if [[ ${WARDEN_NGROK} -eq 1 ]]; then
     fatal "Ngrok is not initialized, please run \"warden ngrok init\" or set WARDEN_NGROK=0 in .env file. File ${WARDEN_ENV_PATH}/.warden/ngrok.caddy is missing."
   fi
 
-  if [[ "$NGROK_AUTHTOKEN" == "" ]]; then
-    fatal "NGROK_AUTHTOKEN is not defined in the .env, please create an account at https://ngrok.com and set the authtoken in your .env file."
-  fi
   appendEnvPartialIfExists "ngrok"
 fi
 
