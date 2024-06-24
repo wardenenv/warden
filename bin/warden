@@ -2,7 +2,7 @@
 set -e
 trap 'error "$(printf "Command \`%s\` at $BASH_SOURCE:$LINENO failed with exit code $?" "$BASH_COMMAND")"' ERR
 
-## find directory where this script is located following symlinks if neccessary
+## find directory where this script is located following symlinks if necessary
 readonly WARDEN_DIR="$(
   cd "$(
     dirname "$(
@@ -17,6 +17,7 @@ export readonly WARDEN_BIN="${WARDEN_DIR}/bin/warden"
 export readonly DOCKER_COMPOSE_COMMAND="${DOCKER_COMPOSE_COMMAND:-"docker compose"}"
 
 source "${WARDEN_DIR}/utils/core.sh"
+source "${WARDEN_DIR}/utils/svc.sh"
 source "${WARDEN_DIR}/utils/env.sh"
 
 ## verify docker is installed
