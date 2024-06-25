@@ -1,0 +1,10 @@
+services:
+  mailhog:
+    container_name: mailhog
+    image: wardenenv/mailhog:1.0
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.mailhog.tls=true
+      - traefik.http.routers.mailhog.rule=Host(`webmail.${WARDEN_SERVICE_DOMAIN:-warden.test}`)
+      - traefik.http.services.mailhog.loadbalancer.server.port=8025
+    restart: ${WARDEN_RESTART_POLICY:-always}

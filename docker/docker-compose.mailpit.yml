@@ -1,0 +1,17 @@
+services:
+  mailpit:
+    container_name: mailhog
+    image: axllent/mailpit:${WARDEN_MAILPIT_VERSION:-latest}
+    environment:
+      - MP_DATABASE=/data/mailpit.db
+    volumes:
+      - mailpitdata:/data
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.mailpit.tls=true
+      - traefik.http.routers.mailpit.rule=Host(`webmail.${WARDEN_SERVICE_DOMAIN:-warden.test}`)
+      - traefik.http.services.mailpit.loadbalancer.server.port=8025
+    restart: ${WARDEN_RESTART_POLICY:-always}
+
+volumes:
+  mailpitdata:

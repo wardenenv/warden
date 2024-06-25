@@ -91,7 +91,9 @@ if [[ ! -f "${WARDEN_HOME_DIR}/.env" ]]; then
 	cat >> "${WARDEN_HOME_DIR}/.env" <<-EOT
 		# Set to "1" to enable global Portainer service
 		WARDEN_PORTAINER_ENABLE=0
-		# SEt to "0" to disable DNSMasq
+		# Set to "0" to disable DNSMasq
 		WARDEN_DNSMASQ_ENABLE=1
+		# Specify which mail trapping service to use: "mailhog" or "mailpit"
+		WARDEN_MAIL_SERVICE=mailhog
 	EOT
 fi
