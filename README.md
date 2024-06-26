@@ -42,8 +42,6 @@ This work is licensed under the MIT license. See [LICENSE](https://github.com/da
 This project was started in 2019 by [David Alger](https://davidalger.com/).
 
 # Gold Sponsors
-[![SwiftOtter](https://warden.dev/img/sponsors/swiftotter.svg)](https://www.swiftotter.com/)  
 [![Sansec.io](https://warden.dev/img/sponsors/sansec.svg)](https://www.sansec.io/)  
-[![Hyvä](https://user-images.githubusercontent.com/145128/226427529-53483968-c9ab-484a-9ae3-c6abb58f81c9.png)](https://www.hyva.io/)
 
 Support Warden Development on <a href="https://opencollective.com/warden" rel="me" class="link">OpenCollective</a> or <a href="https://github.com/sponsors/wardenenv" rel="me" class="link">Github Sponsors</a>
