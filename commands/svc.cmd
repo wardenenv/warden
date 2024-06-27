@@ -23,6 +23,17 @@ if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
     eval "$(grep "^WARDEN_DNSMASQ_ENABLE" "${WARDEN_HOME_DIR}/.env")"
     # Check Portainer
     eval "$(grep "^WARDEN_PORTAINER_ENABLE" "${WARDEN_HOME_DIR}/.env")"
+    # Check Mail service
+    eval "$(grep "^WARDEN_MAIL_SERVICE" "${WARDEN_HOME_DIR}/.env")"
+fi
+
+WARDEN_MAIL_SERVICE="${WARDEN_MAIL_SERVICE:-mailhog}"
+if [[ "$WARDEN_MAIL_SERVICE" == "mailpit" ]]; then
+    DOCKER_COMPOSE_ARGS+=("-f")
+    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.mailpit.yml")
+else
+    DOCKER_COMPOSE_ARGS+=("-f")
+    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.mailhog.yml")
 fi
 
 ## add dnsmasq docker-compose
