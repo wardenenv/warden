@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+[[ ! ${WARDEN_DIR} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
+
+WARDEN_USAGE=$(cat <<EOF
+\033[33mUsage:\033[0m
+  db <sub-command>
+
+\033[33mOptions:\033[0m
+  -h, --help        Display this help menu
+
+\033[33mCommands:\033[0m
+  init <domain1> <domain2> <...>  Initialize the ngrok configuration file with the default TRAEFIK_DOMAIN.
+  refresh-config                  Regenerate the caddy configuration to match the urls in ngrok.
+  ls                              Show the list of ngrok urls
+EOF
+)

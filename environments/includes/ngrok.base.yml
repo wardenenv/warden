@@ -1,0 +1,26 @@
+services:
+  ngrok:
+    hostname: "${WARDEN_ENV_NAME}-ngrok"
+    image: ngrok/ngrok:${NGROK_VERSION:-latest}
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
+    volumes:
+      - ${WARDEN_ENV_PATH:-.}/.warden/ngrok.yml:/etc/ngrok.yml:ro,cached
+    command:
+      - "start"
+      - "--all"
+      - "--config"
+      - "/etc/ngrok.yml"
+
+
+  caddy-ngrok:
+    hostname: "${WARDEN_ENV_NAME}-caddy-ngrok"
+    image: ${WARDEN_IMAGE_REPOSITORY}/caddy-ngrok:${CADDY_NGROK_VERSION:-latest}
+    volumes:
+      - ${WARDEN_ENV_PATH:-.}/.warden/ngrok.caddy:/etc/caddy/Caddyfile:ro,cached
+    command:
+      - "caddy"
+      - "run"
+      - "--watch"
+      - "--config"
+      - "/etc/caddy/Caddyfile"
