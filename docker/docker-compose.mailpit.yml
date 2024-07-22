@@ -11,6 +11,15 @@ services:
       - traefik.http.routers.mailpit.tls=true
       - traefik.http.routers.mailpit.rule=Host(`webmail.${WARDEN_SERVICE_DOMAIN:-warden.test}`)
       - traefik.http.services.mailpit.loadbalancer.server.port=8025
+
+      # Create legacy mailhog redirect middleware
+      - traefik.http.routers.legacymailhog.tls=true
+      - traefik.http.routers.legacymailhog.rule=Host(`mailhog.${WARDEN_SERVICE_DOMAIN:-warden.test}`)
+      - traefik.http.middlewares.legacymailhog.redirectregex.regex=https?://mailhog\\.([^/]+)/?.*
+      - traefik.http.middlewares.legacymailhog.redirectregex.replacement=https://webmail.$${1}/
+      - traefik.http.middlewares.legacymailhog.redirectregex.permanent=true
+      - traefik.http.routers.legacymailhog.middlewares=legacymailhog
+
     restart: ${WARDEN_RESTART_POLICY:-always}
 
 volumes:
