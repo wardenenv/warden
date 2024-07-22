@@ -27,14 +27,8 @@ if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
     eval "$(grep "^WARDEN_MAIL_SERVICE" "${WARDEN_HOME_DIR}/.env")"
 fi
 
-WARDEN_MAIL_SERVICE="${WARDEN_MAIL_SERVICE:-mailhog}"
-if [[ "$WARDEN_MAIL_SERVICE" == "mailpit" ]]; then
-    DOCKER_COMPOSE_ARGS+=("-f")
-    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.mailpit.yml")
-else
-    DOCKER_COMPOSE_ARGS+=("-f")
-    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.mailhog.yml")
-fi
+DOCKER_COMPOSE_ARGS+=("-f")
+DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.mailpit.yml")
 
 ## add dnsmasq docker-compose
 WARDEN_DNSMASQ_ENABLE="${WARDEN_DNSMASQ_ENABLE:-1}"

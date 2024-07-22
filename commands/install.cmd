@@ -93,7 +93,5 @@ if [[ ! -f "${WARDEN_HOME_DIR}/.env" ]]; then
 		WARDEN_PORTAINER_ENABLE=0
 		# Set to "0" to disable DNSMasq
 		WARDEN_DNSMASQ_ENABLE=1
-		# Specify which mail trapping service to use: "mailhog" or "mailpit"
-		WARDEN_MAIL_SERVICE=mailhog
 	EOT
 fi
