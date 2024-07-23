@@ -7,20 +7,21 @@ services:
     volumes:
       - mailpitdata:/data
     labels:
-      - traefik.enable=true
-      - traefik.http.routers.mailpit.tls=true
-      - traefik.http.routers.mailpit.rule=Host(`webmail.${WARDEN_SERVICE_DOMAIN:-warden.test}`)
-      - traefik.http.services.mailpit.loadbalancer.server.port=8025
-
-      # Create legacy mailhog redirect middleware
-      - traefik.http.routers.legacymailhog.tls=true
-      - traefik.http.routers.legacymailhog.rule=Host(`mailhog.${WARDEN_SERVICE_DOMAIN:-warden.test}`)
-      - traefik.http.middlewares.legacymailhog.redirectregex.regex=https?://mailhog\\.([^/]+)/?.*
-      - traefik.http.middlewares.legacymailhog.redirectregex.replacement=https://webmail.$${1}/
-      - traefik.http.middlewares.legacymailhog.redirectregex.permanent=true
-      - traefik.http.routers.legacymailhog.middlewares=legacymailhog
+      traefik.enable: true
+      traefik.http.routers.mailpit.tls: true
+      traefik.http.routers.mailpit.priority: 2
+      traefik.http.routers.mailpit.rule: Host(`webmail.${WARDEN_SERVICE_DOMAIN:-warden.test}`)
+      traefik.http.routers.mailpit.service: mailpit
+      traefik.http.services.mailpit.loadbalancer.server.port: 8025
+      # Legacy Mailhog redirect
+      traefik.http.routers.legacy-mailhog.tls: true
+      traefik.http.routers.legacy-mailhog.priority: 1
+      traefik.http.routers.legacy-mailhog.rule: Host(`mailhog.${WARDEN_SERVICE_DOMAIN:-warden.test}`)
+      traefik.http.routers.legacy-mailhog.middlewares: legacy-mailhog-redirect
+      traefik.http.middlewares.legacy-mailhog-redirect.redirectregex.regex: "^https?://mailhog\\.([^/]+)/.*"
+      traefik.http.middlewares.legacy-mailhog-redirect.redirectregex.replacement: https://webmail.$${1}/
+      traefik.http.middlewares.legacy-mailhog-redirect.redirectregex.permanent: true
 
     restart: ${WARDEN_RESTART_POLICY:-always}
-
 volumes:
   mailpitdata:
