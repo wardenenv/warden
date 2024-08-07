@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+[[ ! ${WARDEN_DIR} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
+
+WARDEN_USAGE=$(cat <<EOF
+\033[33mUsage:\033[0m
+  backup (db, redis, elasticsearch, all)
+\033[33mOptions:\033[0m
+  -h, --help        Display this help menu
+\033[33mCommands:\033[0m
+  db                  backup db volume
+  redis               backup redis volume
+  elasticsearch       backup elasticsearch volume
+  all                 backup db, redis and elasticsearch to one file including env.php and auth.json
+EOF
+)
