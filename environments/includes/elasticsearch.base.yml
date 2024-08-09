@@ -1,7 +1,7 @@
 services:
   elasticsearch:
     hostname: "${WARDEN_ENV_NAME}-elasticsearch"
-    image: ${WARDEN_IMAGE_REPOSITORY}/elasticsearch:${ELASTICSEARCH_VERSION:-7.8}
+    image: ${WARDEN_IMAGE_REPOSITORY}/elasticsearch:${ELASTICSEARCH_VERSION:-8.11}
     labels:
       - traefik.enable=true
       - traefik.http.routers.${WARDEN_ENV_NAME}-elasticsearch.tls=true
