@@ -36,6 +36,7 @@ function loadEnvConfig () {
     eval "$(cat "${WARDEN_ENV_PATH}/.env" | sed 's/\r$//g' | grep "^WARDEN_")"
     eval "$(cat "${WARDEN_ENV_PATH}/.env" | sed 's/\r$//g' | grep "^TRAEFIK_")"
     eval "$(cat "${WARDEN_ENV_PATH}/.env" | sed 's/\r$//g' | grep "^PHP_")"
+    eval "$(cat "${WARDEN_ENV_PATH}/.env" | sed 's/\r$//g' | grep "^NGROK_")"
 
     WARDEN_ENV_NAME="${WARDEN_ENV_NAME:-}"
     WARDEN_ENV_TYPE="${WARDEN_ENV_TYPE:-}"
