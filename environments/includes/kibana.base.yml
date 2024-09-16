@@ -1,0 +1,14 @@
+services:
+  kibana:
+    hostname: "${WARDEN_ENV_NAME}-kibana"
+    image: docker.elastic.co/kibana/kibana:${ELK_VERSION:-${ELASTICSEARCH_VERSION:-7.17.24}}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-kibana.tls=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-kibana.rule=HostRegexp(`kibana.${TRAEFIK_DOMAIN}`)
+      - traefik.http.services.${WARDEN_ENV_NAME}-kibana.loadbalancer.server.port=5601
+      - traefik.docker.network=${WARDEN_ENV_NAME}_default
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch

@@ -1,0 +1,10 @@
+services:
+  vector:
+    image: wardenenv/vector:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      WARDEN_ENV_NAME: ${WARDEN_ENV_NAME}
+      VECTOR_CONFIG: /etc/vector/vector.yaml
+    depends_on:
+      - elasticsearch
