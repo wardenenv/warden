@@ -130,6 +130,12 @@ fi
 [[ ${WARDEN_MAGEPACK} -eq 1 ]] \
     && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.magepack"
 
+if [[ ${WARDEN_ELK} -eq 1 ]]; then
+    appendEnvPartialIfExists "kibana"
+    appendEnvPartialIfExists "vector"
+    appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.vector"
+fi
+
 if [[ -f "${WARDEN_ENV_PATH}/.warden/warden-env.yml" ]]; then
     DOCKER_COMPOSE_ARGS+=("-f")
     DOCKER_COMPOSE_ARGS+=("${WARDEN_ENV_PATH}/.warden/warden-env.yml")
