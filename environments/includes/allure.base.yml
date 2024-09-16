@@ -12,6 +12,8 @@ services:
       # - traefik.http.routers.${WARDEN_ENV_NAME}-allure-api.tls=true
       # - traefik.http.routers.${WARDEN_ENV_NAME}-allure-api.rule=Host(`allure-api.${TRAEFIK_DOMAIN}`)
       # - traefik.http.services.${WARDEN_ENV_NAME}-allure-api.loadbalancer.server.port=5050
+      - sablier.enable=true
+      - sablier.group=${WARDEN_ENV_NAME}
     volumes:
       - allure-results:/app/allure-results
     environment:

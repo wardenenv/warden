@@ -23,3 +23,8 @@ log:
 global:
   checkNewVersion: false
   sendAnonymousUsage: false
+experimental:
+  plugins:
+    sablier:
+      moduleName: github.com/acouvreur/sablier
+      version: v1.5.0

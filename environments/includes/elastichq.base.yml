@@ -8,6 +8,8 @@ services:
       - traefik.http.routers.${WARDEN_ENV_NAME}-elasticsearch-hq.rule=Host(`elastichq.${TRAEFIK_DOMAIN}`)
       - traefik.http.services.${WARDEN_ENV_NAME}-elasticsearch-hq.loadbalancer.server.port=5000
       - traefik.docker.network=${WARDEN_ENV_NAME}_default
+      - sablier.enable=true
+      - sablier.group=${WARDEN_ENV_NAME}
     environment:
       - HQ_DEFAULT_URL=http://elasticsearch:9200
 

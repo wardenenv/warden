@@ -23,6 +23,8 @@ if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
     eval "$(grep "^WARDEN_DNSMASQ_ENABLE" "${WARDEN_HOME_DIR}/.env")"
     # Check Portainer
     eval "$(grep "^WARDEN_PORTAINER_ENABLE" "${WARDEN_HOME_DIR}/.env")"
+    # Check Sablier
+    eval "$(grep "^WARDEN_SABLIER_ENABLE" "${WARDEN_HOME_DIR}/.env")"
 fi
 
 DOCKER_COMPOSE_ARGS+=("-f")
@@ -39,6 +41,12 @@ WARDEN_PORTAINER_ENABLE="${WARDEN_PORTAINER_ENABLE:-0}"
 if [[ "${WARDEN_PORTAINER_ENABLE}" == 1 ]]; then
     DOCKER_COMPOSE_ARGS+=("-f")
     DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.portainer.yml")
+fi
+
+WARDEN_SABLIER_ENABLE="${WARDEN_SABLIER_ENABLE:-0}"
+if [[ "$WARDEN_SABLIER_ENABLE" == "1" ]]; then
+    DOCKER_COMPOSE_ARGS+=("-f")
+    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.sablier.yml")
 fi
 
 ## allow an additional docker-compose file to be loaded for global services
@@ -64,21 +72,28 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
     mkdir -p "${WARDEN_HOME_DIR}/etc/traefik"
     cp "${WARDEN_DIR}/config/traefik/traefik.yml" "${WARDEN_HOME_DIR}/etc/traefik/traefik.yml"
 
+    ## copy sablier configuration files into location where they'll be mounted into containers from
+    if [[ "$WARDEN_SABLIER_ENABLE" == "1" ]]; then
+        mkdir -p "${WARDEN_HOME_DIR}/etc/sablier/theme"
+        cp "${WARDEN_DIR}/config/sablier/sablier.yml" "${WARDEN_HOME_DIR}/etc/sablier/sablier.yml"
+        cp "${WARDEN_DIR}/config/sablier/theme/warden.html" "${WARDEN_HOME_DIR}/etc/sablier/theme/warden.html"
+    fi
+
     ## generate dynamic traefik ssl termination configuration
     cat > "${WARDEN_HOME_DIR}/etc/traefik/dynamic.yml" <<-EOT
 		tls:
 		  stores:
 		    default:
 		      defaultCertificate:
-		        certFile: /etc/ssl/certs/${WARDEN_SERVICE_DOMAIN}.crt.pem
-		        keyFile: /etc/ssl/certs/${WARDEN_SERVICE_DOMAIN}.key.pem
+		        certFile: /etc/ssl/certs/warden/${WARDEN_SERVICE_DOMAIN}.crt.pem
+		        keyFile: /etc/ssl/certs/warden/${WARDEN_SERVICE_DOMAIN}.key.pem
 		  certificates:
 	EOT
 
     for cert in $(find "${WARDEN_SSL_DIR}/certs" -type f -name "*.crt.pem" | sed -E 's#^.*/ssl/certs/(.*)\.crt\.pem$#\1#'); do
         cat >> "${WARDEN_HOME_DIR}/etc/traefik/dynamic.yml" <<-EOF
-		    - certFile: /etc/ssl/certs/${cert}.crt.pem
-		      keyFile: /etc/ssl/certs/${cert}.key.pem
+		    - certFile: /etc/ssl/certs/warden/${cert}.crt.pem
+		      keyFile: /etc/ssl/certs/warden/${cert}.key.pem
 		EOF
     done
 

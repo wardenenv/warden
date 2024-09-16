@@ -72,6 +72,12 @@ if [[ ${WARDEN_ENV_SUBT} == "linux" && $UID == 1000 ]]; then
     export SSH_AUTH_SOCK_PATH_ENV=/run/host-services/ssh-auth.sock
 fi
 
+# Default Sablier Theme
+if [[ -z $TRAEFIK_SABLIER_THEME ]]; then
+    TRAEFIK_SABLIER_THEME=${WARDEN_SABLIER_DEFAULT_THEME:-warden}
+fi
+export TRAEFIK_SABLIER_THEME
+
 ## configure docker compose files
 DOCKER_COMPOSE_ARGS=()
 
@@ -129,6 +135,13 @@ fi
 
 [[ ${WARDEN_MAGEPACK} -eq 1 ]] \
     && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.magepack"
+
+if [[ ${WARDEN_SABLIER_ENABLE:-0} -eq 1 ]]; then
+    appendEnvPartialIfExists "sablier"
+    
+    [[ ${WARDEN_VARNISH} -eq 1 ]] \
+        && appendEnvPartialIfExists "sablier-varnish"
+fi
 
 if [[ -f "${WARDEN_ENV_PATH}/.warden/warden-env.yml" ]]; then
     DOCKER_COMPOSE_ARGS+=("-f")
