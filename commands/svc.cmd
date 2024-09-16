@@ -41,6 +41,12 @@ if [[ "${WARDEN_PORTAINER_ENABLE}" == 1 ]]; then
     DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.portainer.yml")
 fi
 
+WARDEN_PHPMYADMIN_ENABLE="${WARDEN_PHPMYADMIN_ENABLE:-1}"
+if [[ "${WARDEN_PHPMYADMIN_ENABLE}" == 1 ]]; then
+    DOCKER_COMPOSE_ARGS+=("-f")
+    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.phpmyadmin.yml")
+fi
+
 ## allow an additional docker-compose file to be loaded for global services
 if [[ -f "${WARDEN_HOME_DIR}/docker-compose.yml" ]]; then
     DOCKER_COMPOSE_ARGS+=("-f")
@@ -63,6 +69,10 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
     ## copy configuration files into location where they'll be mounted into containers from
     mkdir -p "${WARDEN_HOME_DIR}/etc/traefik"
     cp "${WARDEN_DIR}/config/traefik/traefik.yml" "${WARDEN_HOME_DIR}/etc/traefik/traefik.yml"
+
+    if [[ ! -f "${WARDEN_HOME_DIR}/etc/phpmyadmin/config.user.inc.php" ]]; then
+        mkdir -p "${WARDEN_HOME_DIR}/etc/phpmyadmin"
+    fi
 
     ## generate dynamic traefik ssl termination configuration
     cat > "${WARDEN_HOME_DIR}/etc/traefik/dynamic.yml" <<-EOT
@@ -100,3 +110,5 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
         connectPeeredServices "${network}"
     done
 fi
+
+regeneratePMAConfig

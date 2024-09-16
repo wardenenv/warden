@@ -144,6 +144,9 @@ fi
 ## disconnect peered service containers from environment network
 if [[ "${WARDEN_PARAMS[0]}" == "down" ]]; then
     disconnectPeeredServices "$(renderEnvNetworkName)"
+
+    ## regenerate PMA config on each env changing
+    regeneratePMAConfig
 fi
 
 ## connect peered service containers to environment network
@@ -163,6 +166,9 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
         WARDEN_PARAMS=("${WARDEN_PARAMS[@]:1}")
         WARDEN_PARAMS=(up -d "${WARDEN_PARAMS[@]}")
     fi
+
+    ## regenerate PMA config on each env changing
+    regeneratePMAConfig
 fi
 
 ## lookup address of traefik container on environment network
@@ -201,6 +207,16 @@ fi
 ${DOCKER_COMPOSE_COMMAND} \
     --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
     "${DOCKER_COMPOSE_ARGS[@]}" "${WARDEN_PARAMS[@]}" "$@"
+
+
+if [[ "${WARDEN_PARAMS[0]}" == "stop" ]] || [[ "${WARDEN_PARAMS[0]}" == "down" ]]; then
+    regeneratePMAConfig
+fi
+
+
+if [[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]]; then
+    regeneratePMAConfig
+fi
 
 ## resume mutagen sync if available and php-fpm container id hasn't changed
 if { [[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]]; } \

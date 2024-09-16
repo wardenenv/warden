@@ -2,7 +2,7 @@
 [[ ! ${WARDEN_DIR} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
 
 ## global service containers to be connected with the project docker network
-DOCKER_PEERED_SERVICES=("traefik" "tunnel" "mailhog")
+DOCKER_PEERED_SERVICES=("traefik" "tunnel" "mailhog" "phpmyadmin")
 
 ## messaging functions
 function warning {
@@ -54,4 +54,36 @@ function disconnectPeeredServices {
     echo "Disconnecting ${svc} from $1 network"
     (docker network disconnect "$1" ${svc} 2>&1| grep -v 'is not connected') || true
   done
+}
+function regeneratePMAConfig() {
+  echo "Regenerating phpMyAdmin configuration..."
+    ## generate phpmyadmin connection configuration
+    pma_config_file="${WARDEN_HOME_DIR}/etc/phpmyadmin/config.user.inc.php"
+
+    cat > "${pma_config_file}" <<-EOL
+    <?php
+        \$i = 1;
+EOL
+
+    for container_id in $(docker ps -q --filter "name=mysql" --filter "name=mariadb" --filter "name=db"); do
+        container_name=$(docker inspect --format '{{.Name}}' "${container_id}" | sed 's#^/##')
+        container_ip=$(docker inspect --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "${container_id}")
+        MYSQL_ROOT_PASSWORD=$(docker exec "${container_id}" printenv | grep MYSQL_ROOT_PASSWORD | awk -F '=' '{print $2}')
+        MYSQL_PASSWORD=$(docker exec "${container_id}" printenv | grep MYSQL_PASSWORD | awk -F '=' '{print $2}')
+        cat >> "${pma_config_file}" <<-EOT
+        \$cfg['Servers'][\$i]['host'] = '${container_ip}';
+        \$cfg['Servers'][\$i]['auth_type'] = 'config';
+        \$cfg['Servers'][\$i]['user'] = 'root';
+        \$cfg['Servers'][\$i]['password'] = '${MYSQL_ROOT_PASSWORD}';
+        \$cfg['Servers'][\$i]['AllowNoPassword'] = true;
+        \$cfg['Servers'][\$i]['hide_db'] = '(information_schema|performance_schema|mysql)';
+        \$cfg['Servers'][\$i]['verbose'] = '${container_name}';
+        \$i++;
+EOT
+    done
+
+    cat >> "${pma_config_file}" <<-EOT
+    ?>
+EOT
+echo "phpMyAdmin configuration regenerated."
 }
