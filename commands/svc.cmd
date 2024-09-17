@@ -23,6 +23,8 @@ if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
     eval "$(grep "^WARDEN_DNSMASQ_ENABLE" "${WARDEN_HOME_DIR}/.env")"
     # Check Portainer
     eval "$(grep "^WARDEN_PORTAINER_ENABLE" "${WARDEN_HOME_DIR}/.env")"
+    # Check PMA
+    eval "$(grep "^WARDEN_PHPMYADMIN_ENABLE" "${WARDEN_HOME_DIR}/.env")"
 fi
 
 DOCKER_COMPOSE_ARGS+=("-f")
@@ -70,8 +72,10 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
     mkdir -p "${WARDEN_HOME_DIR}/etc/traefik"
     cp "${WARDEN_DIR}/config/traefik/traefik.yml" "${WARDEN_HOME_DIR}/etc/traefik/traefik.yml"
 
-    if [[ ! -f "${WARDEN_HOME_DIR}/etc/phpmyadmin/config.user.inc.php" ]]; then
-        mkdir -p "${WARDEN_HOME_DIR}/etc/phpmyadmin"
+    if [[ "${WARDEN_PHPMYADMIN_ENABLE}" == 1 ]]; then
+        if [[ ! -f "${WARDEN_HOME_DIR}/etc/phpmyadmin/config.user.inc.php" ]]; then
+            mkdir -p "${WARDEN_HOME_DIR}/etc/phpmyadmin"
+        fi
     fi
 
     ## generate dynamic traefik ssl termination configuration

@@ -93,5 +93,7 @@ if [[ ! -f "${WARDEN_HOME_DIR}/.env" ]]; then
 		WARDEN_PORTAINER_ENABLE=0
 		# Set to "0" to disable DNSMasq
 		WARDEN_DNSMASQ_ENABLE=1
+		# Set to "0" to disable phpMyAdmin
+		WARDEN_PHPMYADMIN_ENABLE=1
 	EOT
 fi

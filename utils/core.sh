@@ -56,6 +56,7 @@ function disconnectPeeredServices {
   done
 }
 function regeneratePMAConfig() {
+if [[ "${WARDEN_PHPMYADMIN_ENABLE}" == 1 ]]; then
   echo "Regenerating phpMyAdmin configuration..."
     ## generate phpmyadmin connection configuration
     pma_config_file="${WARDEN_HOME_DIR}/etc/phpmyadmin/config.user.inc.php"
@@ -85,5 +86,7 @@ EOT
     cat >> "${pma_config_file}" <<-EOT
     ?>
 EOT
+
 echo "phpMyAdmin configuration regenerated."
+fi
 }
