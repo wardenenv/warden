@@ -56,8 +56,15 @@ function disconnectPeeredServices {
   done
 }
 function regeneratePMAConfig() {
+
+if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
+    # Recheck PMA since old versions of .env may not have WARDEN_PHPMYADMIN_ENABLE setting
+    eval "$(grep "^WARDEN_PHPMYADMIN_ENABLE" "${WARDEN_HOME_DIR}/.env")"
+    WARDEN_PHPMYADMIN_ENABLE="${WARDEN_PHPMYADMIN_ENABLE:-1}"
+fi
+
 if [[ "${WARDEN_PHPMYADMIN_ENABLE}" == 1 ]]; then
-  echo "Regenerating phpMyAdmin configuration..."
+    echo "Regenerating phpMyAdmin configuration..."
     ## generate phpmyadmin connection configuration
     pma_config_file="${WARDEN_HOME_DIR}/etc/phpmyadmin/config.user.inc.php"
 
