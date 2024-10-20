@@ -6,7 +6,6 @@ services:
       - "${TRAEFIK_LISTEN:-127.0.0.1}:80:80"     # The HTTP port
       - "${TRAEFIK_LISTEN:-127.0.0.1}:443:443"   # The HTTPS port
     volumes:
-      - ${WARDEN_HOME_DIR}/etc/traefik/traefik.yml:/etc/traefik/traefik.yml
       - ${WARDEN_HOME_DIR}/etc/traefik/dynamic.yml:/etc/traefik/dynamic.yml
       - ${WARDEN_HOME_DIR}/ssl/certs:/etc/ssl/certs
       - /var/run/docker.sock:/var/run/docker.sock
@@ -16,6 +15,24 @@ services:
       - traefik.http.routers.traefik.rule=Host(`traefik.${WARDEN_SERVICE_DOMAIN:-warden.test}`)
       - traefik.http.routers.traefik.service=api@internal
     restart: ${WARDEN_RESTART_POLICY:-always}
+    environment:
+      TRAEFIK_API: true
+      TRAEFIK_API_DASHBOARD: true
+      TRAEFIK_PROVIDERS_FILE_FILENAME: /etc/traefik/dynamic.yml
+      TRAEFIK_PROVIDERS_DOCKER: true
+      TRAEFIK_PROVIDERS_DOCKER_DEFAULTRULE: "Host(`{{ .Name }}.warden.test`)"
+      TRAEFIK_PROVIDERS_DOCKER_NETWORK: warden
+      TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT: false
+      TRAEFIK_ENTRYPOINTS_HTTP: true
+      TRAEFIK_ENTRYPOINTS_HTTP_ADDRESS: :80
+      TRAEFIK_ENTRYPOINTS_HTTP_HTTP_REDIRECTIONS_ENTRYPOINT_SCHEME: https
+      TRAEFIK_ENTRYPOINTS_HTTP_HTTP_REDIRECTIONS_ENTRYPOINT_TO: https
+      TRAEFIK_ENTRYPOINTS_HTTPS: true
+      TRAEFIK_ENTRYPOINTS_HTTPS_ADDRESS: :443
+      TRAEFIK_LOG: true
+      TRAEFIK_LOG_LEVEL: info
+      TRAEFIK_GLOBAL_CHECKNEWVERSION: false
+      TRAEFIK_GLOBAL_SENDANONYMOUSUSAGE: false
 
   tunnel:
     container_name: tunnel
