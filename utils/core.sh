@@ -84,7 +84,7 @@ EOL
         \$cfg['Servers'][\$i]['user'] = 'root';
         \$cfg['Servers'][\$i]['password'] = '${MYSQL_ROOT_PASSWORD}';
         \$cfg['Servers'][\$i]['AllowNoPassword'] = true;
-        \$cfg['Servers'][\$i]['hide_db'] = '(information_schema|performance_schema|mysql)';
+        \$cfg['Servers'][\$i]['hide_db'] = '(information_schema|performance_schema|mysql|sys)';
         \$cfg['Servers'][\$i]['verbose'] = '${container_name}';
         \$i++;
 EOT
