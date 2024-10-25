@@ -55,45 +55,32 @@ function disconnectPeeredServices {
     (docker network disconnect "$1" ${svc} 2>&1| grep -v 'is not connected') || true
   done
 }
-function regeneratePMAConfig {
+function regeneratePMAConfig() {
   if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
     # Recheck PMA since old versions of .env may not have WARDEN_PHPMYADMIN_ENABLE setting
     eval "$(grep "^WARDEN_PHPMYADMIN_ENABLE" "${WARDEN_HOME_DIR}/.env")"
     WARDEN_PHPMYADMIN_ENABLE="${WARDEN_PHPMYADMIN_ENABLE:-1}"
   fi
-
   if [[ "${WARDEN_PHPMYADMIN_ENABLE}" == 1 ]]; then
     echo "Regenerating phpMyAdmin configuration..."
-    ## Generate phpMyAdmin connection configuration
     pma_config_file="${WARDEN_HOME_DIR}/etc/phpmyadmin/config.user.inc.php"
-
-    cat > "${pma_config_file}" <<EOF
-<?php
-    \$i = 1;
-EOF
-
-    for container_id in $(docker ps -q --filter "name=mysql" --filter "name=mariadb" --filter "name=db"); do
-      container_name=$(docker inspect --format '{{.Name}}' "${container_id}" | sed 's#^/##')
-      container_ip=$(docker inspect --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "${container_id}")
-      MYSQL_ROOT_PASSWORD=$(docker exec "${container_id}" printenv | grep MYSQL_ROOT_PASSWORD | awk -F '=' '{print $2}')
-      MYSQL_PASSWORD=$(docker exec "${container_id}" printenv | grep MYSQL_PASSWORD | awk -F '=' '{print $2}')
-
-      cat >> "${pma_config_file}" <<EOF
-    \$cfg['Servers'][\$i]['host'] = '${container_ip}';
-    \$cfg['Servers'][\$i]['auth_type'] = 'config';
-    \$cfg['Servers'][\$i]['user'] = 'root';
-    \$cfg['Servers'][\$i]['password'] = '${MYSQL_ROOT_PASSWORD}';
-    \$cfg['Servers'][\$i]['AllowNoPassword'] = true;
-    \$cfg['Servers'][\$i]['hide_db'] = '(information_schema|performance_schema|mysql|sys)';
-    \$cfg['Servers'][\$i]['verbose'] = '${container_name}';
-    \$i++;
-EOF
-    done
-
-    cat >> "${pma_config_file}" <<EOF
-?>
-EOF
-
+    {
+      echo "<?php"
+      echo "\$i = 1;"
+      for container_id in $(docker ps -q --filter "name=mysql" --filter "name=mariadb" --filter "name=db"); do
+        container_name=$(docker inspect --format '{{.Name}}' "${container_id}" | sed 's#^/##')
+        container_ip=$(docker inspect --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "${container_id}")
+        MYSQL_ROOT_PASSWORD=$(docker exec "${container_id}" printenv | grep MYSQL_ROOT_PASSWORD | awk -F '=' '{print $2}')
+        echo "\$cfg['Servers'][\$i]['host'] = '${container_ip}';"
+        echo "\$cfg['Servers'][\$i]['auth_type'] = 'config';"
+        echo "\$cfg['Servers'][\$i]['user'] = 'root';"
+        echo "\$cfg['Servers'][\$i]['password'] = '${MYSQL_ROOT_PASSWORD}';"
+        echo "\$cfg['Servers'][\$i]['AllowNoPassword'] = true;"
+        echo "\$cfg['Servers'][\$i]['hide_db'] = '(information_schema|performance_schema|mysql|sys)';"
+        echo "\$cfg['Servers'][\$i]['verbose'] = '${container_name}';"
+        echo "\$i++;"
+      done
+    } > "${pma_config_file}"
     echo "phpMyAdmin configuration regenerated."
   fi
 }
