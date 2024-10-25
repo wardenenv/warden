@@ -214,12 +214,8 @@ ${DOCKER_COMPOSE_COMMAND} \
     "${DOCKER_COMPOSE_ARGS[@]}" "${WARDEN_PARAMS[@]}" "$@"
 
 
-if [[ "${WARDEN_PARAMS[0]}" == "stop" ]] || [[ "${WARDEN_PARAMS[0]}" == "down" ]]; then
-    regeneratePMAConfig
-fi
-
-
-if [[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]]; then
+if [[ "${WARDEN_PARAMS[0]}" == "stop" || "${WARDEN_PARAMS[0]}" == "down" || \
+      "${WARDEN_PARAMS[0]}" == "up" || "${WARDEN_PARAMS[0]}" == "start" ]]; then
     regeneratePMAConfig
 fi
 
