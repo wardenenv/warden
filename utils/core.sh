@@ -6,7 +6,7 @@ DOCKER_PEERED_SERVICES=("traefik" "tunnel" "mailhog" "phpmyadmin")
 
 ## messaging functions
 function warning {
-  >&2 printf "\033[33mWARNING\033[0m: $@\n" 
+  >&2 printf "\033[33mWARNING\033[0m: $@\n"
 }
 
 function error {
@@ -55,45 +55,45 @@ function disconnectPeeredServices {
     (docker network disconnect "$1" ${svc} 2>&1| grep -v 'is not connected') || true
   done
 }
-function regeneratePMAConfig() {
-
-if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
+function regeneratePMAConfig {
+  if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
     # Recheck PMA since old versions of .env may not have WARDEN_PHPMYADMIN_ENABLE setting
     eval "$(grep "^WARDEN_PHPMYADMIN_ENABLE" "${WARDEN_HOME_DIR}/.env")"
     WARDEN_PHPMYADMIN_ENABLE="${WARDEN_PHPMYADMIN_ENABLE:-1}"
-fi
+  fi
 
-if [[ "${WARDEN_PHPMYADMIN_ENABLE}" == 1 ]]; then
+  if [[ "${WARDEN_PHPMYADMIN_ENABLE}" == 1 ]]; then
     echo "Regenerating phpMyAdmin configuration..."
-    ## generate phpmyadmin connection configuration
+    ## Generate phpMyAdmin connection configuration
     pma_config_file="${WARDEN_HOME_DIR}/etc/phpmyadmin/config.user.inc.php"
 
-    cat > "${pma_config_file}" <<-EOL
-    <?php
-        \$i = 1;
-EOL
+    cat > "${pma_config_file}" <<EOF
+<?php
+    \$i = 1;
+EOF
 
     for container_id in $(docker ps -q --filter "name=mysql" --filter "name=mariadb" --filter "name=db"); do
-        container_name=$(docker inspect --format '{{.Name}}' "${container_id}" | sed 's#^/##')
-        container_ip=$(docker inspect --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "${container_id}")
-        MYSQL_ROOT_PASSWORD=$(docker exec "${container_id}" printenv | grep MYSQL_ROOT_PASSWORD | awk -F '=' '{print $2}')
-        MYSQL_PASSWORD=$(docker exec "${container_id}" printenv | grep MYSQL_PASSWORD | awk -F '=' '{print $2}')
-        cat >> "${pma_config_file}" <<-EOT
-        \$cfg['Servers'][\$i]['host'] = '${container_ip}';
-        \$cfg['Servers'][\$i]['auth_type'] = 'config';
-        \$cfg['Servers'][\$i]['user'] = 'root';
-        \$cfg['Servers'][\$i]['password'] = '${MYSQL_ROOT_PASSWORD}';
-        \$cfg['Servers'][\$i]['AllowNoPassword'] = true;
-        \$cfg['Servers'][\$i]['hide_db'] = '(information_schema|performance_schema|mysql|sys)';
-        \$cfg['Servers'][\$i]['verbose'] = '${container_name}';
-        \$i++;
-EOT
+      container_name=$(docker inspect --format '{{.Name}}' "${container_id}" | sed 's#^/##')
+      container_ip=$(docker inspect --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "${container_id}")
+      MYSQL_ROOT_PASSWORD=$(docker exec "${container_id}" printenv | grep MYSQL_ROOT_PASSWORD | awk -F '=' '{print $2}')
+      MYSQL_PASSWORD=$(docker exec "${container_id}" printenv | grep MYSQL_PASSWORD | awk -F '=' '{print $2}')
+
+      cat >> "${pma_config_file}" <<EOF
+    \$cfg['Servers'][\$i]['host'] = '${container_ip}';
+    \$cfg['Servers'][\$i]['auth_type'] = 'config';
+    \$cfg['Servers'][\$i]['user'] = 'root';
+    \$cfg['Servers'][\$i]['password'] = '${MYSQL_ROOT_PASSWORD}';
+    \$cfg['Servers'][\$i]['AllowNoPassword'] = true;
+    \$cfg['Servers'][\$i]['hide_db'] = '(information_schema|performance_schema|mysql|sys)';
+    \$cfg['Servers'][\$i]['verbose'] = '${container_name}';
+    \$i++;
+EOF
     done
 
-    cat >> "${pma_config_file}" <<-EOT
-    ?>
-EOT
+    cat >> "${pma_config_file}" <<EOF
+?>
+EOF
 
-echo "phpMyAdmin configuration regenerated."
-fi
+    echo "phpMyAdmin configuration regenerated."
+  fi
 }
