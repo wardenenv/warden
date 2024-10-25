@@ -72,10 +72,9 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
     mkdir -p "${WARDEN_HOME_DIR}/etc/traefik"
     cp "${WARDEN_DIR}/config/traefik/traefik.yml" "${WARDEN_HOME_DIR}/etc/traefik/traefik.yml"
 
-    if [[ "${WARDEN_PHPMYADMIN_ENABLE}" == 1 ]]; then
-        if [[ ! -f "${WARDEN_HOME_DIR}/etc/phpmyadmin/config.user.inc.php" ]]; then
-            mkdir -p "${WARDEN_HOME_DIR}/etc/phpmyadmin"
-        fi
+    if [[ "${WARDEN_PHPMYADMIN_ENABLE}" == 1 && \
+        ! -f "${WARDEN_HOME_DIR}/etc/phpmyadmin/config.user.inc.php" ]]; then
+        mkdir -p "${WARDEN_HOME_DIR}/etc/phpmyadmin"
     fi
 
     ## generate dynamic traefik ssl termination configuration
