@@ -222,7 +222,7 @@ if [[ $OSTYPE =~ ^darwin ]] && [[ -f "${MUTAGEN_SYNC_FILE}" ]] # If we're using 
 then
   MUTAGEN_VERSION=$(mutagen version)
   CONNECTION_STATE_STRING='Connected state: Connected'
-  if [[ $(version "${MUTAGEN_VERSION}") -ge $(version '0.15.0') ]]; then
+  if [[ $((10#$(version "${MUTAGEN_VERSION}"))) -ge $((10#$(version '0.15.0'))) ]]; then
     CONNECTION_STATE_STRING='Connected: Yes'
   fi
 
