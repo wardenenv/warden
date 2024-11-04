@@ -1,9 +1,26 @@
 # Change Log
 
 ## UNRELEASED
-[All Commits](https://github.com/wardenenv/warden/compare/0.14.3..main)
+[All Commits](https://github.com/wardenenv/warden/compare/0.15.0..main)
 
 _No Changes yet_
+
+## Version [0.15.0](https://github.com/wardenenv/warden/tree/0.15.0) (2024-11-04)
+
+**Big Changes:**
+* Moved from Mailhog to Mailpit ([#779](https://github.com/wardenenv/warden/pull/779) by @bap14)  
+  While this seems like a fairly large change, it is smaller than you may give it credit for.  Email should continue to 
+  be pushed to the email catcher, which is now located at https://webmail.warden.test/, with a redirect from the old
+  mailhog URL.
+
+**Enhancements:**
+* Updated Laravel templates to latest PHP version ([#776](https://github.com/wardenenv/warden/pull/776) by @norgeindian)
+* Updated Laravel to use Composer 2 ([#775](https://github.com/wardenenv/warden/pull/775) by @sprankhub)
+* Added success message to `env-init` command ([#765](https://github.com/wardenenv/warden/pull/765) by @hardyjohnson)
+* Added a warning message to start warden services if they're not running when you try to start an environment ([#766](https://github.com/wardenenv/warden/pull/766) by @hardyjohnson)
+
+**Bug Fixes:**
+* Fixed bash error "value too great for base" during `warden env up` ([#817](https://github.com/wardenenv/warden/pull/817) by @ihor-sviziev)
 
 ## Version [0.14.3](https://github.com/wardenenv/warden/tree/0.14.3) (2024-06-11)
 [All Commits](https://github.com/wardenenv/warden/compare/0.14.2..0.14.3)
