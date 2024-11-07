@@ -1,0 +1,14 @@
+services:
+  nginx:
+    networks:
+      - default
+    labels:
+      - traefik.enable=true
+      - sablier.enable=false
+      - traefik.http.routers.${WARDEN_ENV_NAME}-nginx.middlewares=sablier-${WARDEN_ENV_NAME}@docker
+      - traefik.http.middlewares.sablier-${WARDEN_ENV_NAME}.plugin.sablier.sablierUrl=http://sablier:10000
+      - traefik.http.middlewares.sablier-${WARDEN_ENV_NAME}.plugin.sablier.sessionDuration=${TRAEFIK_SABLIER_DURATION:-30m}
+      - traefik.http.middlewares.sablier-${WARDEN_ENV_NAME}.plugin.sablier.group=${WARDEN_ENV_NAME}
+      - traefik.http.middlewares.sablier-${WARDEN_ENV_NAME}.plugin.sablier.dynamic.name=${WARDEN_ENV_NAME}
+      - traefik.http.middlewares.sablier-${WARDEN_ENV_NAME}.plugin.sablier.dynamic.displayName=${WARDEN_ENV_NAME}
+      - traefik.http.middlewares.sablier-${WARDEN_ENV_NAME}.plugin.sablier.dynamic.theme=${TRAEFIK_SABLIER_THEME}

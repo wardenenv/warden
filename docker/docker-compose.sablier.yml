@@ -1,0 +1,12 @@
+services:
+  sablier:
+    container_name: sablier
+    image: acouvreur/sablier:${SABLIER_VERSION:-1.5.0}
+    restart: ${WARDEN_RESTART_POLICY:-always}
+    command:
+      - start
+      - --provider.name=docker
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      - ${WARDEN_HOME_DIR}/etc/sablier/sablier.yml:/etc/sablier/sablier.yml
+      - ${WARDEN_HOME_DIR}/etc/sablier/theme:/etc/sablier/themes

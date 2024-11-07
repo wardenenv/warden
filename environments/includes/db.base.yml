@@ -15,6 +15,9 @@ services:
     volumes:
       - dbdata:/var/lib/mysql
       - sqlhistory:/sql_history
+    labels:
+      - sablier.enable=true
+      - sablier.group=${WARDEN_ENV_NAME}
 
 volumes:
   dbdata:
