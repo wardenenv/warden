@@ -29,6 +29,7 @@ Warden version $(cat ${WARDEN_DIR}/version)
   shell             Launches into a shell within the current project environment
   status            Display list of all running Warden project environments
   debug             Launches debug enabled shell within current project environment
+  spx               Launches spx enabled shell within current project environment
   sign-certificate  Signs a wildcard certificate including all passed hostnames on the SAN list
   version           Show version information
 EOF
