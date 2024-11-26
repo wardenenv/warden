@@ -3,7 +3,12 @@
 ## UNRELEASED
 [All Commits](https://github.com/wardenenv/warden/compare/0.15.0..main)
 
-_No Changes yet_
+**Big Changes:**
+* PHP SPX support ([#820](https://github.com/wardenenv/warden/pull/820) by @SamJUK)
+* phpMyAdmin added to Warden core services ([#801](https://github.com/wardenenv/warden/pull/801) by @monteshot)
+
+**Bug Fixes:**
+* System-level SSL certificates are no longer overwritten ([#812](https://github.com/wardenenv/warden/pull/812) by @SamJUK)
 
 ## Version [0.15.0](https://github.com/wardenenv/warden/tree/0.15.0) (2024-11-04)
 
