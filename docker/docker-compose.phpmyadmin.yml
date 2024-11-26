@@ -1,7 +1,7 @@
 services:
   phpmyadmin:
     container_name: phpmyadmin
-    image: phpmyadmin/phpmyadmin
+    image: phpmyadmin
     environment:
       - PMA_ARBITRARY=1
       - PMA_ABSOLUTE_URI=https://phpmyadmin.${WARDEN_SERVICE_DOMAIN:-warden.test}
