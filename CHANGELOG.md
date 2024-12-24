@@ -6,6 +6,10 @@
 **Big Changes:**
 * PHP SPX support ([#820](https://github.com/wardenenv/warden/pull/820) by @SamJUK)
 * phpMyAdmin added to Warden core services ([#801](https://github.com/wardenenv/warden/pull/801) by @monteshot)
+* Added support for **Adobe Commerce GraphQL Application Server**  
+  This support should be considered experimental.  Your Adobe Commerce application should already be setup and configured
+  before turning on the GraphQL Application Flag.  You can enable GraphQL with the flag `WARDEN_MAGENTO2_GRAPHQL_SERVER=1`
+  or run it using a debug PHP image by including the additional flag `WARDEN_MAGENTO2_GRAPHQL_SERVER_DEBUG=1`
 
 **Bug Fixes:**
 * System-level SSL certificates are no longer overwritten ([#812](https://github.com/wardenenv/warden/pull/812) by @SamJUK)

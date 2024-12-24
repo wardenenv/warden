@@ -1,0 +1,3 @@
+services:
+  php-graphql:
+    image: ${WARDEN_IMAGE_REPOSITORY}/php-fpm${WARDEN_SVC_PHP_IMAGE_SUFFIX:-}:${PHP_VERSION:-7.4}${WARDEN_SVC_PHP_VARIANT:-}-${XDEBUG_VERSION:-debug}

@@ -1,0 +1,6 @@
+
+x-volumes: &volumes
+  - /run/host-services/ssh-auth.sock:/run/host-services/ssh-auth.sock
+
+services:
+  php-graphql: { volumes: *volumes }

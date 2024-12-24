@@ -1,0 +1,30 @@
+
+x-volumes: &volumes
+  - ${WARDEN_SSL_DIR}/rootca/certs:/etc/ssl/warden-rootca-cert:ro
+  - ${WARDEN_COMPOSER_DIR}:/home/www-data/.composer:cached
+  - .${WARDEN_WEB_ROOT:-}/:/var/www/html:cached
+  - bashhistory:/bash_history
+  - sshdirectory:/home/www-data/.ssh
+
+x-extra_hosts: &extra_hosts
+  - ${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
+  - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
+
+services:
+  php-graphql:
+    hostname: "${WARDEN_ENV_NAME}-php-graphql"
+    image: ${WARDEN_IMAGE_REPOSITORY}/php-fpm${WARDEN_SVC_PHP_IMAGE_SUFFIX:-}:${PHP_VERSION:-7.4}${WARDEN_SVC_GRAPHQL_VARIANT:-}
+    command: php -dopcache.enable_cli=1 -dopcache.validate_timestamps=0 /var/www/html/bin/magento server:run -vvv
+    environment:
+      - COMPOSER_VERSION=${COMPOSER_VERSION:-1}
+      - COMPOSER_MEMORY_LIMIT=-1
+      - HISTFILE=/bash_history/.bash_history
+      - CHOWN_DIR_LIST=${CHOWN_DIR_LIST:-}
+    volumes: *volumes
+    extra_hosts: *extra_hosts
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-graphql.tls=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-graphql.rule=(HostRegexp(`{subdomain:.+}.${TRAEFIK_DOMAIN}`) || Host(`${TRAEFIK_DOMAIN}`)) && Path(`/graphql`)
+      - traefik.http.services.${WARDEN_ENV_NAME}-graphql.loadbalancer.server.port=9501
+      - traefik.docker.network=${WARDEN_ENV_NAME}_default

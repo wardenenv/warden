@@ -60,6 +60,8 @@ if [[ ${WARDEN_ENV_TYPE} == "magento2" ]]; then
     WARDEN_VARNISH=${WARDEN_VARNISH:-1}
     WARDEN_ELASTICSEARCH=${WARDEN_ELASTICSEARCH:-1}
     WARDEN_RABBITMQ=${WARDEN_RABBITMQ:-1}
+    WARDEN_MAGENTO2_GRAPHQL_SERVER=${WARDEN_MAGENTO2_GRAPHQL_SERVER:-0}
+    WARDEN_MAGENTO2_GRAPHQL_SERVER_DEBUG=${WARDEN_MAGENTO2_GRAPHQL_SERVER_DEBUG:-0}
 fi
 
 ## WSL1/WSL2 are GNU/Linux env type but still run Docker Desktop
@@ -129,6 +131,11 @@ fi
 
 [[ ${WARDEN_MAGEPACK} -eq 1 ]] \
     && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.magepack"
+
+[[ ${WARDEN_MAGENTO2_GRAPHQL_SERVER} -eq 1 ]] \
+    && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.graphql"
+[[ ${WARDEN_MAGENTO2_GRAPHQL_SERVER_DEBUG} -eq 1 ]] \
+    && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.graphql-debug"
 
 [[ ${WARDEN_PHP_SPX} -eq 1 ]] \
     && appendEnvPartialIfExists "php-spx"
