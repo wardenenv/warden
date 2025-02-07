@@ -131,28 +131,27 @@ function appendEnvPartialIfExists () {
     local PARTIAL_NAME="${1}"
     local PARTIAL_PATH=""
 
-    for PARTIAL_PATH in \
-        "${WARDEN_DIR}/environments" \
-        "${WARDEN_HOME_DIR}/environments" \
-        "${WARDEN_ENV_PATH}/.warden/environments";
-    do
-        for PARTIAL_PATH in \
-            "${PARTIAL_PATH}/includes/${PARTIAL_NAME}" \
-            "${PARTIAL_PATH}/${WARDEN_ENV_TYPE}/${PARTIAL_NAME}";
-        do
-            for PARTIAL_PATH in \
-                "${PARTIAL_PATH}.base" \
-                "${PARTIAL_PATH}.${WARDEN_ENV_SUBT}";
-            do
-                if [[ -f "${PARTIAL_PATH}.yml" ]]; then
-                    DOCKER_COMPOSE_ARGS+=("-f" "${PARTIAL_PATH}.yml")
-                fi
-                if [[ "${WARDEN_ENV_SUBT}" == "darwin" ]] &&
-                    [[ "${WARDEN_MUTAGEN_ENABLE}" == "1" ]] &&
-                    [[ -f "${PARTIAL_PATH}.mutagen.yml" ]]; then
-                    DOCKER_COMPOSE_ARGS+=("-f" "${PARTIAL_PATH}.mutagen.yml")
-                fi
-            done
+    local BASE_PATHS=(
+        "${WARDEN_DIR}/environments/includes"
+        "${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}"
+        "${WARDEN_HOME_DIR}/environments/includes"
+        "${WARDEN_HOME_DIR}/environments/${WARDEN_ENV_TYPE}"
+        "${WARDEN_ENV_PATH}/.warden/environments/includes"
+        "${WARDEN_ENV_PATH}/.warden/environments/${WARDEN_ENV_TYPE}"
+    )
+
+    if [[ ${WARDEN_MUTAGEN_ENABLE} -eq 0 ]]; then
+        local FILE_SUFFIXES=(".base.yml" ".${WARDEN_ENV_SUBT}.yml")
+    else
+        local FILE_SUFFIXES=(".base.yml" ".${WARDEN_ENV_SUBT}.yml" ".mutagen.yml")
+    fi
+
+    for BASE_PATH in "${BASE_PATHS[@]}"; do
+        for SUFFIX in "${FILE_SUFFIXES[@]}"; do
+            PARTIAL_PATH="${BASE_PATH}/${PARTIAL_NAME}${SUFFIX}"
+            if [[ -f "${PARTIAL_PATH}" ]]; then
+                DOCKER_COMPOSE_ARGS+=("-f" "${PARTIAL_PATH}")
+            fi
         done
     done
 }
