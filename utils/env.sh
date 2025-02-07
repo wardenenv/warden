@@ -58,6 +58,14 @@ function loadEnvConfig () {
       eval "$(sed 's/\r$//g' < "${WARDEN_HOME_DIR}/.env" | grep "^WARDEN_MUTAGEN_ENABLE")"
     fi
 
+    ## configure mutagen enable by default for MacOs
+    if [[ $OSTYPE =~ ^darwin ]]; then
+      export WARDEN_MUTAGEN_ENABLE=${WARDEN_MUTAGEN_ENABLE:-1}
+    else
+      # Disable mutagen for non-MacOS systems
+      export WARDEN_MUTAGEN_ENABLE=0
+    fi
+
     assertValidEnvType
 }
 
