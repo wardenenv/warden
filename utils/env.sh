@@ -53,8 +53,9 @@ function loadEnvConfig () {
         ;;
     esac
 
+    # Load mutagen settings if available
     if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
-      eval "$(sed 's/\r$//g' < "${WARDEN_HOME_DIR}/.env" | grep "^WARDEN_")"
+      eval "$(sed 's/\r$//g' < "${WARDEN_HOME_DIR}/.env" | grep "^WARDEN_MUTAGEN_ENABLE")"
     fi
 
     assertValidEnvType
