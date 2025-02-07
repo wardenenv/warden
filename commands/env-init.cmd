@@ -51,3 +51,8 @@ if [[ ! -z $ENV_INIT_FILE ]]; then
   export GENERATED_APP_KEY="base64:$(dd if=/dev/urandom bs=1 count=32 2>/dev/null | base64)"
   envsubst '$WARDEN_ENV_NAME:$GENERATED_APP_KEY' < "${ENV_INIT_FILE}" >> "${WARDEN_ENV_PATH}/.env"
 fi
+
+if [ -s "${WARDEN_ENV_PATH}/.env" ]; then
+  printf "A warden env file was created at ${WARDEN_ENV_PATH}/.env\nYou may now use \'warden env up\' to start your environment.\n"
+  exit 0
+fi

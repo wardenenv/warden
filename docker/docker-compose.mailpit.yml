@@ -1,0 +1,27 @@
+services:
+  mailpit:
+    container_name: mailhog
+    image: axllent/mailpit:${WARDEN_MAILPIT_VERSION:-latest}
+    environment:
+      - MP_DATABASE=/data/mailpit.db
+    volumes:
+      - mailpitdata:/data
+    labels:
+      traefik.enable: true
+      traefik.http.routers.mailpit.tls: true
+      traefik.http.routers.mailpit.priority: 2
+      traefik.http.routers.mailpit.rule: Host(`webmail.${WARDEN_SERVICE_DOMAIN:-warden.test}`)
+      traefik.http.routers.mailpit.service: mailpit
+      traefik.http.services.mailpit.loadbalancer.server.port: 8025
+      # Legacy Mailhog redirect
+      traefik.http.routers.legacy-mailhog.tls: true
+      traefik.http.routers.legacy-mailhog.priority: 1
+      traefik.http.routers.legacy-mailhog.rule: Host(`mailhog.${WARDEN_SERVICE_DOMAIN:-warden.test}`)
+      traefik.http.routers.legacy-mailhog.middlewares: legacy-mailhog-redirect
+      traefik.http.middlewares.legacy-mailhog-redirect.redirectregex.regex: "^https?://mailhog\\.([^/]+)/.*"
+      traefik.http.middlewares.legacy-mailhog-redirect.redirectregex.replacement: https://webmail.$${1}/
+      traefik.http.middlewares.legacy-mailhog-redirect.redirectregex.permanent: true
+
+    restart: ${WARDEN_RESTART_POLICY:-always}
+volumes:
+  mailpitdata:
