@@ -196,12 +196,6 @@ TRAEFIK_ADDRESS="$(docker container inspect traefik \
 export TRAEFIK_ADDRESS;
 
 if [[ ${WARDEN_MUTAGEN_ENABLE} -eq 1 ]]; then
-    # Show warning for MacOS users using Mutagen sync and OrbStack
-    if [[ $OSTYPE =~ ^darwin ]] && docker info 2>&1 | grep -q "OrbStack"; then
-        echo -e "\033[31mWe noticed that you're on MacOS and using Mutagen sync with OrbStack.\033[0m"
-        echo -e "\033[31mWe recommend disabling Mutagen sync by adding WARDEN_MUTAGEN_ENABLE=0 in ~/.warden/.env file.\033[0m"
-    fi
-
     export MUTAGEN_SYNC_FILE="${WARDEN_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.mutagen.yml"
 
     if [[ -f "${WARDEN_HOME_DIR}/environments/${WARDEN_ENV_TYPE}/${WARDEN_ENV_TYPE}.mutagen.yml" ]]; then
