@@ -57,12 +57,6 @@ fi
 ## sub-command execution
 case "${WARDEN_PARAMS[0]}" in
     start)
-        # Show warning for users using Mutagen sync and OrbStack
-        if docker info 2>&1 | grep -q "OrbStack"; then
-            echo -e "\033[31mWe noticed that you're on MacOS and using Mutagen sync with OrbStack.\033[0m" >&2
-            echo -e "\033[31mWe recommend disabling Mutagen sync by adding WARDEN_MUTAGEN_ENABLE=0 in ~/.warden/.env file.\033[0m" >&2
-        fi
-
         ## terminate any existing sessions with matching env label
         mutagen sync terminate --label-selector "warden-sync=${WARDEN_ENV_NAME}"
 
