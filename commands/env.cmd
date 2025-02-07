@@ -25,8 +25,12 @@ trap '' ERR
 if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
   eval "$(sed 's/\r$//g' < "${WARDEN_HOME_DIR}/.env" | grep "^WARDEN_")"
 
-  ## configure mutagen enable by default
-  WARDEN_MUTAGEN_ENABLE=${WARDEN_MUTAGEN_ENABLE:-1}
+  ## configure mutagen enable by default for MacOs, but disable for others
+  if [[ $OSTYPE =~ ^darwin ]]; then
+    export WARDEN_MUTAGEN_ENABLE=${WARDEN_MUTAGEN_ENABLE:-1}
+  else
+    export WARDEN_MUTAGEN_ENABLE=${WARDEN_MUTAGEN_ENABLE:-0}
+  fi
 fi
 export WARDEN_IMAGE_REPOSITORY="${WARDEN_IMAGE_REPOSITORY:-"docker.io/wardenenv"}"
 
