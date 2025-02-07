@@ -1,4 +1,3 @@
-
 x-volumes: &volumes
   - .${WARDEN_WEB_ROOT:-}/pub/media:/var/www/html/pub/media:cached
   - appdata:/var/www/html
