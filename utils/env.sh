@@ -143,7 +143,9 @@ function appendEnvPartialIfExists () {
     if [[ ${WARDEN_MUTAGEN_ENABLE} -eq 0 ]]; then
         local FILE_SUFFIXES=(".base.yml" ".${WARDEN_ENV_SUBT}.yml")
     else
-        local FILE_SUFFIXES=(".base.yml" ".${WARDEN_ENV_SUBT}.yml" ".mutagen.yml")
+        # Suffix .mutagen.yml is used for mutagen sync configuration
+        # so using .mutagen_compose.yml for docker-compose configurations
+        local FILE_SUFFIXES=(".base.yml" ".${WARDEN_ENV_SUBT}.yml" ".mutagen_compose.yml")
     fi
 
     for BASE_PATH in "${BASE_PATHS[@]}"; do
