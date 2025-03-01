@@ -5,6 +5,11 @@ WARDEN_ENV_PATH="$(locateEnvPath)" || exit $?
 loadEnvConfig "${WARDEN_ENV_PATH}" || exit $?
 assertDockerRunning
 
+## warn if global services are not running
+if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
+    assertSvcRunning
+fi
+
 HOST_UID=$(id -u)
 HOST_GID=$(id -g)
 
@@ -55,6 +60,8 @@ if [[ ${WARDEN_ENV_TYPE} == "magento2" ]]; then
     WARDEN_VARNISH=${WARDEN_VARNISH:-1}
     WARDEN_ELASTICSEARCH=${WARDEN_ELASTICSEARCH:-1}
     WARDEN_RABBITMQ=${WARDEN_RABBITMQ:-1}
+    WARDEN_MAGENTO2_GRAPHQL_SERVER=${WARDEN_MAGENTO2_GRAPHQL_SERVER:-0}
+    WARDEN_MAGENTO2_GRAPHQL_SERVER_DEBUG=${WARDEN_MAGENTO2_GRAPHQL_SERVER_DEBUG:-0}
 fi
 
 ## WSL1/WSL2 are GNU/Linux env type but still run Docker Desktop
@@ -125,6 +132,14 @@ fi
 [[ ${WARDEN_MAGEPACK} -eq 1 ]] \
     && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.magepack"
 
+[[ ${WARDEN_MAGENTO2_GRAPHQL_SERVER} -eq 1 ]] \
+    && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.graphql"
+[[ ${WARDEN_MAGENTO2_GRAPHQL_SERVER_DEBUG} -eq 1 ]] \
+    && appendEnvPartialIfExists "${WARDEN_ENV_TYPE}.graphql-debug"
+
+[[ ${WARDEN_PHP_SPX} -eq 1 ]] \
+    && appendEnvPartialIfExists "php-spx"
+
 if [[ -f "${WARDEN_ENV_PATH}/.warden/warden-env.yml" ]]; then
     DOCKER_COMPOSE_ARGS+=("-f")
     DOCKER_COMPOSE_ARGS+=("${WARDEN_ENV_PATH}/.warden/warden-env.yml")
@@ -144,6 +159,9 @@ fi
 ## disconnect peered service containers from environment network
 if [[ "${WARDEN_PARAMS[0]}" == "down" ]]; then
     disconnectPeeredServices "$(renderEnvNetworkName)"
+
+    ## regenerate PMA config on each env changing
+    regeneratePMAConfig
 fi
 
 ## connect peered service containers to environment network
@@ -163,6 +181,9 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
         WARDEN_PARAMS=("${WARDEN_PARAMS[@]:1}")
         WARDEN_PARAMS=(up -d "${WARDEN_PARAMS[@]}")
     fi
+
+    ## regenerate PMA config on each env changing
+    regeneratePMAConfig
 fi
 
 ## lookup address of traefik container on environment network
@@ -202,6 +223,12 @@ ${DOCKER_COMPOSE_COMMAND} \
     --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
     "${DOCKER_COMPOSE_ARGS[@]}" "${WARDEN_PARAMS[@]}" "$@"
 
+
+if [[ "${WARDEN_PARAMS[0]}" == "stop" || "${WARDEN_PARAMS[0]}" == "down" || \
+      "${WARDEN_PARAMS[0]}" == "up" || "${WARDEN_PARAMS[0]}" == "start" ]]; then
+    regeneratePMAConfig
+fi
+
 ## resume mutagen sync if available and php-fpm container id hasn't changed
 if { [[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]]; } \
     && [[ $OSTYPE =~ ^darwin ]] && [[ -f "${MUTAGEN_SYNC_FILE}" ]] \
@@ -217,7 +244,7 @@ if [[ $OSTYPE =~ ^darwin ]] && [[ -f "${MUTAGEN_SYNC_FILE}" ]] # If we're using 
 then
   MUTAGEN_VERSION=$(mutagen version)
   CONNECTION_STATE_STRING='Connected state: Connected'
-  if [[ $(version "${MUTAGEN_VERSION}") -ge $(version '0.15.0') ]]; then
+  if [[ $((10#$(version "${MUTAGEN_VERSION}"))) -ge $((10#$(version '0.15.0'))) ]]; then
     CONNECTION_STATE_STRING='Connected: Yes'
   fi
 

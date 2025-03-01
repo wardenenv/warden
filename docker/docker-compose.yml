@@ -8,23 +8,13 @@ services:
     volumes:
       - ${WARDEN_HOME_DIR}/etc/traefik/traefik.yml:/etc/traefik/traefik.yml
       - ${WARDEN_HOME_DIR}/etc/traefik/dynamic.yml:/etc/traefik/dynamic.yml
-      - ${WARDEN_HOME_DIR}/ssl/certs:/etc/ssl/certs
+      - ${WARDEN_HOME_DIR}/ssl/certs:/etc/ssl/certs/warden
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
       - traefik.enable=true
       - traefik.http.routers.traefik.tls=true
       - traefik.http.routers.traefik.rule=Host(`traefik.${WARDEN_SERVICE_DOMAIN:-warden.test}`)
       - traefik.http.routers.traefik.service=api@internal
-    restart: ${WARDEN_RESTART_POLICY:-always}
-
-  mailhog:
-    container_name: mailhog
-    image: wardenenv/mailhog:1.0
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.mailhog.tls=true
-      - traefik.http.routers.mailhog.rule=Host(`mailhog.${WARDEN_SERVICE_DOMAIN:-warden.test}`)
-      - traefik.http.services.mailhog.loadbalancer.server.port=8025
     restart: ${WARDEN_RESTART_POLICY:-always}
 
   tunnel:
