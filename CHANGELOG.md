@@ -11,6 +11,9 @@
   before turning on the GraphQL Application Flag.  You can enable GraphQL with the flag `WARDEN_MAGENTO2_GRAPHQL_SERVER=1`
   or run it using a debug PHP image by including the additional flag `WARDEN_MAGENTO2_GRAPHQL_SERVER_DEBUG=1`
 
+**Enhancements:**
+* Add ability to run vite bundler in warden for Laravel. See: [Laravel + Vite](https://docs.warden.dev/environments/laravel.html) ([#846](https://github.com/wardenenv/warden/issues/846) by @bap14)
+
 **Bug Fixes:**
 * System-level SSL certificates are no longer overwritten ([#812](https://github.com/wardenenv/warden/pull/812) by @SamJUK)
 

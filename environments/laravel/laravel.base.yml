@@ -2,3 +2,10 @@ services:
   nginx:
     environment:
       - NGINX_PUBLIC=/public
+  php-fpm:
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${WARDEN_ENV_NAME}_default
+      - traefik.http.routers.${WARDEN_ENV_NAME}-vite.tls=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-vite.rule=Host(`vite.${WARDEN_ENV_NAME}.test`)
+      - traefik.http.services.${WARDEN_ENV_NAME}-vite.loadbalancer.server.port=5173
