@@ -1,9 +1,10 @@
 # Change Log
 
 ## UNRELEASED
-[All Commits](https://github.com/wardenenv/warden/compare/0.14.3..main)
+[All Commits](https://github.com/wardenenv/warden/compare/0.15.0..main)
 
-_No Changes yet_
+**Enhancements:**
+* Add ability to run vite bundler in warden for Laravel. See: [Larave + Vite](https://docs.warden.dev/environments/laravel.html) ([#846](https://github.com/wardenenv/warden/issues/846) by @bap14)
 
 ## Version [0.14.3](https://github.com/wardenenv/warden/tree/0.14.3) (2024-06-11)
 [All Commits](https://github.com/wardenenv/warden/compare/0.14.2..0.14.3)
