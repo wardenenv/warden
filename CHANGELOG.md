@@ -16,6 +16,7 @@
 
 **Bug Fixes:**
 * System-level SSL certificates are no longer overwritten ([#812](https://github.com/wardenenv/warden/pull/812) by @SamJUK)
+* Portainer service domain default fix ([#837] by @hardyjohnson credit to: @manuelcanepa)
 
 ## Version [0.15.0](https://github.com/wardenenv/warden/tree/0.15.0) (2024-11-04)
 
