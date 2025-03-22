@@ -8,6 +8,6 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.portainer.tls=true
-      - traefik.http.routers.portainer.rule=Host(`portainer.${WARDEN_SERVICE_DOMAIN:-den.test}`)||Host(`portainer.warden.test`)
+      - traefik.http.routers.portainer.rule=Host(`portainer.${WARDEN_SERVICE_DOMAIN:-warden.test}`)
       - traefik.http.services.portainer.loadbalancer.server.port=9000
     restart: ${WARDEN_RESTART_POLICY:-always}
