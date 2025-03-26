@@ -114,6 +114,8 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
     for network in $(docker network ls -f label=dev.warden.environment.name --format {{.Name}}); do
         connectPeeredServices "${network}"
     done
-fi
 
-regeneratePMAConfig
+    if [[ "${WARDEN_PHPMYADMIN_ENABLE}" == 1 ]]; then
+        regeneratePMAConfig
+    fi
+fi
