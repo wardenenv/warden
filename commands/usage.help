@@ -20,17 +20,18 @@ Warden version $(cat ${WARDEN_DIR}/version)
   -h, --help        Display this help menu
 
 \033[33mCommands:\033[0m
-  svc               Orchestrates global services such as traefik, portainer and dnsmasq via docker compose
-  env-init          Configure environment by adding '.env' file to the current working directory
-  env               Controls an environment from any point within the root project directory
   db                Interacts with the db service on an environment (see 'warden db -h' for details)
-  redis             Interacts with the redis service on an environment (see 'warden redis -h' for details)
-  install           Initializes or updates warden configuration on host machine
-  shell             Launches into a shell within the current project environment
-  status            Display list of all running Warden project environments
   debug             Launches debug enabled shell within current project environment
-  spx               Launches spx enabled shell within current project environment
+  doctor            Software information for bug reports
+  env               Controls an environment from any point within the root project directory
+  env-init          Configure environment by adding '.env' file to the current working directory
+  install           Initializes or updates warden configuration on host machine
+  redis             Interacts with the redis service on an environment (see 'warden redis -h' for details)
+  shell             Launches into a shell within the current project environment
   sign-certificate  Signs a wildcard certificate including all passed hostnames on the SAN list
+  spx               Launches spx enabled shell within current project environment
+  status            Display list of all running Warden project environments
+  svc               Orchestrates global services such as traefik, portainer and dnsmasq via docker compose
   version           Show version information
 EOF
 )
