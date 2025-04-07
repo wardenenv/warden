@@ -7,5 +7,6 @@ WARDEN_USAGE=$(cat <<EOF
 
 \033[33mOptions:\033[0m
   -h, --help        Display this help menu
+  -v, --verbose     Dislpay Warden enviornment variables
 EOF
 )

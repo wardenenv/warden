@@ -7,9 +7,11 @@ set +e
 ## Allow return codes from sub-process to bubble up normally, necessary for command testing
 trap '' ERR
 
-# The warden doctor command is designed to collect information useful in reasoning about the
-# state of a system and configuration warden is running with.
+if [[ ${WARDEN_VERBOSE} -eq 1 ]]; then
+    echo -e "\033[31mWarden doctor is in verbose mode and will output environment variables to to the terminal, please do not copy any sensitive environment variable values into a bug report.\033[0m\n"
+fi
 
+# The warden doctor command is designed to collect information useful in reasoning about the state of a system and configuration Warden is running on.
 if [[ ${OSTYPE} =~ ^darwin ]]; then
     echo -e "\033[032mHost information:\033[0m"
     sw_vers --productName
@@ -34,26 +36,45 @@ ${DOCKER_COMPOSE_COMMAND} version
 echo
 
 echo -e "\033[32mWarden version:\033[0m"
-echo ${WARDEN_BIN} version
+${WARDEN_BIN} version
 echo
 
 echo -e "\033[32mWarden global .env:\033[0m"
-cat ~/.warden/.env
+cat ${WARDEN_HOME_DIR}/.env
 echo
 
 echo -e "\033[32mWarden service override via Docker compose file:\033[0m"
-if [[ -f ~/.warden/docker-compose.yml ]]; then
-    echo -e "\033[33mWarden services have additional service configuration added or overridden via ~/.warden/docker-compose.yml file.\033[0m"
+if [[ -f ${WARDEN_HOME_DIR}/docker-compose.yml ]]; then
+    echo -e "\033[33mWarden services have additional service configuration added or overridden via ${WARDEN_HOME_DIR}/docker-compose.yml file.\033[0m"
 else
-    echo -e "\033[33mWarden services do not appear to be overridden via ~/.warden/docker-compose.yml file.\033[0m"
+    echo -e "\033[33mWarden services do not appear to be overridden via ${WARDEN_HOME_DIR}/docker-compose.yml file.\033[0m"
 fi
 echo
 
-echo -e "\033[32mWarden service override via ~/.warden/warden-env.yml partial:\033[0m"
-if [[ -f ~/.warden/warden-env.yml ]]; then
-    echo -e "\033[33mWarden services have additional service configuration added or overridden via ~/.warden/warden-env.yml partial.\033[0m"
+echo -e "\033[32mWarden service override via ${WARDEN_HOME_DIR}/warden-env.yml partial:\033[0m"
+if [[ -f ${WARDEN_HOME_DIR}/warden-env.yml ]]; then
+    echo -e "\033[33mWarden services have additional service configuration added or overridden via ${WARDEN_HOME_DIR}/warden-env.yml partial.\033[0m"
 else
-    echo -e "\033[33mWarden services do not appear to be overridden via ~/.warden/warden-env.yml partial.\033[0m"
+    echo -e "\033[33mWarden services do not appear to be overridden via ${WARDEN_HOME_DIR}/warden-env.yml partial.\033[0m"
+fi
+echo
+
+echo -e "\033[32mWarden project .env:\033[0m"
+if [[ -f ./.env ]]; then
+    echo -e "\033[33mWarden project directory, detected.\033[0m"
+    if [[ ${WARDEN_VERBOSE} -eq 1 ]]; then
+        cat ./.env
+    fi
+else
+    echo -e "\033[33mNot currently in a Warden project directory, no ./.env is present.\033[0m"
+fi
+echo
+
+echo -e "\033[32mWarden project override via ./.warden/warden-env.yml:\033[0m"
+if [[ -f ./.warden/warden-env.yml ]]; then
+    cat ./.warden/warden-env.yml
+else
+    echo -e "\033[33mWarden and project services do not appear to be overridden via project level override ./.warden/warden-env.yml.\033[0m"
 fi
 echo
 
