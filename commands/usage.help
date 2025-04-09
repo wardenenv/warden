@@ -25,6 +25,7 @@ Warden version $(cat ${WARDEN_DIR}/version)
   env               Controls an environment from any point within the root project directory
   db                Interacts with the db service on an environment (see 'warden db -h' for details)
   redis             Interacts with the redis service on an environment (see 'warden redis -h' for details)
+  valkey            Interacts with the Valkey service on an environment (see 'warden valkey -h' for details)
   install           Initializes or updates warden configuration on host machine
   shell             Launches into a shell within the current project environment
   status            Display list of all running Warden project environments

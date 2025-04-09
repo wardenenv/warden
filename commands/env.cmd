@@ -107,6 +107,9 @@ fi
 [[ ${WARDEN_REDIS} -eq 1 ]] \
     && appendEnvPartialIfExists "redis"
 
+[[ ${WARDEN_VALKEY:=0} -eq 1 ]] \
+    && appendEnvPartialIfExists "valkey"
+
 appendEnvPartialIfExists "${WARDEN_ENV_TYPE}"
 
 [[ ${WARDEN_TEST_DB} -eq 1 ]] \

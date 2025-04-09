@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+[[ ! ${WARDEN_DIR} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
+
+WARDEN_USAGE=$(cat <<EOF
+\033[33mUsage:\033[0m
+  valkey                     Launches an interactive Valkey session within the current project environment
+  valkey COMMAND             Execute any valid Valkey command within the current project environment
+
+\033[33mOptions:\033[0m
+  -h, --help        Display this help menu
+EOF
+)
