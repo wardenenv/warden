@@ -1,0 +1,9 @@
+services:
+  valkey:
+    hostname: "${WARDEN_ENV_NAME}-valkey"
+    image: ${WARDEN_IMAGE_REPOSITORY}/valkey:${VALKEY_VERSION:-8.1}
+    volumes:
+      - valkey:/data
+
+volumes:
+  valkey:
