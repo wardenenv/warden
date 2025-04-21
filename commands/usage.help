@@ -32,6 +32,7 @@ Warden version $(cat ${WARDEN_DIR}/version)
   spx               Launches spx enabled shell within current project environment
   status            Display list of all running Warden project environments
   svc               Orchestrates global services such as traefik, portainer and dnsmasq via docker compose
+  valkey            Interacts with the Valkey service on an environment (see 'warden valkey -h' for details)  
   version           Show version information
 EOF
 )
