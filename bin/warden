@@ -46,7 +46,7 @@ declare WARDEN_PARAMS=()
 declare WARDEN_CMD_VERB=
 declare WARDEN_CMD_EXEC=
 declare WARDEN_CMD_HELP=
-declare WARDEN_CMD_ANYARGS=(svc env db redis sync shell debug)
+declare WARDEN_CMD_ANYARGS=(db debug doctor env redis shell svc sync)
 
 ## parse first argument as command and determine validity
 if (( "$#" )); then
@@ -84,6 +84,10 @@ while (( "$#" )); do
       WARDEN_HELP=1
       break
       ;;
+    -v|--verbose)
+      WARDEN_VERBOSE=1
+      break
+      ;;
     --) # end argument parsing (unless command is on 'anyargs' list and consumes anything as params)
       shift
       containsElement "${WARDEN_CMD_VERB}" "${WARDEN_CMD_ANYARGS[@]}" || break
@@ -103,6 +107,7 @@ done
 if [[ ${WARDEN_HELP} ]]; then
   source "${WARDEN_DIR}/commands/usage.cmd"
 fi
+
 
 ## execute sub-command in context of this script
 source "${WARDEN_CMD_EXEC}"
