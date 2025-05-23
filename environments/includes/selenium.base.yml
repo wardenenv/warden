@@ -1,7 +1,7 @@
 services:
   selenium:
     hostname: ${WARDEN_ENV_NAME}_selenium
-    image: seleniarm/standalone-chromium:${WARDEN_SELENIUM_VERSION:-latest}
+    image: selenium/standalone-chromium:${WARDEN_SELENIUM_VERSION:-latest}
     extra_hosts:
       - ${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
       - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
