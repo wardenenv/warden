@@ -1,0 +1,51 @@
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Node modules (if any)
+node_modules/
+
+# Vendor directories (if any)
+vendor/
+
+# Environment files (keep these out of version control)
+.env
+local.env
+
+# Docker volumes and data
+docker/data/
+docker/volumes/
+
+# Backup files
+*.bak
+*.backup
+
+# Compiled files
+*.pyc
+__pycache__/
+
+# Homebrew specific
+.brew/
+
+# Warden specific exclusions
+# Keep the core files but exclude runtime data

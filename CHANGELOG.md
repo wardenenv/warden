@@ -3,21 +3,7 @@
 ## UNRELEASED
 [All Commits](https://github.com/wardenenv/warden/compare/0.15.0..main)
 
-**Big Changes:**
-* PHP SPX support ([#820](https://github.com/wardenenv/warden/pull/820) by @SamJUK)
-* phpMyAdmin added to Warden core services ([#801](https://github.com/wardenenv/warden/pull/801) by @monteshot and bugfixes by @hardyjohnson)
-* Added support for **Adobe Commerce GraphQL Application Server**  
-  This support should be considered experimental.  Your Adobe Commerce application should already be setup and configured
-  before turning on the GraphQL Application Flag.  You can enable GraphQL with the flag `WARDEN_MAGENTO2_GRAPHQL_SERVER=1`
-  or run it using a debug PHP image by including the additional flag `WARDEN_MAGENTO2_GRAPHQL_SERVER_DEBUG=1`
-
-**Enhancements:**
-* Add ability to run vite bundler in warden for Laravel. See: [Laravel + Vite](https://docs.warden.dev/environments/laravel.html) ([#846](https://github.com/wardenenv/warden/issues/846) by @bap14)
-* Added Valkey service ([#861](https://github.com/wardenenv/warden#861) by @navarr)
-
-**Bug Fixes:**
-* System-level SSL certificates are no longer overwritten ([#812](https://github.com/wardenenv/warden/pull/812) by @SamJUK)
-* Portainer service domain default fix ([#837] by @hardyjohnson credit to: @manuelcanepa)
+_No Changes yet_
 
 ## Version [0.15.0](https://github.com/wardenenv/warden/tree/0.15.0) (2024-11-04)
 
