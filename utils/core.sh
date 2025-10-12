@@ -64,6 +64,7 @@ function regeneratePMAConfig() {
   if [[ "${WARDEN_PHPMYADMIN_ENABLE}" == 1 ]]; then
     echo "Regenerating phpMyAdmin configuration..."
     pma_config_file="${WARDEN_HOME_DIR}/etc/phpmyadmin/config.user.inc.php"
+    mkdir -p "$(dirname "$pma_config_file")"
     {
       echo "<?php"
       echo "\$i = 1;"
