@@ -14,3 +14,6 @@ services:
       - .${WARDEN_WEB_ROOT:-}/:/var/www/html:cached
     environment:
       - XDEBUG_CONNECT_BACK_HOST=${XDEBUG_CONNECT_BACK_HOST:-''}
+      - WARDEN_BLACKFIRE=${WARDEN_BLACKFIRE:-'0'}
+      - PHP_XDEBUG_3=${PHP_XDEBUG_3:-'0'}
+      - WARDEN_PHP_SPX=${WARDEN_PHP_SPX:-'0'}
