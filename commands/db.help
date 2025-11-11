@@ -12,5 +12,6 @@ WARDEN_USAGE=$(cat <<EOF
   connect                  Launches an interactive mysql session within the current project environment
   import                   Reads data from stdin and loads it into the current project\047s mysql database
   dump                     Dumps database from db container via mysqldump
+  upgrade                  Runs the relevant *SQL upgrade command when the project\047s database version updates
 EOF
 )
