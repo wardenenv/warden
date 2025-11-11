@@ -14,6 +14,7 @@
 **Enhancements:**
 * Add ability to run vite bundler in warden for Laravel. See: [Laravel + Vite](https://docs.warden.dev/environments/laravel.html) ([#846](https://github.com/wardenenv/warden/issues/846) by @bap14)
 * Added Valkey service ([#861](https://github.com/wardenenv/warden#861) by @navarr)
+* Added `warden db upgrade` command ([#895](https://github.com/wardenenv/warden/pull/895) by @workslop8264)
 
 **Bug Fixes:**
 * System-level SSL certificates are no longer overwritten ([#812](https://github.com/wardenenv/warden/pull/812) by @SamJUK)
