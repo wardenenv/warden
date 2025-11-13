@@ -46,8 +46,11 @@ case "${WARDEN_PARAMS[0]}" in
     upgrade)
             if [ "$MYSQL_DISTRIBUTION" == "mysql" ]; then
                 upgradeCmd="mysql_upgrade"
-            else
+            elif [ "$MYSQL_DISTRIBUTION" == "mariadb" ]; then
                 upgradeCmd="mariadb-upgrade"
+            else
+                fatal "The upgrade command only supports MySQL and MariaDB installations."
+                exit 1
             fi
 
             "$WARDEN_BIN" env exec -T db \
