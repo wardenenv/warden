@@ -10,6 +10,7 @@
   This support should be considered experimental.  Your Adobe Commerce application should already be setup and configured
   before turning on the GraphQL Application Flag.  You can enable GraphQL with the flag `WARDEN_MAGENTO2_GRAPHQL_SERVER=1`
   or run it using a debug PHP image by including the additional flag `WARDEN_MAGENTO2_GRAPHQL_SERVER_DEBUG=1`
+* Added top level Warden debug information command `warden doctor` by @hardyjohnson
 
 **Enhancements:**
 * Add ability to run vite bundler in warden for Laravel. See: [Laravel + Vite](https://docs.warden.dev/environments/laravel.html) ([#846](https://github.com/wardenenv/warden/issues/846) by @bap14)
@@ -19,6 +20,7 @@
 * System-level SSL certificates are no longer overwritten ([#812](https://github.com/wardenenv/warden/pull/812) by @SamJUK)
 * Portainer service domain default fix ([#837] by @hardyjohnson credit to: @manuelcanepa)
 * Fix for Traefik configuration being overwritten in Warden home directory when running `warden svc up` command ([#876] by @hardyjohnson).
+* Updated default Traefik version to 2.11 (from 2.2) to fix compatibility with newer Docker versions ([#896] by @mattijv)
 
 ## Version [0.15.0](https://github.com/wardenenv/warden/tree/0.15.0) (2024-11-04)
 
