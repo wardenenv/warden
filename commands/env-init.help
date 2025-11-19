@@ -36,5 +36,8 @@ WARDEN_USAGE=$(cat <<EOF
 
   wordpress           Nginx, php-fpm, db
                       pre-configured for running Wordpress
+
+  pimcore             Nginx, php-fpm, db
+                      pre-configured for running Pimcore
 EOF
 )
