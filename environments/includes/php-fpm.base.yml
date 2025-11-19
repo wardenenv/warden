@@ -29,6 +29,7 @@ services:
       - CHOWN_DIR_LIST=${CHOWN_DIR_LIST:-}
     volumes: *volumes
     extra_hosts: *extra_hosts
+    userns_mode: ${WARDEN_DOCKER_USERNS_MODE:-host}
 
   php-debug:
     hostname: "${WARDEN_ENV_NAME}-php-debug"
@@ -45,6 +46,7 @@ services:
       - CHOWN_DIR_LIST=${CHOWN_DIR_LIST:-}
     volumes: *volumes
     extra_hosts: *extra_hosts
+    userns_mode: ${WARDEN_DOCKER_USERNS_MODE:-host}
     depends_on:
       - php-fpm
 volumes:

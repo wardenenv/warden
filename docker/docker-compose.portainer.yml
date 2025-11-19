@@ -3,7 +3,7 @@ services:
     container_name: portainer
     image: portainer/portainer-ce
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ${WARDEN_DOCKER_SOCK}:/var/run/docker.sock
       - portainer:/data
     labels:
       - traefik.enable=true
