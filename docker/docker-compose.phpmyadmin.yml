@@ -1,0 +1,16 @@
+services:
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_ABSOLUTE_URI=https://phpmyadmin.${WARDEN_SERVICE_DOMAIN:-warden.test}
+    volumes:
+      - /sessions
+      - ${WARDEN_HOME_DIR}/etc/phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.phpmyadmin.tls=true
+      - traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.${WARDEN_SERVICE_DOMAIN:-warden.test}`)||Host(`phpmyadmin.warden.test`)
+      - traefik.http.services.phpmyadmin.loadbalancer.server.port=80
+    restart: ${WARDEN_RESTART_POLICY:-always}

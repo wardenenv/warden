@@ -2,6 +2,8 @@ name: Image Issue
 description: Report an issue with an Image or Service not working as expected
 title: '[Image] '
 labels: bug, docker-images
+type: bug
+projects: wardenenv/1
 body:
   - type: input
     id: version

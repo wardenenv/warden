@@ -1,8 +1,7 @@
-version: "3.5"
 services:
   traefik:
     container_name: traefik
-    image: traefik:${TRAEFIK_VERSION:-2.2}
+    image: traefik:${TRAEFIK_VERSION:-2.11}
     ports:
       - "${TRAEFIK_LISTEN:-127.0.0.1}:80:80"     # The HTTP port
       - "${TRAEFIK_LISTEN:-127.0.0.1}:443:443"   # The HTTPS port
@@ -10,22 +9,13 @@ services:
       - ${WARDEN_HOME_DIR}/etc/traefik/traefik.yml:/etc/traefik/traefik.yml
       - ${WARDEN_HOME_DIR}/etc/traefik/dynamic.yml:/etc/traefik/dynamic.yml
       - ${WARDEN_HOME_DIR}/ssl/certs:/etc/ssl/certs
+      - ${WARDEN_HOME_DIR}/ssl/certs:/etc/ssl/certs/warden
       - ${WARDEN_DOCKER_SOCK}:/var/run/docker.sock
     labels:
       - traefik.enable=true
       - traefik.http.routers.traefik.tls=true
       - traefik.http.routers.traefik.rule=Host(`traefik.${WARDEN_SERVICE_DOMAIN:-warden.test}`)
       - traefik.http.routers.traefik.service=api@internal
-    restart: ${WARDEN_RESTART_POLICY:-always}
-
-  mailhog:
-    container_name: mailhog
-    image: wardenenv/mailhog:1.0
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.mailhog.tls=true
-      - traefik.http.routers.mailhog.rule=Host(`mailhog.${WARDEN_SERVICE_DOMAIN:-warden.test}`)
-      - traefik.http.services.mailhog.loadbalancer.server.port=8025
     restart: ${WARDEN_RESTART_POLICY:-always}
 
   tunnel:

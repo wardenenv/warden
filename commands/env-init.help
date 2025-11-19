@@ -9,10 +9,16 @@ WARDEN_USAGE=$(cat <<EOF
   -h, --help        Display this help menu
 
 \033[33mEnvironment Types:\033[0m
-  local               Declares the docker-compose version and labels the project
+  local               Declares the docker compose version and labels the project
                       network allowing Warden to recognize it. Must be coupled with
                       per-project configuration. See documentation for details:
                       https://docs.warden.dev/environments/types.html#local
+
+  drupal              Nginx, php-fpm, and db (mariadb) pre-configured for running
+                      Drupal
+
+  laravel             Nginx, php-fpm, db (mariadb), and redis services
+                      pre-configured for running Laravel
 
   magento2            Nginx, varnish, php-fpm, db (mariadb), elasticsearch, redis,
                       and rabbitmq services pre configured for Magento 2; on macOS
@@ -22,9 +28,6 @@ WARDEN_USAGE=$(cat <<EOF
 
   magento1            Nginx, php-fpm, db (mariadb), and redis services
                       pre-configured for running Magento 1
-
-  laravel             Nginx, php-fpm, db (mariadb), and redis services
-                      pre-configured for running Laravel
 
   symfony             Nginx, php-fpm, db (mariadb), and redis services
                       pre-configured for running Symfony 4+

@@ -8,6 +8,11 @@ if (( ${#WARDEN_PARAMS[@]} == 0 )); then
   fatal "This command has required params; use --help for details."
 fi
 
+## disable sync command when WARDEN_MUTAGEN_ENABLE is set to 0
+if [[ ${WARDEN_MUTAGEN_ENABLE} -eq 0 ]]; then
+  fatal "Mutagen sync is disabled in the config file."
+fi
+
 ## disable sync command on non-darwin environments where it should not be used
 if [[ ${WARDEN_ENV_SUBT} != "darwin" ]]; then
   fatal "Mutagen sync sessions are not used on \"${WARDEN_ENV_SUBT}\" host environments."

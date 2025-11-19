@@ -1,0 +1,28 @@
+---
+sync:
+  defaults:
+    mode: two-way-resolved
+    watch:
+      pollingInterval: 10
+    ignore:
+      vcs: true
+      paths:
+        # Root .git folder 
+        - "/.git/"
+
+        # System files
+        - ".DS_Store"
+        - "._*"
+
+        # Vim files
+        - "*~"
+        - "*.sw[a-p]"
+
+        # Drupal files
+        - "web/sites/default/files/**"
+        - "web/sites/default/private/**"
+
+
+    permissions:
+      defaultFileMode: "0644"
+      defaultDirectoryMode: "0755"

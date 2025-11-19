@@ -2,6 +2,8 @@ name: Installing or Upgrading through Homebrew
 description: Report an issue with the Warden software when installing or upgrading through Homebrew
 title: '[Brew] '
 labels: bug, brew update
+type: bug
+projects: wardenenv/1
 body:
   - type: input
     id: version

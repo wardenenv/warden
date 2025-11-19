@@ -1,4 +1,3 @@
-version: "3.5"
 services:
   magepack:
     hostname: "${WARDEN_ENV_NAME}-magepack"

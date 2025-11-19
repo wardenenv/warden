@@ -1,0 +1,26 @@
+x-volumes: &volumes
+  - ${WARDEN_SSL_DIR}/rootca/certs:/etc/ssl/warden-rootca-cert:ro
+  - ${WARDEN_COMPOSER_DIR}:/home/www-data/.composer:cached
+  - .${WARDEN_WEB_ROOT:-}/:/var/www/html:cached
+  - bashhistory:/bash_history
+  - sshdirectory:/home/www-data/.ssh
+
+x-extra_hosts: &extra_hosts
+    - ${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
+    - ${TRAEFIK_SUBDOMAIN:-app}.${TRAEFIK_DOMAIN}:${TRAEFIK_ADDRESS:-0.0.0.0}
+
+services:
+  php-spx:
+    hostname: "${WARDEN_ENV_NAME}-php-spx"
+    image: ${WARDEN_IMAGE_REPOSITORY}/php-fpm${WARDEN_SVC_PHP_IMAGE_SUFFIX:-}:${PHP_VERSION:-7.4}-spx
+    environment:
+      - TRAEFIK_DOMAIN
+      - TRAEFIK_SUBDOMAIN
+      - SSH_AUTH_SOCK=${SSH_AUTH_SOCK_PATH_ENV:-/tmp/ssh-auth.sock}
+      - NODE_VERSION=${NODE_VERSION:-12}
+      - COMPOSER_VERSION=${COMPOSER_VERSION:-1}
+      - COMPOSER_MEMORY_LIMIT=-1
+      - HISTFILE=/bash_history/.bash_history
+      - CHOWN_DIR_LIST=${CHOWN_DIR_LIST:-}
+    volumes: *volumes
+    extra_hosts: *extra_hosts

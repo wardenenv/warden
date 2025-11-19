@@ -1,13 +1,115 @@
 # Change Log
 
-## UNRELEASED [x.y.z](https://github.com/davidalger/warden/tree/x.y.z) (yyyy-mm-dd)
-[All Commits](https://github.com/davidalger/warden/compare/0.12.0..develop)
+## UNRELEASED
+[All Commits](https://github.com/wardenenv/warden/compare/0.15.0..main)
+
+**Big Changes:**
+* PHP SPX support ([#820](https://github.com/wardenenv/warden/pull/820) by @SamJUK)
+* phpMyAdmin added to Warden core services ([#801](https://github.com/wardenenv/warden/pull/801) by @monteshot and bugfixes by @hardyjohnson)
+* Added support for **Adobe Commerce GraphQL Application Server**  
+  This support should be considered experimental.  Your Adobe Commerce application should already be setup and configured
+  before turning on the GraphQL Application Flag.  You can enable GraphQL with the flag `WARDEN_MAGENTO2_GRAPHQL_SERVER=1`
+  or run it using a debug PHP image by including the additional flag `WARDEN_MAGENTO2_GRAPHQL_SERVER_DEBUG=1`
+* Added top level Warden debug information command `warden doctor` by @hardyjohnson
+
+**Enhancements:**
+* Add ability to run vite bundler in warden for Laravel. See: [Laravel + Vite](https://docs.warden.dev/environments/laravel.html) ([#846](https://github.com/wardenenv/warden/issues/846) by @bap14)
+* Added Valkey service ([#861](https://github.com/wardenenv/warden#861) by @navarr)
+* Added `warden db upgrade` command ([#895](https://github.com/wardenenv/warden/pull/895) by @workslop8264)
+
+**Bug Fixes:**
+* System-level SSL certificates are no longer overwritten ([#812](https://github.com/wardenenv/warden/pull/812) by @SamJUK)
+* Portainer service domain default fix ([#837] by @hardyjohnson credit to: @manuelcanepa)
+* Fix for Traefik configuration being overwritten in Warden home directory when running `warden svc up` command ([#876] by @hardyjohnson).
+* Updated default Traefik version to 2.11 (from 2.2) to fix compatibility with newer Docker versions ([#896] by @mattijv)
+
+## Version [0.15.0](https://github.com/wardenenv/warden/tree/0.15.0) (2024-11-04)
+
+**Big Changes:**
+* Moved from Mailhog to Mailpit ([#779](https://github.com/wardenenv/warden/pull/779) by @bap14)  
+  While this seems like a fairly large change, it is smaller than you may give it credit for.  Email should continue to 
+  be pushed to the email catcher, which is now located at https://webmail.warden.test/, with a redirect from the old
+  mailhog URL.
+
+**Enhancements:**
+* Updated Laravel templates to latest PHP version ([#776](https://github.com/wardenenv/warden/pull/776) by @norgeindian)
+* Updated Laravel to use Composer 2 ([#775](https://github.com/wardenenv/warden/pull/775) by @sprankhub)
+* Added success message to `env-init` command ([#765](https://github.com/wardenenv/warden/pull/765) by @hardyjohnson)
+* Added a warning message to start warden services if they're not running when you try to start an environment ([#766](https://github.com/wardenenv/warden/pull/766) by @hardyjohnson)
+
+**Bug Fixes:**
+* Fixed bash error "value too great for base" during `warden env up` ([#817](https://github.com/wardenenv/warden/pull/817) by @ihor-sviziev)
+
+## Version [0.14.3](https://github.com/wardenenv/warden/tree/0.14.3) (2024-06-11)
+[All Commits](https://github.com/wardenenv/warden/compare/0.14.2..0.14.3)
+
+**Enhancements:**
+* Linux UID/GID added to env command for future image enhancements ([#736](https://github.com/wardenenv/warden/pull/736) by @toonvd)
+
+**Bug Fixes:**
+* Remove obsolete version element ([#760](https://github.com/wardenenv/warden/pull/760) by @mattijv)
+* Correct Java options are now passed to OpenSearch ([#735](https://github.com/wardenenv/warden/pull/735) by @ihor-sviziev)
+
+## Version [0.14.2](https://github.com/wardenenv/warden/tree/0.14.2) (2024-01-03)
+[All Commits](https://github.com/wardenenv/warden/compare/0.14.1..0.14.2)
+
+**Enhancements:**
+* Project and Local Warden commands will now take precedence over built-in warden commands ([#676](https://github.com/wardenenv/warden/pull/676) by @flpandre)
+* New Magento 2 projects will default to the latest version of Magepack ([#712](https://github.com/wardenenv/warden/pull/712) by @sprankhub)
+
+**Bug Fixes:**
+* Traefik will now properly fallback to the default Warden certificate ([#725](https://github.com/wardenenv/warden/pull/725) by @SamJUK)
+* `warden vnc` now properly connects to the container ([#721](https://github.com/wardenenv/warden/pull/721) by @sprankhub)
+* `warden status` will now properly work with dashes in project names and urls ([#685](https://github.com/wardenenv/warden/pull/685) by @bap14)
+
+## Version [0.14.1](https://github.com/wardenenv/warden/tree/0.14.1) (2023-07-10)
+[All Commits](https://github.com/wardenenv/warden/compoare/0.14.0..0.14.1)
+
+**Enhancements:**
+* `warden status` command added that shows running Warden environments ([#669](https://github.com/wardenenv/warden/pull/669) by @bap14)
+
+**Bug Fixes:**
+* Updated Mutagen connection detection so that Mutagen doesn't resync every time in versions >= 0.15.0
+
+## Version [0.14.0](https://github.com/wardenenv/warden/tree/0.14.0) (2023-06-19)
+[All Commits](https://github.com/wardenenv/warden/compare/0.13.1..0.14.0)
+
+**Dependency Changes:**
+* All commands now use the Docker Compose plugin (`docker compose`) instead of the standalone command (`docker-compose`)  
+  Please be aware that this will change your container names from using underscores to using dashes (e.g. vanilla_db_1 becomes vanilla-db-1).  This is configured through the environment variable `DOCKER_COMPOSE_COMMAND` which defaults to `docker compose`.
+
+**Enhancements**
+* ElasticSearch 8.7 and 8.8 images are available
+* Drupal environment type added ([#646](https://github.com/wardenenv/warden/pull/646) by @bap14)
+
+## Version [0.13.1](https://github.com/wardenenv/warden/tree/0.13.1) (2023-03-21)
+[All Commits](https://github.com/wardenenv/warden/compare/0.13.0..0.13.1)
+
+**Bug Fixes:**
+* Removed changelog item about Backup and Restore commands that were reverted
+* Incremented version from 0.12.0 to 0.13.1
+
+## Version [0.13.0](https://github.com/wardenenv/warden/tree/0.13.0) (2023-03-20)
+[All Commits](https://github.com/wardenenv/warden/compare/0.12.0..0.13.0)
 
 **Enhancements:**
 
-* Ability to switch between MariaDB and MySQL using `DB_DISTRIBUTION=(mariadb|mysql)` and `DB_DISTRIBUTION_VERSION` directives
-* Updated environment default Node version from 10 to 12 (issue [#250](https://github.com/davidalger/warden/issues/250))
-* Default URL for ElasticsearchHQ is now configured in the docker-compose config ([#428](https://github.com/davidalger/warden/pull/428) by @ihor-sviziev)
+* Updated environment default Node version from 10 to 12 ([#425](https://github.com/wardenenv/warden/pull/425) by @davidalger)
+* Ignore the only root .git directory ([#496](https://github.com/wardenenv/warden/pull/496) by @ihor-sviziev)
+* Allow dnsmasq service to be disabled ([#462](https://github.com/wardenenv/warden/pull/462) by by @davidhiendl)
+* Update Magento2 defaults to 2.4.6 ([#618](https://github.com/wardenenv/warden/pull/618) by by @lalittmohan)
+* The ability to specify `MYSQL_DISTRIBUTION=(mysql|mariadb)` and `MYSQL_DISTRIBUTION_VERSION` ([dd5ff](https://github.com/wardenenv/warden/commit/dd5ffddf4764d43c70387435c7c75035615661f0) by @rootindex)
+* Add `WARDEN_OPENSEARCH=1` and `OPENSEARCH_VERSION` ([2bd95](https://github.com/wardenenv/warden/commit/2bd95457748c1d639dc6109018d963ff624137ac) by @navarr)
+* Migration from Selenium to Seleniarm ([471dc](https://github.com/wardenenv/warden/commit/471dc0411771e21448dd4aa9eba8e8fdc7abdfdb) by @navarr)
+* Scoped environment config loading ([#451](https://github.com/wardenenv/warden/pull/451) by @tdgroot)
+* Portainer made optional and off by default ([03783](https://github.com/wardenenv/warden/commit/03783b65cfdd644133e75468808a93e751922077) by @bap14)
+* Persist MySQL command history ([45a16](https://github.com/wardenenv/warden/commit/45a16f064680dec0e7cb3fe4906090359bd3dfd5) by @navarr)
+
+**Bug Fixes:**
+* Update default URL for ElasticsearchHQ by @ihor-sviziev in [wardenenv/warden#428](https://github.com/wardenenv/warden/pull/428)
+* Corrected syntax of env-init.help command by @davidalger in [wardenenv/warden#490](https://github.com/wardenenv/warden/pull/490)
+* Add `traefik.docker.network` label to specify docker network exclusively by @tdgroot in [wardenenv/warden#458](https://github.com/wardenenv/warden/pull/458)
+* Require docker compose 2.2.3 when compose v2 is active by @davidalger in [wardenenv/warden#489](https://github.com/wardenenv/warden/pull/489)
 
 ## Version [0.12.0](https://github.com/davidalger/warden/tree/0.12.0) (2021-08-28)
 [All Commits](https://github.com/davidalger/warden/compare/0.11.0..0.12.0)

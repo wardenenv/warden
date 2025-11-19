@@ -12,7 +12,7 @@ fi
 ## allow return codes from sub-process to bubble up normally
 trap '' ERR
 
-## configure docker-compose files
+## configure docker compose files
 DOCKER_COMPOSE_ARGS=()
 
 DOCKER_COMPOSE_ARGS+=("-f")
@@ -23,11 +23,17 @@ if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
     eval "$(grep "^WARDEN_DNSMASQ_ENABLE" "${WARDEN_HOME_DIR}/.env")"
     # Check Portainer
     eval "$(grep "^WARDEN_PORTAINER_ENABLE" "${WARDEN_HOME_DIR}/.env")"
+
     # Check Docker socket
     eval "$(grep "^WARDEN_DOCKER_SOCK" "${WARDEN_HOME_DIR}/.env")"
+
+    # Check PMA
+    eval "$(grep "^WARDEN_PHPMYADMIN_ENABLE" "${WARDEN_HOME_DIR}/.env")"
 fi
 
 export WARDEN_DOCKER_SOCK="${WARDEN_DOCKER_SOCK:-/var/run/docker.sock}"
+DOCKER_COMPOSE_ARGS+=("-f")
+DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.mailpit.yml")
 
 ## add dnsmasq docker-compose
 WARDEN_DNSMASQ_ENABLE="${WARDEN_DNSMASQ_ENABLE:-1}"
@@ -40,6 +46,19 @@ WARDEN_PORTAINER_ENABLE="${WARDEN_PORTAINER_ENABLE:-0}"
 if [[ "${WARDEN_PORTAINER_ENABLE}" == 1 ]]; then
     DOCKER_COMPOSE_ARGS+=("-f")
     DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.portainer.yml")
+fi
+
+WARDEN_PHPMYADMIN_ENABLE="${WARDEN_PHPMYADMIN_ENABLE:-1}"
+if [[ "${WARDEN_PHPMYADMIN_ENABLE}" == 1 ]]; then
+    if [[ -d "${WARDEN_HOME_DIR}/etc/phpmyadmin/config.user.inc.php" ]]; then
+        rm -rf ${WARDEN_HOME_DIR}/etc/phpmyadmin/config.user.inc.php
+    fi
+    if [[ ! -f "${WARDEN_HOME_DIR}/etc/phpmyadmin/config.user.inc.php" ]]; then
+        mkdir -p "${WARDEN_HOME_DIR}/etc/phpmyadmin"
+        touch ${WARDEN_HOME_DIR}/etc/phpmyadmin/config.user.inc.php
+    fi
+    DOCKER_COMPOSE_ARGS+=("-f")
+    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.phpmyadmin.yml")
 fi
 
 ## allow an additional docker-compose file to be loaded for global services
@@ -61,25 +80,30 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
         "$WARDEN_BIN" sign-certificate "${WARDEN_SERVICE_DOMAIN}"
     fi
 
+    if [[ ! -d "${WARDEN_HOME_DIR}/etc/traefik" ]]; then
+        mkdir -p "${WARDEN_HOME_DIR}/etc/traefik"
+    fi
+
     ## copy configuration files into location where they'll be mounted into containers from
-    mkdir -p "${WARDEN_HOME_DIR}/etc/traefik"
-    cp "${WARDEN_DIR}/config/traefik/traefik.yml" "${WARDEN_HOME_DIR}/etc/traefik/traefik.yml"
+    if [[ ! -f "${WARDEN_HOME_DIR}/etc/traefik/traefik.yml" ]]; then
+        cp "${WARDEN_DIR}/config/traefik/traefik.yml" "${WARDEN_HOME_DIR}/etc/traefik/traefik.yml"
+    fi
 
     ## generate dynamic traefik ssl termination configuration
     cat > "${WARDEN_HOME_DIR}/etc/traefik/dynamic.yml" <<-EOT
 		tls:
 		  stores:
 		    default:
-		    defaultCertificate:
-		      certFile: /etc/ssl/certs/${WARDEN_SERVICE_DOMAIN}.crt.pem
-		      keyFile: /etc/ssl/certs/${WARDEN_SERVICE_DOMAIN}.key.pem
+		      defaultCertificate:
+		        certFile: /etc/ssl/certs/warden/${WARDEN_SERVICE_DOMAIN}.crt.pem
+		        keyFile: /etc/ssl/certs/warden/${WARDEN_SERVICE_DOMAIN}.key.pem
 		  certificates:
 	EOT
 
     for cert in $(find "${WARDEN_SSL_DIR}/certs" -type f -name "*.crt.pem" | sed -E 's#^.*/ssl/certs/(.*)\.crt\.pem$#\1#'); do
         cat >> "${WARDEN_HOME_DIR}/etc/traefik/dynamic.yml" <<-EOF
-		    - certFile: /etc/ssl/certs/${cert}.crt.pem
-		      keyFile: /etc/ssl/certs/${cert}.key.pem
+		    - certFile: /etc/ssl/certs/warden/${cert}.crt.pem
+		      keyFile: /etc/ssl/certs/warden/${cert}.key.pem
 		EOF
     done
 
@@ -90,8 +114,8 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
     fi
 fi
 
-## pass ochestration through to docker-compose
-WARDEN_SERVICE_DIR=${WARDEN_DIR} docker-compose \
+## pass ochestration through to docker compose
+WARDEN_SERVICE_DIR=${WARDEN_DIR} ${DOCKER_COMPOSE_COMMAND} \
     --project-directory "${WARDEN_HOME_DIR}" -p warden \
     "${DOCKER_COMPOSE_ARGS[@]}" "${WARDEN_PARAMS[@]}" "$@"
 
@@ -100,4 +124,8 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
     for network in $(docker network ls -f label=dev.warden.environment.name --format {{.Name}}); do
         connectPeeredServices "${network}"
     done
+
+    if [[ "${WARDEN_PHPMYADMIN_ENABLE}" == 1 ]]; then
+        regeneratePMAConfig
+    fi
 fi
