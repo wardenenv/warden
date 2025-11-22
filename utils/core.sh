@@ -44,6 +44,10 @@ function assertDockerRunning {
 ## methods to peer global services requiring network connectivity with project networks
 function connectPeeredServices {
   for svc in ${DOCKER_PEERED_SERVICES[@]}; do
+    if [ ! "$(docker ps -a -q -f name=${svc})" ]; then
+        fatal "Missing Global Service: ${svc}. Run 'warden svc up' and try again."
+    fi
+
     echo "Connecting ${svc} to $1 network"
     (docker network connect "$1" ${svc} 2>&1| grep -v 'already exists in network') || true
   done
