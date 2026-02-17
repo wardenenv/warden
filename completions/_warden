@@ -47,9 +47,21 @@ _warden() {
             fi
             ;;
         env|svc)
+            # These commands delegate to docker compose
             if (( CURRENT == 3 )); then
-                local -a compose_cmds=(up down start stop restart ps logs exec run build pull config)
+                local -a compose_cmds
+                compose_cmds=(${(f)"$(docker compose --help 2>/dev/null | awk '/^  [a-z]/{print $1}')"})
+                if (( ${#compose_cmds} == 0 )); then
+                    compose_cmds=(up down start stop restart ps logs exec run build pull config)
+                fi
                 _describe 'compose subcommand' compose_cmds
+            elif (( CURRENT > 3 )); then
+                local subcmd="${words[3]}"
+                local -a opts
+                opts=(${(f)"$(docker compose ${subcmd} --help 2>/dev/null | grep -oE '  --[a-z][-a-z]*' | awk '{print $1}' | sort -u)"})
+                if (( ${#opts} )); then
+                    _describe 'option' opts
+                fi
             fi
             ;;
         env-init)

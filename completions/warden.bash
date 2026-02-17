@@ -46,8 +46,21 @@ _warden() {
             fi
             ;;
         env|svc)
+            # These commands delegate to docker compose
             if [[ ${cword} -eq 2 ]]; then
-                COMPREPLY=($(compgen -W "up down start stop restart ps logs exec run build pull config" -- "${cur}"))
+                local compose_cmds
+                compose_cmds="$(docker compose --help 2>/dev/null | awk '/^  [a-z]/{print $1}' | tr '\n' ' ')"
+                if [[ -z "${compose_cmds}" ]]; then
+                    compose_cmds="up down start stop restart ps logs exec run build pull config"
+                fi
+                COMPREPLY=($(compgen -W "${compose_cmds}" -- "${cur}"))
+            elif [[ ${cword} -ge 3 ]]; then
+                local subcmd="${words[2]}"
+                local opts
+                opts="$(docker compose "${subcmd}" --help 2>/dev/null | grep -oE '  --[a-z][-a-z]*' | awk '{print $1}' | sort -u | tr '\n' ' ')"
+                if [[ -n "${opts}" ]]; then
+                    COMPREPLY=($(compgen -W "${opts}" -- "${cur}"))
+                fi
             fi
             ;;
         env-init)
