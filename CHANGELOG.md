@@ -3,7 +3,7 @@
 ## UNRELEASED
 [All Commits](https://github.com/wardenenv/warden/compare/0.16.0..main)
 
-_No changes yet_
+* Add support to dynamically connect peered services based on enabled status ([#892](https://github.com/wardenenv/warden/issues/892) by @bap14)
 
 ## Version [0.16.0](https://github.com/wardenenv/warden/tree/0.16.0) (2026-02-12)
 
