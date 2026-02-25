@@ -2,7 +2,8 @@
 [[ ! ${WARDEN_DIR} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
 
 ## global service containers to be connected with the project docker network
-DOCKER_PEERED_SERVICES=("traefik" "tunnel" "mailhog" "phpmyadmin")
+## Only non-disablable services should be listed here. Optioanl services should be handled in getPeeredServices
+DOCKER_PEERED_SERVICES=("traefik" "tunnel" "mailhog")
 
 ## messaging functions
 function warning {
@@ -41,16 +42,30 @@ function assertDockerRunning {
   fi
 }
 
+## use this to add services that can be opted in/out of
+function getPeeredServices {
+  local services=$DOCKER_PEERED_SERVICES
+
+  echo "PhpMyAdmin Enabled? ${WARDEN_PHPMYADMIN_ENABLE}"
+  if [[ "${WARDEN_PHPMYADMIN_ENABLE}" == 1 ]]; then
+    services+=("phpmyadmin")
+  fi
+
+  echo "${services[@]}"
+}
+
 ## methods to peer global services requiring network connectivity with project networks
 function connectPeeredServices {
-  for svc in ${DOCKER_PEERED_SERVICES[@]}; do
+  enabledServices=($(getPeeredServices))
+  for svc in ${enabledServices[@]}; do
     echo "Connecting ${svc} to $1 network"
     (docker network connect "$1" ${svc} 2>&1| grep -v 'already exists in network') || true
   done
 }
 
 function disconnectPeeredServices {
-  for svc in ${DOCKER_PEERED_SERVICES[@]}; do
+  enabledServices=($(getPeeredServices))
+  for svc in ${enabledServices[@]}; do
     echo "Disconnecting ${svc} from $1 network"
     (docker network disconnect "$1" ${svc} 2>&1| grep -v 'is not connected') || true
   done
