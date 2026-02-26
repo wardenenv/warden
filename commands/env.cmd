@@ -293,11 +293,50 @@ then
 
   ## start mutagen sync if needed
   if { [[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]]; } \
-      && [[ $($WARDEN_BIN sync list | grep -c "${CONNECTION_STATE_STRING}" | awk '{print $1}') != "2" ]] \
       && [[ $($WARDEN_BIN env ps -q php-fpm) ]] \
       && [[ $(docker container inspect "$($WARDEN_BIN env ps -q php-fpm)" --format '{{ .State.Status }}') = "running" ]]
   then
-      $WARDEN_BIN sync start
+      CURRENT_CONTAINER_ID=$($WARDEN_BIN env ps -q php-fpm)
+
+      # Get all sessions for this environment (warden filters by label)
+      # conn_state matches only Beta's (docker side) is connected
+      SESSION_DATA=$($WARDEN_BIN sync list | awk -v conn_state="${CONNECTION_STATE_STRING}" '
+          /^Identifier:/ { id=$2; has_id=1 }
+          /URL: docker:\/\// { 
+              container_id=$0
+              sub(/.*docker:\/\//, "", container_id)
+              sub(/\/.*/, "", container_id)
+              has_docker=1
+          }
+          $0 ~ conn_state && has_id && has_docker {
+              if (container_id == "'"${CURRENT_CONTAINER_ID}"'") {
+                  print "CONNECTED:" id
+              } else {
+                  print "STALE:" id
+              }
+              has_id=0
+              has_docker=0
+          }
+      ')
+
+      # Count connected sessions for current container
+      CONNECTED_COUNT=$(echo "$SESSION_DATA" | grep -c "^CONNECTED:" || echo "0")
+
+      # Terminate stale connected sessions (pointing to old containers)
+      STALE_SESSIONS=$(echo "$SESSION_DATA" | grep "^STALE:" | cut -d: -f2)
+      if [[ -n "$STALE_SESSIONS" ]]; then
+          echo "Terminating stale sync sessions with outdated container references:"
+          while IFS= read -r session_id; do
+              echo "  - Terminating: $session_id"
+              mutagen sync terminate "$session_id"
+          done <<< "$STALE_SESSIONS"
+      fi
+
+      # Start sync only if zero connected sessions for current container
+      if [[ $CONNECTED_COUNT -eq 0 ]]; then
+          echo "Starting mutagen sync (no connected sessions found)"
+          $WARDEN_BIN sync start
+      fi
   fi
 fi
 
