@@ -237,12 +237,50 @@ fi
 ## resume mutagen sync if available and php-fpm container id hasn't changed
 if { [[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]]; } \
     && [[ ${WARDEN_MUTAGEN_ENABLE} -eq 1 ]] && [[ -f "${MUTAGEN_SYNC_FILE}" ]] \
-    && [[ $($WARDEN_BIN sync list | grep -ci 'Status: \[Paused\]' | awk '{print $1}') == "1" ]] \
+    && [[ $($WARDEN_BIN sync list | grep -ci 'Status: \[Paused\]') -gt 0 ]] \
     && [[ $($WARDEN_BIN env ps -q php-fpm) ]] \
-    && [[ $(docker container inspect "$($WARDEN_BIN env ps -q php-fpm)" --format '{{ .State.Status }}') = "running" ]] \
-    && [[ $($WARDEN_BIN env ps -q php-fpm) = $($WARDEN_BIN sync list | grep -i 'URL: docker' | awk -F'/' '{print $3}') ]]
+    && [[ $(docker container inspect "$($WARDEN_BIN env ps -q php-fpm)" --format '{{ .State.Status }}') = "running" ]]
 then
-    $WARDEN_BIN sync resume
+    CURRENT_CONTAINER_ID=$($WARDEN_BIN env ps -q php-fpm)
+
+    # Get paused sessions: separate matching and mismatched containers
+    SESSION_DATA=$($WARDEN_BIN sync list | awk '
+        /^Identifier:/ { id=$2; has_id=1 }
+        /URL: docker:\/\// { 
+            container_id=$0
+            sub(/.*docker:\/\//, "", container_id)
+            sub(/\/.*/, "", container_id)
+            has_docker=1
+        }
+        /Status: \[Paused\]/ && has_id && has_docker { 
+            if (container_id == "'"$CURRENT_CONTAINER_ID"'") {
+                print "MATCH:" id
+            } else {
+                print "MISMATCH:" id
+            }
+            has_id=0
+            has_docker=0
+        }
+    ')
+
+    # Terminate sessions with mismatched containers
+    MISMATCHED_SESSIONS=$(echo "$SESSION_DATA" | grep "^MISMATCH:" | cut -d: -f2)
+    if [[ -n "$MISMATCHED_SESSIONS" ]]; then
+        echo "Terminating sync sessions with outdated container references:"
+        while IFS= read -r session_id; do
+            echo "  - Terminating: $session_id"
+            mutagen sync terminate "$session_id"
+        done <<< "$MISMATCHED_SESSIONS"
+    fi
+
+    # Count matching sessions
+    MATCHING_COUNT=$(echo "$SESSION_DATA" | grep -c "^MATCH:" || echo "0")
+
+    # Resume all valid paused sessions (warden filters by label automatically)
+    if [[ $MATCHING_COUNT -gt 0 ]]; then
+        echo "Resuming $MATCHING_COUNT paused sync session(s)"
+        $WARDEN_BIN sync resume
+    fi
 fi
 
 if [[ ${WARDEN_MUTAGEN_ENABLE} -eq 1 ]] && [[ -f "${MUTAGEN_SYNC_FILE}" ]] # If we're using Mutagen
