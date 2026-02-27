@@ -234,115 +234,141 @@ if [[ "${WARDEN_PARAMS[0]}" == "stop" || "${WARDEN_PARAMS[0]}" == "down" || \
     regeneratePMAConfig
 fi
 
-## resume mutagen sync if available and php-fpm container id hasn't changed
-if { [[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]]; } \
-    && [[ ${WARDEN_MUTAGEN_ENABLE} -eq 1 ]] && [[ -f "${MUTAGEN_SYNC_FILE}" ]] \
-    && [[ $($WARDEN_BIN sync list | grep -ci 'Status: \[Paused\]') -gt 0 ]] \
-    && [[ $($WARDEN_BIN env ps -q php-fpm) ]] \
-    && [[ $(docker container inspect "$($WARDEN_BIN env ps -q php-fpm)" --format '{{ .State.Status }}') = "running" ]]
-then
-    CURRENT_CONTAINER_ID=$($WARDEN_BIN env ps -q php-fpm)
 
-    # Get paused sessions: separate matching and mismatched containers
-    SESSION_DATA=$($WARDEN_BIN sync list | awk '
-        /^Identifier:/ { id=$2; has_id=1 }
-        /URL: docker:\/\// { 
+##
+# Categorize Mutagen sync sessions by container match status
+#
+# Analyzes sync sessions and categorizes them as MATCH or MISMATCH based on
+# whether their container ID matches the current running container.
+#
+# @param $1 sync_list_output - The raw output from 'warden sync list' command
+# @param $2 ref_container_id - The ID of the currently running container
+# @param $3 status - Optional status to filter by (e.g., "Status: Paused", "Connected: Yes", or "0" for all)
+#
+# @output Lines in format: "MATCH:session_id" or "MISMATCH:session_id"
+# @return 0 on success
+##
+categorizeSyncSessions() {
+    local sync_list_output="$1"
+    local ref_container_id="$2"
+    local status="${3:-0}"
+
+    # AWK Pattern: Capture session identifier
+    local capture_identifier_awk='
+        /Identifier: / {
+            id=$2
+            has_id=1
+            has_docker=0
+        }
+    '
+
+    # AWK Pattern: Extract container ID from docker URL
+    local extract_container_id_awk='
+        /URL: docker:/ {
             container_id=$0
             sub(/.*docker:\/\//, "", container_id)
             sub(/\/.*/, "", container_id)
             has_docker=1
         }
-        /Status: \[Paused\]/ && has_id && has_docker { 
-            if (container_id == "'"$CURRENT_CONTAINER_ID"'") {
-                print "MATCH:" id
-            } else {
-                print "MISMATCH:" id
+    '
+
+    # AWK Pattern: Categorize sessions by container match with optional status filter
+    local categorize_by_container_awk='
+        (!status_filter || $0 ~ status_filter) && has_id && has_docker {
+            if (has_id && has_docker) {
+                if (container_id == container_filter) {
+                    print "MATCH:" id
+                } else {
+                    print "MISMATCH:" id
+                }
+                has_id=0
+                has_docker=0
             }
-            has_id=0
-            has_docker=0
         }
-    ')
+    '
 
-    # Terminate sessions with mismatched containers
-    MISMATCHED_SESSIONS=$(echo "$SESSION_DATA" | grep "^MISMATCH:" | cut -d: -f2)
-    if [[ -n "$MISMATCHED_SESSIONS" ]]; then
-        echo "Terminating sync sessions with outdated container references:"
-        while IFS= read -r session_id; do
-            echo "  - Terminating: $session_id"
-            mutagen sync terminate "$session_id"
-        done <<< "$MISMATCHED_SESSIONS"
+    echo "$sync_list_output" | awk \
+        -v container_filter="$ref_container_id" \
+        -v status_filter="$status" \
+        "$capture_identifier_awk $extract_container_id_awk $categorize_by_container_awk"
+}
+
+## If we're using Mutagen
+if [[ ${WARDEN_MUTAGEN_ENABLE} -eq 1 ]] && [[ -f "${MUTAGEN_SYNC_FILE}" ]]
+then
+    MUTAGEN_VERSION=$(mutagen version)
+    CONNECTION_STATE_STRING='Connected state: Connected'
+    if [[ $((10#$(version "${MUTAGEN_VERSION}"))) -ge $((10#$(version '0.15.0'))) ]]; 
+    then
+        CONNECTION_STATE_STRING='Connected: Yes'
     fi
 
-    # Count matching sessions
-    MATCHING_COUNT=$(echo "$SESSION_DATA" | grep -c "^MATCH:" || echo "0")
+    CURRENT_CONTAINER_ID=$($WARDEN_BIN env ps -q php-fpm)
 
-    # Resume all valid paused sessions (warden filters by label automatically)
-    if [[ $MATCHING_COUNT -gt 0 ]]; then
-        echo "Resuming $MATCHING_COUNT paused sync session(s)"
-        $WARDEN_BIN sync resume
+    if { [[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]]; } \
+        && [[ $CURRENT_CONTAINER_ID ]] \
+        && [[ $(docker container inspect "$($WARDEN_BIN env ps -q php-fpm)" --format '{{ .State.Status }}') = "running" ]]
+    then
+        # Get all mutagen sessions for this environment: separate matching and mismatched containers
+        SYNC_LIST_OUTPUT=$($WARDEN_BIN sync list)
+
+        ALL_SESSIONS=$(categorizeSyncSessions "$SYNC_LIST_OUTPUT" "$CURRENT_CONTAINER_ID")
+
+        # Terminate sessions with mismatched containers
+        MISMATCHED_SESSIONS=$(echo "${ALL_SESSIONS}" | grep "^MISMATCH:" | cut -d: -f2)
+        if [[ -n ${MISMATCHED_SESSIONS} ]]; 
+        then
+            echo "Terminating sync sessions with outdated container references"
+            while IFS= read -r session_id; do
+                echo "  - Terminating ${session_id}"
+                mutagen sync terminate "${session_id}"
+            done <<< "${MISMATCHED_SESSIONS}"
+        fi
+
+        ## == mutagen sync resume ==
+
+        # Match paused sessions
+        PAUSED_MATCHED_SESSIONS=$(categorizeSyncSessions "$SYNC_LIST_OUTPUT" "$CURRENT_CONTAINER_ID" "Status: \\\[Paused\\\]" | grep "^MATCH:" | cut -d: -f2)
+
+        if [[ -z "${PAUSED_MATCHED_SESSIONS}" ]]; then
+            PAUSED_MATCHING_COUNT=0
+        else
+            PAUSED_MATCHING_COUNT=$(echo "${PAUSED_MATCHED_SESSIONS}" | grep -c .)
+        fi
+
+        # Resume all valid paused sessions if there are any
+        if [[ ${PAUSED_MATCHING_COUNT} -gt 0 ]]; then
+            echo "Resuming ${PAUSED_MATCHING_COUNT} paused sync sessions"
+            while IFS= read -r session_id; do
+                echo "  - ${session_id}"
+            done <<< "${PAUSED_MATCHED_SESSIONS}"
+            $WARDEN_BIN sync resume
+        fi
+
+        ## == mutagen sync start ==
+
+        # Get all mutagen sessions for this environment (re-run because statuses changed after resume)
+        SYNC_LIST_OUTPUT=$($WARDEN_BIN sync list)
+
+        # Count connected sessions for current container
+        CONNECTED_MATCHED_SESSIONS=$(categorizeSyncSessions "$SYNC_LIST_OUTPUT" "$CURRENT_CONTAINER_ID" "$CONNECTION_STATE_STRING" | grep "^MATCH:" | cut -d: -f2)
+
+        if [[ -z "${CONNECTED_MATCHED_SESSIONS}" ]]; then
+            CONNECTED_COUNT=0
+        else
+            CONNECTED_COUNT=$(echo "${CONNECTED_MATCHED_SESSIONS}" | grep -c .)
+        fi
+
+        # Start sync only if zero connected sessions for current container
+        if [[ ${CONNECTED_COUNT} -eq 0 ]]; then
+            echo "Starting mutagen sync (no connected sessions found)"
+            $WARDEN_BIN sync start
+        fi
     fi
-fi
 
-if [[ ${WARDEN_MUTAGEN_ENABLE} -eq 1 ]] && [[ -f "${MUTAGEN_SYNC_FILE}" ]] # If we're using Mutagen
-then
-  MUTAGEN_VERSION=$(mutagen version)
-  CONNECTION_STATE_STRING='Connected state: Connected'
-  if [[ $((10#$(version "${MUTAGEN_VERSION}"))) -ge $((10#$(version '0.15.0'))) ]]; then
-    CONNECTION_STATE_STRING='Connected: Yes'
-  fi
-
-  ## start mutagen sync if needed
-  if { [[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]]; } \
-      && [[ $($WARDEN_BIN env ps -q php-fpm) ]] \
-      && [[ $(docker container inspect "$($WARDEN_BIN env ps -q php-fpm)" --format '{{ .State.Status }}') = "running" ]]
-  then
-      CURRENT_CONTAINER_ID=$($WARDEN_BIN env ps -q php-fpm)
-
-      # Get all sessions for this environment (warden filters by label)
-      # conn_state matches only Beta's (docker side) is connected
-      SESSION_DATA=$($WARDEN_BIN sync list | awk -v conn_state="${CONNECTION_STATE_STRING}" '
-          /^Identifier:/ { id=$2; has_id=1 }
-          /URL: docker:\/\// { 
-              container_id=$0
-              sub(/.*docker:\/\//, "", container_id)
-              sub(/\/.*/, "", container_id)
-              has_docker=1
-          }
-          $0 ~ conn_state && has_id && has_docker {
-              if (container_id == "'"${CURRENT_CONTAINER_ID}"'") {
-                  print "CONNECTED:" id
-              } else {
-                  print "STALE:" id
-              }
-              has_id=0
-              has_docker=0
-          }
-      ')
-
-      # Count connected sessions for current container
-      CONNECTED_COUNT=$(echo "$SESSION_DATA" | grep -c "^CONNECTED:" || echo "0")
-
-      # Terminate stale connected sessions (pointing to old containers)
-      STALE_SESSIONS=$(echo "$SESSION_DATA" | grep "^STALE:" | cut -d: -f2)
-      if [[ -n "$STALE_SESSIONS" ]]; then
-          echo "Terminating stale sync sessions with outdated container references:"
-          while IFS= read -r session_id; do
-              echo "  - Terminating: $session_id"
-              mutagen sync terminate "$session_id"
-          done <<< "$STALE_SESSIONS"
-      fi
-
-      # Start sync only if zero connected sessions for current container
-      if [[ $CONNECTED_COUNT -eq 0 ]]; then
-          echo "Starting mutagen sync (no connected sessions found)"
-          $WARDEN_BIN sync start
-      fi
-  fi
-fi
-
-## stop mutagen sync if needed
-if [[ "${WARDEN_PARAMS[0]}" == "down" ]] \
-    && [[ ${WARDEN_MUTAGEN_ENABLE} -eq 1 ]] && [[ -f "${MUTAGEN_SYNC_FILE}" ]]
-then
-    $WARDEN_BIN sync stop
+    ## == mutagen sync stop ==
+    if [[ "${WARDEN_PARAMS[0]}" == "down" ]]
+    then
+        $WARDEN_BIN sync stop
+    fi
 fi
