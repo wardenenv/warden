@@ -5,6 +5,11 @@
 
 * Add support to dynamically connect peered services based on enabled status ([#892](https://github.com/wardenenv/warden/issues/892) by @bap14)
 
+**Enhancements:**
+* Support resuming multiple Mutagen sessions and improved sync handling ([#918](https://github.com/wardenenv/warden/pull/918) by @martin-cod)
+  - Environments can now resume and monitor multiple live Mutagen sync sessions in parallel.
+  - Improved synchronization logic and error handling; more robust session tracking and status reporting.
+
 ## Version [0.16.0](https://github.com/wardenenv/warden/tree/0.16.0) (2026-02-12)
 
 **Big Changes:**
