@@ -44,9 +44,8 @@ function assertDockerRunning {
 
 ## use this to add services that can be opted in/out of
 function getPeeredServices {
-  local services=$DOCKER_PEERED_SERVICES
+  local services=("${DOCKER_PEERED_SERVICES[@]}")
 
-  echo "PhpMyAdmin Enabled? ${WARDEN_PHPMYADMIN_ENABLE}"
   if [[ "${WARDEN_PHPMYADMIN_ENABLE}" == 1 ]]; then
     services+=("phpmyadmin")
   fi
