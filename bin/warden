@@ -48,6 +48,13 @@ declare WARDEN_CMD_EXEC=
 declare WARDEN_CMD_HELP=
 declare WARDEN_CMD_ANYARGS=(db debug doctor env redis shell svc sync)
 
+## read and export docker socket path from .env, defaulting to /var/run/docker.sock
+if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
+    # Check Docker socket
+    eval "$(grep "^WARDEN_DOCKER_SOCK" "${WARDEN_HOME_DIR}/.env")"
+fi
+export WARDEN_DOCKER_SOCK="${WARDEN_DOCKER_SOCK:-/var/run/docker.sock}"
+
 ## parse first argument as command and determine validity
 if (( "$#" )); then
   ## local project directory if running within one; don't fail if it can't be found
