@@ -5,6 +5,7 @@
 
 **Bug Fixes:**
 * Add support to dynamically connect peered services based on enabled status ([#892](https://github.com/wardenenv/warden/issues/892) by @bap14, [#919](https://github.com/wardenenv/warden/issues/919) by @xinsodev)
+* Fix WARDEN_DOCKER_SOCK error running `warden sign-certificate` ([#907](https://github.com/wardenenv/warden/issues/907) by @bap14)
 
 ## Version [0.16.0](https://github.com/wardenenv/warden/tree/0.16.0) (2026-02-12)
 
