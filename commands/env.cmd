@@ -307,7 +307,7 @@ then
 
     if { [[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]]; } \
         && [[ $CURRENT_CONTAINER_ID ]] \
-        && [[ $(docker container inspect "$($WARDEN_BIN env ps -q php-fpm)" --format '{{ .State.Status }}') = "running" ]]
+        && [[ $(docker container inspect "${CURRENT_CONTAINER_ID}" --format '{{ .State.Status }}') = "running" ]]
     then
         # Get all mutagen sessions for this environment: separate matching and mismatched containers
         SYNC_LIST_OUTPUT=$($WARDEN_BIN sync list)
