@@ -1,0 +1,84 @@
+#compdef warden
+# Zsh completion for warden
+
+_warden() {
+    local warden_bin warden_dir
+    warden_bin="$(command -v warden 2>/dev/null)"
+    warden_dir=""
+    if [[ -n "${warden_bin}" ]]; then
+        local real_bin
+        real_bin="$(readlink "${warden_bin}" 2>/dev/null || echo "${warden_bin}")"
+        warden_dir="$(cd "$(dirname "${real_bin}")/.." 2>/dev/null && pwd)"
+    fi
+
+    local -a commands
+    if [[ -n "${warden_dir}" && -d "${warden_dir}/commands" ]]; then
+        commands=(${(f)"$(ls "${warden_dir}/commands/"*.cmd 2>/dev/null \
+            | xargs -I{} basename {} .cmd \
+            | grep -v usage)"})
+    fi
+    if (( ${#commands} == 0 )); then
+        commands=(blackfire db debug doctor env env-init install redis shell sign-certificate spx status svc sync valkey version vnc)
+    fi
+
+    local -a global_opts
+    global_opts=('-h[Show help]' '--help[Show help]' '-v[Enable verbose output]' '--verbose[Enable verbose output]')
+
+    # Top-level: complete command name
+    if (( CURRENT == 2 )); then
+        _describe 'warden command' commands
+        _arguments -s ${global_opts}
+        return
+    fi
+
+    local cmd="${words[2]}"
+
+    case "${cmd}" in
+        db)
+            if (( CURRENT == 3 )); then
+                local -a db_cmds=(connect import dump upgrade)
+                _describe 'db subcommand' db_cmds
+            fi
+            ;;
+        sync)
+            if (( CURRENT == 3 )); then
+                local -a sync_cmds=(start stop list flush monitor pause reset resume)
+                _describe 'sync subcommand' sync_cmds
+            fi
+            ;;
+        env|svc)
+            # These commands delegate to docker compose
+            if (( CURRENT == 3 )); then
+                local -a compose_cmds
+                compose_cmds=(${(f)"$(docker compose --help 2>/dev/null | awk '/^  [a-z]/{print $1}')"})
+                if (( ${#compose_cmds} == 0 )); then
+                    compose_cmds=(up down start stop restart ps logs exec run build pull config)
+                fi
+                _describe 'compose subcommand' compose_cmds
+            elif (( CURRENT > 3 )); then
+                local subcmd="${words[3]}"
+                local -a opts
+                opts=(${(f)"$(docker compose ${subcmd} --help 2>/dev/null | grep -oE '  --[a-z][-a-z]*' | awk '{print $1}' | sort -u)"})
+                if (( ${#opts} )); then
+                    _describe 'option' opts
+                fi
+            fi
+            ;;
+        env-init)
+            if (( CURRENT == 4 )); then
+                local -a env_types
+                if [[ -n "${warden_dir}" && -d "${warden_dir}/environments" ]]; then
+                    env_types=(${(f)"$(ls -d "${warden_dir}/environments/"*/ 2>/dev/null \
+                        | xargs -I{} basename {} \
+                        | grep -v includes)"})
+                fi
+                if (( ${#env_types} == 0 )); then
+                    env_types=(cakephp drupal laravel local magento1 magento2 shopware symfony wordpress)
+                fi
+                _describe 'environment type' env_types
+            fi
+            ;;
+    esac
+}
+
+_warden "$@"
