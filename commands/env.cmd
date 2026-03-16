@@ -263,6 +263,31 @@ then
   fi
 fi
 
+## fix file permissions for multi-user environments
+## this ensures www-data UID/GID matches the host user to prevent permission issues
+if [[ "${WARDEN_PARAMS[0]}" == "up" ]] || [[ "${WARDEN_PARAMS[0]}" == "start" ]]; then
+    for container in php-fpm php-debug php-spx; do
+        # Check if container is running (exact match) and www-data UID doesn't match host UID
+        CONTAINER_UID=$($WARDEN_BIN env exec "$container" id -u www-data 2>/dev/null || echo "")
+        if $WARDEN_BIN env ps --services 2>/dev/null | grep -q "^${container}$" \
+            && [[ -n "$CONTAINER_UID" ]] && [[ "$CONTAINER_UID" != "${HOST_UID}" ]]; then
+
+            # Update www-data user/group to match host UID/GID
+            $WARDEN_BIN env exec -u 0 "$container" usermod -u "${HOST_UID}" www-data 2>/dev/null || true
+            $WARDEN_BIN env exec -u 0 "$container" groupmod -g "${HOST_GID}" www-data 2>/dev/null || true
+
+            # Create backward-compatible group for original GID 1000 files (only if host GID differs)
+            if [[ "${HOST_GID}" != "1000" ]]; then
+                $WARDEN_BIN env exec -u 0 "$container" sh -c "getent group centos >/dev/null 2>&1 || groupadd -g 1000 centos" 2>/dev/null || true
+                $WARDEN_BIN env exec -u 0 "$container" usermod -aG centos www-data 2>/dev/null || true
+            fi
+
+            # Restart container to apply changes
+            $WARDEN_BIN env restart "$container"
+        fi
+    done
+fi
+
 ## stop mutagen sync if needed
 if [[ "${WARDEN_PARAMS[0]}" == "down" ]] \
     && [[ ${WARDEN_MUTAGEN_ENABLE} -eq 1 ]] && [[ -f "${MUTAGEN_SYNC_FILE}" ]]
