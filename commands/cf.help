@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+[[ ! ${WARDEN_DIR} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
+
+WARDEN_USAGE=$(cat <<EOF
+\033[33mUsage:\033[0m
+  cf <subcommand>
+
+\033[33mSubcommands:\033[0m
+  login             Authenticate with Cloudflare (opens browser)
+  create [name]     Create a new tunnel (default name: warden)
+  delete            Delete the tunnel from Cloudflare
+  status            Show tunnel and connected domains
+  update            Regenerate cloudflared config and restart
+  logout            Remove all cloudflared credentials and config
+
+\033[33mOptions:\033[0m
+  -h, --help        Display this help menu
+
+\033[33mDescription:\033[0m
+  Manages Cloudflare Tunnel integration for exposing local projects
+  to the public internet. Projects opt-in by setting TRAEFIK_PUBLIC_DOMAIN
+  in their .env file.
+
+\033[33mSetup:\033[0m
+  1. warden cf login          # Authenticate with Cloudflare
+  2. warden cf create         # Create tunnel
+  3. warden svc up            # Start global services (includes cloudflared)
+  4. Set TRAEFIK_PUBLIC_DOMAIN in project .env
+  5. warden env up            # Start project (config auto-generated)
+EOF
+)
