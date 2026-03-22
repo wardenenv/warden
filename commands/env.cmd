@@ -167,6 +167,7 @@ if [[ "${WARDEN_PARAMS[0]}" == "down" ]]; then
 
     ## regenerate PMA config on each env changing
     regeneratePMAConfig
+    regenerateCloudflaredConfig
 fi
 
 ## connect peered service containers to environment network
@@ -189,6 +190,7 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
 
     ## regenerate PMA config on each env changing
     regeneratePMAConfig
+    regenerateCloudflaredConfig
 fi
 
 ## lookup address of traefik container on environment network
@@ -232,6 +234,7 @@ ${DOCKER_COMPOSE_COMMAND} \
 if [[ "${WARDEN_PARAMS[0]}" == "stop" || "${WARDEN_PARAMS[0]}" == "down" || \
       "${WARDEN_PARAMS[0]}" == "up" || "${WARDEN_PARAMS[0]}" == "start" ]]; then
     regeneratePMAConfig
+    regenerateCloudflaredConfig
 fi
 
 ## resume mutagen sync if available and php-fpm container id hasn't changed
