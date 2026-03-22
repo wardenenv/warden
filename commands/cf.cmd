@@ -51,6 +51,7 @@ case "${WARDEN_PARAMS[0]}" in
         echo "${CREATE_OUTPUT}"
 
         ## extract tunnel UUID from output (format: "Created tunnel <name> with id <uuid>")
+        ## UUID is [0-9a-f-] only, which is safe for use in sed substitution below
         TUNNEL_ID=$(echo "${CREATE_OUTPUT}" | grep -oE '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}' | head -1)
 
         if [[ -z "${TUNNEL_ID}" ]]; then
@@ -65,8 +66,7 @@ case "${WARDEN_PARAMS[0]}" in
             echo "WARDEN_CLOUDFLARED_TUNNEL_ID=${TUNNEL_ID}" >> "${WARDEN_HOME_DIR}/.env"
         fi
 
-        ## generate initial config
-        export WARDEN_CLOUDFLARED_TUNNEL_ID="${TUNNEL_ID}"
+        ## generate initial config (reads TUNNEL_ID from ~/.warden/.env written above)
         regenerateCloudflaredConfig
 
         echo ""

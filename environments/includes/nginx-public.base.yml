@@ -1,6 +1,7 @@
 services:
   nginx:
     labels:
+      - traefik.enable=true
       - traefik.http.routers.${WARDEN_ENV_NAME}-nginx-public.tls=true
       - traefik.http.routers.${WARDEN_ENV_NAME}-nginx-public.priority=2
       - traefik.http.routers.${WARDEN_ENV_NAME}-nginx-public.rule=
