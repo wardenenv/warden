@@ -99,3 +99,54 @@ function regeneratePMAConfig() {
     >&2 echo "phpMyAdmin configuration regenerated."
   fi
 }
+
+function regenerateCloudflaredConfig() {
+  if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
+    eval "$(grep "^WARDEN_CLOUDFLARED_TUNNEL_ID" "${WARDEN_HOME_DIR}/.env")"
+  fi
+
+  if [[ -z "${WARDEN_CLOUDFLARED_TUNNEL_ID:-}" ]]; then
+    return 0
+  fi
+
+  ## find credentials file (either credentials.json or <uuid>.json)
+  local credentials_file=""
+  if [[ -f "${WARDEN_HOME_DIR}/etc/cloudflared/${WARDEN_CLOUDFLARED_TUNNEL_ID}.json" ]]; then
+    credentials_file="/home/nonroot/.cloudflared/${WARDEN_CLOUDFLARED_TUNNEL_ID}.json"
+  elif [[ -f "${WARDEN_HOME_DIR}/etc/cloudflared/credentials.json" ]]; then
+    credentials_file="/home/nonroot/.cloudflared/credentials.json"
+  else
+    warning "Cloudflared credentials file not found. Run 'warden cf create' first."
+    return 0
+  fi
+
+  >&2 echo "Regenerating cloudflared configuration..."
+  local config_dir="${WARDEN_HOME_DIR}/etc/cloudflared"
+  mkdir -p "${config_dir}"
+
+  local config_file="${config_dir}/config.yml"
+  {
+    echo "tunnel: ${WARDEN_CLOUDFLARED_TUNNEL_ID}"
+    echo "credentials-file: ${credentials_file}"
+    echo ""
+    echo "ingress:"
+
+    for domain in $(docker ps --filter "label=dev.warden.cf.domain" --format '{{.Label "dev.warden.cf.domain"}}' 2>/dev/null | sort -u); do
+      echo "  - hostname: ${domain}"
+      echo "    service: https://traefik"
+      echo "    originRequest:"
+      echo "      noTLSVerify: true"
+      echo "  - hostname: \"*.${domain}\""
+      echo "    service: https://traefik"
+      echo "    originRequest:"
+      echo "      noTLSVerify: true"
+    done
+
+    echo "  - service: http_status:404"
+  } > "${config_file}"
+
+  >&2 echo "Cloudflared configuration regenerated."
+
+  ## restart cloudflared container if it is running
+  docker restart cloudflared 2>/dev/null || true
+}
