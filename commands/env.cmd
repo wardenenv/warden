@@ -88,6 +88,9 @@ fi
 [[ ${WARDEN_NGINX} -eq 1 ]] \
     && appendEnvPartialIfExists "nginx"
 
+[[ ${WARDEN_NGINX} -eq 1 ]] && [[ -n "${TRAEFIK_PUBLIC_DOMAIN:-}" ]] \
+    && appendEnvPartialIfExists "nginx-public"
+
 [[ ${WARDEN_DB} -eq 1 ]] \
     && appendEnvPartialIfExists "db"
 
