@@ -88,8 +88,13 @@ fi
 [[ ${WARDEN_NGINX} -eq 1 ]] \
     && appendEnvPartialIfExists "nginx"
 
-[[ ${WARDEN_NGINX} -eq 1 ]] && [[ -n "${TRAEFIK_PUBLIC_DOMAIN:-}" ]] \
-    && appendEnvPartialIfExists "nginx-public"
+if [[ -n "${TRAEFIK_PUBLIC_DOMAIN:-}" ]]; then
+    if [[ ${WARDEN_VARNISH:-0} -eq 1 ]]; then
+        appendEnvPartialIfExists "varnish-public"
+    elif [[ ${WARDEN_NGINX} -eq 1 ]]; then
+        appendEnvPartialIfExists "nginx-public"
+    fi
+fi
 
 [[ ${WARDEN_DB} -eq 1 ]] \
     && appendEnvPartialIfExists "db"
@@ -170,7 +175,6 @@ if [[ "${WARDEN_PARAMS[0]}" == "down" ]]; then
 
     ## regenerate PMA config on each env changing
     regeneratePMAConfig
-    regenerateCloudflaredConfig
 fi
 
 ## connect peered service containers to environment network
@@ -193,7 +197,6 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
 
     ## regenerate PMA config on each env changing
     regeneratePMAConfig
-    regenerateCloudflaredConfig
 fi
 
 ## lookup address of traefik container on environment network

@@ -1,0 +1,10 @@
+services:
+  varnish:
+    labels:
+      - traefik.http.routers.${WARDEN_ENV_NAME}-varnish-public.tls=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-varnish-public.priority=1
+      - traefik.http.routers.${WARDEN_ENV_NAME}-varnish-public.rule=
+          HostRegexp(`{subdomain:.+}.${TRAEFIK_PUBLIC_DOMAIN}`) || Host(`${TRAEFIK_PUBLIC_DOMAIN}`)
+      - traefik.http.services.${WARDEN_ENV_NAME}-varnish-public.loadbalancer.server.port=80
+      - traefik.docker.network=${WARDEN_ENV_NAME}_default
+      - dev.warden.cf.domain=${TRAEFIK_PUBLIC_DOMAIN}

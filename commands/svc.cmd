@@ -66,6 +66,10 @@ fi
 
 ## add cloudflared docker-compose
 if [[ -n "${WARDEN_CLOUDFLARED_TUNNEL_ID:-}" ]]; then
+    if [[ "${WARDEN_PARAMS[0]}" == "up" ]] && [[ ! -f "${WARDEN_HOME_DIR}/etc/cloudflared/config.yml" ]]; then
+        warning "Cloudflared tunnel ID is set but config.yml is missing."
+        warning "Run 'warden cf create' or 'warden cf update' to generate configuration."
+    fi
     DOCKER_COMPOSE_ARGS+=("-f")
     DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.cloudflared.yml")
 fi

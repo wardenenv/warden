@@ -147,6 +147,6 @@ function regenerateCloudflaredConfig() {
 
   >&2 echo "Cloudflared configuration regenerated."
 
-  ## restart cloudflared container if it is running
+  ## restart (or start if stopped) the cloudflared container if it exists
   docker restart cloudflared 2>/dev/null || true
 }
