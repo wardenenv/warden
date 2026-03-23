@@ -1,0 +1,10 @@
+services:
+  cloudflared:
+    container_name: cloudflared
+    image: ${WARDEN_IMAGE_REPOSITORY:-docker.io/wardenenv}/cloudflared:latest
+    command: tunnel --config /home/nonroot/.cloudflared/config.yml run
+    volumes:
+      - ${WARDEN_HOME_DIR}/etc/cloudflared:/home/nonroot/.cloudflared
+    labels:
+      - traefik.enable=false
+    restart: ${WARDEN_RESTART_POLICY:-always}

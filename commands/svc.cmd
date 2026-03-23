@@ -29,6 +29,9 @@ if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
 
     # Check PMA
     eval "$(grep "^WARDEN_PHPMYADMIN_ENABLE" "${WARDEN_HOME_DIR}/.env")"
+
+    # Check Cloudflared
+    eval "$(grep "^WARDEN_CLOUDFLARED_TUNNEL_ID" "${WARDEN_HOME_DIR}/.env" | tr -d '\r')"
 fi
 
 export WARDEN_DOCKER_SOCK="${WARDEN_DOCKER_SOCK:-/var/run/docker.sock}"
@@ -59,6 +62,16 @@ if [[ "${WARDEN_PHPMYADMIN_ENABLE}" == 1 ]]; then
     fi
     DOCKER_COMPOSE_ARGS+=("-f")
     DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.phpmyadmin.yml")
+fi
+
+## add cloudflared docker-compose
+if [[ -n "${WARDEN_CLOUDFLARED_TUNNEL_ID:-}" ]]; then
+    if [[ "${WARDEN_PARAMS[0]}" == "up" ]] && [[ ! -f "${WARDEN_HOME_DIR}/etc/cloudflared/config.yml" ]]; then
+        warning "Cloudflared tunnel ID is set but config.yml is missing."
+        warning "Run 'warden cf create' or 'warden cf update' to generate configuration."
+    fi
+    DOCKER_COMPOSE_ARGS+=("-f")
+    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.cloudflared.yml")
 fi
 
 ## allow an additional docker-compose file to be loaded for global services
@@ -128,4 +141,6 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
     if [[ "${WARDEN_PHPMYADMIN_ENABLE}" == 1 ]]; then
         regeneratePMAConfig
     fi
+
+    regenerateCloudflaredConfig
 fi

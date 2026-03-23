@@ -88,6 +88,14 @@ fi
 [[ ${WARDEN_NGINX} -eq 1 ]] \
     && appendEnvPartialIfExists "nginx"
 
+if [[ -n "${TRAEFIK_PUBLIC_DOMAIN:-}" ]]; then
+    if [[ ${WARDEN_VARNISH:-0} -eq 1 ]]; then
+        appendEnvPartialIfExists "varnish-public"
+    elif [[ ${WARDEN_NGINX} -eq 1 ]]; then
+        appendEnvPartialIfExists "nginx-public"
+    fi
+fi
+
 [[ ${WARDEN_DB} -eq 1 ]] \
     && appendEnvPartialIfExists "db"
 
@@ -232,6 +240,7 @@ ${DOCKER_COMPOSE_COMMAND} \
 if [[ "${WARDEN_PARAMS[0]}" == "stop" || "${WARDEN_PARAMS[0]}" == "down" || \
       "${WARDEN_PARAMS[0]}" == "up" || "${WARDEN_PARAMS[0]}" == "start" ]]; then
     regeneratePMAConfig
+    regenerateCloudflaredConfig
 fi
 
 ## resume mutagen sync if available and php-fpm container id hasn't changed
