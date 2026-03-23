@@ -79,7 +79,7 @@ case "${WARDEN_PARAMS[0]}" in
         fi
 
         if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
-            eval "$(grep "^WARDEN_CLOUDFLARED_TUNNEL_ID" "${WARDEN_HOME_DIR}/.env")"
+            eval "$(grep "^WARDEN_CLOUDFLARED_TUNNEL_ID" "${WARDEN_HOME_DIR}/.env" | tr -d '\r')"
         fi
 
         if [[ -z "${WARDEN_CLOUDFLARED_TUNNEL_ID:-}" ]]; then
@@ -113,7 +113,7 @@ case "${WARDEN_PARAMS[0]}" in
         echo ""
         ## show tunnel ID
         if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
-            eval "$(grep "^WARDEN_CLOUDFLARED_TUNNEL_ID" "${WARDEN_HOME_DIR}/.env")"
+            eval "$(grep "^WARDEN_CLOUDFLARED_TUNNEL_ID" "${WARDEN_HOME_DIR}/.env" | tr -d '\r')"
         fi
 
         if [[ -n "${WARDEN_CLOUDFLARED_TUNNEL_ID:-}" ]]; then
@@ -139,7 +139,7 @@ case "${WARDEN_PARAMS[0]}" in
         ;;
     update)
         if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
-            eval "$(grep "^WARDEN_CLOUDFLARED_TUNNEL_ID" "${WARDEN_HOME_DIR}/.env")"
+            eval "$(grep "^WARDEN_CLOUDFLARED_TUNNEL_ID" "${WARDEN_HOME_DIR}/.env" | tr -d '\r')"
         fi
 
         if [[ -z "${WARDEN_CLOUDFLARED_TUNNEL_ID:-}" ]]; then
@@ -152,7 +152,7 @@ case "${WARDEN_PARAMS[0]}" in
     logout)
         ## check if tunnel exists and warn user to delete it first
         if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
-            eval "$(grep "^WARDEN_CLOUDFLARED_TUNNEL_ID" "${WARDEN_HOME_DIR}/.env")"
+            eval "$(grep "^WARDEN_CLOUDFLARED_TUNNEL_ID" "${WARDEN_HOME_DIR}/.env" | tr -d '\r')"
         fi
         if [[ -n "${WARDEN_CLOUDFLARED_TUNNEL_ID:-}" ]]; then
             warning "A tunnel is still configured (ID: ${WARDEN_CLOUDFLARED_TUNNEL_ID})."

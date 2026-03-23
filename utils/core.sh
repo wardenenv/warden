@@ -102,7 +102,7 @@ function regeneratePMAConfig() {
 
 function regenerateCloudflaredConfig() {
   if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
-    eval "$(grep "^WARDEN_CLOUDFLARED_TUNNEL_ID" "${WARDEN_HOME_DIR}/.env")"
+    eval "$(grep "^WARDEN_CLOUDFLARED_TUNNEL_ID" "${WARDEN_HOME_DIR}/.env" | tr -d '\r')"
   fi
 
   if [[ -z "${WARDEN_CLOUDFLARED_TUNNEL_ID:-}" ]]; then
