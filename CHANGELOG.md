@@ -5,6 +5,7 @@
 
 **Big Changes:**
 * Add Cloudflare Tunnel integration for exposing local projects to the public internet via `warden cf` commands ([#923](https://github.com/wardenenv/warden/pull/923) by @lbajsarowicz)
+* Add Quick Tunnel support for instant public URLs without custom domains (`WARDEN_QUICK_TUNNEL=1`) (by @lbajsarowicz)
 
 **Bug Fixes:**
 * Add support to dynamically connect peered services based on enabled status ([#892](https://github.com/wardenenv/warden/issues/892) by @bap14, [#919](https://github.com/wardenenv/warden/issues/919) by @xinsodev)
