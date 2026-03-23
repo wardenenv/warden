@@ -12,6 +12,7 @@ WARDEN_USAGE=$(cat <<EOF
   status            Show tunnel and connected domains
   update            Regenerate cloudflared config and restart
   logout            Remove all cloudflared credentials and config
+  quick             Show the Quick Tunnel URL for current project
 
 \033[33mOptions:\033[0m
   -h, --help        Display this help menu
@@ -27,5 +28,10 @@ WARDEN_USAGE=$(cat <<EOF
   3. warden svc up            # Start global services (includes cloudflared)
   4. Set TRAEFIK_PUBLIC_DOMAIN in project .env
   5. warden env up            # Start project (config auto-generated)
+
+\033[33mQuick Tunnel (no setup needed):\033[0m
+  1. Add WARDEN_QUICK_TUNNEL=1 to project .env
+  2. warden env up            # Starts quick tunnel container
+  3. warden cf quick          # Shows the random public URL
 EOF
 )

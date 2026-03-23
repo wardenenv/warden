@@ -1,0 +1,5 @@
+services:
+  quick-tunnel:
+    command: tunnel --url http://varnish:80
+    depends_on:
+      - varnish

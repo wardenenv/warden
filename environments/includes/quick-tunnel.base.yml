@@ -1,0 +1,9 @@
+services:
+  quick-tunnel:
+    image: ${WARDEN_IMAGE_REPOSITORY:-docker.io/wardenenv}/cloudflared:latest
+    command: tunnel --url http://nginx:80
+    labels:
+      - traefik.enable=false
+    depends_on:
+      - nginx
+    restart: ${WARDEN_RESTART_POLICY:-always}

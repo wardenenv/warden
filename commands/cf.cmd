@@ -179,6 +179,37 @@ case "${WARDEN_PARAMS[0]}" in
 
         echo "Cloudflared configuration removed."
         ;;
+    quick)
+        WARDEN_ENV_PATH="$(locateEnvPath 2>/dev/null)" || true
+
+        if [[ -z "${WARDEN_ENV_PATH:-}" ]]; then
+            fatal "Not in a Warden environment directory. Navigate to a project with WARDEN_QUICK_TUNNEL=1."
+        fi
+
+        source "${WARDEN_DIR}/utils/env.sh"
+        loadEnvConfig "${WARDEN_ENV_PATH}" || exit $?
+
+        if [[ ${WARDEN_QUICK_TUNNEL:-0} -ne 1 ]]; then
+            fatal "WARDEN_QUICK_TUNNEL is not enabled for this project. Add WARDEN_QUICK_TUNNEL=1 to your .env file."
+        fi
+
+        ## extract the quick tunnel URL from container logs
+        QUICK_URL=$(${DOCKER_COMPOSE_COMMAND} \
+            --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
+            logs quick-tunnel 2>/dev/null | grep -oE 'https://[a-zA-Z0-9-]+\.trycloudflare\.com' | tail -1)
+
+        if [[ -n "${QUICK_URL}" ]]; then
+            echo ""
+            echo "Quick Tunnel URL: ${QUICK_URL}"
+            echo ""
+            echo "This URL is temporary and changes when the container restarts."
+        else
+            echo ""
+            echo "Quick Tunnel URL not found yet."
+            echo "The container may still be starting. Try:"
+            echo "  warden env logs quick-tunnel"
+        fi
+        ;;
     *)
         fatal "Unknown subcommand '${WARDEN_PARAMS[0]}'. Run 'warden cf help' for usage."
         ;;
