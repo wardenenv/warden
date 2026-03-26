@@ -51,6 +51,15 @@ then
     -k /Library/Keychains/System.keychain "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem"
 fi
 
+if hasWindowsCertificateBridge; then
+  echo "==> Trusting root certificate in Windows CurrentUser store"
+  if ! windows_trust_status="$(trustRootCaInWindows "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem")"; then
+    warning "Unable to trust the Warden root certificate in Windows. Windows browsers may continue to warn until it is imported manually."
+  elif [[ "${windows_trust_status}" == "imported" ]]; then
+    echo "==> Root certificate imported into Windows CurrentUser Root store"
+  fi
+fi
+
 ## configure resolver for .test domains on Mac OS only as Linux lacks support
 ## for BSD like per-TLD configuration as is done at /etc/resolver/test on Mac
 if [[ "$OSTYPE" == "darwin"* ]]; then
