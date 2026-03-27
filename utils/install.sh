@@ -1,6 +1,74 @@
 #!/usr/bin/env bash
 [[ ! ${WARDEN_DIR} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
 
+source "${WARDEN_DIR}/utils/core.sh"
+
+function isWsl () {
+  [[ -n "${WSL_DISTRO_NAME:-}" ]] && return 0
+  [[ -r /proc/sys/kernel/osrelease ]] && grep -qiE '(microsoft|wsl)' /proc/sys/kernel/osrelease && return 0
+  [[ -r /proc/version ]] && grep -qiE '(microsoft|wsl)' /proc/version && return 0
+  return 1
+}
+
+function hasWindowsCertificateBridge () {
+  isWsl && command -v powershell.exe >/dev/null 2>&1
+}
+
+function trustRootCaInWindows () {
+  local cert_path="${1}"
+  local windows_cert_path powershell_script trust_status
+
+  [[ -f "${cert_path}" ]] || return 1
+
+  windows_cert_path="$(wslpath -w "${cert_path}")" || return 1
+  windows_cert_path="${windows_cert_path//\'/\'\'}"
+
+  read -r -d '' powershell_script <<-EOT || true
+		& {
+		  \$certPath = '${windows_cert_path}'
+		  if (-not (Test-Path \$certPath)) {
+		    throw "Certificate path not found: \$certPath"
+		  }
+
+		  \$cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2(\$certPath)
+		  \$store = New-Object System.Security.Cryptography.X509Certificates.X509Store('Root', 'CurrentUser')
+		  \$store.Open([System.Security.Cryptography.X509Certificates.OpenFlags]::ReadWrite)
+
+		  try {
+		    \$existing = \$store.Certificates | Where-Object { \$_.Thumbprint -eq \$cert.Thumbprint }
+		    if (\$existing) {
+		      Write-Output 'present'
+		      return
+		    }
+
+		    \$staleWardenRoots = @(
+		      \$store.Certificates | Where-Object {
+		        \$_.Thumbprint -ne \$cert.Thumbprint -and
+		        \$_.Subject -like '*O=Warden.dev*' -and
+		        \$_.Subject -like '*CN=Warden Proxy Local CA*'
+		      }
+		    )
+		    \$store.Add(\$cert)
+		    foreach (\$staleCert in \$staleWardenRoots) {
+		      \$store.Remove(\$staleCert)
+		    }
+		    if (\$staleWardenRoots.Count -gt 0) {
+		      Write-Output 'replaced'
+		    } else {
+		      Write-Output 'imported'
+		    }
+		  } finally {
+		    \$store.Close()
+		  }
+		}
+	EOT
+
+  trust_status="$(powershell.exe -NoProfile -NonInteractive -Command "${powershell_script}" | tr -d '\r')" || return 1
+  [[ "${trust_status}" =~ ^(present|imported|replaced)$ ]] || return 1
+
+  echo "${trust_status}"
+}
+
 function installSshConfig () {
   if ! grep '## WARDEN START ##' /etc/ssh/ssh_config >/dev/null; then
     echo "==> Configuring sshd tunnel in host ssh_config (requires sudo privileges)"
