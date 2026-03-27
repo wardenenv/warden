@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 [[ ! ${WARDEN_DIR} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
 
+source "${WARDEN_DIR}/utils/core.sh"
+
 function isWsl () {
   [[ -n "${WSL_DISTRO_NAME:-}" ]] && return 0
   [[ -r /proc/sys/kernel/osrelease ]] && grep -qiE '(microsoft|wsl)' /proc/sys/kernel/osrelease && return 0
