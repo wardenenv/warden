@@ -39,8 +39,23 @@ function trustRootCaInWindows () {
 		      return
 		    }
 
+		    \$staleWardenRoots = @(
+		      \$store.Certificates | Where-Object {
+		        \$_.Thumbprint -ne \$cert.Thumbprint -and
+		        \$_.Subject -like '*O=Warden.dev*' -and
+		        \$_.Subject -like '*CN=Warden Proxy Local CA*'
+		      }
+		    )
+		    foreach (\$staleCert in \$staleWardenRoots) {
+		      \$store.Remove(\$staleCert)
+		    }
+
 		    \$store.Add(\$cert)
-		    Write-Output 'imported'
+		    if (\$staleWardenRoots.Count -gt 0) {
+		      Write-Output 'replaced'
+		    } else {
+		      Write-Output 'imported'
+		    }
 		  } finally {
 		    \$store.Close()
 		  }
@@ -48,7 +63,7 @@ function trustRootCaInWindows () {
 	EOT
 
   trust_status="$(powershell.exe -NoProfile -NonInteractive -Command "${powershell_script}" | tr -d '\r')" || return 1
-  [[ "${trust_status}" =~ ^(present|imported)$ ]] || return 1
+  [[ "${trust_status}" =~ ^(present|imported|replaced)$ ]] || return 1
 
   echo "${trust_status}"
 }

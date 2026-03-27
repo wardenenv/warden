@@ -57,6 +57,8 @@ if hasWindowsCertificateBridge; then
     warning "Unable to trust the Warden root certificate in Windows. Windows browsers may continue to warn until it is imported manually."
   elif [[ "${windows_trust_status}" == "imported" ]]; then
     echo "==> Root certificate imported into Windows CurrentUser Root store"
+  elif [[ "${windows_trust_status}" == "replaced" ]]; then
+    echo "==> Root certificate replaced in Windows CurrentUser Root store"
   fi
 fi
 
