@@ -46,11 +46,10 @@ function trustRootCaInWindows () {
 		        \$_.Subject -like '*CN=Warden Proxy Local CA*'
 		      }
 		    )
+		    \$store.Add(\$cert)
 		    foreach (\$staleCert in \$staleWardenRoots) {
 		      \$store.Remove(\$staleCert)
 		    }
-
-		    \$store.Add(\$cert)
 		    if (\$staleWardenRoots.Count -gt 0) {
 		      Write-Output 'replaced'
 		    } else {
