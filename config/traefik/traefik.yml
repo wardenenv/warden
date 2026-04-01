@@ -23,3 +23,7 @@ log:
 global:
   checkNewVersion: false
   sendAnonymousUsage: false
+# v2 BC compatibility for router rule syntax (global default) @see https://doc.traefik.io/traefik/v3.0/migration/v2-to-v3/#step-1-prepare-configurations-and-test-v3
+# v3 rule syntax is opt-in per router via label traefik.http.routers.some-router.ruleSyntax=v3
+core:
+  defaultRuleSyntax: v2

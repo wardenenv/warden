@@ -3,6 +3,9 @@
 ## UNRELEASED
 [All Commits](https://github.com/wardenenv/warden/compare/0.16.0..main)
 
+**Big Changes:**
+* Traefik has been updated from v2 to v3.  For compatibility, we have kept the v2 rule engine as the default.  It is possible to opt-in to v3 rule syntax on a per-router basis.
+
 **Bug Fixes:**
 * Add support to dynamically connect peered services based on enabled status ([#892](https://github.com/wardenenv/warden/issues/892) by @bap14, [#919](https://github.com/wardenenv/warden/issues/919) by @xinsodev)
 * Fix WARDEN_DOCKER_SOCK error running `warden sign-certificate` ([#907](https://github.com/wardenenv/warden/issues/907) by @bap14)
