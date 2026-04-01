@@ -1,0 +1,49 @@
+services:
+  dns-over-https-pki:
+    container_name: dns-over-https-pki
+    image: busybox:1.36.1
+    entrypoint:
+      - /bin/sh
+      - -c
+    command:
+      - exec httpd -f -v -p 80 -h /www
+    volumes:
+      - ${WARDEN_HOME_DIR}/etc/pki-public:/www:ro
+    labels:
+      - traefik.enable=true
+      # pki must be explicetly opt-in for plain http instead of https for proper revocation endpoint behavior
+      - traefik.http.routers.dns-over-https-pki.rule=PathPrefix(`/.warden/pki/`)
+      - traefik.http.routers.dns-over-https-pki.entrypoints=http
+      - traefik.http.routers.dns-over-https-pki.priority=1000
+      - traefik.http.routers.dns-over-https-pki.service=dns-over-https-pki
+      - traefik.http.routers.dns-over-https-pki.middlewares=dns-over-https-pki-strip-prefix
+      - traefik.http.middlewares.dns-over-https-pki-strip-prefix.stripprefix.prefixes=/.warden/pki
+      - traefik.http.services.dns-over-https-pki.loadbalancer.server.port=80
+    restart: ${WARDEN_RESTART_POLICY:-always}
+
+  dns-over-https:
+    container_name: dns-over-https
+    image: powerdns/dnsdist-19:1.9.11
+    depends_on:
+      - dnsmasq
+    environment:
+      WARDEN_DNS_OVER_HTTPS_UPSTREAM_HOST: dnsmasq
+      WARDEN_DNS_OVER_HTTPS_CONFIG: |-
+        -- Accept any source that can already reach this local-dev service. Access control is handled by Docker networking and Traefik exposure.
+        setACL({"0.0.0.0/0", "::/0"})
+
+        newServer({address="__WARDEN_DNS_OVER_HTTPS_UPSTREAM__:53"})
+        addDOHLocal("0.0.0.0:8053", nil, nil, {"/dns-query"})
+    volumes:
+      - ${WARDEN_SERVICE_DIR}/docker/dns-over-https/docker-entrypoint.sh:/usr/local/bin/warden-dns-over-https-entrypoint.sh:ro
+    entrypoint:
+      - /usr/local/bin/warden-dns-over-https-entrypoint.sh
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.dns-over-https.tls=true
+      - traefik.http.routers.dns-over-https.priority=100
+      - traefik.http.routers.dns-over-https.rule=Host(`doh.${WARDEN_SERVICE_DOMAIN:-warden.test}`) && Path(`/dns-query`)
+      - traefik.http.routers.dns-over-https.service=dns-over-https
+      - traefik.http.services.dns-over-https.loadbalancer.server.port=8053
+      - traefik.http.services.dns-over-https.loadbalancer.server.scheme=h2c
+    restart: ${WARDEN_RESTART_POLICY:-always}

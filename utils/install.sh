@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 [[ ! ${WARDEN_DIR} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
 
+source "${WARDEN_DIR}/utils/core.sh"
+
+# Load WSL/Windows bridge helpers. This only defines functions;
+# install.cmd and doctor.cmd still decide when to call them.
+source "${WARDEN_DIR}/utils/windows/install.sh"
+
 function installSshConfig () {
   if ! grep '## WARDEN START ##' /etc/ssh/ssh_config >/dev/null; then
     echo "==> Configuring sshd tunnel in host ssh_config (requires sudo privileges)"
