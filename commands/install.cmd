@@ -86,6 +86,30 @@ fi
 ## append settings for tunnel.warden.test in /etc/ssh/ssh_config
 installSshConfig
 
+## install shell completions
+WARDEN_COMPLETIONS_DIR="${WARDEN_HOME_DIR}/completions"
+mkdir -p "${WARDEN_COMPLETIONS_DIR}"
+
+# symlink completion files into ~/.warden/completions/
+ln -sf "${WARDEN_DIR}/completions/warden.bash" "${WARDEN_COMPLETIONS_DIR}/warden.bash"
+ln -sf "${WARDEN_DIR}/completions/_warden" "${WARDEN_COMPLETIONS_DIR}/_warden"
+
+# Bash: source completion from ~/.bashrc if not already present
+BASHRC="${HOME}/.bashrc"
+if [[ -f "${BASHRC}" ]] && ! grep -q 'warden/completions/warden.bash' "${BASHRC}" 2>/dev/null; then
+  echo "==> Adding warden bash completion to ${BASHRC}"
+  printf '\n# Warden CLI bash completion\n[ -f "%s/warden.bash" ] && source "%s/warden.bash"\n' \
+    "${WARDEN_COMPLETIONS_DIR}" "${WARDEN_COMPLETIONS_DIR}" >> "${BASHRC}"
+fi
+
+# Zsh: add fpath entry to ~/.zshrc if not already present
+ZSHRC="${HOME}/.zshrc"
+if [[ -f "${ZSHRC}" || "$OSTYPE" == "darwin"* ]] && ! grep -q 'warden/completions' "${ZSHRC}" 2>/dev/null; then
+  echo "==> Adding warden zsh completion to ${ZSHRC}"
+  printf '\n# Warden CLI zsh completion\nfpath=("%s" $fpath)\nautoload -Uz compinit && compinit\n' \
+    "${WARDEN_COMPLETIONS_DIR}" >> "${ZSHRC}"
+fi
+
 ## Add optional Warden configuration file
 if [[ ! -f "${WARDEN_HOME_DIR}/.env" ]]; then
 	cat >> "${WARDEN_HOME_DIR}/.env" <<-EOT
