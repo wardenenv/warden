@@ -8,6 +8,7 @@ if [[ ! -d "${WARDEN_SSL_DIR}/rootca" ]]; then
 
     touch "${WARDEN_SSL_DIR}/rootca/index.txt"
     echo 1000 > "${WARDEN_SSL_DIR}/rootca/serial"
+    echo 1000 > "${WARDEN_SSL_DIR}/rootca/crlnumber"
 fi
 
 # create CA root certificate if none present
@@ -24,6 +25,21 @@ if [[ ! -f "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem" ]]; then
     -out "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem"         \
     -subj "/C=US/O=Warden.dev/CN=Warden Proxy Local CA ($(hostname -s))"
 fi
+
+if [[ ! -f "${WARDEN_SSL_DIR}/rootca/crlnumber" ]]; then
+  echo 1000 > "${WARDEN_SSL_DIR}/rootca/crlnumber"
+fi
+
+if [[ ! -f "${WARDEN_SSL_DIR}/rootca/crl/ca.crl.pem" ]]; then
+  echo "==> Generating certificate revocation list for local root certificate"
+  openssl ca -gencrl -config "${WARDEN_DIR}/config/openssl/rootca.conf" \
+    -out "${WARDEN_SSL_DIR}/rootca/crl/ca.crl.pem"
+fi
+
+if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
+  eval "$(grep "^WARDEN_SERVICE_DOMAIN" "${WARDEN_HOME_DIR}/.env")"
+fi
+WARDEN_SERVICE_DOMAIN="${WARDEN_SERVICE_DOMAIN:-warden.test}"
 
 ## trust root ca differently on Fedora, Ubuntu and macOS
 if [[ "$OSTYPE" =~ ^linux ]] \
@@ -49,6 +65,12 @@ then
   echo "==> Trusting root certificate (requires sudo privileges)"
   sudo security add-trusted-cert -d -r trustRoot \
     -k /Library/Keychains/System.keychain "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem"
+fi
+
+if hasWindowsBridge; then
+  installWindowsRootCa "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem"
+  installWindowsDohTemplate "${WARDEN_SERVICE_DOMAIN}"
+  installWindowsGlobalHosts "${WARDEN_SERVICE_DOMAIN}"
 fi
 
 ## configure resolver for .test domains on Mac OS only as Linux lacks support
@@ -93,6 +115,8 @@ if [[ ! -f "${WARDEN_HOME_DIR}/.env" ]]; then
 		WARDEN_PORTAINER_ENABLE=0
 		# Set to "0" to disable DNSMasq
 		WARDEN_DNSMASQ_ENABLE=1
+		# Set to "1" to enable experimental DNS-over-HTTPS at https://doh.\${WARDEN_SERVICE_DOMAIN:-warden.test}/dns-query
+		WARDEN_DNS_OVER_HTTPS_ENABLE=0
 		# Set to "0" to disable phpMyAdmin
 		WARDEN_PHPMYADMIN_ENABLE=1
 		# Set to "0" to disabled Mutagen.  Keep commented out to use System default (Darwin defaults to 1)
