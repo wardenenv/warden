@@ -1,0 +1,12 @@
+services:
+  db:
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-maho}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-maho}
+      - MYSQL_USER=${MYSQL_USER:-maho}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-maho}
+    command:
+      - mysqld
+      - --max_allowed_packet=1024M
+      - --explicit_defaults_for_timestamp=on
+      - --transaction-isolation=READ-COMMITTED

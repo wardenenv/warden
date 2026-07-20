@@ -1,0 +1,13 @@
+services:
+  nginx:
+    environment:
+      - NGINX_PUBLIC=/public
+      - NGINX_TEMPLATE=maho.conf
+
+  php-fpm:
+    environment:
+      - MAGE_IS_DEVELOPER_MODE=1
+
+  php-debug:
+    environment:
+      - MAGE_IS_DEVELOPER_MODE=1
