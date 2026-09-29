@@ -43,6 +43,22 @@ echo -e "\033[32mWarden global .env:\033[0m"
 cat ${WARDEN_HOME_DIR}/.env
 echo
 
+echo -e "\033[32mTraefik version in use:\033[0m"
+docker container inspect traefik --format '{{ .Config.Image }} ({{ .State.Status }})' 2>/dev/null \
+    || echo "traefik container is not present"
+echo
+
+echo -e "\033[32mTraefik static configuration:\033[0m"
+if [[ ! -f "${WARDEN_HOME_DIR}/etc/traefik/traefik.yml" ]]; then
+    echo "not present; run 'warden svc up'"
+elif cmp -s "${WARDEN_DIR}/config/traefik/traefik.yml" "${WARDEN_HOME_DIR}/etc/traefik/traefik.yml"; then
+    echo "in sync with ${WARDEN_DIR}/config/traefik/traefik.yml"
+else
+    echo "differs from ${WARDEN_DIR}/config/traefik/traefik.yml (shipped < | > in use):"
+    diff "${WARDEN_DIR}/config/traefik/traefik.yml" "${WARDEN_HOME_DIR}/etc/traefik/traefik.yml"
+fi
+echo
+
 echo -e "\033[32mWarden service override via Docker compose file:\033[0m"
 if [[ -f ${WARDEN_HOME_DIR}/docker-compose.yml ]]; then
     echo -e "\033[33mWarden services have additional service configuration added or overridden via ${WARDEN_HOME_DIR}/docker-compose.yml file.\033[0m"

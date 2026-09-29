@@ -10,6 +10,12 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
     assertSvcRunning
 fi
 
+## keep Traefik's static configuration current on environment lifecycle commands, since
+## these are reached far more often than 'warden svc up' after an upgrade
+if containsElement "${WARDEN_PARAMS[0]}" up start restart; then
+    assertTraefikStaticConfig
+fi
+
 HOST_UID=$(id -u)
 HOST_GID=$(id -g)
 
