@@ -29,6 +29,10 @@ WARDEN_USAGE=$(cat <<EOF
   magento1            Nginx, php-fpm, db (mariadb), and redis services
                       pre-configured for running Magento 1
 
+  maho                Nginx, php-fpm, and db (mariadb) services pre-configured
+                      for running Maho; no redis, varnish or elasticsearch as
+                      Maho requires none of them
+
   symfony             Nginx, php-fpm, db (mariadb), and redis services
                       pre-configured for running Symfony 4+
                       Due to the fact that Symfony uses '.env' file too,
