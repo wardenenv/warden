@@ -1,0 +1,9 @@
+services:
+  share:
+    hostname: "${WARDEN_ENV_NAME}-share"
+    image: ngrok/ngrok:3
+    environment:
+      - NGROK_AUTHTOKEN=${WARDEN_NGROK_AUTHTOKEN}
+    command: http http://${WARDEN_SHARE_UPSTREAM}:80 --log stdout --log-format json ${WARDEN_SHARE_NGROK_URL_ARG}
+    labels:
+      - traefik.enable=false

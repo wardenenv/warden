@@ -1,0 +1,7 @@
+services:
+  share:
+    hostname: "${WARDEN_ENV_NAME}-share"
+    image: ${WARDEN_IMAGE_REPOSITORY:-docker.io/wardenenv}/cloudflared:latest
+    command: tunnel --url http://${WARDEN_SHARE_UPSTREAM}:80
+    labels:
+      - traefik.enable=false
