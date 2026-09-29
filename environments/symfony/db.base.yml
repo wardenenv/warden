@@ -5,3 +5,4 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE:-symfony}
       - MYSQL_USER=${MYSQL_USER:-symfony}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD:-symfony}
+      - MYSQL_DISTRIBUTION=${MYSQL_DISTRIBUTION:-mariadb}

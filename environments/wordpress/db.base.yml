@@ -5,3 +5,4 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE:-wordpress}
       - MYSQL_USER=${MYSQL_USER:-wordpress}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD:-wordpress}
+      - MYSQL_DISTRIBUTION=${MYSQL_DISTRIBUTION:-mariadb}

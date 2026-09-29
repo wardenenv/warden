@@ -7,8 +7,8 @@ services:
       - MYSQL_DATABASE=magento_integration_tests
       - MYSQL_USER=${MYSQL_USER:-magento}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD:-magento}
+      - MYSQL_DISTRIBUTION=${MYSQL_DISTRIBUTION:-mariadb}
     command:
-      - mysqld
       - --max_allowed_packet=1024M
       - --explicit_defaults_for_timestamp=on
     volumes:

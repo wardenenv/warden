@@ -5,3 +5,4 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE:-laravel}
       - MYSQL_USER=${MYSQL_USER:-laravel}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD:-laravel}
+      - MYSQL_DISTRIBUTION=${MYSQL_DISTRIBUTION:-mariadb}

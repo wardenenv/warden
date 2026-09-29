@@ -27,21 +27,33 @@ eval "$(
     ' | grep "^MYSQL_"
 )"
 
+## determine the client commands to use based on the database distribution
+case "${MYSQL_DISTRIBUTION}" in
+    mariadb)
+        clientCmd="mariadb"
+        dumpCmd="mariadb-dump"
+        ;;
+    *)
+        clientCmd="mysql"
+        dumpCmd="mysqldump"
+        ;;
+esac
+
 ## sub-command execution
 case "${WARDEN_PARAMS[0]}" in
     connect)
         "$WARDEN_BIN" env exec db \
-            mysql -u"${MYSQL_USER}" -p"${MYSQL_PASSWORD}" --database="${MYSQL_DATABASE}" "${WARDEN_PARAMS[@]:1}" "$@"
+            "${clientCmd}" -u"${MYSQL_USER}" -p"${MYSQL_PASSWORD}" --database="${MYSQL_DATABASE}" "${WARDEN_PARAMS[@]:1}" "$@"
         ;;
     import)
         LC_ALL=C sed -E 's/DEFINER[ ]*=[ ]*`[^`]+`@`[^`]+`/DEFINER=CURRENT_USER/g' \
             | LC_ALL=C sed -E '/\@\@(GLOBAL\.GTID_PURGED|SESSION\.SQL_LOG_BIN)/d' \
             | "$WARDEN_BIN" env exec -T db \
-            mysql -u"${MYSQL_USER}" -p"${MYSQL_PASSWORD}" --database="${MYSQL_DATABASE}" "${WARDEN_PARAMS[@]:1}" "$@"
+            "${clientCmd}" -u"${MYSQL_USER}" -p"${MYSQL_PASSWORD}" --database="${MYSQL_DATABASE}" "${WARDEN_PARAMS[@]:1}" "$@"
         ;;
     dump)
             "$WARDEN_BIN" env exec -T db \
-            mysqldump -u"${MYSQL_USER}" -p"${MYSQL_PASSWORD}" "${MYSQL_DATABASE}" "${WARDEN_PARAMS[@]:1}" "$@"
+            "${dumpCmd}" -u"${MYSQL_USER}" -p"${MYSQL_PASSWORD}" "${MYSQL_DATABASE}" "${WARDEN_PARAMS[@]:1}" "$@"
         ;;
     upgrade)
             if [ "$MYSQL_DISTRIBUTION" == "mysql" ]; then
@@ -54,7 +66,7 @@ case "${WARDEN_PARAMS[0]}" in
             fi
 
             "$WARDEN_BIN" env exec -T db \
-            ${upgradeCmd} -p"${MYSQL_ROOT_PASSWORD}"
+            "${upgradeCmd}" -p"${MYSQL_ROOT_PASSWORD}"
         ;;
     *)
         fatal "The command \"${WARDEN_PARAMS[0]}\" does not exist. Please use --help for usage."

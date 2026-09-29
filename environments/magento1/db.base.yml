@@ -5,6 +5,6 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE:-magento}
       - MYSQL_USER=${MYSQL_USER:-magento}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD:-magento}
+      - MYSQL_DISTRIBUTION=${MYSQL_DISTRIBUTION:-mariadb}
     command:
-      - mysqld
       - --max_allowed_packet=1024M
