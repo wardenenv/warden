@@ -1,0 +1,18 @@
+services:
+  share:
+    hostname: "${WARDEN_ENV_NAME}-share"
+    image: tailscale/tailscale:stable
+    environment:
+      - TS_AUTHKEY=${WARDEN_TAILSCALE_AUTHKEY}
+      - TS_HOSTNAME=${WARDEN_SHARE_TAILSCALE_HOSTNAME}
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_USERSPACE=true
+      - TS_SERVE_CONFIG=/config/serve.json
+    volumes:
+      - sharetailscale:/var/lib/tailscale
+      - ./.warden/share-tailscale.json:/config/serve.json:ro
+    labels:
+      - traefik.enable=false
+
+volumes:
+  sharetailscale:

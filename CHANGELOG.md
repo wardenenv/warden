@@ -5,6 +5,10 @@
 
 **Big Changes:**
 * Traefik has been updated from v2 to v3.  For compatibility, we have kept the v2 rule engine as the default.  It is possible to opt-in to v3 rule syntax on a per-router basis.
+* Add `warden share` for exposing local projects to the public internet, with Cloudflare Tunnel as the first provider ([#923](https://github.com/wardenenv/warden/pull/923) by @lbajsarowicz)
+* Add project-scope share providers with Cloudflare Quick Tunnel (`WARDEN_SHARE=quick`) and `warden share url` ([#947](https://github.com/wardenenv/warden/pull/947) by @lbajsarowicz)
+* Add ngrok share provider (`WARDEN_SHARE=ngrok`) ([#948](https://github.com/wardenenv/warden/pull/948) by @lbajsarowicz)
+* Add Tailscale share provider (`WARDEN_SHARE=tailscale`, Serve by default, Funnel opt-in) ([#949](https://github.com/wardenenv/warden/pull/949) by @lbajsarowicz)
 
 **Security Fixes:**
 * Fix arbitrary command execution via project `.env` files. The previous loader used `eval "$(grep ...)"` against any project's `.env`, allowing shell metacharacters (e.g. `$(...)` or backticks) inside `WARDEN_*`, `TRAEFIK_*` or `PHP_*` values to execute on the developer's host whenever `warden env *` was run. Replaced with a strict KEY=VALUE parser that validates identifiers and never evaluates values. (by @lbajsarowicz)
