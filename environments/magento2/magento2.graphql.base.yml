@@ -24,6 +24,7 @@ services:
     extra_hosts: *extra_hosts
     labels:
       - traefik.enable=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-graphql.ruleSyntax=v2
       - traefik.http.routers.${WARDEN_ENV_NAME}-graphql.tls=true
       - traefik.http.routers.${WARDEN_ENV_NAME}-graphql.rule=(HostRegexp(`{subdomain:.+}.${TRAEFIK_DOMAIN}`) || Host(`${TRAEFIK_DOMAIN}`)) && Path(`/graphql`)
       - traefik.http.services.${WARDEN_ENV_NAME}-graphql.loadbalancer.server.port=9501
