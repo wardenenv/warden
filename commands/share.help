@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+[[ ! ${WARDEN_DIR} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
+
+# shellcheck disable=SC2034  # consumed by commands/usage.cmd after sourcing
+WARDEN_USAGE=$(cat <<EOF
+\033[33mUsage:\033[0m
+  share <subcommand>
+
+\033[33mSubcommands:\033[0m
+  status            Show provider status (and the public URL in project scope)
+  url               Print the public URL of the current project
+  update            Regenerate the provider configuration and restart it when it changed
+
+\033[33mGlobal provider (~/.warden/.env):\033[0m
+  Selected with WARDEN_SHARE_PROVIDER; the agent runs in 'warden svc' and routes
+  through Traefik. Projects opt-in with TRAEFIK_PUBLIC_DOMAIN in their .env.
+
+  cloudflared       Named Cloudflare Tunnel on your own domain
+    login           Authenticate with Cloudflare (opens browser)
+    create [name]   Create a new tunnel (default name: warden)
+    delete          Delete the tunnel from Cloudflare
+    logout          Remove all cloudflared credentials and config
+
+\033[33mProject provider (.env):\033[0m
+  Selected with WARDEN_SHARE; the agent runs as the 'share' service inside the
+  project stack and forwards to varnish or nginx directly. Credentials, when a
+  provider needs them, are read from ~/.warden/.env only.
+
+  quick             Cloudflare Quick Tunnel, no account needed
+                    (no subcommands; the URL changes on every start)
+
+\033[33mOptions:\033[0m
+  -h, --help        Display this help menu
+
+\033[33mSetup (global provider):\033[0m
+  1. Set WARDEN_SHARE_PROVIDER=cloudflared in ~/.warden/.env
+  2. warden share login       # Authenticate with the provider
+  3. warden share create      # Create tunnel
+  4. warden svc up            # Start global services (includes the share agent)
+  5. Set TRAEFIK_PUBLIC_DOMAIN in project .env
+  6. warden env up            # Start project (config auto-generated)
+
+\033[33mSetup (project provider):\033[0m
+  1. Set WARDEN_SHARE=quick in the project .env
+  2. warden env up
+  3. warden share url
+EOF
+)

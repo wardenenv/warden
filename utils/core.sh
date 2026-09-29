@@ -99,3 +99,157 @@ function regeneratePMAConfig() {
     >&2 echo "phpMyAdmin configuration regenerated."
   fi
 }
+
+## reads the scope declaration without sourcing the provider, so an unusable
+## provider can still be listed in an error message
+function shareProviderScope() {
+  local providerFile="${1}" declaration=""
+
+  declaration="$(grep -m1 -E '^SHARE_PROVIDER_SCOPE=' "${providerFile}" 2>/dev/null || true)"
+  declaration="${declaration%$'\r'}"
+  declaration="${declaration#SHARE_PROVIDER_SCOPE=}"
+  declaration="${declaration%%[[:space:]]*}"
+  declaration="${declaration%%#*}"
+  declaration="${declaration%\"}"
+  declaration="${declaration#\"}"
+  declaration="${declaration%\'}"
+  declaration="${declaration#\'}"
+
+  echo "${declaration:-global}"
+}
+
+## provider-owned project variables; empty when the provider has none
+function shareProviderEnvPrefix() {
+  local providerFile="${1}" declaration=""
+
+  declaration="$(grep -m1 -E '^SHARE_PROVIDER_ENV_PREFIX=' "${providerFile}" 2>/dev/null || true)"
+  declaration="${declaration%$'\r'}"
+  declaration="${declaration#SHARE_PROVIDER_ENV_PREFIX=}"
+  declaration="${declaration%%[[:space:]]*}"
+  declaration="${declaration%%#*}"
+  declaration="${declaration%\"}"
+  declaration="${declaration#\"}"
+  declaration="${declaration%\'}"
+  declaration="${declaration#\'}"
+
+  if [[ ! "${declaration}" =~ ^[A-Z0-9_]*$ ]]; then
+    fatal "SHARE_PROVIDER_ENV_PREFIX in ${providerFile} must be an uppercase identifier prefix (got '${declaration}')."
+  fi
+
+  echo "${declaration}"
+}
+
+function shareAvailableProviders() {
+  local scope="${1:-}" providers="" candidate name
+  for candidate in "${WARDEN_DIR}"/utils/share/*.sh; do
+    [[ -f "${candidate}" ]] || continue
+
+    name="${candidate##*/}"
+    name="${name%.sh}"
+
+    if [[ -n "${scope}" ]] && [[ "$(shareProviderScope "${candidate}")" != "${scope}" ]]; then
+      continue
+    fi
+
+    providers="${providers}${name} "
+  done
+
+  echo "${providers% }"
+}
+
+function assertShareProviderName() {
+  local name="${1}" selector="${2}" scope="${3}"
+
+  if [[ ! "${name}" =~ ^[a-z0-9-]+$ ]] || [[ ! -f "${WARDEN_DIR}/utils/share/${name}.sh" ]]; then
+    fatal "Unknown share provider '${name}' in ${selector}. Available ${scope}-scope providers: $(shareAvailableProviders "${scope}")"
+  fi
+
+  if [[ "$(shareProviderScope "${WARDEN_DIR}/utils/share/${name}.sh")" != "${scope}" ]]; then
+    local other="global" otherSelector="WARDEN_SHARE_PROVIDER in ${WARDEN_HOME_DIR}/.env"
+    if [[ "${scope}" == "global" ]]; then
+      other="project"
+      otherSelector="WARDEN_SHARE in the project .env"
+    fi
+
+    fatal "Share provider '${name}' is ${other}-scope and cannot be selected with ${selector}. Select it with ${otherSelector}. Available ${scope}-scope providers: $(shareAvailableProviders "${scope}")"
+  fi
+}
+
+function loadShareConfig() {
+  unset WARDEN_SHARE_PROVIDER
+  loadEnvFile "${WARDEN_HOME_DIR}/.env" "WARDEN_SHARE_"
+  WARDEN_SHARE_PROVIDER="${WARDEN_SHARE_PROVIDER:-}"
+  export WARDEN_SHARE_PROVIDER
+
+  if [[ -n "${WARDEN_SHARE_PROVIDER}" ]]; then
+    assertShareProviderName "${WARDEN_SHARE_PROVIDER}" "WARDEN_SHARE_PROVIDER" "global"
+
+    # shellcheck source=/dev/null
+    source "${WARDEN_DIR}/utils/share/${WARDEN_SHARE_PROVIDER}.sh"
+  fi
+}
+
+## mirrors the WARDEN_VARNISH default commands/env.cmd applies per environment
+## type, so share.cmd and env.cmd agree on where the agent forwards
+function resolveShareUpstream() {
+  local varnish="${WARDEN_VARNISH:-}"
+
+  if [[ -z "${varnish}" ]] && [[ "${WARDEN_ENV_TYPE:-}" == "magento2" ]]; then
+    varnish=1
+  fi
+
+  if [[ "${varnish}" == "1" ]]; then
+    echo "varnish"
+    return 0
+  fi
+
+  echo "nginx"
+}
+
+function loadProjectShareConfig() {
+  WARDEN_SHARE="${WARDEN_SHARE:-}"
+  [[ -z "${WARDEN_SHARE}" ]] && return 0
+
+  assertShareProviderName "${WARDEN_SHARE}" "WARDEN_SHARE" "project"
+
+  WARDEN_SHARE_UPSTREAM="$(resolveShareUpstream)"
+
+  if [[ "${WARDEN_SHARE_UPSTREAM}" == "nginx" ]] && [[ "${WARDEN_NGINX:-1}" == "0" ]]; then
+    fatal "WARDEN_SHARE needs nginx or varnish enabled in the project (WARDEN_NGINX=1 or WARDEN_VARNISH=1)."
+  fi
+
+  export WARDEN_SHARE WARDEN_SHARE_UPSTREAM
+
+  # shellcheck source=/dev/null
+  source "${WARDEN_DIR}/utils/share/${WARDEN_SHARE}.sh"
+}
+
+function shareProviderPrepare() {
+  return 0
+}
+
+function shareProviderRequireConfig() {
+  return 0
+}
+
+function shareProviderUrl() {
+  return 1
+}
+
+function shareProviderStatus() {
+  return 0
+}
+
+function shareProviderCommand() {
+  return 64
+}
+
+function shareDomains() {
+  docker ps --filter "label=dev.warden.share.domain" --format '{{.Label "dev.warden.share.domain"}}' 2>/dev/null | sort -u
+}
+
+function regenerateShareConfig() {
+  if [[ -n "${WARDEN_SHARE_PROVIDER:-}" ]]; then
+    shareProviderRegenerateConfig
+  fi
+}
