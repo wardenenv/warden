@@ -94,6 +94,21 @@ fi
 [[ ${WARDEN_NGINX} -eq 1 ]] \
     && appendEnvPartialIfExists "nginx"
 
+if [[ -n "${TRAEFIK_PUBLIC_DOMAIN:-}" ]]; then
+    ## the value reaches a Traefik router rule and the shared share-provider
+    ## ingress config verbatim, so anything but a hostname is rejected here
+    TRAEFIK_PUBLIC_DOMAIN_REGEX='^[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?)+$'
+    if [[ ! "${TRAEFIK_PUBLIC_DOMAIN}" =~ $TRAEFIK_PUBLIC_DOMAIN_REGEX ]]; then
+        fatal "TRAEFIK_PUBLIC_DOMAIN must be a valid hostname (got '${TRAEFIK_PUBLIC_DOMAIN}')."
+    fi
+
+    if [[ ${WARDEN_VARNISH:-0} -eq 1 ]]; then
+        appendEnvPartialIfExists "share-varnish"
+    elif [[ ${WARDEN_NGINX} -eq 1 ]]; then
+        appendEnvPartialIfExists "share-nginx"
+    fi
+fi
+
 [[ ${WARDEN_DB} -eq 1 ]] \
     && appendEnvPartialIfExists "db"
 
@@ -238,6 +253,8 @@ ${DOCKER_COMPOSE_COMMAND} \
 if [[ "${WARDEN_PARAMS[0]}" == "stop" || "${WARDEN_PARAMS[0]}" == "down" || \
       "${WARDEN_PARAMS[0]}" == "up" || "${WARDEN_PARAMS[0]}" == "start" ]]; then
     regeneratePMAConfig
+    loadShareConfig
+    regenerateShareConfig
 fi
 
 ## resume mutagen sync if available and php-fpm container id hasn't changed

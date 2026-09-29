@@ -99,3 +99,38 @@ function regeneratePMAConfig() {
     >&2 echo "phpMyAdmin configuration regenerated."
   fi
 }
+
+function shareAvailableProviders() {
+  local providers="" candidate
+  for candidate in "${WARDEN_DIR}"/utils/share/*.sh; do
+    candidate="${candidate##*/}"
+    providers="${providers}${candidate%.sh} "
+  done
+
+  echo "${providers% }"
+}
+
+function loadShareConfig() {
+  loadEnvFile "${WARDEN_HOME_DIR}/.env" "WARDEN_SHARE_"
+  WARDEN_SHARE_PROVIDER="${WARDEN_SHARE_PROVIDER:-}"
+  export WARDEN_SHARE_PROVIDER
+
+  if [[ -n "${WARDEN_SHARE_PROVIDER}" ]]; then
+    if [[ ! -f "${WARDEN_DIR}/utils/share/${WARDEN_SHARE_PROVIDER}.sh" ]]; then
+      fatal "Unknown share provider '${WARDEN_SHARE_PROVIDER}'. Available: $(shareAvailableProviders)"
+    fi
+
+    # shellcheck source=/dev/null
+    source "${WARDEN_DIR}/utils/share/${WARDEN_SHARE_PROVIDER}.sh"
+  fi
+}
+
+function shareDomains() {
+  docker ps --filter "label=dev.warden.share.domain" --format '{{.Label "dev.warden.share.domain"}}' 2>/dev/null | sort -u
+}
+
+function regenerateShareConfig() {
+  if [[ -n "${WARDEN_SHARE_PROVIDER:-}" ]]; then
+    shareProviderRegenerateConfig
+  fi
+}

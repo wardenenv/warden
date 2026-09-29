@@ -61,6 +61,20 @@ if [[ "${WARDEN_PHPMYADMIN_ENABLE}" == 1 ]]; then
     DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.phpmyadmin.yml")
 fi
 
+## add share provider docker-compose
+loadShareConfig
+if [[ -n "${WARDEN_SHARE_PROVIDER}" ]]; then
+    if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
+        shareProviderPreflight
+    fi
+
+    WARDEN_SHARE_COMPOSE_FILE="$(shareProviderComposeFile)"
+    if [[ -n "${WARDEN_SHARE_COMPOSE_FILE}" ]]; then
+        DOCKER_COMPOSE_ARGS+=("-f")
+        DOCKER_COMPOSE_ARGS+=("${WARDEN_SHARE_COMPOSE_FILE}")
+    fi
+fi
+
 ## allow an additional docker-compose file to be loaded for global services
 if [[ -f "${WARDEN_HOME_DIR}/docker-compose.yml" ]]; then
     DOCKER_COMPOSE_ARGS+=("-f")
@@ -128,4 +142,6 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
     if [[ "${WARDEN_PHPMYADMIN_ENABLE}" == 1 ]]; then
         regeneratePMAConfig
     fi
+
+    regenerateShareConfig
 fi

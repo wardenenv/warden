@@ -1,0 +1,11 @@
+services:
+  varnish:
+    labels:
+      - traefik.http.routers.${WARDEN_ENV_NAME}-varnish-share.tls=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-varnish-share.priority=1
+      - traefik.http.routers.${WARDEN_ENV_NAME}-varnish-share.ruleSyntax=v2
+      - traefik.http.routers.${WARDEN_ENV_NAME}-varnish-share.rule=
+          HostRegexp(`{subdomain:.+}.${TRAEFIK_PUBLIC_DOMAIN}`) || Host(`${TRAEFIK_PUBLIC_DOMAIN}`)
+      - traefik.http.services.${WARDEN_ENV_NAME}-varnish-share.loadbalancer.server.port=80
+      - traefik.docker.network=${WARDEN_ENV_NAME}_default
+      - dev.warden.share.domain=${TRAEFIK_PUBLIC_DOMAIN}
