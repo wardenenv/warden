@@ -1,0 +1,29 @@
+services:
+  artemis:
+    hostname: "${WARDEN_ENV_NAME}-artemis"
+    image: ${WARDEN_IMAGE_REPOSITORY}/artemis:${ARTEMIS_VERSION:-2}
+    environment:
+      - AMQ_USER=${ARTEMIS_USERNAME:-artemis}
+      - AMQ_PASSWORD=${ARTEMIS_PASSWORD:-artemis}
+      - JAVA_ARGS=
+        -Dhawtio.proxyEnabled=true
+        -Dhawtio.offline=true
+        -Dhawtio.allowProxy=true
+        -Dhawtio.proxyAllowlist=*
+        -Djolokia.allowDnsReverseLookup=false
+        -Dhawtio.realm=activemq
+        -Dhawtio.role=amq
+        -Dhawtio.rolePrincipalClasses=org.apache.activemq.artemis.spi.core.security.jaas.RolePrincipal
+        -Dhawtio.baseUrl=/console
+        -Dhawtio.url=https://artemis.${TRAEFIK_DOMAIN}/console
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-artemis.tls=true
+      - traefik.http.routers.${WARDEN_ENV_NAME}-artemis.rule=Host(`artemis.${TRAEFIK_DOMAIN}`)
+      - traefik.http.services.${WARDEN_ENV_NAME}-artemis.loadbalancer.server.port=8161
+      - traefik.docker.network=${WARDEN_ENV_NAME}_default
+    volumes:
+      - artemis:/var/lib/artemis-instance
+
+volumes:
+  artemis:
