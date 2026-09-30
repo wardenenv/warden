@@ -151,6 +151,18 @@ fi
 [[ ${WARDEN_PHP_SPX} -eq 1 ]] \
     && appendEnvPartialIfExists "php-spx"
 
+SECRETS_EXPORTS=()
+if [[ -n "${WARDEN_SECRETS:-}" ]] \
+    && [[ ${WARDEN_ENV_TYPE} != local ]] \
+    && [[ "${WARDEN_PARAMS[0]}" == "up" ]]
+then
+    if loadSecretsProvider "${WARDEN_SECRETS}" && loadSecrets; then
+        trap 'rm -f "${SECRETS_COMPOSE_FILE}"' EXIT
+        DOCKER_COMPOSE_ARGS+=("-f")
+        DOCKER_COMPOSE_ARGS+=("${SECRETS_COMPOSE_FILE}")
+    fi
+fi
+
 if [[ -f "${WARDEN_ENV_PATH}/.warden/warden-env.yml" ]]; then
     DOCKER_COMPOSE_ARGS+=("-f")
     DOCKER_COMPOSE_ARGS+=("${WARDEN_ENV_PATH}/.warden/warden-env.yml")
@@ -179,9 +191,12 @@ fi
 if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
     ## create environment network for attachments if it does not already exist
     if [[ $(docker network ls -f "name=$(renderEnvNetworkName)" -q) == "" ]]; then
-        ${DOCKER_COMPOSE_COMMAND} \
-            --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
-            "${DOCKER_COMPOSE_ARGS[@]}" up --no-start
+        (
+            exportSecrets
+            ${DOCKER_COMPOSE_COMMAND} \
+                --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
+                "${DOCKER_COMPOSE_ARGS[@]}" up --no-start
+        )
     fi
 
     ## connect globally peered services to the environment network
@@ -230,9 +245,12 @@ then
 fi
 
 ## pass orchestration through to docker compose
-${DOCKER_COMPOSE_COMMAND} \
-    --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
-    "${DOCKER_COMPOSE_ARGS[@]}" "${WARDEN_PARAMS[@]}" "$@"
+(
+    exportSecrets
+    ${DOCKER_COMPOSE_COMMAND} \
+        --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
+        "${DOCKER_COMPOSE_ARGS[@]}" "${WARDEN_PARAMS[@]}" "$@"
+)
 
 
 if [[ "${WARDEN_PARAMS[0]}" == "stop" || "${WARDEN_PARAMS[0]}" == "down" || \
