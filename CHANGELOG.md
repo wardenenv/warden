@@ -8,6 +8,7 @@
 
 **New Features:**
 * Pluggable secrets providers: `WARDEN_SECRETS` selects a provider under `utils/secrets/` whose variables are injected into the php containers on `warden env up`, without Warden writing secret values to disk (by @lbajsarowicz)
+* 1Password secrets provider (`WARDEN_SECRETS=1password`): a 1Password Environment via `WARDEN_OP_ENVIRONMENT_ID`, or secret references (`KEY=op://vault/item/field`) listed in the project's `.env.op`; optional `WARDEN_OP_ACCOUNT` (by @lbajsarowicz)
 
 **Security Fixes:**
 * Fix arbitrary command execution via project `.env` files. The previous loader used `eval "$(grep ...)"` against any project's `.env`, allowing shell metacharacters (e.g. `$(...)` or backticks) inside `WARDEN_*`, `TRAEFIK_*` or `PHP_*` values to execute on the developer's host whenever `warden env *` was run. Replaced with a strict KEY=VALUE parser that validates identifiers and never evaluates values. (by @lbajsarowicz)
