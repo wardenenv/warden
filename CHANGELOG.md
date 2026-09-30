@@ -6,6 +6,9 @@
 **Big Changes:**
 * Traefik has been updated from v2 to v3.  For compatibility, we have kept the v2 rule engine as the default.  It is possible to opt-in to v3 rule syntax on a per-router basis.
 
+**New Features:**
+* Pluggable secrets providers: `WARDEN_SECRETS` selects a provider under `utils/secrets/` whose variables are injected into the php containers on `warden env up`, without Warden writing secret values to disk (by @lbajsarowicz)
+
 **Security Fixes:**
 * Fix arbitrary command execution via project `.env` files. The previous loader used `eval "$(grep ...)"` against any project's `.env`, allowing shell metacharacters (e.g. `$(...)` or backticks) inside `WARDEN_*`, `TRAEFIK_*` or `PHP_*` values to execute on the developer's host whenever `warden env *` was run. Replaced with a strict KEY=VALUE parser that validates identifiers and never evaluates values. (by @lbajsarowicz)
 

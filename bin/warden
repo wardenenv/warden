@@ -19,6 +19,7 @@ export readonly DOCKER_COMPOSE_COMMAND="${DOCKER_COMPOSE_COMMAND:-"docker compos
 source "${WARDEN_DIR}/utils/core.sh"
 source "${WARDEN_DIR}/utils/svc.sh"
 source "${WARDEN_DIR}/utils/env.sh"
+source "${WARDEN_DIR}/utils/secrets.sh"
 
 ## verify docker is installed
 if ! which docker >/dev/null; then
