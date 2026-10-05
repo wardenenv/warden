@@ -19,6 +19,25 @@ function fatal {
   exit -1
 }
 
+## Emit a warning once per invocation, keyed by an identifier. The key set is
+## exported so nested invocations (env.cmd shells out to "warden env ps") do not
+## repeat the notice. WARDEN_SUPPRESS_DEPRECATIONS=1 silences all keyed notices.
+function warnOnce {
+  local noticeKey="${1}"
+  shift
+
+  if [[ "${WARDEN_SUPPRESS_DEPRECATIONS:-0}" == 1 ]]; then
+    return 0
+  fi
+
+  if containsElement "${noticeKey}" ${WARDEN_NOTICES_EMITTED:-}; then
+    return 0
+  fi
+
+  export WARDEN_NOTICES_EMITTED="${WARDEN_NOTICES_EMITTED:-} ${noticeKey}"
+  warning "$@"
+}
+
 function version {
   echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }';
 }

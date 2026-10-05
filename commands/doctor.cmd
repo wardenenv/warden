@@ -75,14 +75,14 @@ else
 fi
 echo
 
-echo -e "\033[32mWarden project .env:\033[0m"
-if [[ -f ./.env ]]; then
-    echo -e "\033[33mWarden project directory, detected.\033[0m"
+echo -e "\033[32mWarden project configuration:\033[0m"
+if projectEnvFile="$(findEnvFile "$(pwd -P)")"; then
+    echo -e "\033[33mWarden project directory, detected. Configured via ${projectEnvFile}.\033[0m"
     if [[ ${WARDEN_VERBOSE} -eq 1 ]]; then
-        cat ./.env
+        cat "${projectEnvFile}"
     fi
 else
-    echo -e "\033[33mNot currently in a Warden project directory, no ./.env is present.\033[0m"
+    echo -e "\033[33mNot currently in a Warden project directory; none of ${WARDEN_ENV_FILENAMES[*]} are present.\033[0m"
 fi
 echo
 

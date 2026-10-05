@@ -85,6 +85,15 @@ fi
 ## configure docker compose files
 DOCKER_COMPOSE_ARGS=()
 
+## pass the resolved config file to compose; it only reads '.env' implicitly, so
+## without this every variable outside the prefixes loadEnvConfig handles
+## (MYSQL_*, NODE_VERSION, ...) would silently fall back to the partial defaults.
+## Guarded on existence so an unresolvable config falls back to compose's lookup.
+DOCKER_COMPOSE_ENV_ARGS=()
+if [[ -f "${WARDEN_ENV_FILE}" ]]; then
+    DOCKER_COMPOSE_ENV_ARGS+=("--env-file" "${WARDEN_ENV_FILE}")
+fi
+
 appendEnvPartialIfExists "networks"
 
 if [[ ${WARDEN_ENV_TYPE} != local ]]; then
@@ -181,6 +190,7 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
     if [[ $(docker network ls -f "name=$(renderEnvNetworkName)" -q) == "" ]]; then
         ${DOCKER_COMPOSE_COMMAND} \
             --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
+            "${DOCKER_COMPOSE_ENV_ARGS[@]}" \
             "${DOCKER_COMPOSE_ARGS[@]}" up --no-start
     fi
 
@@ -232,6 +242,7 @@ fi
 ## pass orchestration through to docker compose
 ${DOCKER_COMPOSE_COMMAND} \
     --project-directory "${WARDEN_ENV_PATH}" -p "${WARDEN_ENV_NAME}" \
+    "${DOCKER_COMPOSE_ENV_ARGS[@]}" \
     "${DOCKER_COMPOSE_ARGS[@]}" "${WARDEN_PARAMS[@]}" "$@"
 
 

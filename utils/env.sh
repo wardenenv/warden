@@ -1,13 +1,45 @@
 #!/usr/bin/env bash
 [[ ! ${WARDEN_DIR} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
 
+## Supported config filenames, in precedence order.
+WARDEN_ENV_FILENAME_CANONICAL=".warden.env"
+WARDEN_ENV_FILENAME_DEPRECATED=".env"
+WARDEN_ENV_FILENAMES=("${WARDEN_ENV_FILENAME_CANONICAL}" "${WARDEN_ENV_FILENAME_DEPRECATED}")
+
+## Echo the config file in a directory, or return 1 if there is none. Both names
+## are tested in one directory before a caller ascends, so a sub-stack's config
+## beats its parent's. Pass "markers" to also require WARDEN_ENV_NAME/_TYPE, which
+## is what tells a project root from an unrelated dotenv file during the walk.
+function findEnvFile () {
+    local envDir="${1}"
+    local requireMarkers="${2:-}"
+    local envFile envFileName
+
+    for envFileName in "${WARDEN_ENV_FILENAMES[@]}"; do
+        envFile="${envDir}/${envFileName}"
+
+        if [[ ! -f "${envFile}" ]]; then
+            continue
+        fi
+
+        if [[ "${requireMarkers}" = "markers" ]]; then
+            grep "^WARDEN_ENV_NAME" "${envFile}" >/dev/null || continue
+            grep "^WARDEN_ENV_TYPE" "${envFile}" >/dev/null || continue
+        fi
+
+        echo "${envFile}"
+        return 0
+    done
+
+    return 1
+}
+
 function locateEnvPath () {
     local WARDEN_ENV_PATH="$(pwd -P)"
+    local WARDEN_ENV_FILE=""
+
     while [[ "${WARDEN_ENV_PATH}" != "/" ]]; do
-        if [[ -f "${WARDEN_ENV_PATH}/.env" ]] \
-            && grep "^WARDEN_ENV_NAME" "${WARDEN_ENV_PATH}/.env" >/dev/null \
-            && grep "^WARDEN_ENV_TYPE" "${WARDEN_ENV_PATH}/.env" >/dev/null
-        then
+        if WARDEN_ENV_FILE="$(findEnvFile "${WARDEN_ENV_PATH}" markers)"; then
             break
         fi
         WARDEN_ENV_PATH="$(dirname "${WARDEN_ENV_PATH}")"
@@ -18,11 +50,11 @@ function locateEnvPath () {
         return 1
     fi
 
-    ## Resolve .env symlink should it exist in project sub-directory allowing sub-stacks to use relative link to parent
+    ## Resolve config symlink should it exist in project sub-directory allowing sub-stacks to use relative link to parent
     WARDEN_ENV_PATH="$(
         cd "$(
             dirname "$(
-                (readlink "${WARDEN_ENV_PATH}/.env" || echo "${WARDEN_ENV_PATH}/.env")
+                (readlink "${WARDEN_ENV_FILE}" || echo "${WARDEN_ENV_FILE}")
             )"
         )" >/dev/null \
         && pwd
@@ -65,17 +97,48 @@ function loadEnvFile () {
     done < "${envFile}"
 }
 
+## Warn on the deprecated filename, or on a .env.local left behind by a partial
+## migration. The latter checks for Warden-owned keys because a migrated project
+## may legitimately keep a framework-owned .env.local.
+function warnOnDeprecatedEnvFile () {
+    local envFile="${1}"
+    local envPath="${2}"
+    local legacyLocalFile="${envPath}/${WARDEN_ENV_FILENAME_DEPRECATED}.local"
+
+    if [[ "$(basename "${envFile}")" = "${WARDEN_ENV_FILENAME_DEPRECATED}" ]]; then
+        warnOnce "env-file-deprecated" \
+            "Configuring Warden via \"${WARDEN_ENV_FILENAME_DEPRECATED}\" is deprecated and support will be removed in a future release.\n         Rename \"${envFile}\" to \"${envPath}/${WARDEN_ENV_FILENAME_CANONICAL}\" to silence this notice."
+        return 0
+    fi
+
+    if [[ -f "${legacyLocalFile}" ]] \
+        && grep -qE "^(WARDEN_|TRAEFIK_|PHP_)" "${legacyLocalFile}"
+    then
+        warnOnce "env-local-orphaned" \
+            "\"${legacyLocalFile}\" holds Warden settings but is no longer read, because \"${envFile}\" takes precedence.\n         Move those overrides into \"${envFile}.local\"."
+    fi
+}
+
 function loadEnvConfig () {
     local WARDEN_ENV_PATH="${1}"
-    loadEnvFile "${WARDEN_ENV_PATH}/.env" "WARDEN_"
-    loadEnvFile "${WARDEN_ENV_PATH}/.env" "TRAEFIK_"
-    loadEnvFile "${WARDEN_ENV_PATH}/.env" "PHP_"
 
-    ## values in .env.local (typically git-ignored) override those in .env,
-    ## allowing per-clone settings such as a distinct WARDEN_ENV_NAME
-    loadEnvFile "${WARDEN_ENV_PATH}/.env.local" "WARDEN_"
-    loadEnvFile "${WARDEN_ENV_PATH}/.env.local" "TRAEFIK_"
-    loadEnvFile "${WARDEN_ENV_PATH}/.env.local" "PHP_"
+    ## fall back to the canonical name so consumers always have a usable path
+    WARDEN_ENV_FILE="$(findEnvFile "${WARDEN_ENV_PATH}")" \
+        || WARDEN_ENV_FILE="${WARDEN_ENV_PATH}/${WARDEN_ENV_FILENAME_CANONICAL}"
+    export WARDEN_ENV_FILE
+
+    warnOnDeprecatedEnvFile "${WARDEN_ENV_FILE}" "${WARDEN_ENV_PATH}"
+
+    loadEnvFile "${WARDEN_ENV_FILE}" "WARDEN_"
+    loadEnvFile "${WARDEN_ENV_FILE}" "TRAEFIK_"
+    loadEnvFile "${WARDEN_ENV_FILE}" "PHP_"
+
+    ## the '.local' override (typically git-ignored) holds per-clone settings such
+    ## as a distinct WARDEN_ENV_NAME. It is paired with whichever primary was
+    ## resolved, so a framework's own .env.local is never read by Warden.
+    loadEnvFile "${WARDEN_ENV_FILE}.local" "WARDEN_"
+    loadEnvFile "${WARDEN_ENV_FILE}.local" "TRAEFIK_"
+    loadEnvFile "${WARDEN_ENV_FILE}.local" "PHP_"
 
     WARDEN_ENV_NAME="${WARDEN_ENV_NAME:-}"
     WARDEN_ENV_TYPE="${WARDEN_ENV_TYPE:-}"

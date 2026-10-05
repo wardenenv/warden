@@ -29,10 +29,17 @@ for projectNetwork in "${projectNetworkList[@]}"; do
     [[ -z "${container}" ]] && continue # Project is not running, skip it
 
     projectDir=$(docker container inspect --format '{{ index .Config.Labels "com.docker.compose.project.working_dir"}}' "$container")
-    projectName=$(cat "${projectDir}/.env" | grep '^WARDEN_ENV_NAME=' | sed -e 's/WARDEN_ENV_NAME=[[:space:]]*//g')
-    projectType=$(cat "${projectDir}/.env" | grep '^WARDEN_ENV_TYPE=' | sed -e 's/WARDEN_ENV_TYPE=[[:space:]]*//g')
-    traefikDomain=$(cat "${projectDir}/.env" | grep '^TRAEFIK_DOMAIN=' | sed -e 's/TRAEFIK_DOMAIN=[[:space:]]*//g')
-    traefikSubdomain=$(cat "${projectDir}/.env" | grep '^TRAEFIK_SUBDOMAIN=' | sed -e 's/TRAEFIK_SUBDOMAIN=[[:space:]]*//g')
+
+    ## the project may be configured through any of the supported filenames; a
+    ## running environment whose config has since been removed is simply skipped
+    if ! projectEnvFile="$(findEnvFile "${projectDir}")"; then
+        continue
+    fi
+
+    projectName=$(cat "${projectEnvFile}" | grep '^WARDEN_ENV_NAME=' | sed -e 's/WARDEN_ENV_NAME=[[:space:]]*//g')
+    projectType=$(cat "${projectEnvFile}" | grep '^WARDEN_ENV_TYPE=' | sed -e 's/WARDEN_ENV_TYPE=[[:space:]]*//g')
+    traefikDomain=$(cat "${projectEnvFile}" | grep '^TRAEFIK_DOMAIN=' | sed -e 's/TRAEFIK_DOMAIN=[[:space:]]*//g')
+    traefikSubdomain=$(cat "${projectEnvFile}" | grep '^TRAEFIK_SUBDOMAIN=' | sed -e 's/TRAEFIK_SUBDOMAIN=[[:space:]]*//g')
 
     fullDomain="${traefikDomain}"
     if test -n "${traefikSubdomain}"; then

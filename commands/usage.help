@@ -24,7 +24,7 @@ Warden version $(cat ${WARDEN_DIR}/version)
   debug             Launches debug enabled shell within current project environment
   doctor            Software information for bug reports
   env               Controls an environment from any point within the root project directory
-  env-init          Configure environment by adding '.env' file to the current working directory
+  env-init          Configure environment by adding '.warden.env' file to the current working directory
   install           Initializes or updates warden configuration on host machine
   redis             Interacts with the redis service on an environment (see 'warden redis -h' for details)
   shell             Launches into a shell within the current project environment

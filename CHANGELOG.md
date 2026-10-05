@@ -5,6 +5,11 @@
 
 **Big Changes:**
 * Traefik has been updated from v2 to v3.  For compatibility, we have kept the v2 rule engine as the default.  It is possible to opt-in to v3 rule syntax on a per-router basis.
+* Warden environments may now be configured via a `.warden.env` file, so a Warden environment can be initialised over an existing Laravel, Bedrock or Symfony project without the two config files colliding. `warden env-init` writes `.warden.env`, and per-clone overrides live in `.warden.env.local`. Configuring an environment through `.env` still works and is resolved as a fallback, so existing projects are unaffected; migrating is a rename. Where both files exist, `.warden.env` takes precedence and the `.env` is left entirely to the application. ([#912](https://github.com/wardenenv/warden/issues/912) by @jerrylopez)
+* Warden no longer writes application configuration into the environment file. The `laravel` and `wordpress` templates previously seeded `APP_KEY`, `DB_*`, `CACHE_DRIVER` and similar keys, which existed only because Warden's config file was the same `.env` the application read. Application configuration is now left to the project. Database credentials are unchanged and continue to come from each environment type's compose partial. ([#912](https://github.com/wardenenv/warden/issues/912) by @jerrylopez)
+
+**Deprecations:**
+* Configuring an environment through `.env` is deprecated in favour of `.warden.env` and will emit a warning. Support will be removed in a future release. Set `WARDEN_SUPPRESS_DEPRECATIONS=1` to silence the notice while migrating. ([#912](https://github.com/wardenenv/warden/issues/912) by @jerrylopez)
 
 **Security Fixes:**
 * Fix arbitrary command execution via project `.env` files. The previous loader used `eval "$(grep ...)"` against any project's `.env`, allowing shell metacharacters (e.g. `$(...)` or backticks) inside `WARDEN_*`, `TRAEFIK_*` or `PHP_*` values to execute on the developer's host whenever `warden env *` was run. Replaced with a strict KEY=VALUE parser that validates identifiers and never evaluates values. (by @lbajsarowicz)
