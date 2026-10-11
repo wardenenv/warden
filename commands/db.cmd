@@ -13,18 +13,19 @@ if (( ${#WARDEN_PARAMS[@]} == 0 )) || [[ "${WARDEN_PARAMS[0]}" == "help" ]]; the
   $WARDEN_BIN db --help || exit $? && exit $?
 fi
 
-## load connection information for the mysql service
+## load connection information for the database service
 DB_CONTAINER=$($WARDEN_BIN env ps -q db)
 if [[ ! ${DB_CONTAINER} ]]; then
     fatal "No container found for db service."
 fi
 
-eval "$(
+## detect database type and load appropriate connection variables
+DB_ENV_OUTPUT="$(
     docker container inspect ${DB_CONTAINER} --format '
         {{- range .Config.Env }}{{with split . "=" -}}
             {{- index . 0 }}='\''{{ range $i, $v := . }}{{ if $i }}{{ $v }}{{ end }}{{ end }}'\''{{println}}
         {{- end }}{{ end -}}
-    ' | grep "^MYSQL_"
+    '
 )"
 
 ## determine the client commands to use based on the database distribution
@@ -52,6 +53,10 @@ case "${WARDEN_PARAMS[0]}" in
             "${clientCmd}" -u"${MYSQL_USER}" -p"${MYSQL_PASSWORD}" --database="${MYSQL_DATABASE}" "${WARDEN_PARAMS[@]:1}" "$@"
         ;;
     dump)
+        if [[ "${DB_TYPE}" == "postgres" ]]; then
+            PGPASSWORD="${POSTGRES_PASSWORD}" "$WARDEN_BIN" env exec -T db \
+                pg_dump -U "${POSTGRES_USER}" "${POSTGRES_DB:-${POSTGRES_USER}}" "${WARDEN_PARAMS[@]:1}" "$@"
+        else
             "$WARDEN_BIN" env exec -T db \
             "${dumpCmd}" -u"${MYSQL_USER}" -p"${MYSQL_PASSWORD}" "${MYSQL_DATABASE}" "${WARDEN_PARAMS[@]:1}" "$@"
         ;;
