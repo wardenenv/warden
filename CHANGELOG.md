@@ -12,8 +12,15 @@
 **Bug Fixes:**
 * Add support to dynamically connect peered services based on enabled status ([#892](https://github.com/wardenenv/warden/issues/892) by @bap14, [#919](https://github.com/wardenenv/warden/issues/919) by @xinsodev)
 * Fix WARDEN_DOCKER_SOCK error running `warden sign-certificate` ([#907](https://github.com/wardenenv/warden/issues/907) by @bap14)
+* Automatically trust the Warden root CA in Windows when `warden install` runs in WSL, preferring the LocalMachine Root store and falling back to CurrentUser Root when elevation or policy prevents it; `warden doctor` reports the Windows root store state
 * Install Mutagen from the current `mutagen-io/mutagen` tap instead of the deprecated `havoc-io` one, and report an actionable message when the automated install fails ([#944](https://github.com/wardenenv/warden/issues/944) by @lbajsarowicz)
 * Allow DB service entrypoint script to determine the correct mysql/mariadb command ([#864](https://github.com/wardenenv/warden/issues/864) by @mattijv)
+* Warden-issued TLS certificates now include local CRL/AIA metadata and publish revocation artifacts on `http://127.0.0.1/.warden/pki/` so Windows Schannel can validate local HTTPS services such as native DoH
+
+**Enhancements:**
+* Added optional DNS-over-HTTPS support for Windows / WSL workflows via `WARDEN_DNS_OVER_HTTPS_ENABLE=1`, serving `https://doh.warden.test/dns-query` by default
+* Enabling `WARDEN_DNS_OVER_HTTPS_ENABLE=1` now automatically keeps Warden `dnsmasq` enabled for the same global services run because the DoH bridge depends on the existing DNS resolver
+* The DNS-over-HTTPS service now serves the local CRL/AIA files Windows Schannel uses, without a separate PKI sidecar
 
 ## Version [0.16.0](https://github.com/wardenenv/warden/tree/0.16.0) (2026-02-12)
 

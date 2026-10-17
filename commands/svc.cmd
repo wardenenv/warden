@@ -21,6 +21,8 @@ DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.yml")
 if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
     # Check DNSMasq
     eval "$(grep "^WARDEN_DNSMASQ_ENABLE" "${WARDEN_HOME_DIR}/.env")"
+    # Check DNS over HTTPS
+    eval "$(grep "^WARDEN_DNS_OVER_HTTPS_ENABLE" "${WARDEN_HOME_DIR}/.env")"
     # Check Portainer
     eval "$(grep "^WARDEN_PORTAINER_ENABLE" "${WARDEN_HOME_DIR}/.env")"
 
@@ -37,9 +39,22 @@ DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.mailpit.yml")
 
 ## add dnsmasq docker-compose
 WARDEN_DNSMASQ_ENABLE="${WARDEN_DNSMASQ_ENABLE:-1}"
+WARDEN_DNS_OVER_HTTPS_ENABLE="${WARDEN_DNS_OVER_HTTPS_ENABLE:-0}"
+if [[ "$WARDEN_DNS_OVER_HTTPS_ENABLE" == "1" ]]; then
+    if [[ "$WARDEN_DNSMASQ_ENABLE" != "1" ]]; then
+        warning "WARDEN_DNS_OVER_HTTPS_ENABLE requires dnsmasq; enabling Warden dnsmasq for this global services run"
+        WARDEN_DNSMASQ_ENABLE="1"
+    fi
+fi
+
 if [[ "$WARDEN_DNSMASQ_ENABLE" == "1" ]]; then
     DOCKER_COMPOSE_ARGS+=("-f")
     DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.dnsmasq.yml")
+fi
+
+if [[ "$WARDEN_DNS_OVER_HTTPS_ENABLE" == "1" ]]; then
+    DOCKER_COMPOSE_ARGS+=("-f")
+    DOCKER_COMPOSE_ARGS+=("${WARDEN_DIR}/docker/docker-compose.dns-over-https.yml")
 fi
 
 WARDEN_PORTAINER_ENABLE="${WARDEN_PORTAINER_ENABLE:-0}"
@@ -76,9 +91,7 @@ fi
 if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
 
     ## sign certificate used by global services (by default warden.test)
-    if [[ -f "${WARDEN_HOME_DIR}/.env" ]]; then
-        eval "$(grep "^WARDEN_SERVICE_DOMAIN" "${WARDEN_HOME_DIR}/.env")"
-    fi
+    loadEnvFile "${WARDEN_HOME_DIR}/.env" "WARDEN_SERVICE_DOMAIN$"
 
     WARDEN_SERVICE_DOMAIN="${WARDEN_SERVICE_DOMAIN:-warden.test}"
     if [[ ! -f "${WARDEN_SSL_DIR}/certs/${WARDEN_SERVICE_DOMAIN}.crt.pem" ]]; then
@@ -106,6 +119,32 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
 		      keyFile: /etc/ssl/certs/warden/${cert}.key.pem
 		EOF
     done
+
+    if [[ "$WARDEN_DNS_OVER_HTTPS_ENABLE" == "1" ]]; then
+        mkdir -p "${WARDEN_HOME_DIR}/etc/pki-public"
+        cp "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem" "${WARDEN_HOME_DIR}/etc/pki-public/ca.cert.pem"
+        cp "${WARDEN_SSL_DIR}/rootca/crl/ca.crl.pem" "${WARDEN_HOME_DIR}/etc/pki-public/ca.crl.pem"
+    fi
+
+    # Keep normal HTTP->HTTPS redirects in dynamic config so specific paths
+    # such as `/.warden/pki/` can remain opt-in plain HTTP when required
+    # for TLS validation metadata retrieval.
+    cat >> "${WARDEN_HOME_DIR}/etc/traefik/dynamic.yml" <<-'EOT'
+		http:
+		  routers:
+		    http-catchall-redirect:
+		      entryPoints:
+		        - http
+		      rule: PathPrefix(`/`)
+		      middlewares:
+		        - http-redirect-to-https
+		      service: noop@internal
+		  middlewares:
+		    http-redirect-to-https:
+		      redirectScheme:
+		        scheme: https
+		        permanent: true
+	EOT
 
     ## always execute svc up using --detach mode
     if ! (containsElement "-d" "$@" || containsElement "--detach" "$@"); then

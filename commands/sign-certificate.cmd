@@ -12,6 +12,15 @@ if (( ${#WARDEN_PARAMS[@]} == 0 )); then
   exit -1
 fi
 
+if [[ ! -f "${WARDEN_SSL_DIR}/rootca/crlnumber" ]]; then
+  echo 1000 > "${WARDEN_SSL_DIR}/rootca/crlnumber"
+fi
+
+if [[ ! -f "${WARDEN_SSL_DIR}/rootca/crl/ca.crl.pem" ]]; then
+  openssl ca -gencrl -config "${WARDEN_DIR}/config/openssl/rootca.conf" \
+    -out "${WARDEN_SSL_DIR}/rootca/crl/ca.crl.pem"
+fi
+
 CERTIFICATE_SAN_LIST=
 for (( i = 0; i < ${#WARDEN_PARAMS[@]} * 2; i+=2 )); do
   [[ ${CERTIFICATE_SAN_LIST} ]] && CERTIFICATE_SAN_LIST+=","
@@ -31,23 +40,15 @@ openssl genrsa -out "${WARDEN_SSL_DIR}/certs/${CERTIFICATE_NAME}.key.pem" 2048
 echo "==> Generating signing req ${CERTIFICATE_NAME}.crt.pem"
 openssl req -new -sha256 -config <(cat                            \
     "${WARDEN_DIR}/config/openssl/certificate.conf"               \
-    <(printf "extendedKeyUsage = serverAuth,clientAuth \n         \
-      subjectAltName = %s" "${CERTIFICATE_SAN_LIST}")             \
+    <(printf "subjectAltName = %s" "${CERTIFICATE_SAN_LIST}")     \
   )                                                               \
   -key "${WARDEN_SSL_DIR}/certs/${CERTIFICATE_NAME}.key.pem"      \
   -out "${WARDEN_SSL_DIR}/certs/${CERTIFICATE_NAME}.csr.pem"      \
   -subj "/C=US/O=Warden.dev/CN=${CERTIFICATE_NAME}"
 
 echo "==> Generating certificate ${CERTIFICATE_NAME}.crt.pem"
-openssl x509 -req -days 365 -sha256 -extensions v3_req            \
-  -extfile <(cat                                                  \
-    "${WARDEN_DIR}/config/openssl/certificate.conf"               \
-    <(printf "extendedKeyUsage = serverAuth,clientAuth \n         \
-      subjectAltName = %s" "${CERTIFICATE_SAN_LIST}")             \
-  )                                                               \
-  -CA "${WARDEN_SSL_DIR}/rootca/certs/ca.cert.pem"                \
-  -CAkey "${WARDEN_SSL_DIR}/rootca/private/ca.key.pem"            \
-  -CAserial "${WARDEN_SSL_DIR}/rootca/serial"                     \
+openssl ca -batch -config "${WARDEN_DIR}/config/openssl/rootca.conf" \
+  -extensions server_cert -days 365                               \
   -in "${WARDEN_SSL_DIR}/certs/${CERTIFICATE_NAME}.csr.pem"       \
   -out "${WARDEN_SSL_DIR}/certs/${CERTIFICATE_NAME}.crt.pem" 
 
