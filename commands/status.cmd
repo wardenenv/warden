@@ -1,59 +1,66 @@
 #!/usr/bin/env bash
 [[ ! ${WARDEN_DIR} ]] && >&2 echo -e "\033[31mThis script is not intended to be run directly!\033[0m" && exit 1
 
-assertDockerRunning
+wardenNetworkName=$(sed -n '/^networks:/,/^[^[:space:]]/s/^[[:space:]]*name:[[:space:]]*//p' "${WARDEN_DIR}/docker/docker-compose.yml")
 
-wardenNetworkName=$(cat ${WARDEN_DIR}/docker/docker-compose.yml | grep -A3 'networks:' | tail -n1 | sed -e 's/[[:blank:]]*name:[[:blank:]]*//g')
-wardenNetworkId=$(docker network ls -q --filter name="${wardenNetworkName}")
+## List core and project networks in one request; a failure here means Docker is not running.
+if ! networkList=$(docker network ls --format '{{.Name}}{{"\t"}}{{.Label "dev.warden.environment.name"}}' 2>/dev/null); then
+    fatal "Docker does not appear to be running. Please start Docker."
+fi
 
-if [[ -z "${wardenNetworkId}" ]]; then
+wardenNetworkFound=
+projectNetworks=""
+while IFS=$'\t' read -r networkName environmentName; do
+    if [[ "${networkName}" == "${wardenNetworkName}" ]]; then
+        wardenNetworkFound=1
+    elif [[ -n "${environmentName}" ]]; then
+        projectNetworks+=" ${networkName}"
+    fi
+done <<< "${networkList}"
+
+if [[ -z "${wardenNetworkFound}" ]]; then
     echo -e "[\033[33;1m!!\033[0m] \033[31mWarden is not currently running.\033[0m Run \033[36mwarden svc up\033[0m to start Warden core services."
 fi
 
-OLDIFS="$IFS";
-IFS=$'\n'
-projectNetworkList=( $(docker network ls --format '{{.Name}}' -q --filter "label=dev.warden.environment.name") )
-IFS="$OLDIFS"
+## One line per running Compose project: its default network name and working directory.
+runningProjectList=""
+if [[ -n "${projectNetworks}" ]]; then
+    runningProjectList=$(set -o pipefail; docker container ls --filter label=com.docker.compose.project.working_dir \
+        --format '{{.Label "com.docker.compose.project"}}_default{{"\t"}}{{.Label "com.docker.compose.project.working_dir"}}' \
+        | LC_ALL=C sort -t $'\t' -u -k1,1)
+fi
 
 messageList=()
-for projectNetwork in "${projectNetworkList[@]}"; do
-    # Skip empty names and the Warden core services network
-    test -z "${projectNetwork}" -o "${projectNetwork}" = "${wardenNetworkName}" && continue
+while IFS=$'\t' read -r projectNetwork projectDir; do
+    # Skip Compose projects that are not Warden environments
+    [[ "${projectNetworks} " == *" ${projectNetwork} "* ]] || continue
 
-    prefix="${projectNetwork%_default}"
-    prefixLen="${#prefix}"
-    ((prefixLen+=1))
-    projectContainers=$(docker network inspect --format '{{ range $k,$v := .Containers }}{{ $nameLen := len $v.Name }}{{ if gt $nameLen '"${prefixLen}"' }}{{ $prefix := slice $v.Name 0 '"${prefixLen}"' }}{{ if eq $prefix "'"${prefix}-"'" }}{{ println $v.Name }}{{end}}{{end}}{{end}}' "${projectNetwork}")
-    container=$(echo "$projectContainers" | head -n1)
+    unset WARDEN_ENV_NAME WARDEN_ENV_TYPE TRAEFIK_DOMAIN TRAEFIK_SUBDOMAIN
+    for envFile in "${projectDir}/.env" "${projectDir}/.env.local"; do
+        loadEnvFile "${envFile}" '(WARDEN_ENV_NAME|WARDEN_ENV_TYPE|TRAEFIK_DOMAIN|TRAEFIK_SUBDOMAIN)$'
+    done
 
-    [[ -z "${container}" ]] && continue # Project is not running, skip it
-
-    projectDir=$(docker container inspect --format '{{ index .Config.Labels "com.docker.compose.project.working_dir"}}' "$container")
-    projectName=$(cat "${projectDir}/.env" | grep '^WARDEN_ENV_NAME=' | sed -e 's/WARDEN_ENV_NAME=[[:space:]]*//g')
-    projectType=$(cat "${projectDir}/.env" | grep '^WARDEN_ENV_TYPE=' | sed -e 's/WARDEN_ENV_TYPE=[[:space:]]*//g')
-    traefikDomain=$(cat "${projectDir}/.env" | grep '^TRAEFIK_DOMAIN=' | sed -e 's/TRAEFIK_DOMAIN=[[:space:]]*//g')
-    traefikSubdomain=$(cat "${projectDir}/.env" | grep '^TRAEFIK_SUBDOMAIN=' | sed -e 's/TRAEFIK_SUBDOMAIN=[[:space:]]*//g')
-
-    fullDomain="${traefikDomain}"
-    if test -n "${traefikSubdomain}"; then
-        fullDomain="${traefikSubdomain}.${traefikDomain}"
+    fullDomain="${TRAEFIK_DOMAIN}"
+    if [[ -n "${TRAEFIK_SUBDOMAIN}" ]]; then
+        fullDomain="${TRAEFIK_SUBDOMAIN}.${TRAEFIK_DOMAIN}"
     fi
 
-    messageList+=("    \033[1;35m${projectName}\033[0m a \033[36m${projectType}\033[0m project")
+    if (( ${#messageList[@]} > 0 )); then
+        messageList+=("")
+    fi
+    messageList+=("    \033[1;35m${WARDEN_ENV_NAME}\033[0m a \033[36m${WARDEN_ENV_TYPE}\033[0m project")
     messageList+=("       Project Directory: \033[33m${projectDir}\033[0m")
     messageList+=("       Project URL: \033[94mhttps://${fullDomain}\033[0m")
+done <<< "${runningProjectList}"
 
-    [[ "$projectNetwork" != "${projectNetworkList[@]: -1:1}" ]] && messageList+=()
-done
-
-if [[ "${#messageList[@]}" > 0 ]]; then
-    if [[ -z "${wardenNetworkId}" ]]; then
+if (( ${#messageList[@]} > 0 )); then
+    if [[ -z "${wardenNetworkFound}" ]]; then
         echo -e "Found the following \033[32mrunning\033[0m projects; however, \033[31mWarden core services are currently not running\033[0m:"
     else
         echo -e "Found the following \033[32mrunning\033[0m environments:"
     fi
     for line in "${messageList[@]}"; do
-        echo -e "$line"
+        echo -e "${line}"
     done
 else
     echo "No running environments found."

@@ -1,0 +1,2 @@
+# Always check out LF: bash scripts break with CRLF (e.g. Git for Windows core.autocrlf=true + WSL)
+* text=auto eol=lf

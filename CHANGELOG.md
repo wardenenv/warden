@@ -9,11 +9,16 @@
 **Security Fixes:**
 * Fix arbitrary command execution via project `.env` files. The previous loader used `eval "$(grep ...)"` against any project's `.env`, allowing shell metacharacters (e.g. `$(...)` or backticks) inside `WARDEN_*`, `TRAEFIK_*` or `PHP_*` values to execute on the developer's host whenever `warden env *` was run. Replaced with a strict KEY=VALUE parser that validates identifiers and never evaluates values. (by @lbajsarowicz)
 
+**Enhancements:**
+* Speed up `warden status` with 2 Docker calls instead of 2 per project network ([#953](https://github.com/wardenenv/warden/pull/953) by @ilnytskyi)
+
 **Bug Fixes:**
 * Add support to dynamically connect peered services based on enabled status ([#892](https://github.com/wardenenv/warden/issues/892) by @bap14, [#919](https://github.com/wardenenv/warden/issues/919) by @xinsodev)
 * Fix WARDEN_DOCKER_SOCK error running `warden sign-certificate` ([#907](https://github.com/wardenenv/warden/issues/907) by @bap14)
 * Install Mutagen from the current `mutagen-io/mutagen` tap instead of the deprecated `havoc-io` one, and report an actionable message when the automated install fails ([#944](https://github.com/wardenenv/warden/issues/944) by @lbajsarowicz)
 * Allow DB service entrypoint script to determine the correct mysql/mariadb command ([#864](https://github.com/wardenenv/warden/issues/864) by @mattijv)
+* Fix `warden status` output for `.env.local`, quoted and CRLF values, and `warden-*` project names ([#953](https://github.com/wardenenv/warden/pull/953) by @ilnytskyi)
+* Check out text files with LF line endings so scripts run from WSL ([#953](https://github.com/wardenenv/warden/pull/953) by @ilnytskyi)
 
 ## Version [0.16.0](https://github.com/wardenenv/warden/tree/0.16.0) (2026-02-12)
 
