@@ -55,10 +55,39 @@ function getPeeredServices {
 
 ## methods to peer global services requiring network connectivity with project networks
 function connectPeeredServices {
-  enabledServices=($(getPeeredServices))
-  for svc in ${enabledServices[@]}; do
-    echo "Connecting ${svc} to $1 network"
-    (docker network connect "$1" ${svc} 2>&1| grep -v 'already exists in network') || true
+  local -a enabledServices=($(getPeeredServices))
+  local -a serviceNetworks=()
+  local snapshot container networks network svc i
+
+  # Docker's container listing includes all network names for each container.
+  # Read it once for the entire operation, including stopped peer containers.
+  if ! snapshot=$(docker container ls --all \
+      --filter label=com.docker.compose.project=warden \
+      --format '{{.Names}}{{"\t"}}{{.Networks}}'); then
+    warning "Could not list peer connections; attempting each connection."
+    snapshot=""
+  fi
+
+  while IFS=$'\t' read -r container networks; do
+    for ((i=0; i<${#enabledServices[@]}; i++)); do
+      if [[ "${container}" == "${enabledServices[$i]}" ]]; then
+        # Docker separates network names with commas. Docker network names cannot
+        # contain spaces or commas; allow for spaces after the separator.
+        serviceNetworks[$i]="${networks// /}"
+        break
+      fi
+    done
+  done <<< "${snapshot}"
+
+  for network in "$@"; do
+    for ((i=0; i<${#enabledServices[@]}; i++)); do
+      svc="${enabledServices[$i]}"
+      if [[ ",${serviceNetworks[$i]}," == *",${network},"* ]]; then
+        continue
+      fi
+      echo "Connecting ${svc} to ${network} network"
+      (docker network connect "${network}" "${svc}" 2>&1 | grep -v 'already exists in network') || true
+    done
   done
 }
 

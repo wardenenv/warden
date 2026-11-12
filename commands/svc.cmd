@@ -121,9 +121,11 @@ WARDEN_SERVICE_DIR=${WARDEN_DIR} ${DOCKER_COMPOSE_COMMAND} \
 
 ## connect peered service containers to environment networks when 'svc up' is run
 if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
-    for network in $(docker network ls -f label=dev.warden.environment.name --format {{.Name}}); do
-        connectPeeredServices "${network}"
-    done
+    if ! projectNetworks=($(docker network ls -f label=dev.warden.environment.name --format '{{.Name}}')); then
+        warning "Could not list environment networks; peer services were not reconnected."
+    elif (( ${#projectNetworks[@]} )); then
+        connectPeeredServices "${projectNetworks[@]}"
+    fi
 
     if [[ "${WARDEN_PHPMYADMIN_ENABLE}" == 1 ]]; then
         regeneratePMAConfig
