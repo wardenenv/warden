@@ -197,6 +197,11 @@ if [[ "${WARDEN_PARAMS[0]}" == "up" ]]; then
     regeneratePMAConfig
 fi
 
+## self-heal peer links 'svc up' misses (peer recreated outside Warden, network without env label); one listing when intact
+if [[ "${WARDEN_PARAMS[0]}" == "start" ]]; then
+    connectPeeredServices "$(renderEnvNetworkName)"
+fi
+
 ## lookup address of traefik container on environment network
 TRAEFIK_ADDRESS="$(docker container inspect traefik \
     --format '
