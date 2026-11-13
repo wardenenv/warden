@@ -55,5 +55,4 @@ if [[ "$(${WARDEN_BIN} svc ps -q traefik 2>/dev/null)" ]]
 then
   echo "==> Updating traefik"
   "$WARDEN_BIN" svc up traefik
-  "$WARDEN_BIN" svc restart traefik
 fi
